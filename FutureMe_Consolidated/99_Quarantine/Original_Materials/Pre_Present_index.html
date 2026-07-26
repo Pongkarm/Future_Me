@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FutureMe AI — 3D Native Motion Architecture & Data Pipeline</title>
+  <meta name="description" content="Native CSS3D & SVG Canvas Interactive Motion Architecture, Data Pipeline, and RAG Audit Hub for FutureMe AI — JUMP Thailand Hackathon 2026">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <style>
+    :root {
+      --bg-dark: #05050C;
+      --bg-card: rgba(14, 14, 28, 0.85);
+      --border-color: rgba(255, 255, 255, 0.12);
+      --border-glow: rgba(109, 94, 246, 0.5);
+      --primary: #6D5EF6;
+      --primary-glow: rgba(109, 94, 246, 0.45);
+      --mint: #4FE3C1;
+      --mint-glow: rgba(79, 227, 193, 0.4);
+      --rose: #FF5E80;
+      --amber: #FFB800;
+      --cyan: #00E5FF;
+      --purple-ribbon: #8B5CF6;
+      --text-main: #F1F3F9;
+      --text-muted: #94A3B8;
+      --font-th: 'Sarabun', sans-serif;
+      --font-en: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-th);
+      line-height: 1.6;
+      overflow-x: hidden;
+      perspective: 1200px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(109, 94, 246, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(79, 227, 193, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.1) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* Ambient 3D Mesh Grid Background */
+    .mesh-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: rotateX(60deg) scale(2) translateY(-100px);
+      transform-style: preserve-3d;
+      opacity: 0.75;
+    }
+
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(5, 5, 12, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      color: #000;
+      font-weight: 800;
+      font-family: var(--font-en);
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .logo-title {
+      font-family: var(--font-en);
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-family: var(--font-th);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn.active, .nav-btn:hover {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), rgba(109, 94, 246, 0.7));
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-en);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .github-link:hover {
+      border-color: var(--mint);
+      box-shadow: 0 0 20px var(--mint-glow);
+      background: rgba(79, 227, 193, 0.15);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 50px 0 30px;
+      text-align: center;
+    }
+
+    .hero-3d-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      font-family: var(--font-en);
+      background: linear-gradient(135deg, #FFFFFF 20%, var(--cyan) 60%, var(--mint) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(0, 229, 255, 0.3);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 900px;
+      margin: 0 auto 30px;
+    }
+
+    /* Filter Chips & View Filters Styling */
+    .view-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: var(--font-th);
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+    }
+
+    .filter-chip:hover {
+      color: #fff;
+      border-color: var(--cyan);
+      background: rgba(0, 229, 255, 0.12);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .filter-chip.active {
+      background: linear-gradient(135deg, rgba(109, 94, 246, 0.4), rgba(0, 229, 255, 0.3));
+      border-color: var(--cyan);
+      color: #FFFFFF;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+    }
+
+    /* ANIMATION COMPONENT 1: NATIVE 3D SERPENTINE ROADMAP RIBBON */
+    .serpentine-container {
+      background: rgba(14, 14, 28, 0.85);
+      border: 1px solid var(--border-glow);
+      border-radius: 28px;
+      padding: 40px 20px;
+      margin: 30px 0;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .serpentine-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* SVG Ribbon Path Canvas */
+    .ribbon-svg-wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .ribbon-path-laser {
+      stroke-dasharray: 20 10;
+      animation: dashFlow 2s linear infinite;
+    }
+
+    @keyframes dashFlow {
+      from { stroke-dashoffset: 60; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Floating 3D Node Rings along Serpentine */
+    .serpentine-nodes-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 1024px) {
+      .serpentine-nodes-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .serpentine-nodes-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .serpentine-node-card {
+      background: rgba(22, 22, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .serpentine-node-card:hover {
+      transform: translateZ(20px) scale(1.05);
+      border-color: var(--cyan);
+      box-shadow: 0 15px 35px rgba(0, 229, 255, 0.3);
+    }
+
+    .ripple-ring {
+      width: 44px;
+      height: 44px;
+      background: rgba(109, 94, 246, 0.2);
+      border: 2px solid var(--cyan);
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      font-family: var(--font-en);
+      color: var(--cyan);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      position: relative;
+    }
+
+    .ripple-ring::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px solid var(--mint);
+      animation: ripplePulse 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    @keyframes ripplePulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .serpentine-node-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--mint);
+      text-transform: uppercase;
+    }
+
+    .serpentine-node-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    /* ANIMATION COMPONENT 2: NATIVE 3D PEDESTAL ARCHITECTURE HUB */
+    .hub-pedestals-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 1024px) {
+      .hub-pedestals-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .hub-pedestals-grid { grid-template-columns: 1fr; }
+    }
+
+    .pedestal-card-3d {
+      background: rgba(18, 18, 34, 0.85);
+      border: 1px solid var(--border-glow);
+      border-radius: 22px;
+      padding: 24px;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .pedestal-card-3d:hover {
+      transform: translateZ(25px) rotateX(10deg);
+      border-color: var(--mint);
+      box-shadow: 0 25px 50px rgba(79, 227, 193, 0.3);
+    }
+
+    .pedestal-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(109, 94, 246, 0.3), rgba(79, 227, 193, 0.3));
+      border: 1px solid var(--cyan);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .pedestal-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .pedestal-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .pedestal-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.25s;
+    }
+
+    .pedestal-card-3d:hover .pedestal-btn {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    /* 4 Column Unfolded Breakdown Panel */
+    .unfolded-panel {
+      background: rgba(12, 12, 24, 0.9);
+      border: 1px solid var(--mint);
+      border-radius: 24px;
+      padding: 30px;
+      margin: 30px 0;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(79, 227, 193, 0.2);
+      display: none;
+    }
+
+    .unfolded-panel.active {
+      display: block;
+      animation: unfoldAnim 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes unfoldAnim {
+      from { opacity: 0; transform: perspective(1000px) rotateX(-20deg) scale(0.95); }
+      to { opacity: 1; transform: perspective(1000px) rotateX(0deg) scale(1); }
+    }
+
+    .unfolded-cols-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .unfolded-cols-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .unfolded-col-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .unfolded-col-box h4 {
+      font-size: 1rem;
+      color: var(--mint);
+      margin-bottom: 10px;
+    }
+
+    .unfolded-col-box ul {
+      list-style-type: none;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .unfolded-col-box ul li {
+      margin-bottom: 8px;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .unfolded-col-box ul li::before {
+      content: '•';
+      color: var(--cyan);
+      position: absolute;
+      left: 0;
+    }
+
+    /* Matrix Table */
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin: 20px 0;
+      backdrop-filter: blur(16px);
+    }
+
+    .matrix-table th, .matrix-table td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.92rem;
+    }
+
+    .matrix-table th {
+      background: rgba(109, 94, 246, 0.25);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .matrix-table tr:hover {
+      background: rgba(0, 229, 255, 0.04);
+    }
+
+    /* Audit Grid Cards */
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .audit-card-3d {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      transform-style: preserve-3d;
+      transition: all 0.3s ease;
+    }
+
+    .audit-card-3d:hover {
+      transform: translateZ(15px);
+      border-color: var(--mint);
+    }
+
+    .tag-verified { background: rgba(79, 227, 193, 0.15); color: var(--mint); padding: 3px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; }
+    .tag-conditional { background: rgba(255, 184, 0, 0.15); color: var(--amber); padding: 3px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; }
+    .tag-quarantine { background: rgba(255, 94, 128, 0.15); color: var(--rose); padding: 3px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient 3D Mesh Grid Background -->
+  <div class="mesh-bg"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-wrapper">
+      <div class="logo-group">
+        <span class="logo-badge">FutureMe AI 3D</span>
+        <span class="logo-title">Native Motion Architecture</span>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-btn active" onclick="switchMainTab('mindmap')">3D Architecture Hub & Serpentine</button>
+        <button class="nav-btn" onclick="switchMainTab('matrix')">Data Mapping Matrix</button>
+        <button class="nav-btn" onclick="switchMainTab('audit')">Open Source & Audit Hub</button>
+      </div>
+
+      <a href="https://github.com/winxtxrgit/futureme-ai" target="_blank" class="github-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Verified (96.5/100)
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-3d-title">FutureMe AI — 3D Motion Architecture</h1>
+      <p>ระบบแอนิเมชัน CSS3D/SVG Interactive แสดงพิมพ์เขียวสถาปัตยกรรม RAG 4 Data Streams และเอนจินตัดสินใจ 5 มิติ พร้อมสำหรับการนำเสนอพิตช์ 5 นาที</p>
+
+      <!-- Pitch Mode 4 Scenes Quick Selector -->
+      <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;">
+        <button onclick="pitchScene(1)" style="background: rgba(109, 94, 246, 0.25); border: 1px solid var(--primary); color: #fff; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; backdrop-filter: blur(10px);">🎤 Scene 1: What We Build (45s)</button>
+        <button onclick="pitchScene(2)" style="background: rgba(255, 94, 128, 0.25); border: 1px solid var(--rose); color: #fff; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; backdrop-filter: blur(10px);">🎤 Scene 2: Why & Pain Point (60s)</button>
+        <button onclick="pitchScene(3)" style="background: rgba(0, 229, 255, 0.25); border: 1px solid var(--cyan); color: #fff; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; backdrop-filter: blur(10px);">🎤 Scene 3: How & RAG Engine (120s)</button>
+        <button onclick="pitchScene(4)" style="background: rgba(79, 227, 193, 0.25); border: 1px solid var(--mint); color: #fff; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; backdrop-filter: blur(10px);">🎤 Scene 4: Value & Ecosystem (75s)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN TAB 1: 3D PEDESTALS & SERPENTINE ROADMAP -->
+  <main class="container" id="tab-mindmap">
+    
+    <!-- ANIMATION COMPONENT 1: 3D SERPENTINE ROADMAP RIBBON -->
+    <div class="serpentine-container">
+      <div class="serpentine-title">
+        <span>🗺️ 3D Isometric Serpentine Student Journey Roadmap</span>
+      </div>
+
+      <!-- SVG Wavy Path Canvas -->
+      <div class="ribbon-svg-wrap">
+        <svg viewBox="0 0 1200 120" width="100%" height="120" fill="none">
+          <defs>
+            <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6D5EF6" />
+              <stop offset="50%" stop-color="#00E5FF" />
+              <stop offset="100%" stop-color="#4FE3C1" />
+            </linearGradient>
+          </defs>
+          <path d="M 50 60 C 200 10, 300 110, 450 60 C 600 10, 700 110, 850 60 C 1000 10, 1100 110, 1150 60" stroke="url(#ribbonGrad)" stroke-width="12" stroke-linecap="round"/>
+          <path class="ribbon-path-laser" d="M 50 60 C 200 10, 300 110, 450 60 C 600 10, 700 110, 850 60 C 1000 10, 1100 110, 1150 60" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- 6 Floating Serpentine Nodes -->
+      <div class="serpentine-nodes-grid">
+        <div class="serpentine-node-card" onclick="togglePedestal('ai')">
+          <div class="ripple-ring">01</div>
+          <div class="serpentine-node-num">Step 01</div>
+          <div class="serpentine-node-title">Socratic Chat</div>
+        </div>
+
+        <div class="serpentine-node-card" onclick="togglePedestal('ai')">
+          <div class="ripple-ring">02</div>
+          <div class="serpentine-node-num">Step 02</div>
+          <div class="serpentine-node-title">Scenario Mission</div>
+        </div>
+
+        <div class="serpentine-node-card" onclick="togglePedestal('opt')">
+          <div class="ripple-ring">03</div>
+          <div class="serpentine-node-num">Step 03</div>
+          <div class="serpentine-node-title">Constraint Rules</div>
+        </div>
+
+        <div class="serpentine-node-card" onclick="togglePedestal('rag')">
+          <div class="ripple-ring">04</div>
+          <div class="serpentine-node-num">Step 04</div>
+          <div class="serpentine-node-title">Hybrid RAG Stream</div>
+        </div>
+
+        <div class="serpentine-node-card" onclick="togglePedestal('opt')">
+          <div class="ripple-ring">05</div>
+          <div class="serpentine-node-num">Step 05</div>
+          <div class="serpentine-node-title">Decision Matrix</div>
+        </div>
+
+        <div class="serpentine-node-card" onclick="togglePedestal('opt')">
+          <div class="ripple-ring">06</div>
+          <div class="serpentine-node-num">Step 06</div>
+          <div class="serpentine-node-title">3-Route Roadmap</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANIMATION COMPONENT 2: 3D PEDESTALS ARCHITECTURE HUB -->
+    <div class="section-title">
+      <h2>🏛️ 3D Pedestals Architecture Hub (คลิกที่แท่นเพื่อคลี่ 4 คอลัมน์ย่อย)</h2>
+    </div>
+
+    <div class="hub-pedestals-grid">
+      <div class="pedestal-card-3d" onclick="togglePedestal('auth')">
+        <div class="pedestal-icon">🔑</div>
+        <div class="pedestal-title">1. Identification & Access</div>
+        <div class="pedestal-desc">AIS Open API Number Verify, OTP & DEEP SSO</div>
+        <button class="pedestal-btn">คลิกคลี่ 4 คอลัมน์ ⚡</button>
+      </div>
+
+      <div class="pedestal-card-3d" onclick="togglePedestal('ai')">
+        <div class="pedestal-icon">🤖</div>
+        <div class="pedestal-title">2. Artificial Intelligence</div>
+        <div class="pedestal-desc">Socratic AI Chat (STAR/RIASEC) & Mission Sandbox</div>
+        <button class="pedestal-btn">คลิกคลี่ 4 คอลัมน์ ⚡</button>
+      </div>
+
+      <div class="pedestal-card-3d" onclick="togglePedestal('rag')">
+        <div class="pedestal-icon">📊</div>
+        <div class="pedestal-title">3. Data Analytics & RAG</div>
+        <div class="pedestal-desc">TDRI 756k Jobs, สพฐ./ปวช. 2567 & O*NET/ESCO</div>
+        <button class="pedestal-btn">คลิกคลี่ 4 คอลัมน์ ⚡</button>
+      </div>
+
+      <div class="pedestal-card-3d" onclick="togglePedestal('opt')">
+        <div class="pedestal-icon">⚙️</div>
+        <div class="pedestal-title">4. Pathway Optimisation</div>
+        <div class="pedestal-desc">5-Weight Decision Matrix & Dynamic DAG Roadmap</div>
+        <button class="pedestal-btn">คลิกคลี่ 4 คอลัมน์ ⚡</button>
+      </div>
+    </div>
+
+    <!-- 4 Column Unfolded Breakdown Panel -->
+    <div class="unfolded-panel" id="unfoldedPanel">
+      <h3 style="color: #fff; font-size: 1.3rem; font-weight: 800;" id="unfoldedTitle">4 Breakdown Columns</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="unfoldedSub">รายละเอียดการทำงานและข้อมูลย่อย</p>
+
+      <div class="unfolded-cols-grid" id="unfoldedCols">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- MAIN TAB 2: DATA MAPPING MATRIX -->
+  <main class="container" id="tab-matrix" style="display: none;">
+    <div class="section-title">
+      <h2>🗺️ Data Mapping Matrix — ข้อมูลอะไร ใช้ตรงไหน ผลลัพธ์คืออะไร</h2>
+    </div>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>ก้อนข้อมูล (Input Data)</th>
+          <th>ส่งไปยังโมดูล (Target Module)</th>
+          <th>กระบวนการประมวลผล (Processing Logic)</th>
+          <th>ผลลัพธ์ที่ได้ (Output Result)</th>
+          <th>สิทธิ์การใช้งาน (License)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>เบอร์มือถือผู้ใช้</b></td>
+          <td>AIS Open API Gateway</td>
+          <td>ตรวจยืนยัน SIM ผ่าน Number Verify / OTP API (CAMARA Spec)</td>
+          <td>ล็อกอินปลอดภัย ไร้รหัสผ่าน (Passwordless)</td>
+          <td><span class="tag-conditional">Commercial Partner</span></td>
+        </tr>
+        <tr>
+          <td><b>คำตอบสัมภาษณ์เด็ก</b></td>
+          <td>Socratic Dialogue Engine</td>
+          <td>สกัดคำตอบด้วยโครงสร้าง STAR (Situation, Task, Action, Result)</td>
+          <td>คะแนน RIASEC 6 ด้าน + จุดแข็งพฤติกรรมจริง</td>
+          <td><span class="tag-verified">CC BY 4.0 (O*NET)</span></td>
+        </tr>
+        <tr>
+          <td><b>ผลการทำโจทย์ Sandbox</b></td>
+          <td>Mission Scoring Engine</td>
+          <td>ประเมินผลงานปฏิบัติตาม Rubric การทดลองชิ้นงาน</td>
+          <td>หลักฐานพฤติกรรมปฏิบัติจริง (Behavioural Evidence)</td>
+          <td><span class="tag-verified">Internal Design</span></td>
+        </tr>
+        <tr>
+          <td><b>เกรด / ระดับชั้น / งบประมาณ</b></td>
+          <td>Rule-based Filter Engine</td>
+          <td>กรองตัดเส้นทางที่ไม่ตรงตามข้อกำหนดขั้นต่ำออก (Hard Constraints)</td>
+          <td>ขอบเขตเส้นทางที่เป็นไปได้จริง</td>
+          <td><span class="tag-verified">Public Criteria</span></td>
+        </tr>
+        <tr>
+          <td><b>ประกาศงาน TDRI (756,300 รายการ) + O*NET / ESCO</b></td>
+          <td>Qdrant Vector Database</td>
+          <td>ค้นหาแบบ Hybrid (Dense Vector BGE-M3 + Sparse Keyword RRF)</td>
+          <td>บริบททักษะสายงานจริงและสถิติตลาดงาน</td>
+          <td><span class="tag-verified">Open Data / Public</span></td>
+        </tr>
+        <tr>
+          <td><b>หลักสูตร สพฐ. / อาชีวะ ปวช. 2567 / TCAS70</b></td>
+          <td>Curriculum RAG Stream</td>
+          <td>จับคู่คะแนนเด็กกับวิชาเรียน คณะ และเกณฑ์สอบ TCAS70</td>
+          <td>รายชื่อวิชาสอบ TGAT/TPAT/A-Level และวุฒิเป้าหมาย</td>
+          <td><span class="tag-verified">Gov Open Data</span></td>
+        </tr>
+        <tr>
+          <td><b>คะแนน Matrix 5 มิติ</b></td>
+          <td>Decision Matrix Code</td>
+          <td>คำนวณถ่วงน้ำหนัก 5 มิติ (Interests 30%, Feasibility 25% ฯลฯ)</td>
+          <td>คะแนน 3 เส้นทางคู่ขนาน (Deterministic)</td>
+          <td><span class="tag-verified">100% Python Code</span></td>
+        </tr>
+        <tr>
+          <td><b>ผลคะแนน + บริบท RAG</b></td>
+          <td>Base LLM Synthesizer</td>
+          <td>สรุปเรียบเรียงเป็นภาษาไทยภายใต้ Prompt Template JSON</td>
+          <td>3 เส้นทาง + เหตุผล + หลักฐาน + สิ่งที่ยังไม่แน่นอน</td>
+          <td><span class="tag-verified">Explainable AI</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- MAIN TAB 3: OPEN SOURCE & AUDIT HUB -->
+  <main class="container" id="tab-audit" style="display: none;">
+    <div class="section-title">
+      <h2>🛡️ Open Source & Fact Audit Hub</h2>
+      <div class="view-filters">
+        <button class="filter-chip active" onclick="filterAudit('all')">ทั้งหมด (25 Sources + 16 Quarantined)</button>
+        <button class="filter-chip" onclick="filterAudit('verified')">Verified (21)</button>
+        <button class="filter-chip" onclick="filterAudit('conditional')">Conditional (4)</button>
+        <button class="filter-chip" onclick="filterAudit('quarantine')">Quarantined Claims (16)</button>
+      </div>
+    </div>
+
+    <div class="audit-grid" id="auditGrid">
+      <!-- Audit cards injected by JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>FutureMe AI Native 3D Motion Architecture — Developed for JUMP Thailand Hackathon 2026</p>
+      <p style="font-size: 0.8rem; margin-top: 6px;">Open Source Project under MIT License · Verified Data against TDRI, OECD, WEF 2025, OBEC & OVEC 2567</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const pedestalData = {
+      auth: {
+        title: "1. Identification & Access Pedestal",
+        sub: "ระบบยืนยันตัวตนและการจัดการสิทธิ์ตาม PDPA",
+        cols: [
+          { title: "AIS Number Verify API", items: ["ยืนยันตัวตนผ่านซิมการ์ด", "ไม่ต้องจำรหัสผ่าน", "CAMARA Standard"] },
+          { title: "SIM Swap Detection", items: ["ตรวจจับการสวมรอยซิม", "ป้องกันการขโมยบัญชี", "ความปลอดภัยระดับสูง"] },
+          { title: "DEEP SSO Integration", items: ["เชื่อมต่อบัญชี ศธ.", " Single Sign-On", "ลดความซ้ำซ้อนล็อกอิน"] },
+          { title: "PDPA Consent Gate", items: ["เด็กเป็นเจ้าของข้อมูล", " transcript อยู่กับเด็ก", "Consent แยกรายคน"] }
+        ]
+      },
+      ai: {
+        title: "2. Artificial Intelligence Assessment Pedestal",
+        sub: "ระบบประเมินผล 2 เฟสเก็บหลักฐานพฤติกรรมจริง",
+        cols: [
+          { title: "Socratic AI Chat", items: ["ถามชวนตกผลึก 5-10 นาที", "สกัด STAR Methodology", "คะแนน RIASEC 6 ด้าน"] },
+          { title: "Scenario Mission Sandbox", items: ["โจทย์จำลอง 3-5 นาที", "ทดลองทำชิ้นงานจริง", " Behavioural Evidence"] },
+          { title: "Motivational Interview", items: ["บรรยากาศไม่ตัดสิน", "ขุดลึกความสนใจแฝง", " non-judgemental tone"] },
+          { title: "Evidence Calibration", items: ["เทียบผลคุยกับผลภารกิจ", "เพิ่ม Confidence Score", "แสดงข้อขัดแย้งให้เด็กดู"] }
+        ]
+      },
+      rag: {
+        title: "3. Data Analytics & RAG Pedestal",
+        sub: "คลังข้อมูลปฐมภูมิ 4 สาย ดึงด้วย Qdrant Vector DB",
+        cols: [
+          { title: "TDRI Labour Big Data", items: ["ประกาศงาน 756,300 รายการ", "สถิติ STEM & AI Jobs", "ความต้องการทักษะจริง"] },
+          { title: "Thai Curricula Stream", items: ["สพฐ. ม.ปลาย 5 สาย", "อาชีวะ ปวช. 2567 (12 หมวด)", "เกณฑ์สอบ TCAS70"] },
+          { title: "Skill Taxonomy Stream", items: ["O*NET Database 30.3", "ESCO v1.2.1 (3,039 อาชีพ)", "13,939 ทักษะอ้างอิง"] },
+          { title: "Quarantine Guardrails", items: ["กักกัน 16 Claims ลอยๆ", " production_rag: false", "ป้องกัน AI มโนสถิติ"] }
+        ]
+      },
+      opt: {
+        title: "4. Pathway Optimisation Pedestal",
+        sub: "เอนจินตัดสินใจ 5 มิติ และผัง Roadmap 30 วัน",
+        cols: [
+          { title: "5-Weight Decision Matrix", items: ["Interests 30%", "Feasibility 25%", "Strengths 20%", "Style 15%, Flexibility 10%"] },
+          { title: "3 Route Alternatives", items: ["Balanced Next Step", "Interest Growth", "Practical Access"] },
+          { title: "Dynamic DAG Roadmap", items: ["Directed Acyclic Graph", "Topological Sort", "เรียงหมุดหมายทีละก้าว"] },
+          { title: "Multi-Role Privacy Views", items: ["Student Private View", "Parent Summary View", "Counselor Dashboard"] }
+        ]
+      }
+    };
+
+    const auditData = [
+      { id: 1, title: "O*NET Database 30.3", publisher: "U.S. Dept of Labor", tag: "verified", tagText: "Verified Open Data", license: "CC BY 4.0", link: "https://www.onetcenter.org/database.html" },
+      { id: 2, title: "ESCO v1.2.1 Occupations & Skills", publisher: "European Commission", tag: "verified", tagText: "Verified Open Data", license: "CC BY 4.0", link: "https://esco.ec.europa.eu/" },
+      { id: 3, title: "TDRI Big Data ตลาดแรงงาน (756,300 งาน)", publisher: "TDRI", tag: "verified", tagText: "Verified Research", license: "Public Research", link: "https://tdri.or.th/2025/08/bigdata-report-labourmarket-q2-2025/" },
+      { id: 4, title: "หลักสูตร ปวช. 2567 (12 หมวดวิชา)", publisher: "สอศ. (OVEC)", tag: "verified", tagText: "Verified Gov Data", license: "Gov Open Data", link: "https://ckan.vec.go.th/th/dataset/voc_curriculum" },
+      { id: 5, title: "สถิติ Mismatch บัณฑิตไทย (56% / 27%)", publisher: "TDRI 2025", tag: "verified", tagText: "Verified Research", license: "Public Report", link: "https://tdri.or.th/2025/09/thailand-human-capital-development/" },
+      { id: 6, title: "WEF Future of Jobs 2025 (39% Disruption)", publisher: "World Economic Forum", tag: "verified", tagText: "Verified Report", license: "Public Report", link: "https://www.weforum.org/publications/the-future-of-jobs-report-2025/" },
+      { id: 7, title: "myTCAS เกณฑ์อุดมศึกษา TCAS70", publisher: "ทปอ.", tag: "conditional", tagText: "Conditional (Yearly)", license: "Public Criteria", link: "https://school.mytcas.com/" },
+      { id: 8, title: "AIS Open API (CAMARA Standard Spec)", publisher: "AIS", tag: "conditional", tagText: "Conditional Partner", license: "Commercial API", link: "https://www.ais.th/business/enterprise/technology-and-solution/communication/ais-open-api" },
+      { id: 9, title: "Quarantine: ตัวเลข Mismatch ลอยๆ 68.6%", publisher: "Internal Quarantine", tag: "quarantine", tagText: "Quarantined Claim", license: "production_rag: false", link: "#" },
+      { id: 10, title: "Quarantine: Wage Penalty 15-20% ลอยๆ", publisher: "Internal Quarantine", tag: "quarantine", tagText: "Quarantined Claim", license: "production_rag: false", link: "#" }
+    ];
+
+    function togglePedestal(key) {
+      const data = pedestalData[key];
+      if (!data) return;
+
+      const panel = document.getElementById('unfoldedPanel');
+      const title = document.getElementById('unfoldedTitle');
+      const sub = document.getElementById('unfoldedSub');
+      const grid = document.getElementById('unfoldedCols');
+
+      title.innerText = data.title;
+      sub.innerText = data.sub;
+      grid.innerHTML = '';
+
+      data.cols.forEach(col => {
+        const box = document.createElement('div');
+        box.className = 'unfolded-col-box';
+
+        let listHtml = '<ul>';
+        col.items.forEach(i => listHtml += `<li>${i}</li>`);
+        listHtml += '</ul>';
+
+        box.innerHTML = `
+          <h4>${col.title}</h4>
+          ${listHtml}
+        `;
+        grid.appendChild(box);
+      });
+
+      panel.classList.add('active');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderAudit(filter = 'all') {
+      const grid = document.getElementById('auditGrid');
+      grid.innerHTML = '';
+
+      const filtered = filter === 'all' ? auditData : auditData.filter(a => a.tag === filter);
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'audit-card-3d';
+
+        let tagClass = 'tag-verified';
+        if (item.tag === 'conditional') tagClass = 'tag-conditional';
+        if (item.tag === 'quarantine') tagClass = 'tag-quarantine';
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="${tagClass}">${item.tagText}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">${item.publisher}</span>
+          </div>
+          <h4 style="font-size:1.05rem; margin-bottom:6px; color:#fff;">${item.title}</h4>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">License: <strong>${item.license}</strong></div>
+          ${item.link !== '#' ? `<a href="${item.link}" target="_blank" style="color:var(--cyan); font-size:0.8rem; text-decoration:none;">ดูเอกสารต้นทาง ↗</a>` : `<span style="color:var(--rose); font-size:0.8rem;">กักกันห้ามใช้ใน RAG</span>`}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterAudit(cat) {
+      document.querySelectorAll('#tab-audit .filter-chip').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderAudit(cat);
+    }
+
+    function switchMainTab(tabName) {
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('tab-mindmap').style.display = tabName === 'mindmap' ? 'block' : 'none';
+      document.getElementById('tab-matrix').style.display = tabName === 'matrix' ? 'block' : 'none';
+      document.getElementById('tab-audit').style.display = tabName === 'audit' ? 'block' : 'none';
+    }
+
+    function pitchScene(sceneNum) {
+      if (sceneNum === 1) {
+        switchMainTab('mindmap');
+        togglePedestal('auth');
+        alert("🎤 Scene 1: What We Build (45s)\n• เปิดด้วย Hero UI Mockup & System Architecture\n• FutureMe AI คือระบบแนะแนวที่อธิบายเหตุผลได้จริงผ่าน 3 เส้นทางคู่ขนาน");
+      } else if (sceneNum === 2) {
+        switchMainTab('audit');
+        alert("🎤 Scene 2: Why & Pain Point (60s)\n• Mismatch ไทย: จบไม่ตรงสาย 56%, ต่ำวุฒิ 27% (TDRI 2025)\n• 39% ทักษะจะเปลี่ยนไปภายในปี 2030 (WEF 2025)\n• ชี้จุดอับของแบบทดสอบนิ่ง (Static Quiz) บนแพลตฟอร์มเดิม");
+      } else if (sceneNum === 3) {
+        switchMainTab('mindmap');
+        togglePedestal('rag');
+        alert("🎤 Scene 3: How & 4-Stream RAG Engine (120s)\n• 2-Phase Assessment (Socratic Chat + Mission Sandbox)\n• 4 Data Streams RAG (756,300 งาน TDRI, สพฐ./ปวช. 2567, O*NET/ESCO, หลักฐานเด็ก)\n• Rules Decide, LLM Explains");
+      } else if (sceneNum === 4) {
+        switchMainTab('matrix');
+        alert("🎤 Scene 4: Value & Ecosystem Fit (75s)\n• วางตำแหน่งเป็น Strategic Plug-in Module เสริม DEEP SSO & NDLP\n• 100% Data Sovereignty บน AIS Cloud\n• ปลอดภัยตามกฎหมาย PDPA (Chat Transcript อยู่กับเด็ก)");
+      }
+    }
+
+    window.onload = () => {
+      renderAudit();
+      togglePedestal('auth');
+    };
+  </script>
+</body>
+</html>

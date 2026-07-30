@@ -249,12 +249,12 @@ The next milestone is **validation, not more AI**:
 
 ---
 
-<table width="100%">
+<table width="120%">
 <tr>
-<td align="center" width="50%">
+<td align="center" width="60%">
 <h3><a href="READMEEN.md">English README → </a></h3>
 </td>
-<td align="center" width="50%">
+<td align="center" width="60%">
 <h3><a href="READMETH.md">Thai README → </a></h3>
 </td>
 </tr>

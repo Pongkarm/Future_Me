@@ -1,0 +1,11 @@
+{"path":"01_Evidence","status":"mixed_verified_conditional_unverified","production_rag":true,"note":"filter at claim/chunk level"}
+{"path":"02_Education_and_Careers","status":"verified_conditional_seed","production_rag":true,"note":"admission criteria must be date-checked"}
+{"path":"03_Assessment_and_Safety","status":"framework_design_assumption","production_rag":true,"note":"reflection only; no diagnosis"}
+{"path":"04_Product_and_UX","status":"design_assumption","production_rag":false,"note":"product design corpus"}
+{"path":"05_AI_Engineering","status":"technical_reference","production_rag":false,"note":"version/license/benchmark check required"}
+{"path":"06_System_Architecture","status":"design_assumption","production_rag":false,"note":"target architecture; not deployed"}
+{"path":"07_Business_and_Competition","status":"hypothesis_target","production_rag":false,"note":"not measured outcomes"}
+{"path":"08_Examples","status":"prototype_scaffold","production_rag":false,"note":"not FutureMe backend"}
+{"path":"90_Assets","status":"presentation_only","production_rag":false,"note":"reader-facing assets"}
+{"path":"99_Quarantine","status":"quarantined","production_rag":false,"note":"never retrieve in production"}
+

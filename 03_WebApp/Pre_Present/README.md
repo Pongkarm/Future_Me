@@ -249,16 +249,19 @@ The next milestone is **validation, not more AI**:
 
 ---
 
-<table width="120%">
-<tr>
-<td align="center" width="60%">
-<h3><a href="READMEEN.md">English README → </a></h3>
-</td>
-<td align="center" width="60%">
-<h3><a href="READMETH.md">Thai README → </a></h3>
-</td>
-</tr>
-</table>
+<div align="center">
+
+<h3>🌐 Choose your language</h3>
+
+<a href="./READMEEN.md">
+  <img src="https://img.shields.io/badge/English-README-2F81F7?style=for-the-badge" alt="English README">
+</a>
+&nbsp;&nbsp;
+<a href="./READMETH.md">
+  <img src="https://img.shields.io/badge/Thai-README-2F81F7?style=for-the-badge" alt="Thai README">
+</a>
+
+</div>
 
 <p align="center">
   <sub>

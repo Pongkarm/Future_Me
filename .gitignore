@@ -21,3 +21,9 @@
 !**/.env.example
 
 .claude/
+
+# Office lock files
+~$*
+
+# Next.js generated
+**/next-env.d.ts

@@ -184,6 +184,8 @@ export const en = {
     sending: "Sending…",
     networkError:
       "I could not reach the chat service just now. You can try again, or use the structured assessment, which still works without the chat service.",
+    rateLimited:
+      "That is more messages than I can take at once. Please wait about {seconds} seconds and send it again — nothing you have written is lost.",
     mascotReady: "FutureMe is ready to listen",
     mascotThinking: "FutureMe is checking the project data",
     mascotSpeaking: "FutureMe has answered with AI assistance",

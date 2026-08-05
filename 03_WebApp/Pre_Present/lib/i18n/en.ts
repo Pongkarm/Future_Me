@@ -287,6 +287,7 @@ export const en = {
     progressLabel: "Plan progress",
     week: "WEEK {n}",
     weekComplete: "All tasks ticked",
+    weekCurrent: "Start here",
     gapTaskMarker: "added for a gap",
     noRouteTitle: "No route selected yet",
     noRouteChanged:

@@ -147,6 +147,7 @@ export default function PlanPage() {
         objectiveLabel={(w) => localised(w.objective, lang)}
         taskLabel={(task) => taskText(task, lang, t)}
         weekCompleteLabel={t.plan.weekComplete}
+        currentWeekLabel={t.plan.weekCurrent}
         gapTaskLabel={t.plan.gapTaskMarker}
         isGapTask={(task) => Boolean(task.gap)}
       />

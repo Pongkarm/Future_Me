@@ -29,6 +29,7 @@ export default function PlanRoadmap({
   objectiveLabel,
   taskLabel,
   weekCompleteLabel,
+  currentWeekLabel,
   gapTaskLabel,
   isGapTask,
 }: {
@@ -43,14 +44,33 @@ export default function PlanRoadmap({
   taskLabel: (task: PlanWeek["tasks"][number]) => string;
   /** Announced on a week whose tasks are all ticked. */
   weekCompleteLabel: string;
+  /** Marks the earliest unfinished week — where to pick the plan back up. */
+  currentWeekLabel: string;
   /** Marks a task the engine added because it found a gap. */
   gapTaskLabel: string;
   isGapTask: (task: PlanWeek["tasks"][number]) => boolean;
 }) {
+  const isComplete = (week: PlanWeek) =>
+    week.tasks.length > 0 && week.tasks.every((task) => done[task.id]);
+
+  /*
+   * Where to pick the plan back up: the earliest week still unfinished. A plan
+   * is read over a month, not in one sitting, so returning to it should not
+   * mean re-reading four weeks to work out where you stopped. Nothing is
+   * current once every week is done — there is no next stop to point at.
+   */
+  const currentWeek = weeks.find((week) => !isComplete(week))?.week ?? null;
+
   return (
-    <ol className="relative" data-testid="plan-roadmap">
+    /*
+     * The list roles are explicit because `display: grid` on a list item drops
+     * its list semantics in WebKit, and "item 2 of 4" is most of what this
+     * component is telling a screen-reader user.
+     */
+    <ol className="relative" data-testid="plan-roadmap" role="list">
       {weeks.map((week, index) => {
-        const complete = week.tasks.length > 0 && week.tasks.every((task) => done[task.id]);
+        const complete = isComplete(week);
+        const current = week.week === currentWeek;
         const isLast = index === weeks.length - 1;
         // Right-hand card on odd stops, left-hand on even — wide screens only.
         const cardOnRight = index % 2 === 0;
@@ -58,8 +78,11 @@ export default function PlanRoadmap({
         return (
           <li
             key={week.week}
+            role="listitem"
+            aria-current={current ? "step" : undefined}
             data-testid={`roadmap-stop-${week.week}`}
             data-complete={complete ? "true" : "false"}
+            data-current={current ? "true" : "false"}
             className="grid grid-cols-[3rem_1fr] gap-x-4 lg:grid-cols-[1fr_3rem_1fr] lg:gap-x-6"
           >
             {/* Wide screens only: the empty half opposite the card. */}
@@ -72,7 +95,9 @@ export default function PlanRoadmap({
                   "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors",
                   complete
                     ? "border-mint bg-mint text-mintInk"
-                    : "border-indigo/40 bg-surface text-indigoText",
+                    : current
+                      ? "border-indigo bg-indigo/10 text-indigoText ring-4 ring-indigo/20"
+                      : "border-indigo/40 bg-surface text-indigoText",
                 ].join(" ")}
               >
                 {complete ? "✓" : String(week.week).padStart(2, "0")}
@@ -96,6 +121,11 @@ export default function PlanRoadmap({
                 {complete ? (
                   <p className="mt-1 text-xs font-semibold text-mint">{weekCompleteLabel}</p>
                 ) : null}
+                {current ? (
+                  <p className="mt-1 text-xs font-semibold text-indigoText" data-testid="roadmap-current-label">
+                    {currentWeekLabel}
+                  </p>
+                ) : null}
 
                 <ul className="mt-3 space-y-2">
                   {week.tasks.map((task) => {
@@ -110,8 +140,13 @@ export default function PlanRoadmap({
                             data-testid={`task-${task.id}`}
                             className="mt-0.5 h-4 w-4 accent-mint"
                           />
-                          <span className={checked ? "text-muted line-through" : ""}>
-                            {taskLabel(task)}
+                          <span>
+                            <span className={checked ? "text-muted line-through" : ""}>
+                              {taskLabel(task)}
+                            </span>
+                            {/* Outside the struck-through span on purpose: why a
+                                task exists does not stop being true once it is
+                                ticked, and a struck-out label reads as retracted. */}
                             {isGapTask(task) ? (
                               <span
                                 data-testid={`gap-marker-${task.id}`}

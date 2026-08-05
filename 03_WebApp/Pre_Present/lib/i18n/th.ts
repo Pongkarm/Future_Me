@@ -289,6 +289,7 @@ export const th: Dictionary = {
     progressLabel: "ความคืบหน้าของแผน",
     week: "สัปดาห์ที่ {n}",
     weekComplete: "ทำครบทุกงานแล้ว",
+    weekCurrent: "เริ่มตรงนี้",
     gapTaskMarker: "เพิ่มเพราะข้อมูลยังขาด",
     noRouteTitle: "ยังไม่ได้เลือกเส้นทาง",
     noRouteChanged: "เส้นทางที่คุณเลือกไม่อยู่ในผลลัพธ์แล้ว คำตอบของคุณอาจเปลี่ยนไปตั้งแต่ตอนนั้น",

@@ -1,5 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
-import { completeInterview, completeMission } from "./helpers/journey";
+import {
+  ITEMS,
+  completeInterview,
+  completeMission,
+  contextReplyNumber,
+  sendInterviewReply,
+} from "./helpers/journey";
 
 /**
  * The plan reached the way a learner reaches it, rather than by seeding storage:
@@ -16,6 +22,41 @@ async function reachPlan(page: Page) {
   await page.locator('[data-testid^="plan-"]').first().click();
   await expect(page).toHaveURL(/\/plan/);
   await expect(page.getByTestId("plan-heading")).toBeVisible();
+}
+
+/**
+ * The same journey, but arranged so the engine actually has gaps to append
+ * tasks for: "I don't know yet" on cost and location only becomes a notice on a
+ * route that is expensive and needs relocation, which sci-math-engineering is
+ * and the cheap local routes are not. Without this the marker never renders and
+ * a test about it could only ever skip.
+ */
+async function reachPlanWithGaps(page: Page) {
+  await page.goto("/");
+  await page.getByTestId("start-guest").click();
+  await expect(page).toHaveURL(/\/interview/);
+
+  for (const item of ITEMS) {
+    await sendInterviewReply(page, String(["R", "I"].includes(item.dimension) ? 5 : 2));
+  }
+  await sendInterviewReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
+  await sendInterviewReply(page, contextReplyNumber("cost", "unknown"));
+  await sendInterviewReply(page, contextReplyNumber("mobility", "unknown"));
+  await sendInterviewReply(page, contextReplyNumber("horizon", "soon"));
+  await page.getByTestId("assessment-skip").click();
+
+  await page.getByTestId("interview-continue").click();
+  await completeMission(page);
+  await expect(page).toHaveURL(/\/routes/);
+
+  const routeId = "sci-math-engineering";
+  await expect(
+    page.getByTestId(`select-${routeId}`),
+    "this profile is expected to surface the expensive, relocation-heavy route",
+  ).toBeVisible();
+  await page.getByTestId(`select-${routeId}`).click();
+  await page.getByTestId(`plan-${routeId}`).click();
+  await expect(page).toHaveURL(/\/plan/);
 }
 
 test("the plan is drawn as a roadmap with one numbered stop per week", async ({ page }) => {
@@ -91,6 +132,58 @@ test("the roadmap fits a phone without scrolling sideways", async ({ page }) => 
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("the earliest unfinished week is marked as where to pick up", async ({ page }) => {
+  await reachPlan(page);
+
+  // Nothing done yet, so week 1 is where you start.
+  await expect(page.getByTestId("roadmap-stop-1")).toHaveAttribute("data-current", "true");
+  await expect(page.getByTestId("roadmap-stop-1")).toHaveAttribute("aria-current", "step");
+  await expect(page.getByTestId("roadmap-stop-2")).toHaveAttribute("data-current", "false");
+  await expect(page.getByTestId("roadmap-stop-2")).not.toHaveAttribute("aria-current", "step");
+
+  // Finishing week 1 moves the marker on rather than leaving it behind.
+  const tasks = page.getByTestId("roadmap-stop-1").locator('input[type="checkbox"]');
+  const count = await tasks.count();
+  for (let i = 0; i < count; i += 1) await tasks.nth(i).check();
+
+  await expect(page.getByTestId("roadmap-stop-1")).toHaveAttribute("data-current", "false");
+  await expect(page.getByTestId("roadmap-stop-2")).toHaveAttribute("data-current", "true");
+
+  // Exactly one stop is current at a time.
+  await expect(page.locator('[data-current="true"]')).toHaveCount(1);
+});
+
+test("the list keeps its semantics despite being laid out as a grid", async ({ page }) => {
+  await reachPlan(page);
+
+  // `display: grid` on a list item drops the role in WebKit, so it is explicit.
+  await expect(page.getByTestId("plan-roadmap")).toHaveAttribute("role", "list");
+  await expect(page.getByTestId("roadmap-stop-1")).toHaveAttribute("role", "listitem");
+  await expect(page.getByRole("list").filter({ has: page.getByTestId("roadmap-stop-1") }))
+    .toBeVisible();
+});
+
+test("a ticked task strikes the sentence but not the reason it exists", async ({ page }) => {
+  // Answering "I don't know yet" to cost and location is what makes the engine
+  // append gap tasks, so the marker exists to assert on at all.
+  await reachPlanWithGaps(page);
+
+  const marker = page.locator('[data-testid^="gap-marker-"]').first();
+  await expect(marker).toBeVisible();
+
+  const checkbox = marker
+    .locator('xpath=ancestor::label')
+    .locator('input[type="checkbox"]');
+  await checkbox.check();
+
+  await expect(marker).not.toHaveCSS("text-decoration-line", "line-through");
+  // The sentence itself is struck, which is the part that is now done.
+  await expect(marker.locator("xpath=preceding-sibling::span")).toHaveCSS(
+    "text-decoration-line",
+    "line-through",
+  );
 });
 
 test("the roadmap reads in Thai", async ({ page }) => {

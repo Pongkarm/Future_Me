@@ -55,9 +55,8 @@ describe("normalizeInterviewReply", () => {
     expect(normalizeInterviewReply("ครับ")).toBe("ครับ");
   });
 
-  it("collapses a mashed key but not a genuine doubled letter", () => {
-    expect(normalizeInterviewReply("ชอบบบ")).toBe("ชอบ");
-    expect(normalizeInterviewReply("บรรทัด")).toBe("บรรทัด");
+  it("leaves a drawn-out spelling alone — the length is the answer", () => {
+    expect(normalizeInterviewReply("ชอบบบ")).toBe("ชอบบบ");
   });
 });
 
@@ -73,8 +72,8 @@ describe("parseInterestReply", () => {
     expect(parseInterestReply("๔", LIKERT)).toEqual({ ok: true, value: 4 });
   });
 
-  it.each(["ชอบครับ", "ชอบค่ะ", "ชอบคะ", "ชอบนะครับ", "ชอบ ค่ะ", "ชอบบบ"])(
-    "accepts a polite or emphatic form of an answer it already knew: %s",
+  it.each(["ชอบครับ", "ชอบค่ะ", "ชอบคะ", "ชอบนะครับ", "ชอบ ค่ะ"])(
+    "accepts a polite form of an answer it already knew: %s",
     (reply) => {
       expect(parseInterestReply(reply, LIKERT)).toEqual({ ok: true, value: 4 });
     },
@@ -96,9 +95,20 @@ describe("parseInterestReply", () => {
     expect(parseInterestReply("ไม่ชอบเลยครับ", LIKERT)).toEqual({ ok: true, value: 1 });
   });
 
+  /*
+   * Drawing the word out is how strength gets expressed in writing, so a
+   * collapsed "ชอบบบ" would be this parser inventing a point on the scale.
+   * Asking again is the only honest response.
+   */
+  it.each(["ชอบบบ", "ไม่ชอบบบ", "ชอบบบบบ"])("asks again about a drawn-out %s", (reply) => {
+    expect(parseInterestReply(reply, LIKERT).ok).toBe(false);
+  });
+
   it.each([
     ["ชอบมั้ง", "hedged — the learner is not sure"],
     ["ก็ชอบ", "hedged"],
+    ["น่าจะชอบ", "hedged: probably, not definitely"],
+    ["คงไม่ชอบ", "hedged in the other direction"],
     ["ไม่ค่อยชอบเท่าไหร่", "a different degree, not a politer ไม่ชอบ"],
     ["น่าสนใจ", "interesting is not a point on this scale"],
     ["ชอบแต่ไม่มาก", "two answers at once"],

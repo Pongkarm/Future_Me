@@ -82,6 +82,51 @@ describe("containsRouteDecision", () => {
     expect(containsRouteDecision(text)).toBe(false);
   });
 
+  /*
+   * A red-team set from review. Every line here reached a learner once: the
+   * guard matched on verbs and nouns it had been shown, and a model does not
+   * write from that list. The last one is the shape that mattered most — it
+   * opens as the disclaimer we want and ends as a verdict, and the old code
+   * deleted the disclaimer from the middle of the text and then judged what
+   * was left, which is how it got through.
+   */
+  it.each([
+    "คุณเหมาะกับสายวิทย์ที่สุด",
+    "สายอาชีพตอบโจทย์คุณที่สุด",
+    "ทางเลือกแรกของคุณคือสายอาชีพ",
+    "ตัดสายสามัญออก เหลือสายอาชีพ",
+    "ควรไปสายอาชีพดิจิทัล",
+    "ควรต่อ ปวส. สายดิจิทัล",
+    "อันดับหนึ่งคือสายอาชีพ",
+    "สายอาชีพใช่ทางสำหรับคุณ",
+    "ไม่มีเส้นทางไหนเหมาะกับคุณเท่าสายอาชีพ",
+    "สายวิทย์ดีกว่าสายศิลป์สำหรับคุณ",
+  ])("rejects a decision review found reaching learners: %s", (text) => {
+    expect(containsRouteDecision(text)).toBe(true);
+  });
+
+  /*
+   * The other half of the same finding. Over-blocking is not the safe side
+   * here: an answer withheld is the offline fallback, so a guard that fires on
+   * ordinary helpful sentences quietly turns the chat off.
+   */
+  it.each([
+    ["สายไหนที่เหมาะกับคุณ ลองใช้แบบสำรวจดู", "a question, and the answer we want"],
+    ["ลองดูว่าค่าใช้จ่ายแบบนี้เหมาะกับคุณไหม", "a question ending in ไหม"],
+    ["หลักสูตรนี้ไม่ได้หมายความว่าเหมาะกับคุณ", "an explicit denial of fit"],
+    ["สายอาชีพเน้นการฝึกปฏิบัติมากกว่าสายสามัญ", "comparing routes, not ranking them for the reader"],
+    ["ปวช. ใช้เวลาน้อยกว่าสายสามัญหนึ่งปี", "a fact that happens to be comparative"],
+    ["เส้นทางใดจะเหมาะกับคุณ ขึ้นอยู่กับสิ่งที่คุณอยากลองทำ", "declines to answer, in question form"],
+  ])("still allows %s (%s)", (text) => {
+    expect(containsRouteDecision(text)).toBe(false);
+  });
+
+  it("judges each sentence, so a caveat cannot cover the one after it", () => {
+    expect(
+      containsRouteDecision("ไม่มีเส้นทางไหนดีที่สุดสำหรับทุกคน คุณควรเลือกสายอาชีพ"),
+    ).toBe(true);
+  });
+
   it("does not let a disclaimer smuggle a decision past the guard", () => {
     // The caveat is stripped before matching, so the second clause still trips.
     expect(

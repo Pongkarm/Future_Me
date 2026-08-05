@@ -167,40 +167,135 @@ const ROUTE_DECISION_PATTERNS = [
    * characters rather than words, and a learner-facing answer names the track
    * concretely — สายอาชีพ, สายวิทย์, ปวช. — rather than saying เส้นทาง.
    */
-  new RegExp(`(?:ควรเลือก|ควรเรียน|แนะนำให้เลือก|แนะนำให้เรียน)[^.!?]{0,20}(?:${TH_ROUTE_NOUNS})`),
-  new RegExp(`(?:${TH_ROUTE_NOUNS})[^.!?]{0,20}(?:เหมาะที่สุด|ดีที่สุด)`),
   /*
-   * Claiming that anything suits *the reader* is the decision itself, whatever
-   * noun it is attached to — "ปวช. ดิจิทัลเหมาะกับคุณที่สุด" names the track
-   * before a full stop, so a noun-anchored rule would never reach it.
-   *
-   * An interrogative in front turns the same words into a question rather than
-   * a verdict: "สายไหนเหมาะกับคุณ" invites the learner to go and find out, and
-   * pointing them at the assessment is exactly what this model should do.
+   * Telling the learner where to go. These hold whatever wraps them: an
+   * instruction inside a question ("คุณควรเลือกสายอาชีพ ใช่ไหม") is still an
+   * instruction, so unlike the fit claims below they are never excused.
    */
-  /(?<!ไหน|อะไร|ใด)เหมาะ(?:สม)?กับคุณ/,
-  new RegExp(`จัดอันดับ[^.!?]{0,20}(?:${TH_ROUTE_NOUNS})`),
+  new RegExp(
+    `(?:ควรเลือก|ควรเรียน|ควรไป|ควรต่อ|แนะนำให้เลือก|แนะนำให้เรียน|แนะนำให้ไป)[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})`,
+  ),
+  // Narrowing the field is choosing, stated backwards.
+  new RegExp(`(?:ตัด|ตัดออก|คัด)[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})[^.!?]{0,12}(?:ออก|ทิ้ง)`),
+  new RegExp(`(?:${TH_ROUTE_NOUNS})[^.!?]{0,12}(?:ออก|ทิ้ง)[^.!?]{0,12}(?:เหลือ|เลือก)`),
+  // Ordering them is ranking, however gently it is phrased.
+  new RegExp(`(?:ทางเลือก|ตัวเลือก)(?:แรก|ที่หนึ่ง|อันดับหนึ่ง)`),
+  new RegExp(`(?:อันดับ(?:แรก|หนึ่ง|ที่ ?1))[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})`),
+  new RegExp(`จัดอันดับ[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})`),
 ];
 
 /**
- * Stripped before matching, so that saying the honest thing — that there is no
- * single right answer and that this model does not get to pick — reads as the
- * refusal it is rather than as the decision it is refusing to make.
+ * Claims that a route suits *this reader*.
+ *
+ * Held apart from the list above because they are the one family that a
+ * question or a negation genuinely reverses: "สายไหนที่เหมาะกับคุณ" sends the
+ * learner to find out, and "ไม่ได้หมายความว่าเหมาะกับคุณ" is the disclaimer we
+ * want. An instruction cannot be undone that way, which is why it is not here.
  */
-const ROUTE_CAVEAT_PATTERNS = [
-  /\bthere (?:is|are) no (?:single )?(?:best|ideal|perfect|right) (?:route|path|track)\b/gi,
-  /\bi (?:cannot|can't|can not|will not|won't) (?:recommend|choose|pick|select|rank)\b.{0,80}\b(?:route|path|track|option)\b/gi,
-  new RegExp(`ไม่มี(?:${TH_ROUTE_NOUNS})[^.!?]{0,20}(?:ดีที่สุด|เหมาะที่สุด|เหมาะกับคุณ)`, "g"),
-  new RegExp(`ไม่(?:สามารถ|อาจ)?(?:เลือก|จัดอันดับ|ตัดสิน|บอก)[^.!?]{0,20}(?:แทนคุณ|ให้คุณ)`, "g"),
+const TH_FIT_CLAIM_PATTERNS = [
+  /เหมาะ(?:สม)?(?:กับ|สำหรับ)คุณ/,
+  /ตอบโจทย์(?:ของ)?คุณ/,
+  /ใช่(?:ทาง|สาย)?(?:สำหรับ)?คุณ/,
+  new RegExp(`คุณ[^.!?]{0,16}เหมาะ(?:สม)?(?:กับ|สำหรับ)[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})`),
+  new RegExp(`(?:${TH_ROUTE_NOUNS})[^.!?]{0,24}(?:เหมาะที่สุด|ดีที่สุด|เหมาะสุด)`),
+];
+
+/**
+ * A comparison of *suitability* that lands on a named route.
+ *
+ * This is the shape that slipped through when caveats were stripped mid
+ * sentence: "ไม่มีเส้นทางไหนเหมาะกับคุณเท่าสายอาชีพ" opens as a disclaimer and
+ * ends as a verdict, so it is checked before any exemption can apply.
+ *
+ * The comparison has to be about fit, not about the routes. Comparing two
+ * routes on an attribute — "สายอาชีพเน้นการฝึกปฏิบัติมากกว่าสายสามัญ" — is the
+ * thing this product exists to help with, and an earlier version of this rule
+ * blocked exactly that. What is forbidden is ranking them *for the reader*.
+ */
+const TH_COMPARATIVE_VERDICT = new RegExp(
+  `(?:เหมาะ|ตอบโจทย์|ใช่|ดี)[^.!?]{0,20}(?:เท่า|กว่า)[^.!?]{0,24}(?:${TH_ROUTE_NOUNS})`,
+);
+
+/** Turns a fit claim into a question rather than a verdict. */
+const TH_INTERROGATIVE = /(?:ไหม|มั้ย|หรือเปล่า|รึเปล่า|ไหน|อะไร|ใด|หรือไม่)/;
+
+/** Turns a fit claim into a denial of one. */
+const TH_NEGATED_CLAIM =
+  /(?:ไม่ได้หมายความว่า|ไม่ได้แปลว่า|ไม่จำเป็นว่า|ไม่จำเป็นต้อง|ไม่ได้บอกว่า)/;
+
+/**
+ * The honest refusal, rather than the decision it refuses.
+ *
+ * These match only their own words. The old code deleted them from the whole
+ * text and judged whatever was left, which let a decision ride in behind one;
+ * making them cover a whole sentence instead just moved the seam, because then
+ * anything trailing the disclaimer was covered too — "There is no single best
+ * route, but honestly you should choose the vocational route" came out clean.
+ *
+ * So a caveat excuses its own span and nothing else: it is removed from the
+ * clause and the remainder is judged on its own merits. What that cannot catch
+ * is a disclaimer whose *ending* is the verdict, which is why the comparative
+ * rule above runs first, on the untouched clause.
+ */
+const ROUTE_CAVEAT_SPANS = [
+  /there (?:is|are) no (?:single )?(?:best|ideal|perfect|right) (?:route|path|track)/gi,
+  /i (?:cannot|can't|can not|will not|won't) (?:recommend|choose|pick|select|rank)[^.!?]{0,40}(?:route|path|track|option)/gi,
+  new RegExp(`ไม่มี(?:${TH_ROUTE_NOUNS})[^.!?]{0,24}(?:ดีที่สุด|เหมาะที่สุด|เหมาะกับคุณ)`, "g"),
+  new RegExp(`ไม่(?:สามารถ|อาจ)?(?:เลือก|จัดอันดับ|ตัดสิน|บอก)[^.!?]{0,24}(?:แทนคุณ|ให้คุณ)`, "g"),
   /(?:เลือก|ตัดสินใจ)แทนคุณไม่ได้/g,
 ];
 
-export function containsRouteDecision(text: string): boolean {
-  const withoutCaveats = ROUTE_CAVEAT_PATTERNS.reduce(
-    (candidate, pattern) => candidate.replace(pattern, ""),
-    text,
+const THAI = /[฀-๿]/;
+
+/**
+ * The units a caveat is allowed to cover.
+ *
+ * Thai does not put spaces between words — it puts them between clauses — so a
+ * single space is a boundary there in a way it never is in English. Splitting
+ * on punctuation alone left "ไม่มีเส้นทางไหนดีที่สุดสำหรับทุกคน คุณควรเลือกสายอาชีพ"
+ * as one unit, where the disclaimer at the front excused the instruction at the
+ * back. Thai runs are therefore also split on single spaces; English is not,
+ * or every word would become its own sentence.
+ */
+function clauses(text: string): string[] {
+  const byPunctuation = text
+    .split(/(?<=[.!?])\s+|[\n\r]+|\s{2,}/u)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  return byPunctuation.flatMap((part) =>
+    THAI.test(part) ? [part, ...part.split(/\s+/u).filter(Boolean)] : [part],
   );
-  return ROUTE_DECISION_PATTERNS.some((pattern) => pattern.test(withoutCaveats));
+}
+
+/** Anchors are written without terminators, so drop the sentence's own. */
+const withoutTerminator = (sentence: string) => sentence.replace(/[.!?]+\s*$/u, "").trim();
+
+function sentenceDecides(rawSentence: string): boolean {
+  const sentence = withoutTerminator(rawSentence);
+
+  /*
+   * Before any exemption: a suitability comparison that ends on a named route
+   * is a verdict however it opened. This is the one shape a caveat cannot be
+   * trusted around, because here the caveat *is* the run-up to the decision.
+   */
+  if (TH_COMPARATIVE_VERDICT.test(sentence)) return true;
+
+  const residue = ROUTE_CAVEAT_SPANS.reduce(
+    (rest, pattern) => rest.replace(pattern, " "),
+    sentence,
+  );
+
+  if (ROUTE_DECISION_PATTERNS.some((pattern) => pattern.test(residue))) return true;
+
+  // Questions and denials are read from what is left, so a disclaimer cannot
+  // lend its ไหน or its ไม่ได้หมายความว่า to a verdict standing next to it.
+  const excused = TH_INTERROGATIVE.test(residue) || TH_NEGATED_CLAIM.test(residue);
+  return !excused && TH_FIT_CLAIM_PATTERNS.some((pattern) => pattern.test(residue));
+}
+
+export function containsRouteDecision(text: string): boolean {
+  return clauses(text).some(sentenceDecides);
 }
 
 const BRACKETED_SOURCE_ID = /\[([A-Za-z0-9][A-Za-z0-9._:-]{0,119})\]/g;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { format } from "@/lib/i18n";
 import ProgressBar from "./ProgressBar";
 
@@ -24,6 +25,12 @@ export default function AssessmentHeader({
   progressLabel,
   onReview,
   reviewLabel,
+  onReset,
+  resetLabel,
+  resetConfirmLabel,
+  resetConfirmPrompt,
+  resetCancelLabel,
+  resetDoneLabel,
 }: {
   title: string;
   position: number;
@@ -44,22 +51,112 @@ export default function AssessmentHeader({
   progressLabel: string;
   onReview?: () => void;
   reviewLabel: string;
+  /** Discard every reply and return to the first question. */
+  onReset?: () => void;
+  resetLabel: string;
+  resetConfirmLabel: string;
+  /** States what is about to be lost, before it is lost. */
+  resetConfirmPrompt: string;
+  resetCancelLabel: string;
+  /** Announced after the reset so the change is not silent. */
+  resetDoneLabel: string;
 }) {
+  const [confirming, setConfirming] = useState(false);
+  const [done, setDone] = useState(false);
+  const confirmRef = useRef<HTMLButtonElement>(null);
+  const resetRef = useRef<HTMLButtonElement>(null);
+
+  // Move to the confirm button rather than leaving focus on a control that just
+  // disappeared, which would drop a keyboard user back to the top of the page.
+  useEffect(() => {
+    if (confirming) confirmRef.current?.focus();
+  }, [confirming]);
+
+  // The confirmation is a decision about losing work, so let Escape out of it.
+  useEffect(() => {
+    if (!confirming) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setConfirming(false);
+      resetRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [confirming]);
+
   return (
     <div className="mb-7">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h1 className="text-lg font-bold sm:text-xl">{title}</h1>
-        {onReview ? (
-          <button
-            type="button"
-            onClick={onReview}
-            data-testid="go-review"
-            className="rounded-full px-2 py-1 text-xs font-semibold text-muted underline underline-offset-4 transition hover:text-ink"
-          >
-            {reviewLabel}
-          </button>
-        ) : null}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          {onReset ? (
+            <button
+              ref={resetRef}
+              type="button"
+              onClick={() => {
+                setDone(false);
+                setConfirming(true);
+              }}
+              data-testid="assessment-reset"
+              className="rounded-full px-2 py-1 text-xs font-semibold text-muted underline underline-offset-4 transition hover:text-ink"
+            >
+              {resetLabel}
+            </button>
+          ) : null}
+          {onReview ? (
+            <button
+              type="button"
+              onClick={onReview}
+              data-testid="go-review"
+              className="rounded-full px-2 py-1 text-xs font-semibold text-muted underline underline-offset-4 transition hover:text-ink"
+            >
+              {reviewLabel}
+            </button>
+          ) : null}
+        </div>
       </div>
+
+      {confirming ? (
+        <div
+          role="alertdialog"
+          aria-label={resetConfirmPrompt}
+          data-testid="assessment-reset-confirm"
+          className="mt-3 rounded-control border border-warning/50 bg-warning/5 p-3"
+        >
+          <p className="text-xs text-ink">{resetConfirmPrompt}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              ref={confirmRef}
+              type="button"
+              onClick={() => {
+                onReset?.();
+                setConfirming(false);
+                setDone(true);
+              }}
+              data-testid="assessment-reset-confirm-yes"
+              className="rounded-full bg-coral px-3 py-1.5 text-xs font-bold text-canvas transition hover:bg-coral/90"
+            >
+              {resetConfirmLabel}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setConfirming(false);
+                resetRef.current?.focus();
+              }}
+              data-testid="assessment-reset-cancel"
+              className="rounded-full border border-line bg-surface2 px-3 py-1.5 text-xs font-bold text-ink transition hover:border-muted"
+            >
+              {resetCancelLabel}
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Kept mounted so the announcement is not competing with a DOM insertion. */}
+      <p role="status" aria-live="polite" className="sr-only">
+        {done ? resetDoneLabel : ""}
+      </p>
 
       <div className="mt-3 flex items-baseline justify-between text-xs font-semibold">
         <span className="text-muted" aria-live="polite">

@@ -49,6 +49,12 @@ export const en = {
     reviewLabel: "Review",
     answeredCounter: "{answered} of {total} answered",
     reviewAnswers: "Review answers",
+    resetAnswers: "Start over",
+    resetConfirmPrompt:
+      "This clears every answer you have given and returns you to the first question. Any mission or plan built from them goes too. It cannot be undone.",
+    resetConfirm: "Yes, clear my answers",
+    resetCancel: "Keep my answers",
+    resetDone: "Your answers were cleared. You are back at the first question.",
     eyebrowInterests: "Interests",
     eyebrowSituation: "Your situation",
     eyebrowOptional: "Optional",

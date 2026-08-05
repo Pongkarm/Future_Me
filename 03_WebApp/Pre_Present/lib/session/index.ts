@@ -403,6 +403,31 @@ export function clearSession(): void {
   forget();
 }
 
+/**
+ * Start the questions again, keeping the same guest.
+ *
+ * Everything downstream of the answers goes with them. A mission, a chosen
+ * route and its plan progress were all derived from replies that no longer
+ * exist, and leaving them would let the learner walk into a plan built on
+ * answers they have just withdrawn.
+ *
+ * `safetyTriggered` is the deliberate exception. It gates the support screen on
+ * /routes, so clearing it here would turn "start over" into a way to dismiss
+ * that screen — a safety state must not be undone as a side effect of an
+ * unrelated action. Identity is kept too: this is the same learner starting
+ * again, not a new one, so `id` and `createdAt` survive.
+ */
+export function resetInterview(session: GuestSession): GuestSession {
+  return {
+    ...session,
+    updatedAt: new Date().toISOString(),
+    interview: { interest: {}, context: {} },
+    mission: null,
+    selectedRouteId: null,
+    planProgress: {},
+  };
+}
+
 function forget(): void {
   if (typeof window === "undefined") return;
   try {

@@ -53,6 +53,12 @@ export const th: Dictionary = {
     reviewLabel: "ทบทวน",
     answeredCounter: "ตอบแล้ว {answered} จาก {total}",
     reviewAnswers: "ดูคำตอบทั้งหมด",
+    resetAnswers: "เริ่มตอบใหม่",
+    resetConfirmPrompt:
+      "การทำแบบนี้จะลบคำตอบทั้งหมดที่คุณตอบไว้ และพากลับไปที่คำถามข้อแรก ภารกิจหรือแผนที่สร้างจากคำตอบเหล่านั้นจะถูกลบไปด้วย และกู้คืนไม่ได้",
+    resetConfirm: "ใช่ ลบคำตอบของฉัน",
+    resetCancel: "เก็บคำตอบไว้",
+    resetDone: "ลบคำตอบเรียบร้อยแล้ว ตอนนี้คุณอยู่ที่คำถามข้อแรก",
     eyebrowInterests: "ความสนใจ",
     eyebrowSituation: "สถานการณ์ของคุณ",
     eyebrowOptional: "ตอบหรือไม่ก็ได้",

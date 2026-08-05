@@ -25,8 +25,15 @@ export default function AssessmentMascot({
   const visual = CHAT_MASCOT_STATES[state];
 
   return (
+    /*
+     * Compact below `sm`, where it sits above the question rather than beside
+     * it. At its full size the character pushed the question itself off a
+     * 390×850 phone — the learner opened the interview, saw a mascot, and had
+     * to scroll before finding out what was being asked. It stays the same
+     * size from `sm` up, where there is a column of its own to live in.
+     */
     <div
-      className="interview-mascot-stage mx-auto flex w-full max-w-[190px] min-w-0 flex-col items-center justify-start gap-2"
+      className="interview-mascot-stage mx-auto flex w-full min-w-0 max-w-[124px] flex-row flex-wrap items-center justify-center gap-2 sm:max-w-[190px] sm:flex-col sm:justify-start"
       data-mascot-force-motion={forceMotion ? "on" : "system"}
       data-mascot-state={state}
       data-testid={`${testIdPrefix}-mascot-stage`}
@@ -37,7 +44,7 @@ export default function AssessmentMascot({
         data-mascot-force-motion={forceMotion ? "on" : "system"}
         data-mascot-state={state}
         data-testid={`${testIdPrefix}-mascot`}
-        className="interview-mascot-scene relative flex min-h-[190px] w-full items-end justify-center overflow-hidden rounded-[42%]"
+        className="interview-mascot-scene relative flex min-h-[124px] w-full items-end justify-center overflow-hidden rounded-[42%] sm:min-h-[190px]"
       >
         <span
           aria-hidden="true"
@@ -55,7 +62,14 @@ export default function AssessmentMascot({
           size={165}
           animated
           motion={forceMotion ? "on" : "system"}
-          className="interview-mascot-model relative z-10"
+          /*
+           * `size` is a fixed pixel width set in JS, so on the narrow stage
+           * above the character kept its 165px and was simply clipped by the
+           * scene's overflow — smaller frame, same mascot, cropped. The
+           * `!w-full` wins against that inline width below `sm` so it scales
+           * to the frame instead; from `sm` up the prop is left to do its job.
+           */
+          className="interview-mascot-model relative z-10 max-sm:!w-full"
         />
       </div>
       <div className="interview-mascot-status-pill flex items-center gap-1.5 rounded-full border border-indigo/40 bg-indigo/10 px-3 py-1.5 shadow-sm">

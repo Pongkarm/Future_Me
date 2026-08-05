@@ -314,11 +314,17 @@ export default function InterviewPage() {
     }
   };
 
-  const handleReplySubmit = () => {
+  /**
+   * @param quickReply text chosen by tapping an option instead of typing it.
+   *   It takes the same path as anything typed — the safety check, the parser,
+   *   the clarification on a miss — because a tap and a typed word are the same
+   *   answer and must not be recorded two different ways.
+   */
+  const handleReplySubmit = (quickReply?: string) => {
     const activeStep = STEPS[stepIndex];
     if (!session || submitting || !activeStep || activeStep.kind === "review") return;
 
-    const raw = reply.trim();
+    const raw = (quickReply ?? reply).trim();
     if (!raw) {
       showClarification("empty");
       return;
@@ -567,6 +573,8 @@ export default function InterviewPage() {
                     : undefined
               }
               replyOptions={replyOptions}
+              onQuickReply={(option) => handleReplySubmit(option)}
+              quickReplyBusy={submitting}
               history={transcriptHistory}
               acceptedReply={acceptedReply}
               acceptedReplyValue={acceptedReplyValue}

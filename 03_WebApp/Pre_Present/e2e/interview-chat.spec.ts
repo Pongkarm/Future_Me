@@ -318,9 +318,18 @@ test("the chat timeline fits phone, narrow desktop and desktop screens", async (
     expect(bubbleBox).not.toBeNull();
     expect(tailBox).not.toBeNull();
     if (transcriptBox && stageBox && mascotBox && bubbleBox && tailBox) {
-      expect(mascotBox.width).toBeGreaterThanOrEqual(140);
+      /*
+       * The character is deliberately smaller below `sm`, where it stacks
+       * above the question instead of sitting beside it. At the size it keeps
+       * on wider screens it pushed the question itself off a 390×850 phone —
+       * the learner opened the interview and had to scroll before finding out
+       * what was being asked. The floor stays in place at every width so it
+       * cannot quietly shrink to nothing; it is just a lower floor here.
+       */
+      const [minMascotWidth, minMascotHeight] = width < 640 ? [100, 110] : [140, 160];
+      expect(mascotBox.width).toBeGreaterThanOrEqual(minMascotWidth);
       expect(mascotBox.width).toBeLessThanOrEqual(200);
-      expect(mascotBox.height).toBeGreaterThanOrEqual(160);
+      expect(mascotBox.height).toBeGreaterThanOrEqual(minMascotHeight);
       expect(stageBox.x).toBeGreaterThanOrEqual(transcriptBox.x - 1);
       expect(stageBox.x + stageBox.width).toBeLessThanOrEqual(
         transcriptBox.x + transcriptBox.width + 1,

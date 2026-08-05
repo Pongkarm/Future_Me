@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button, Card, EvidenceBadge, Notice, Shell } from "@/components/ui";
+import PlanRoadmap from "@/components/plan/PlanRoadmap";
 import { recommend, type Recommendation } from "@/lib/decision-engine";
 import { buildPlan, planProgress, type GapTaskCode, type PlanTask } from "@/lib/plan";
 import { loadOrCreate, saveSession, type GuestSession } from "@/lib/session";
@@ -138,37 +139,17 @@ export default function PlanPage() {
         </div>
       </div>
 
-      <ol className="space-y-4">
-        {plan.weeks.map((w) => (
-          <Card as="li" key={w.week}>
-            <p className="text-[11px] font-bold tracking-widest text-muted">
-              {format(t.plan.week, { n: w.week })}
-            </p>
-            <h2 className="mt-1 text-base font-bold">{localised(w.objective, lang)}</h2>
-            <ul className="mt-3 space-y-2">
-              {w.tasks.map((task) => {
-                const done = !!session.planProgress[task.id];
-                return (
-                  <li key={task.id}>
-                    <label className="flex cursor-pointer items-start gap-3 rounded-control border border-line bg-surface2 p-3 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={done}
-                        onChange={() => toggle(task.id)}
-                        data-testid={`task-${task.id}`}
-                        className="mt-0.5 h-4 w-4 accent-mint"
-                      />
-                      <span className={done ? "text-muted line-through" : ""}>
-                        {taskText(task, lang, t)}
-                      </span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          </Card>
-        ))}
-      </ol>
+      <PlanRoadmap
+        weeks={plan.weeks}
+        done={session.planProgress}
+        onToggle={toggle}
+        weekTemplate={t.plan.week}
+        objectiveLabel={(w) => localised(w.objective, lang)}
+        taskLabel={(task) => taskText(task, lang, t)}
+        weekCompleteLabel={t.plan.weekComplete}
+        gapTaskLabel={t.plan.gapTaskMarker}
+        isGapTask={(task) => Boolean(task.gap)}
+      />
 
       <Card className="mt-6">
         <h2 className="text-sm font-bold">{t.plan.changedMindTitle}</h2>

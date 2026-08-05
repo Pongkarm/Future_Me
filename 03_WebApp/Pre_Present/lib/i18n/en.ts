@@ -137,6 +137,10 @@ export const en = {
     honest4:
       "This does not replace a qualified counsellor, and it has not been tested with real students.",
     readData: "Read exactly what data is collected →",
+    howItWorks: "How this works →",
+    howTitle: "How this works",
+    howIntro: "Three steps, and what each one can and cannot tell you.",
+    backHome: "Back to the start",
   },
 
   chat: {

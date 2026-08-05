@@ -97,7 +97,10 @@ export default function Home() {
             </li>
             <li>• {t.landing.honest4}</li>
           </ul>
-          <p className="mt-4 text-sm">
+          <p className="mt-4 flex flex-wrap gap-4 text-sm">
+            <Link href="/how-it-works" className="text-mint underline underline-offset-2">
+              {t.landing.howItWorks}
+            </Link>
             <Link href="/privacy" className="text-mint underline underline-offset-2">
               {t.landing.readData}
             </Link>

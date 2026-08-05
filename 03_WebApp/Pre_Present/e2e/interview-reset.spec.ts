@@ -108,6 +108,71 @@ test("the cleared state survives a refresh rather than coming back", async ({ pa
   expect(stored.interview.context).toEqual({});
 });
 
+test("research timing is discarded with the answers it describes", async ({ page }) => {
+  await page.goto("/interview");
+  await answer(page, "I love it", second.id);
+  await answer(page, "I dislike it", third.id);
+
+  const before = await page.evaluate(() =>
+    window.localStorage.getItem("futureme.research.v1"),
+  );
+  expect(before).not.toBeNull();
+
+  await page.getByTestId("assessment-reset").click();
+  await page.getByTestId("assessment-reset-confirm-yes").click();
+  await expect(page.getByTestId("interview-message-user")).toHaveCount(0);
+
+  /*
+   * Kept behind, the next attempt's answers get filed against the first
+   * attempt's timings, and a learner who simply restarted reads in the pilot
+   * data as one who deliberated a long time and then revised.
+   *
+   * The store is not empty afterwards and should not be: question one is on
+   * screen again, so a fresh clock has already started for it. What must be
+   * gone is everything the previous attempt recorded — no entry for the
+   * question that was answered and left behind, and an unanswered clock for
+   * the one now showing.
+   */
+  const after = await page.evaluate(() =>
+    JSON.parse(window.localStorage.getItem("futureme.research.v1") ?? "null"),
+  );
+  expect(after?.items?.[second.id]).toBeUndefined();
+  expect(after?.items?.[first.id]).toMatchObject({ firstResponseMs: -1, revisions: 0 });
+});
+
+test("deleting your data on the privacy page takes the timing with it", async ({ page }) => {
+  await page.goto("/interview");
+  await answer(page, "I love it", second.id);
+  await expect
+    .poll(async () => page.evaluate(() => window.localStorage.getItem("futureme.research.v1")))
+    .not.toBeNull();
+
+  await page.goto("/privacy");
+  await page.getByTestId("delete-data").click();
+
+  const research = await page.evaluate(() =>
+    JSON.parse(window.localStorage.getItem("futureme.research.v1") ?? "null"),
+  );
+  expect(research?.items ?? {}).toEqual({});
+});
+
+test("focus stays in the composer when resetting from the first question", async ({ page }) => {
+  await page.goto("/interview");
+  await answer(page, "I love it", second.id);
+  // Back to question one, so the reset does not change the step index and the
+  // usual focus move never fires.
+  await page.getByTestId("assessment-prev").click();
+  await expect(page.getByTestId("interview-current-question")).toHaveAttribute(
+    "data-question-id",
+    first.id,
+  );
+
+  await page.getByTestId("assessment-reset").click();
+  await page.getByTestId("assessment-reset-confirm-yes").click();
+
+  await expect(page.getByTestId("assessment-reply")).toBeFocused();
+});
+
 test("the reset is announced rather than happening silently", async ({ page }) => {
   await page.goto("/interview");
   await answer(page, "I love it", second.id);

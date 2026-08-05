@@ -187,6 +187,121 @@ const ROUTE_KEYWORDS: Record<string, string[]> = {
   ],
 };
 
+/**
+ * The words learners use, as opposed to the words the sources use.
+ *
+ * Every keyword above was taken from the material being cited — สอศ., myTCAS,
+ * RIASEC, ตลาดแรงงาน. A fifteen-year-old does not type any of that. They type
+ * "ชอบวาดรูป", "อยากเป็นหมอ", "จบมาทำงานอะไร", and retrieval returned nothing,
+ * which in this pipeline is not a worse answer but no answer at all: with no
+ * source the chat never reaches the model, so the most natural way to ask was
+ * the one guaranteed to fail.
+ *
+ * Kept as a separate map rather than folded into `keywords` so the two
+ * vocabularies stay legible. One is what a source is about; the other is how
+ * someone asks for it, and only the second needs revisiting when we watch real
+ * learners type.
+ *
+ * Short stems are chosen where they are unambiguous — ศิลป covers ศิลปะ,
+ * ศิลป์ and ศิลปิน; วิศว covers วิศวะ and วิศวกรรม. Ambiguous fragments are
+ * left out: ช่าง would match ช่างเถอะ, and หมอ alone would match หมอน.
+ */
+const LEARNER_VOCABULARY: Record<string, string[]> = {
+  "ovec-voc-curriculum-2567": [
+    "สายอาชีพ",
+    "อาชีวะ",
+    "วิทยาลัย",
+    "เรียนสายอาชีพ",
+    "ฝึกอาชีพ",
+    "ทวิศึกษา",
+  ],
+  "mytcas-70": [
+    "ม.ปลาย",
+    "มัธยมปลาย",
+    "สายสามัญ",
+    "สอบเข้า",
+    "เรียนต่อ",
+    "ต่อมหาลัย",
+    "มหาลัย",
+    "แอดมิชชั่น",
+    "โควตา",
+    "รอบพอร์ต",
+    "ยื่นคะแนน",
+    "คณะไหน",
+  ],
+  "onet-interest-profiler-manual": [
+    "ชอบอะไร",
+    "ถนัด",
+    "ความถนัด",
+    "สนใจ",
+    "ค้นหาตัวเอง",
+    "เลือกไม่ถูก",
+    "ไม่รู้จะเรียนอะไร",
+    "ยังไม่รู้ว่าชอบอะไร",
+    "แนะแนว",
+  ],
+  "hsces-current-2026": ["วุฒิ", "กศน", "เรียนนอกระบบ", "จบต่างประเทศ"],
+  "tdri-human-capital-2025": [
+    "หางาน",
+    "ตกงาน",
+    "เงินเดือน",
+    "รายได้",
+    "จบมาทำงานอะไร",
+    "อาชีพในอนาคต",
+    "ตลาดงาน",
+    "งานที่ต้องการ",
+  ],
+  "route-sci-math-engineering": [
+    "สายวิทย์",
+    "วิทย์-คณิต",
+    "วิศว",
+    "คณิตศาสตร์",
+    "เคมี",
+    "ชีววิทยา",
+    "วิทยาศาสตร์",
+  ],
+  "route-vocational-digital": [
+    "เทคโนโลยี",
+    "โปรแกรมเมอร์",
+    "เขียนโค้ด",
+    "ทำเกม",
+    "ทำแอป",
+    "ทำเว็บ",
+    "สายไอที",
+  ],
+  "route-dve-dual": ["เรียนไปทำงานไป", "มีรายได้ระหว่างเรียน", "ทำงานจริง", "สหกิจ"],
+  "route-arts-design": [
+    "วาดรูป",
+    "วาดภาพ",
+    "กราฟิก",
+    "ดีไซน์",
+    "สายศิลป์",
+    "ศิลป",
+    "ถ่ายรูป",
+    "ครีเอทีฟ",
+    "งานคราฟต์",
+  ],
+  "route-business-admin": [
+    "ค้าขาย",
+    "ขายของ",
+    "การเงิน",
+    "เศรษฐศาสตร์",
+    "ผู้ประกอบการ",
+    "เปิดร้าน",
+    "ทำธุรกิจ",
+  ],
+  "route-health-care": [
+    "อยากเป็นหมอ",
+    "เป็นหมอ",
+    "เภสัช",
+    "ทันตแพทย์",
+    "สาธารณสุข",
+    "ผู้ช่วยพยาบาล",
+    "ดูแลคน",
+    "กายภาพบำบัด",
+  ],
+};
+
 const ROUTE_KNOWLEDGE: KnowledgeRecord[] = routesData.routes.map((route, index) => ({
   id: `route-${route.id}`,
   title: {
@@ -203,7 +318,10 @@ const ROUTE_KNOWLEDGE: KnowledgeRecord[] = routesData.routes.map((route, index) 
   order: 100 + index,
 }));
 
-const KNOWLEDGE = [...GENERAL_KNOWLEDGE, ...ROUTE_KNOWLEDGE];
+const KNOWLEDGE = [...GENERAL_KNOWLEDGE, ...ROUTE_KNOWLEDGE].map((record) => ({
+  ...record,
+  keywords: [...record.keywords, ...(LEARNER_VOCABULARY[record.id] ?? [])],
+}));
 
 const STOP_WORDS = new Set([
   "about",
@@ -247,8 +365,17 @@ function normalize(value: string): string {
   return value.normalize("NFKC").toLocaleLowerCase("en").replace(/[–—]/g, "-");
 }
 
+/**
+ * `\p{M}` is in the class because Thai vowels and tone marks are combining
+ * marks, not letters. Without it the pattern cuts a Thai word at every mark
+ * and leaves fragments that mean nothing — "เท่ากับเท่าไหร่" became "บเท",
+ * which then substring-matched "ระบบเทียบวุฒิ" and retrieved the credential
+ * equivalency source for a question about arithmetic. Whole words match far
+ * less often, which is correct: for Thai the curated keywords below are meant
+ * to be doing the work, not accidents of where a tone mark fell.
+ */
 function tokens(value: string): string[] {
-  return (normalize(value).match(/[\p{L}\p{N}]+/gu) ?? []).filter(
+  return (normalize(value).match(/[\p{L}\p{N}\p{M}]+/gu) ?? []).filter(
     (token) => token.length >= 3 && !STOP_WORDS.has(token),
   );
 }

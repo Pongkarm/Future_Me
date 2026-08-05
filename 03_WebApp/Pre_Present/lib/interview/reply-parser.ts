@@ -187,6 +187,56 @@ const CONTEXT_ALIASES = {
 };
 
 /**
+ * Sentence-final politeness particles, stripped before matching.
+ *
+ * A Thai speaker types ครับ or ค่ะ without deciding to — it marks who is
+ * speaking to whom, not what was answered. "ชอบครับ" and "ชอบ" are the same
+ * reply, so rejecting the polite one asks the most courteous learners to type
+ * again, on a screen that just invited them to answer in their own words.
+ *
+ * This is not a licence to guess. Everything listed is propositionally empty,
+ * and the two exclusions are load bearing:
+ *
+ * - เลย is an intensifier, not a particle. ไม่ชอบเลย is the bottom of the
+ *   scale and ไม่ชอบ is one step up, so stripping it would move a learner's
+ *   answer without telling them.
+ * - ค่า is left out although it is a common spelling of ค่ะ, because it is
+ *   also the ordinary word for cost — something this questionnaire asks about.
+ *
+ * Hedges (มั้ง, ก็, น่าจะ) are absent for the same reason: they carry real
+ * uncertainty, and this parser is meant to ask again rather than resolve it.
+ */
+const TH_POLITENESS_PARTICLES = [
+  "ครับผม",
+  "ครับ",
+  "คับ",
+  "ค่ะ",
+  "คะ",
+  "ฮะ",
+  "ฮ่ะ",
+  "จ้ะ",
+  "จ๊ะ",
+  "จ้า",
+  "นะ",
+  "น่ะ",
+  "อ่ะ",
+  "อะ",
+];
+
+const TH_TRAILING_PARTICLES = new RegExp(
+  `(?:\\s*(?:${TH_POLITENESS_PARTICLES.join("|")}))+$`,
+  "u",
+);
+
+/**
+ * Thai does not lengthen a word by repeating a letter, so a run of three or
+ * more is someone leaning on a key — "ชอบบบ" is enthusiasm, not a different
+ * answer. Two in a row is left alone, because real spellings have them
+ * (บรรทัด, กรรม).
+ */
+const TH_KEY_MASHING = /([฀-๿])\1{2,}/gu;
+
+/**
  * Unicode-safe normalization for approved whole-reply matching.
  *
  * This deliberately does not remove question marks, exclamation marks, or
@@ -194,7 +244,7 @@ const CONTEXT_ALIASES = {
  */
 export function normalizeInterviewReply(input: string): string {
   const thaiDigits = "๐๑๒๓๔๕๖๗๘๙";
-  return input
+  const base = input
     .normalize("NFKC")
     .replace(/[\u200B-\u200D\u2060\uFEFF]/gu, "")
     .replace(/[๐-๙]/gu, (digit) => String(thaiDigits.indexOf(digit)))
@@ -204,7 +254,18 @@ export function normalizeInterviewReply(input: string): string {
     .trim()
     .replace(/\s+/gu, " ")
     .replace(/\.$/u, "")
-    .toLocaleLowerCase("en");
+    .toLocaleLowerCase("en")
+    .replace(TH_KEY_MASHING, "$1");
+
+  // The full stop is trimmed a second time: in "ปวช.ครับ" it only becomes
+  // trailing once the particle is gone, and ปวช. is how the abbreviation is
+  // ordinarily written.
+  const stripped = base.replace(TH_TRAILING_PARTICLES, "").replace(/\.$/u, "");
+
+  // A reply made of nothing but particles carries no answer. Leaving it whole
+  // keeps it a miss the learner is told about, rather than collapsing it to an
+  // empty lookup key.
+  return stripped.length > 0 ? stripped : base;
 }
 
 function parseFromChoices<T extends string | number>(

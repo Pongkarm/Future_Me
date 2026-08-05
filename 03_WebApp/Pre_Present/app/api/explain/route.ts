@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import routesData from "@/data/routes.json";
+import { clientKeyFromHeaders, spendLimiter } from "@/lib/chat";
 import { REASON_TEXT } from "@/lib/decision-engine/explanations";
 import type { ReasonCode } from "@/lib/decision-engine/types";
 
@@ -101,6 +102,25 @@ export async function POST(request: Request) {
         note: "No ANTHROPIC_API_KEY configured — deterministic explanation used.",
       },
       { status: 200 },
+    );
+  }
+
+  /*
+   * Shares one ceiling with /api/chat, because they share one budget. Limiting
+   * only the busier endpoint would move the attack to the quieter one rather
+   * than stopping it.
+   *
+   * Answered with the deterministic text and a 200 rather than a 429: this
+   * endpoint's whole contract is that it always returns usable wording, and
+   * the screen it feeds is meant to degrade without the reader noticing. The
+   * learner reads the engine's own sentence, which was always the fallback.
+   */
+  const decision = spendLimiter.check(clientKeyFromHeaders(request.headers));
+  if (!decision.allowed) {
+    console.warn(`[explain] rate limited (${decision.scope})`);
+    return NextResponse.json(
+      { source: "fallback", text: fallback, note: "Rate limited — deterministic explanation used." },
+      { status: 200, headers: { "Retry-After": String(decision.retryAfterSeconds) } },
     );
   }
 

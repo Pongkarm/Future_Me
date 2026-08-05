@@ -264,6 +264,28 @@ test("the chat timeline fits phone, narrow desktop and desktop screens", async (
     await page.setViewportSize({ width, height: 760 });
     await page.goto("/interview");
 
+    /*
+     * Measure the resting layout, not a frame of the entry animation.
+     *
+     * The active turn arrives under `animate-[card-in_220ms_ease-out]`, whose
+     * transform puts it two pixels outside the transcript while it plays. A
+     * measurement that landed inside those 220ms failed this assertion for a
+     * reason it is not about: the laid-out width is fine, and the overshoot is
+     * the animation doing its job. That is the whole of the intermittency here.
+     *
+     * Only finite animations are awaited. The mascot breathes and floats on
+     * infinite loops, so waiting on those would hang forever.
+     */
+    await page.locator("svg.fm-mascot").first().waitFor();
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      const settling = document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => undefined));
+      await Promise.all(settling);
+    });
+
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );

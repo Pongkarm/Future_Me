@@ -121,7 +121,9 @@ test("the reset is announced rather than happening silently", async ({ page }) =
 test("the control is written in Thai when the learner reads Thai", async ({ page }) => {
   await page.goto("/interview");
   await page.getByRole("radio", { name: "ไทย" }).click();
-  await answer(page, "ชอบ", second.id);
+  // Answered the way a Thai learner actually types it, particle and all, which
+  // also proves the parser's politeness handling is wired to the real screen.
+  await answer(page, "ชอบครับ", second.id);
 
   await expect(page.getByTestId("assessment-reset")).toHaveText("เริ่มตอบใหม่");
   await page.getByTestId("assessment-reset").click();

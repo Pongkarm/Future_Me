@@ -126,23 +126,73 @@ function systemPrompt(language: ChatLanguage, retrieved: RetrievedKnowledge[]): 
   ].join("\n");
 }
 
+/**
+ * How a Thai answer actually names a study route. Kept as one list because
+ * every Thai rule below needs the same vocabulary, and a route the guard does
+ * not know the name of is a route it cannot protect.
+ */
+const TH_ROUTE_NOUNS = [
+  "เส้นทาง",
+  "สายการเรียน",
+  "สายอาชีพ",
+  "สายสามัญ",
+  "สายวิทย์",
+  "สายศิลป์",
+  "คณะ",
+  "สาขา",
+  "หลักสูตร",
+  "ปวช",
+  "ปวส",
+  "ทางเลือก",
+].join("|");
+
 const ROUTE_DECISION_PATTERNS = [
   /\b(?:best|ideal|perfect|right)\s+(?:route|path|track)\b/i,
-  /\byou should (?:choose|pick|take) (?:the |this |that )?(?:route|path|track)\b/i,
-  /\bi recommend (?:the |this |that )?(?:route|path|track)\b/i,
+  /*
+   * The noun is allowed to sit a short way from the verb, because a model
+   * names the route rather than calling it "the route" — "you should choose
+   * the vocational route" is the sentence this has to catch. The span stops at
+   * sentence punctuation so it cannot reach across into an unrelated clause.
+   */
+  /\byou should (?:choose|pick|take)\b[^.!?]{0,60}\b(?:route|path|track|programme|program|stream)\b/i,
+  /\bi recommend\b[^.!?]{0,60}\b(?:route|path|track|programme|program|stream)\b/i,
   /\b(?:best|strongest|top|ideal|perfect|right|better|good)\s+(?:fit|match|choice|option)\b.{0,80}\bfor you\b/i,
   /\b(?:programme|program|route|path|track|option|choice)\b.{0,80}\b(?:best|strongest|top|ideal|perfect|right|better|good)\s+(?:fit|match|choice|option)\b/i,
   /\b(?:put|place|rank)\b.{0,60}\b(?:it|this|that|programme|program|route|path|track|option)\b.{0,30}\b(?:first|ahead|top)\b/i,
   /\b(?:fits?|matches?|suits?)\s+you\b/i,
-  /(?:ควรเลือก|แนะนำให้เลือก)(?:เส้นทาง|สายการเรียน|คณะ)/,
-  /(?:เส้นทาง|สายการเรียน|คณะ)(?:นี้)?(?:เหมาะที่สุด|ดีที่สุด|เหมาะกับคุณแน่นอน)/,
-  /(?:หลักสูตร|เส้นทาง|สายการเรียน|คณะ)(?:นี้)?เหมาะกับคุณ/,
-  /จัดอันดับ(?:เส้นทาง|สายการเรียน|คณะ)/,
+  /*
+   * Thai is the audience's language, so these carry more weight than the
+   * English rules above, not less. Two things make them harder to write:
+   * Thai runs words together without spaces, so a "gap" is counted in
+   * characters rather than words, and a learner-facing answer names the track
+   * concretely — สายอาชีพ, สายวิทย์, ปวช. — rather than saying เส้นทาง.
+   */
+  new RegExp(`(?:ควรเลือก|ควรเรียน|แนะนำให้เลือก|แนะนำให้เรียน)[^.!?]{0,20}(?:${TH_ROUTE_NOUNS})`),
+  new RegExp(`(?:${TH_ROUTE_NOUNS})[^.!?]{0,20}(?:เหมาะที่สุด|ดีที่สุด)`),
+  /*
+   * Claiming that anything suits *the reader* is the decision itself, whatever
+   * noun it is attached to — "ปวช. ดิจิทัลเหมาะกับคุณที่สุด" names the track
+   * before a full stop, so a noun-anchored rule would never reach it.
+   *
+   * An interrogative in front turns the same words into a question rather than
+   * a verdict: "สายไหนเหมาะกับคุณ" invites the learner to go and find out, and
+   * pointing them at the assessment is exactly what this model should do.
+   */
+  /(?<!ไหน|อะไร|ใด)เหมาะ(?:สม)?กับคุณ/,
+  new RegExp(`จัดอันดับ[^.!?]{0,20}(?:${TH_ROUTE_NOUNS})`),
 ];
 
+/**
+ * Stripped before matching, so that saying the honest thing — that there is no
+ * single right answer and that this model does not get to pick — reads as the
+ * refusal it is rather than as the decision it is refusing to make.
+ */
 const ROUTE_CAVEAT_PATTERNS = [
   /\bthere (?:is|are) no (?:single )?(?:best|ideal|perfect|right) (?:route|path|track)\b/gi,
   /\bi (?:cannot|can't|can not|will not|won't) (?:recommend|choose|pick|select|rank)\b.{0,80}\b(?:route|path|track|option)\b/gi,
+  new RegExp(`ไม่มี(?:${TH_ROUTE_NOUNS})[^.!?]{0,20}(?:ดีที่สุด|เหมาะที่สุด|เหมาะกับคุณ)`, "g"),
+  new RegExp(`ไม่(?:สามารถ|อาจ)?(?:เลือก|จัดอันดับ|ตัดสิน|บอก)[^.!?]{0,20}(?:แทนคุณ|ให้คุณ)`, "g"),
+  /(?:เลือก|ตัดสินใจ)แทนคุณไม่ได้/g,
 ];
 
 export function containsRouteDecision(text: string): boolean {

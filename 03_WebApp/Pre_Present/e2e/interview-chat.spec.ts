@@ -172,16 +172,46 @@ test("the interview mascot keeps a calm scene with readable character motion", a
     "fm-listen-ping",
   );
 
+  /*
+   * The acknowledgement runs for 420ms and the page moves on at 480ms, so this
+   * is a window that closes for good rather than a value to retry for. Waiting
+   * for the state and *then* reading the style is two round trips through a
+   * 60ms gap: when the first one lands late the second reads fm-breathe, the
+   * resting animation, and the test fails for a reason that has nothing to do
+   * with the acknowledgement.
+   *
+   * The read is armed before the click and fires on the attribute change
+   * itself, so it captures the frame it is about rather than racing it.
+   */
+  const acknowledgement = scene.evaluate(
+    (element) =>
+      new Promise<{ name: string; duration: string } | null>((resolve) => {
+        const read = () => {
+          const target = element.querySelector(".fm-breathe");
+          if (!target) return null;
+          const style = getComputedStyle(target);
+          return { name: style.animationName, duration: style.animationDuration };
+        };
+        if (element.getAttribute("data-mascot-state") === "offline") {
+          resolve(read());
+          return;
+        }
+        const observer = new MutationObserver(() => {
+          if (element.getAttribute("data-mascot-state") !== "offline") return;
+          observer.disconnect();
+          resolve(read());
+        });
+        observer.observe(element, {
+          attributes: true,
+          attributeFilter: ["data-mascot-state"],
+        });
+      }),
+  );
+
   await page.getByTestId("assessment-reply").fill("5");
   await page.getByTestId("assessment-send").click();
   await expect(mascot).toHaveAttribute("data-mascot-state", "offline");
-  const acknowledgement = await scene.evaluate((element) => {
-    const target = element.querySelector(".fm-breathe");
-    if (!target) return null;
-    const style = getComputedStyle(target);
-    return { name: style.animationName, duration: style.animationDuration };
-  });
-  expect(acknowledgement).toEqual({ name: "fm-interview-ack-pop", duration: "0.42s" });
+  expect(await acknowledgement).toEqual({ name: "fm-interview-ack-pop", duration: "0.42s" });
 });
 
 test("the static interview scene preserves reduced motion and character-only opt-in", async ({ page }) => {

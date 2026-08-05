@@ -34,7 +34,7 @@ import {
   type ReplyParseFailureReason,
 } from "@/lib/interview/reply-parser";
 import { MASCOT_MOTION_KEY } from "@/lib/mascot/motion-preference";
-import { markSeen, recordAnswer } from "@/lib/research/telemetry";
+import { clearTelemetry, markSeen, recordAnswer } from "@/lib/research/telemetry";
 
 type ContextKey = "tier" | "cost" | "mobility" | "horizon" | "proud";
 
@@ -270,10 +270,25 @@ export default function InterviewPage() {
   const handleReset = () => {
     if (!session) return;
     persist(resetInterview(session));
+    /*
+     * Response timing lives under its own key, and it has to go with the
+     * answers it describes. Left behind, the next attempt's replies are filed
+     * against the first attempt's timings — a learner who restarts looks in the
+     * pilot data like one who deliberated for a very long time and then
+     * revised, which is a finding about a bug rather than about them.
+     */
+    clearTelemetry();
     setReply("");
     setShowErrors(false);
     setReturnToReview(false);
     goTo(0, "back");
+    /*
+     * `goTo` moves focus only when the step index changes, and resetting from
+     * the first question leaves it at zero. The confirm button the learner just
+     * pressed is unmounted either way, so without this focus lands on <body>
+     * and a keyboard user restarts from the top of the page.
+     */
+    window.requestAnimationFrame(() => replyRef.current?.focus());
   };
 
   /** A sent and accepted reply advances after the mascot acknowledges it. */

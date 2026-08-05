@@ -222,6 +222,34 @@ export default function ChatPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ language: lang, messages: requestMessages }),
       });
+      /*
+       * Throttled, which is the one failure the learner can actually do
+       * something about — so it says how long, rather than joining every other
+       * failure under "could not reach the chat service".
+       *
+       * Their words go back in the composer and the unanswered turn comes off
+       * the transcript, so sending again is one click and does not leave a
+       * duplicate above it. The provider allowance never arrives here: running
+       * out of that returns a project-data answer, not an error.
+       */
+      if (response.status === 429) {
+        if (requestSequence.current !== requestId) return;
+        const header = Number(response.headers.get("retry-after"));
+        const seconds = Number.isFinite(header) && header > 0 ? Math.ceil(header) : 60;
+        setMessages((current) => [
+          ...current.filter((message) => message.id !== userMessage.id),
+          {
+            id: nextId("assistant"),
+            role: "assistant",
+            content: t.chat.rateLimited.replace("{seconds}", String(seconds)),
+            mode: "offline",
+          },
+        ]);
+        setInput(content);
+        cancelMascotReset();
+        setMascotState("error");
+        return;
+      }
       if (!response.ok) throw new Error(`Chat route returned ${response.status}`);
 
       const parsed = parseChatResponse(await response.json());

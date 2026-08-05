@@ -52,7 +52,6 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "not really",
     "ไม่ชอบ",
     "ไม่ค่อยชอบ",
-    "คงไม่ชอบ",
   ],
   3: [
     "not sure",
@@ -74,7 +73,6 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "sounds good",
     "ชอบ",
     "ค่อนข้างชอบ",
-    "น่าจะชอบ",
   ],
   5: [
     "strongly like",
@@ -203,8 +201,11 @@ const CONTEXT_ALIASES = {
  * - ค่า is left out although it is a common spelling of ค่ะ, because it is
  *   also the ordinary word for cost — something this questionnaire asks about.
  *
- * Hedges (มั้ง, ก็, น่าจะ) are absent for the same reason: they carry real
- * uncertainty, and this parser is meant to ask again rather than resolve it.
+ * Hedges (มั้ง, ก็, น่าจะ, คง, แหละ, ล่ะ) are absent for the same reason: they
+ * carry real uncertainty, and this parser is meant to ask again rather than
+ * resolve it. The alias lists above were carrying "น่าจะชอบ" and "คงไม่ชอบ"
+ * against that rule — a hedged answer scored as though it were flat. They are
+ * gone, so an unsure learner is asked again instead of being written down.
  */
 const TH_POLITENESS_PARTICLES = [
   "ครับผม",
@@ -228,13 +229,16 @@ const TH_TRAILING_PARTICLES = new RegExp(
   "u",
 );
 
-/**
- * Thai does not lengthen a word by repeating a letter, so a run of three or
- * more is someone leaning on a key — "ชอบบบ" is enthusiasm, not a different
- * answer. Two in a row is left alone, because real spellings have them
- * (บรรทัด, กรรม).
+/*
+ * There was a rule here that collapsed three or more repeated Thai letters, on
+ * the theory that "ชอบบบ" is the same answer as "ชอบ" typed enthusiastically.
+ * It is removed, because that reasoning was wrong in the one way that matters:
+ * the drawn-out spelling is *how the strength is expressed*. Collapsing it
+ * recorded ชอบบบ as 4 and ไม่ชอบบบ as 2 when the learner may well have meant
+ * the ends of the scale, and recorded them without asking — the exact failure
+ * this parser exists to avoid. Politeness particles carry no meaning and can
+ * go; emphasis carries the answer itself and cannot.
  */
-const TH_KEY_MASHING = /([฀-๿])\1{2,}/gu;
 
 /**
  * Unicode-safe normalization for approved whole-reply matching.
@@ -254,8 +258,7 @@ export function normalizeInterviewReply(input: string): string {
     .trim()
     .replace(/\s+/gu, " ")
     .replace(/\.$/u, "")
-    .toLocaleLowerCase("en")
-    .replace(TH_KEY_MASHING, "$1");
+    .toLocaleLowerCase("en");
 
   // The full stop is trimmed a second time: in "ปวช.ครับ" it only becomes
   // trailing once the particle is gone, and ปวช. is how the abbreviation is

@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import {
   CHAT_LIMITS,
+  ChatProviderError,
   answerChat,
+  clientKeyFromHeaders,
   requestAnthropic,
+  requestLimiter,
+  spendLimiter,
   validateChatRequest,
   type ChatResponse,
 } from "@/lib/chat";
@@ -12,6 +16,7 @@ export const runtime = "nodejs";
 const TIMEOUT_MS = 8_000;
 const DEFAULT_MODEL = "claude-sonnet-5";
 const NO_STORE = { "Cache-Control": "no-store" } as const;
+
 
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: NO_STORE });
@@ -65,6 +70,29 @@ async function readJsonBody(request: Request): Promise<BodyReadResult> {
 }
 
 export async function POST(request: Request) {
+  const clientKey = clientKeyFromHeaders(request.headers);
+
+  /*
+   * The request throttle, checked before the body is read: refusing costs
+   * nothing then, and a caller flooding the endpoint should not also get to
+   * make us parse 64KB per attempt.
+   *
+   * This ceiling is about server load only. What it does *not* do any more is
+   * charge the provider budget, which is checked further down at the moment
+   * something is actually about to be spent.
+   */
+  const decision = requestLimiter.check(clientKey);
+  if (!decision.allowed) {
+    console.warn(`[chat] throttled (${decision.scope})`);
+    return NextResponse.json(
+      { error: "Too many requests. Try again shortly.", code: "RATE_LIMITED" },
+      {
+        status: 429,
+        headers: { ...NO_STORE, "Retry-After": String(decision.retryAfterSeconds) },
+      },
+    );
+  }
+
   const bodyResult = await readJsonBody(request);
   if (!bodyResult.ok && bodyResult.code === "PAYLOAD_TOO_LARGE") {
     return json({ error: "Request body is too large.", code: bodyResult.code }, 413);
@@ -80,14 +108,54 @@ export async function POST(request: Request) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const generate = apiKey
-    ? ({ system, messages }: { system: string; messages: typeof parsed.value.messages }) =>
-        requestAnthropic({
-          apiKey,
-          model: process.env.ANTHROPIC_MODEL ?? DEFAULT_MODEL,
-          system,
-          messages,
-          timeoutMs: TIMEOUT_MS,
-        })
+    ? async ({ system, messages }: { system: string; messages: typeof parsed.value.messages }) => {
+        /*
+         * The provider allowance, spent here and nowhere earlier. answerChat
+         * only reaches this closure once the safety gate has passed and
+         * retrieval has found something to ground an answer in, so a blocked
+         * message, an unanswerable one, and a malformed body all cost nothing.
+         *
+         * Refusal is a throw rather than a 429, which answerChat turns into the
+         * project-data answer — the same one every keyless deployment gives.
+         * The learner still gets a real answer to their question; we simply
+         * stop paying for the wording. A 429 here would take the answer away
+         * too, which is a worse outcome for a much smaller saving.
+         */
+        const spend = spendLimiter.check(clientKey);
+        if (!spend.allowed) {
+          console.warn(`[chat] provider allowance exhausted (${spend.scope})`);
+          throw new ChatProviderError(
+            "rate_limited",
+            "Local provider allowance exhausted.",
+            spend.retryAfterSeconds,
+          );
+        }
+
+        try {
+          return await requestAnthropic({
+            apiKey,
+            model: process.env.ANTHROPIC_MODEL ?? DEFAULT_MODEL,
+            system,
+            messages,
+            timeoutMs: TIMEOUT_MS,
+          });
+        } catch (error) {
+          /*
+           * The learner gets the offline answer either way — answerChat treats
+           * a throw as "no AI available". This line is the only place the
+           * distinction survives, and without it a dead key, an exhausted
+           * quota and a safety refusal are the same silent degradation.
+           * Nothing from the conversation is logged.
+           */
+          if (error instanceof ChatProviderError) {
+            const wait = error.retryAfterSeconds ? ` retry-after=${error.retryAfterSeconds}s` : "";
+            console.warn(`[chat] provider unavailable: ${error.reason}${wait}`);
+          } else {
+            console.warn("[chat] provider unavailable: unknown");
+          }
+          throw error;
+        }
+      }
     : undefined;
 
   const response: ChatResponse = await answerChat(parsed.value, { generate });

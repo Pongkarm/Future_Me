@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import ChatAvatar from "@/components/chat/ChatAvatar";
 import AssessmentMascot from "./AssessmentMascot";
 import AssessmentTimelineMessage from "./AssessmentTimelineMessage";
+import QuickReplies from "./QuickReplies";
 
 export interface AssessmentTranscriptExchange {
   questionId: string;
@@ -36,6 +37,8 @@ export default function QuestionCard({
   forceMascotMotion,
   onToggleMascotMotion,
   motionToggleLabel,
+  onQuickReply,
+  quickReplyBusy,
 }: {
   motionKey: string;
   direction: "forward" | "back";
@@ -58,6 +61,9 @@ export default function QuestionCard({
     optionsIntro: string;
     transcriptLabel: string;
   };
+  /** Sends one of `replyOptions` as the answer. Omitted where none apply. */
+  onQuickReply?: (option: string) => void;
+  quickReplyBusy?: boolean;
   mascotState: "idle" | "thinking" | "speaking" | "offline" | "error";
   mascotStatus: string;
   forceMascotMotion: boolean;
@@ -230,6 +236,15 @@ export default function QuestionCard({
           data-question-id={questionId}
           data-testid="interview-composer"
         >
+          {onQuickReply && replyOptions && replyOptions.length > 0 ? (
+            <QuickReplies
+              options={replyOptions}
+              onSelect={onQuickReply}
+              disabled={quickReplyBusy}
+              label={labels.optionsIntro}
+            />
+          ) : null}
+
           <div className="flex min-w-0 items-end gap-3">
             <div className="min-w-0 flex-1">{children}</div>
             <ChatAvatar role="user" />

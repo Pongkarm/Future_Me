@@ -172,16 +172,46 @@ test("the interview mascot keeps a calm scene with readable character motion", a
     "fm-listen-ping",
   );
 
+  /*
+   * The acknowledgement runs for 420ms and the page moves on at 480ms, so this
+   * is a window that closes for good rather than a value to retry for. Waiting
+   * for the state and *then* reading the style is two round trips through a
+   * 60ms gap: when the first one lands late the second reads fm-breathe, the
+   * resting animation, and the test fails for a reason that has nothing to do
+   * with the acknowledgement.
+   *
+   * The read is armed before the click and fires on the attribute change
+   * itself, so it captures the frame it is about rather than racing it.
+   */
+  const acknowledgement = scene.evaluate(
+    (element) =>
+      new Promise<{ name: string; duration: string } | null>((resolve) => {
+        const read = () => {
+          const target = element.querySelector(".fm-breathe");
+          if (!target) return null;
+          const style = getComputedStyle(target);
+          return { name: style.animationName, duration: style.animationDuration };
+        };
+        if (element.getAttribute("data-mascot-state") === "offline") {
+          resolve(read());
+          return;
+        }
+        const observer = new MutationObserver(() => {
+          if (element.getAttribute("data-mascot-state") !== "offline") return;
+          observer.disconnect();
+          resolve(read());
+        });
+        observer.observe(element, {
+          attributes: true,
+          attributeFilter: ["data-mascot-state"],
+        });
+      }),
+  );
+
   await page.getByTestId("assessment-reply").fill("5");
   await page.getByTestId("assessment-send").click();
   await expect(mascot).toHaveAttribute("data-mascot-state", "offline");
-  const acknowledgement = await scene.evaluate((element) => {
-    const target = element.querySelector(".fm-breathe");
-    if (!target) return null;
-    const style = getComputedStyle(target);
-    return { name: style.animationName, duration: style.animationDuration };
-  });
-  expect(acknowledgement).toEqual({ name: "fm-interview-ack-pop", duration: "0.42s" });
+  expect(await acknowledgement).toEqual({ name: "fm-interview-ack-pop", duration: "0.42s" });
 });
 
 test("the static interview scene preserves reduced motion and character-only opt-in", async ({ page }) => {
@@ -264,6 +294,28 @@ test("the chat timeline fits phone, narrow desktop and desktop screens", async (
     await page.setViewportSize({ width, height: 760 });
     await page.goto("/interview");
 
+    /*
+     * Measure the resting layout, not a frame of the entry animation.
+     *
+     * The active turn arrives under `animate-[card-in_220ms_ease-out]`, whose
+     * transform puts it two pixels outside the transcript while it plays. A
+     * measurement that landed inside those 220ms failed this assertion for a
+     * reason it is not about: the laid-out width is fine, and the overshoot is
+     * the animation doing its job. That is the whole of the intermittency here.
+     *
+     * Only finite animations are awaited. The mascot breathes and floats on
+     * infinite loops, so waiting on those would hang forever.
+     */
+    await page.locator("svg.fm-mascot").first().waitFor();
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      const settling = document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => undefined));
+      await Promise.all(settling);
+    });
+
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
@@ -296,9 +348,18 @@ test("the chat timeline fits phone, narrow desktop and desktop screens", async (
     expect(bubbleBox).not.toBeNull();
     expect(tailBox).not.toBeNull();
     if (transcriptBox && stageBox && mascotBox && bubbleBox && tailBox) {
-      expect(mascotBox.width).toBeGreaterThanOrEqual(140);
+      /*
+       * The character is deliberately smaller below `sm`, where it stacks
+       * above the question instead of sitting beside it. At the size it keeps
+       * on wider screens it pushed the question itself off a 390×850 phone —
+       * the learner opened the interview and had to scroll before finding out
+       * what was being asked. The floor stays in place at every width so it
+       * cannot quietly shrink to nothing; it is just a lower floor here.
+       */
+      const [minMascotWidth, minMascotHeight] = width < 640 ? [100, 110] : [140, 160];
+      expect(mascotBox.width).toBeGreaterThanOrEqual(minMascotWidth);
       expect(mascotBox.width).toBeLessThanOrEqual(200);
-      expect(mascotBox.height).toBeGreaterThanOrEqual(160);
+      expect(mascotBox.height).toBeGreaterThanOrEqual(minMascotHeight);
       expect(stageBox.x).toBeGreaterThanOrEqual(transcriptBox.x - 1);
       expect(stageBox.x + stageBox.width).toBeLessThanOrEqual(
         transcriptBox.x + transcriptBox.width + 1,

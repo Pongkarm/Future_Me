@@ -41,18 +41,40 @@ export const en = {
   },
 
   assessment: {
-    title: "A few questions about you",
+    title: "Chat with FutureMe about you",
     intro:
-      "There are no right answers, and nothing here is a test. Answer as you actually are, not as you think you should be.",
+      "FutureMe will ask one question at a time. There are no right answers, and nothing here is a test — reply as you actually are.",
     demoNotice: "Research-informed demo — not a validated test",
     questionCounter: "Question {current} of {total}",
     reviewLabel: "Review",
     answeredCounter: "{answered} of {total} answered",
     reviewAnswers: "Review answers",
+    resetAnswers: "Start over",
+    resetConfirmPrompt:
+      "This clears every answer you have given and returns you to the first question. Any mission or plan built from them goes too. It cannot be undone.",
+    resetConfirm: "Yes, clear my answers",
+    resetCancel: "Keep my answers",
+    resetDone: "Your answers were cleared. You are back at the first question.",
     eyebrowInterests: "Interests",
     eyebrowSituation: "Your situation",
     eyebrowOptional: "Optional",
     interestHelper: "How much would you like doing this activity?",
+    interviewerName: "FutureMe AI",
+    interviewerAsking: "Asking you",
+    interviewerListening: "Listening",
+    interviewerChecking: "Checking your reply",
+    interviewerSaved: "Reply saved",
+    interviewerClarifying: "Asking for clarification",
+    replyLabel: "You",
+    textChatHint: "Your message",
+    optionsIntro: "Reply naturally, or use one of these numbers:",
+    replyPlaceholder: "Type your reply to FutureMe…",
+    composerHint: "Enter sends · Shift+Enter adds a new line",
+    sendReply: "Send",
+    savingReply: "Saving…",
+    replyNotRecognised:
+      "I cannot save that without guessing. Please reply with one answer from the numbered list.",
+    replyTooLong: "Keep this answer under 160 characters so it can be matched safely.",
     previous: "Previous",
     next: "Next",
     skip: "Skip",
@@ -93,14 +115,23 @@ export const en = {
   },
 
   landing: {
+    heroNote: "Answer a few short questions, try one real task, then see up to three study routes — each with the evidence behind it.",
+    ctaHeading: "Start with what you already know about yourself",
+    tabHow: "How it works",
+    tabHonest: "Straight talk",
+    tabMore: "Other ways in",
+    tabMoreBody: "You do not have to start with the questions. Ask something directly, or just look at what exists near you — neither needs an account or tells us anything about you.",
+    nearbyButton: "What is near me",
     badge: "FUNCTIONAL PROTOTYPE · RUNNABLE END-TO-END DEMO",
     headlineLead: "A next step you can",
     headlineAccent: "actually explain.",
     subhead:
       "Answer a short interview, try one real task, then compare up to three study routes — each showing the evidence behind it and what it still does not know.",
     startGuest: "Start as guest →",
+    chatButton: "Chat with FutureMe",
     whatHappens: "What happens to my answers?",
-    noAccount: "No account needed. Your answers stay in this browser.",
+    noAccount:
+      "No account needed. Assessment and mission answers stay in this browser; chat uses the separate network path explained on its page.",
     card1Title: "Ask, then check",
     card1Body: "A shortened interview plus your own words gives a starting guess — not a verdict.",
     card2Title: "Try, don't guess",
@@ -119,6 +150,63 @@ export const en = {
     honest4:
       "This does not replace a qualified counsellor, and it has not been tested with real students.",
     readData: "Read exactly what data is collected →",
+    howItWorks: "How this works →",
+    howTitle: "How this works",
+    howIntro: "Three steps, and what each one can and cannot tell you.",
+    backHome: "Back to the start",
+  },
+
+  chat: {
+    eyebrow: "FUTUREME COMPANION",
+    title: "Ask about study and career directions",
+    intro:
+      "Talk through an idea, compare possible directions, or ask what you could try next. FutureMe answers from this prototype's project data and shows the sources it used when they are available.",
+    privacyTitle: "Your message uses a separate network path",
+    privacyBody:
+      "Chat is optional. When you press Send, the conversation shown here is sent to the application server and may be sent to its AI provider. If you have chosen a province elsewhere in FutureMe, it is sent too, so the answer can name places near you — a province and never anything narrower. It is not saved in your guest session, and refreshing or clearing this page removes the on-screen transcript.",
+    welcome:
+      "Hi, I’m the FutureMe companion. Tell me what you are curious about, or ask me to explain one of the study routes in this prototype. I can help you explore, but I cannot choose your future or predict admission, employment, or income.",
+    companionName: "FutureMe companion",
+    assistantLabel: "FutureMe",
+    youLabel: "You",
+    modeAi: "AI response",
+    modeOffline: "Project-data mode",
+    sources: "Sources used",
+    sourceStatus: "Source status",
+    clear: "Clear chat",
+    motionEnable: "Always animate",
+    motionSystem: "Use system motion",
+    conversationLabel: "Conversation with FutureMe",
+    thinking: "FutureMe is checking the project data…",
+    suggestionsLabel: "Try asking",
+    suggestions: [
+      "What study routes could I explore if I like technology?",
+      "How can I compare vocational study and upper secondary school?",
+      "What can I try this month if I am still unsure?",
+    ],
+    composerLabel: "Your message",
+    placeholder: "Ask about interests, study routes, missions, or a next step…",
+    composerHint: "Do not include your full name, school, phone number, or other identifying details.",
+    send: "Send",
+    sending: "Sending…",
+    networkError:
+      "I could not reach the chat service just now. You can try again, or use the structured assessment, which still works without the chat service.",
+    rateLimited:
+      "That is more messages than I can take at once. Please wait about {seconds} seconds and send it again — nothing you have written is lost.",
+    mascotReady: "FutureMe is ready to listen",
+    mascotThinking: "FutureMe is checking the project data",
+    mascotSpeaking: "FutureMe has answered with AI assistance",
+    mascotOffline: "FutureMe answered in project-data mode",
+    mascotError: "FutureMe could not reach the chat service",
+    moreOptionsLabel: "Other ways to use FutureMe",
+    assessmentTitle: "Want route suggestions?",
+    assessmentBody:
+      "Use the structured assessment for route suggestions. Its fixed questions and rule engine, not this chat, decide which directions appear.",
+    assessmentLink: "Start the assessment →",
+    limitsTitle: "Use this as a starting point",
+    limitsBody:
+      "The chatbot can be wrong, and parts of the route catalogue are illustrative team estimates. Check current entry criteria, fees, and programmes with official sources before acting.",
+    privacyLink: "Read the chat data details",
   },
 
   engine: {
@@ -142,9 +230,11 @@ export const en = {
       FEASIBLE_LOCATION: "This is usually available without moving away from home.",
       TIMING_MATCH: "The time before you start earning matches what you said you wanted.",
       KEEPS_OPTIONS_OPEN: "This route keeps a relatively wide range of later options open.",
-      COST_CONSTRAINT: "Filtered out: you said cost matters a lot and this route is high-cost.",
-      LOCATION_CONSTRAINT: "Filtered out: you said you need to stay near home and this route usually requires moving.",
-      TIER_MISMATCH: "Filtered out: this route is not offered at your current stage.",
+      COST_CONSTRAINT:
+        "This route is high-cost and you said cost matters a lot, so it is not in the list above. That can change if the money changes — ask about scholarships and the student loan fund.",
+      LOCATION_CONSTRAINT:
+        "This route usually means moving away and you said you need to stay near home, so it is not in the list above. If that changes, so does this.",
+      TIER_MISMATCH: "This route does not admit at your stage yet. Nothing to do with your answers.",
       INSUFFICIENT_ANSWERS: "Not enough interview questions were answered.",
       INSUFFICIENT_EVIDENCE: "There is not enough evidence yet to separate the routes.",
       TIED_SCORES: "These routes scored close enough that the difference is not meaningful.",
@@ -207,6 +297,9 @@ export const en = {
     progress: "{completed} of {total} tasks checked in",
     progressLabel: "Plan progress",
     week: "WEEK {n}",
+    weekComplete: "All tasks ticked",
+    weekCurrent: "Start here",
+    gapTaskMarker: "added for a gap",
     noRouteTitle: "No route selected yet",
     noRouteChanged:
       "The route you picked is no longer among your results — your answers may have changed since.",
@@ -224,13 +317,72 @@ export const en = {
     createAccount: "Create an account (not implemented)",
   },
 
+  nearby: {
+    stationAway: "{km} km",
+    modes: {
+      walk: "Walk",
+      bicycle: "Bicycle",
+      motorcycle: "Motorbike",
+      songthaew: "Songthaew",
+      bus: "Bus",
+      van: "Minivan",
+      coach: "Coach",
+      car: "Car",
+      metro: "BTS / MRT",
+      train: "Train",
+      plane: "Plane",
+    },
+    noticeTitle: "What this list is",
+    filterLabel: "Show",
+    filterAll: "Everything",
+    filterVocational: "Wor Chor / Wor Sor",
+    filterDegree: "Bachelor's degree",
+    filterEmpty: "Nothing in this province matches that filter.",
+    showMore: "Show {count} more",
+    showLess: "Show fewer",
+    title: "What is near you",
+    intro:
+      "Pick your province to see the schools, colleges and universities that continue after Mattayom 3, and how far each one is by road.",
+    notARecommendation:
+      "This is a list of what exists, ordered by distance. It does not say which one suits you — the assessment and its rule engine do that, and distance is never one of their inputs.",
+    pickLabel: "Your province",
+    pickPlaceholder: "Choose a province…",
+    loading: "Looking up your province…",
+    error: "Could not load that province just now. Try again in a moment.",
+    empty: "No options are recorded for this province yet.",
+    summaryTitle: "{province} at a glance",
+    summaryInside: "{count} in this province",
+    summaryWithin30: "{count} within 30 km",
+    summaryVocational: "{count} offer Wor Chor or Wor Sor",
+    summaryDegree: "{count} offer a bachelor's degree",
+    summaryUnknown: "{count} here with no distance yet",
+    originNote:
+      "Distances are measured from the provincial capital, not from your home. If you live in an outer district the real journey may be much longer — or much shorter if you live near a neighbouring province.",
+    driveNote:
+      "Times shown are driving times. On a songthaew, a bus or while waiting for one, expect longer.",
+    offersLabel: "Teaches",
+    stationLabel: "Nearest station",
+    unknownDistance: "In this province, distance not yet known",
+    outsideProvince: "In {province}",
+    kmAway: "{km} km by road",
+    minutesAway: "about {minutes} min by car",
+    bandWalkable: "Walking or cycling distance",
+    bandLocal: "An ordinary daily journey",
+    bandCommute: "Reachable daily, but it costs time and fare",
+    bandHardCommute: "A hard daily journey — worth thinking about lodging",
+    bandRelocate: "You would be moving there, not commuting",
+    bandUnknown: "Distance not yet known",
+    dataNote:
+      "Built from the OVEC college register, the MHESI institution register and OpenStreetMap road routing. Institution details change every year — check with the place itself before deciding anything.",
+    sourceLink: "How this list was built",
+  },
   privacy: {
     title: "Your data, precisely",
     intro:
       "This page describes what the prototype actually does today — not what the production design intends. Where the two differ, it says so.",
     shortTitle: "The short version",
     shortBody:
-      "In guest mode, everything you type stays in this browser's local storage. The recommendation engine runs on your device and does not send those answers to a server. Like any website, the app still uses the network to load and can expose ordinary request metadata to its host.",
+      "Your assessment and mission answers stay in this browser, and the recommendation engine runs on your device. The optional chatbot is separate: when you press Send, its conversation goes to the application server and may go to an AI provider. Like any website, the app also exposes ordinary request metadata to its host.",
     collectedTitle: "What is collected",
     colData: "Data",
     colWhere: "Where it goes",
@@ -239,32 +391,36 @@ export const en = {
     rowMission:
       "Mission answers, including free text — saved as you type, so a refresh does not lose unfinished writing",
     rowRoutes: "Generated routes and plan progress",
+    rowProvince: "The province you picked, so route suggestions can name real places",
     rowSession: "Guest session id",
     rowAnalytics: "Analytics, cookies, trackers",
+    rowChat: "Messages you send in the optional chatbot",
     thisBrowser: "This browser only",
     thisBrowserRandom: "This browser only — random, not linked to you",
+    chatWhere: "Application server; AI provider when enabled",
+    chatKept: "Not saved in the guest session; server and provider policies may apply",
     untilCleared: "Until you clear it",
     analyticsWhere:
       "None are implemented by the app. A deployment host may still process normal request metadata.",
     storedUnder: "Stored under the key {key} in localStorage. You can inspect it in your browser's developer tools.",
-    aiTitle: "The optional path where route metadata can leave the app",
+    aiTitle: "The optional chatbot and AI network paths",
     aiBody1Optional: "optional",
     aiBody1Off: "off unless the operator sets an API key",
     aiBody1:
-      "The prototype has an {optional} AI explanation layer. It is {off}. Local development, automated tests, and CI use the deterministic template explanations without a key.",
+      "The chatbot is {optional}. Provider-backed generation is {off}. Pressing Send still sends the visible conversation to the application server, which can answer in project-data mode when the provider is unavailable.",
     aiBody2:
-      "If it were enabled, and only when you pressed the button on a route card, the browser would send a catalogue route id and fixed reason codes such as INTEREST_MATCH to the application server. The server validates both against its own data, then sends the catalogue route name and fixed reason wording to the model provider.",
+      "When provider-backed chat is enabled, the server may forward the conversation to that provider. The separate route-card rewording control remains narrower: it sends only a validated route id and fixed reason codes, never the learner answers behind them.",
     aiBody3:
-      "Not sent: your free text, your interview answers, your mission answers, your scores, or your session id. The route selection could not change either, because the engine has already decided it and the endpoint is never given the list.",
+      "Chat messages are not written to localStorage or the guest session. Clear chat or refresh removes the on-screen transcript, but it cannot retract a request already sent. Provider retention and training treatment depend on the deployment owner's current agreement and must be checked before public use.",
     claimsTitle: "Two claims that are not the same",
     claim1Title: "“Not shared with parents or counsellors”",
     claim1Body:
       "A permission rule. It says who may read your data — not where your data physically is.",
-    claim2Title: "“Learner answers do not enter the recommendation network path”",
+    claim2Title: "“Assessment answers do not enter the recommendation network path”",
     claim2Body:
-      "A narrower, verifiable claim. The engine reads answers from local storage in the browser. The optional AI path sends only the validated catalogue route and fixed reasons listed above, never the learner's answers or free text.",
+      "A narrower, verifiable claim. The rule engine reads assessment and mission answers from local storage in the browser. Chat is a separate, user-triggered network path and does not feed the route-selection engine.",
     claimsCorrection:
-      "Earlier versions of this project's documentation said “chat transcripts never leave the student” while describing a server-side architecture. That was imprecise and has been corrected.",
+      "The chat screen states its network use before the composer. It does not silently attach assessment answers, mission answers, scores, or the guest session id to a chat request.",
     notYetTitle: "Not implemented yet",
     notYet1: "Accounts, login, and permanent saving",
     notYet2: "Parent and counsellor views, and the consent flow that would gate them",
@@ -279,7 +435,7 @@ export const en = {
     rowResearch: "Response times and answer changes, if the pilot study is used",
     deleteTitle: "Delete everything",
     deleteBody:
-      "This removes your guest session from this browser immediately. It cannot be undone, and the app keeps no server-side copy of that session. Browser extensions, screenshots and device backups are outside this control.",
+      "This removes your guest session from this browser immediately. Chat is not part of that session; use Clear chat or refresh its page to remove the on-screen transcript. This control cannot retract chat requests already sent to a server or provider. Browser extensions, screenshots and device backups are also outside this control.",
     deleteButton: "Delete my data",
     deleted: "Deleted. Starting again will create a new session.",
     back: "← Back",
@@ -326,6 +482,16 @@ export const en = {
     statusPartiallyVerified: "partially verified",
     statusIllustrative: "illustrative",
     statusUnverified: "unverified",
+    guideTitle: "What should I compare for you first?",
+    guideBody:
+      "Choose one lens. I will apply it equally to every route, without ranking them or naming a winner.",
+    focusFit: "Fit signals",
+    focusPractical: "Practical trade-offs",
+    focusEvidence: "Evidence & unknowns",
+    yourFocus: "Your comparison focus",
+    showingFocus:
+      "Here is the same lens across every route, so you can see the trade-offs without a ranking.",
+    fullMatrix: "Open the full comparison table",
   },
 
   mission: {
@@ -358,6 +524,14 @@ export const en = {
   },
 
   routes: {
+    nearbyTitle: "Where you could do this, near {province}",
+    nearbyNone:
+      "No institution of the kind that teaches this route is recorded within reach of {province}. That is worth knowing before you choose it — it may mean living away from home.",
+    nearbyMore: "and {count} more",
+    nearbyCaveat:
+      "These are the kinds of institution that teach this direction, and how far they are. Our register records what each place is, not which programmes it runs — ask the college itself whether it opens this subject.",
+    nearbySetProvince: "Set your province to see where you could do these",
+    nearbyChangeProvince: "Change province",
     errorTitle: "Something went wrong generating routes",
     tryAgain: "Try again",
     insufficientTitle: "We do not have enough evidence to suggest a route yet.",
@@ -376,7 +550,7 @@ export const en = {
       "Put them side by side on cost, time to earning, flexibility and evidence before you decide anything.",
     compareN: "Compare the {n} routes →",
     compareOne: "See this route's details side by side →",
-    filteredSummary: "{n} routes were filtered out — see why",
+    filteredSummary: "{n} more routes are not in the list above — see why",
     generatedBy:
       "Generated in your browser by engine {version} from demo route data compiled {date}. No model chose these routes.",
     summaryTitle: "What your answers pointed to",
@@ -492,6 +666,8 @@ export const en = {
     limitsTitle: "How this works, and its limits.",
     limitsBody:
       "This screen is triggered by a simple keyword rule running in your browser — it is not a risk assessment. It will miss things and it will sometimes fire when nothing is wrong. Nothing you typed was sent anywhere, and nobody was alerted.",
+    limitsBodyServer:
+      "This screen was triggered by the same simple keyword rule on the application server — it is not a risk assessment. Your bounded chat reached the FutureMe server but was not sent to the AI provider. Nobody was alerted.",
   },
 };
 

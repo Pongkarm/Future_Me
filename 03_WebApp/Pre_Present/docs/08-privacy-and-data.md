@@ -22,20 +22,22 @@ and a PostgreSQL database. Two different claims were being blurred:
 | Claim | What it means | Where it is true |
 |---|---|---|
 | **"Not shared with parents or counsellors"** | A *permission* rule. It constrains who may read data. It says nothing about where the data physically travels. | This is the production design intent. Nothing enforces it yet, because the sharing features do not exist. |
-| **"Learner answers stay on the device"** | A narrower physical claim about interview and mission input. | True of the implemented recommendation path. An enabled explanation request sends a catalogue route id and fixed reason codes, but not the underlying answers. |
+| **"Assessment answers stay on the device"** | A narrower physical claim about interview and mission input. | True of the implemented recommendation path. An enabled explanation request sends a catalogue route id and fixed reason codes, but not the underlying answers. |
+| **"The chat transcript is not persisted by the app"** | A retention claim, not a no-transmission claim. | The transcript exists only in current-tab React state, but pressing Send transmits the bounded messages to the application server and, when configured, Anthropic. |
 
-The first does not imply the second. A system can faithfully hide a transcript from a parent while
-still transmitting it to a server, logging it, and retaining it indefinitely. The corrected wording
-appears in the README, in the running app at `/privacy`, and below.
+These claims do not imply one another. A system can faithfully hide a transcript from a parent
+while still transmitting it to a server, logging it, and retaining it indefinitely. The corrected
+implemented data flow appears in the README and below.
 
 ---
 
 ## What the prototype actually does
 
-**Learner answers and progress stay in the browser.** The recommendation engine
+**Assessment answers and progress stay in the browser.** The recommendation engine
 (`lib/decision-engine/`) is plain TypeScript that executes on the client. There is no network
 request in the recommendation path. Loading a hosted web app still creates ordinary requests to
-its host, and the optional explanation layer is a separate network path described below.
+its host, and the optional explanation and chat endpoints are separate network paths described
+below.
 
 | Data | Collected? | Where it goes | Retention |
 |---|---|---|---|
@@ -45,10 +47,12 @@ its host, and the optional explanation layer is a separate network path describe
 | Generated routes and scores | Yes | Recomputed on demand; not stored separately | n/a |
 | Selected route and plan check-ins | Yes | `localStorage` only | Until the user deletes it |
 | Guest session id | Yes | `localStorage` only — random, not derived from anything about the user | Until the user deletes it |
+| Chat draft and visible transcript before Send | Yes | React state in the current tab; not `localStorage`, `sessionStorage` or the guest session | Until Clear, refresh, navigation that unmounts the page, or tab close |
+| Chat messages after Send | Yes | Next.js application server; also Anthropic only when the operator configures `ANTHROPIC_API_KEY` | FutureMe application code does not persist them; deployment-host and provider handling must be verified separately |
 | Name, email, phone, school | **No** | — | — |
 | Analytics, advertising cookies or trackers added by the app | **No** | — | — |
-| Normal request metadata such as IP address | Not collected by FutureMe application code | A deployment host may process or log it when serving pages or `/api/explain` | Governed by the host's configuration |
-| Server-side logs of answers | **No** — there is no server in this path | — | — |
+| Normal request metadata such as IP address | Not collected by FutureMe application code | A deployment host may process or log it when serving pages, `/api/explain` or `/api/chat` | Governed by the host's configuration |
+| Application database, cookies or logs containing assessment/chat bodies | **No** | The implemented routes do not persist or log request/response bodies | A deployment host or provider may have separate logging or retention |
 
 Storage key: `futureme.guest.v1`. It is inspectable in browser developer tools, which is
 deliberate — a privacy claim a user can verify themselves is worth more than one they must trust.
@@ -73,16 +77,24 @@ reaching the scorer would produce a recommendation nobody could explain.
 immediately. The app creates no server-side copy of that session. Browser extensions, screenshots,
 device backups and deployment-host request logs are outside that control.
 
+`/chat` has a separate **Clear chat** control, and refresh also resets the current-tab transcript.
+That removes the UI's in-memory copy. It cannot recall a request already processed by the host or
+Anthropic, so host/provider retention and deletion terms must be checked before deployment.
+
 **Identity and consent.** Guest mode does not ask for a name, email, phone number or school.
-Learners can still type identifying information into optional free-text fields, so anonymity
-cannot be guaranteed. Account and counsellor-sharing flows are not built; any future pilot needs
-an appropriate consent and legal review rather than relying on guest mode alone.
+Learners can still type identifying information into optional free-text fields or chat, so
+anonymity cannot be guaranteed. Account and counsellor-sharing flows are not built; any future
+pilot needs an appropriate consent and legal review rather than relying on guest mode alone.
 
 ---
 
-## The one path where data could leave the device
+## Optional network paths
 
-There is an optional LLM explanation layer at `app/api/explain/route.ts`.
+There are two server routes that are outside the client-side recommendation path.
+
+### Explanation rewording
+
+The optional explanation layer is at `app/api/explain/route.ts`.
 
 - It is **disabled unless the operator sets `ANTHROPIC_API_KEY`**.
 - When disabled it returns `{ source: "fallback" }` and the app uses deterministic template text. Behaviour is identical apart from wording.
@@ -95,12 +107,36 @@ There is an optional LLM explanation layer at `app/api/explain/route.ts`.
 - The endpoint constrains content but has no production authentication or rate limit. A public
   deployment needs abuse controls and provider spend limits before enabling a funded API key.
 
+### Repo-grounded chat
+
+The companion at `/chat` calls `app/api/chat/route.ts` only when the learner presses Send.
+
+- The browser sends `{ language, messages }`; it does not attach the guest assessment session,
+  scores, selected route, research export or `localStorage` contents.
+- A request contains at most 11 messages, 2,000 characters per message and 8,000 characters total;
+  the server also rejects a raw body above 64,000 bytes before JSON parsing. Only alternating
+  `user` and `assistant` roles are accepted, beginning and ending with the user.
+- The route is stateless. FutureMe application code uses no database, cookie, session store or
+  request-body logging for chat.
+- Missing key, timeout, provider error or malformed provider output returns an offline,
+  deterministic answer with repo-derived sources. A query with no matching repository source is
+  not sent to the provider. Raw messages still reached the application server even when the
+  offline path is used.
+- When `ANTHROPIC_API_KEY` is configured, the bounded transcript and selected repository context
+  are sent to Anthropic. The operator must verify and disclose the deployment host's and
+  Anthropic's current retention, training, residency and deletion terms before deployment.
+- The companion cannot call the scorer or route engine and cannot add, remove, select or reorder a
+  route.
+
 ```mermaid
 flowchart LR
-    A["Learner's answers"] --> B["localStorage<br/>this browser only"]
+    A["Assessment answers"] --> B["localStorage<br/>this browser only"]
     B --> C["Decision engine<br/>runs in the browser"]
     C --> D["Routes + plan<br/>rendered locally"]
     C -.->|"optional, off by default<br/>catalogue route + fixed reasons"| E["LLM provider"]
+    F["Chat transcript<br/>current-tab memory"] -->|"Send"| G["/api/chat<br/>stateless app server"]
+    G --> H["Offline deterministic reply"]
+    G -.->|"only when configured"| E
 
     style E stroke-dasharray: 5 5
 ```
@@ -109,22 +145,26 @@ flowchart LR
 
 ## Safeguarding
 
-A keyword rule (`lib/safety/`) scans free-text answers. If it matches, the app stops generating
-career output from that answer and shows a support screen with the Thai Department of Mental Health
-[hotline 1323](https://dmh.go.th/).
+A keyword rule (`lib/safety/`) scans free-text answers and chat input. If it matches, the app stops
+generating career output from that answer and shows a support screen with the Thai Department of
+Mental Health [hotline 1323](https://dmh.go.th/). On `/chat`, the client does not append or send the
+triggering text, and the server checks every submitted turn again before any provider call.
 
 **Its limits, stated plainly:**
 
 - It is a regular-expression list, not a risk assessment. It will miss real distress and will fire on harmless phrasing.
-- Matching happens **in the browser**. Nothing is transmitted and **nobody is alerted** — there is no monitoring behind this.
-- It records only which rule index fired, never the text that triggered it.
+- A client-side chat match is not transmitted. If the client misses it, the server-side check means
+  the text reached the app server, but it is not sent to Anthropic. **Nobody is alerted** in either
+  case; there is no monitoring behind this.
+- The assessment session records only which rule index fired, never the triggering text. Chat does
+  not append the triggering message to its transcript.
 - This is a prototype-level mechanism. It must not be described as a validated safeguarding system.
 
 ---
 
 ## Not implemented
 
-None of the following exists in the prototype, so no data flows through any of it:
+The following production controls or reviews are not complete:
 
 | Feature | Status |
 |---|---|
@@ -133,6 +173,7 @@ None of the following exists in the prototype, so no data flows through any of i
 | Consent grant and revocation flow | Planned |
 | Server-side storage (PostgreSQL) | Planned |
 | Retention enforcement and audit logging | Planned |
+| Deployment-host and AI-provider processing/retention review | Not started |
 | Field-level encryption of sensitive attributes | Planned |
 | Data-subject request process | Planned |
 | PDPA compliance review | Not started |
@@ -146,8 +187,10 @@ marked as planned.
 
 The users are minors, so this matters more than usual. The honest position:
 
-- The prototype minimises data by avoiding accounts and keeping learner answers in browser
-  storage. That is useful privacy-by-design work, not a compliance conclusion.
+- The prototype minimises data by avoiding accounts, keeping assessment answers in browser
+  storage, and not persisting chat in application storage. Submitted chat is still processed by
+  the app server and optionally Anthropic. These are privacy-by-design choices, not a compliance
+  conclusion.
 - **No PDPA compliance review has been carried out.** A qualified review is required before a
   real-student pilot or public deployment that processes learner data.
 - In-country data residency and ISO certification from a cloud provider would cover *where* data lives. Consent management, access control, minimisation, retention and processor governance are application-layer duties that remain with this project. Conflating the two is the most common way a project like this gets compliance wrong.

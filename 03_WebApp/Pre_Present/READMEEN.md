@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg" alt="Continuous integration status"></a>
+  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg?branch=main" alt="Continuous integration status"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="MIT license"></a>
 </p>
@@ -168,7 +168,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **Catalogue** | 6 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
 | **Recommendations** | 0–3 routes, refusal gates, hard constraints, ties, contradiction signals, provenance, and unknowns |
 | **Comparison and plan** | Consistent route comparison and a deterministic 30-day plan with gap-specific tasks |
-| **Optional AI** | Provider-backed explanation rewording only; disabled by default and outside route selection |
+| **Optional AI** | Repo-grounded chat and explanation rewording, both with deterministic offline fallbacks and outside route selection |
 | **Pilot tooling** | Response-process capture, anonymous participant export, simulation, and analysis scripts |
 
 The application can be used end to end without an account, database, environment variable, or
@@ -229,8 +229,15 @@ The optional `/api/explain` endpoint can rewrite an explanation in warmer langua
 deterministic result exists. The browser sends only a route id and fixed reason codes. The server
 validates both and resolves its own wording before contacting the provider.
 
-The model never receives learner answers, free text, scores, or the route list. It cannot add,
-remove, select, or reorder a route. If the provider fails, the deterministic explanation remains.
+For `/api/explain`, the model never receives learner answers, free text, scores, or the route list.
+It cannot add, remove, select, or reorder a route. If the provider fails, the deterministic
+explanation remains.
+
+`/chat` is a separate, stateless companion grounded in a small curated repository index. Its
+current-tab transcript is sent to the application server only when the learner presses Send and
+to Anthropic only when an operator configures a key. Without a key or when the provider fails, it
+returns a deterministic offline reply with sources. It receives no assessment session and has no
+scoring or route-selection interface.
 
 ---
 
@@ -259,8 +266,13 @@ The goal is not more prediction. It is a better exploration process.
 - The recommendation engine runs client-side and makes no network call.
 - No account, analytics library, advertising tracker, sharing flow, or server-side answer store is implemented.
 - The privacy screen can delete the complete guest session immediately.
+- Chat history is current-tab memory and clears on refresh or Clear chat. Pressing Send transmits
+  the bounded chat messages to the app server and, only when configured, Anthropic.
 - Research participation is separate and optional. `/research` saves a file to the participant's
   device; nothing is transmitted automatically.
+
+The deployment host's and provider's current processing and retention terms must be verified
+before deployment. This prototype has not completed a PDPA compliance review.
 
 Normal hosting can still process request metadata such as IP addresses. “Answers stay in the
 browser” does not mean a website operates without a network.
@@ -339,7 +351,7 @@ Requires Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/winxtxrgit/futureme-ai.git
-cd futureme-ai
+cd futureme-ai/03_WebApp/Pre_Present
 npm ci
 npm run dev
 ```
@@ -355,8 +367,9 @@ npm run simulate -- /tmp/futureme-sim --n 300 --seed 7
 npm run analyse -- /tmp/futureme-sim
 ```
 
-The optional wording layer is configured through [`.env.example`](.env.example). Do not enable a
-funded provider key on a public deployment without authentication or rate limits.
+The optional provider-backed explanation and chat layers are configured through
+[`.env.example`](.env.example). Do not enable a funded provider key on a public deployment without
+authentication, rate limits, and verified host/provider retention terms.
 
 ---
 

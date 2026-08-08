@@ -14,7 +14,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium",
-    "verify": "npm run typecheck && npm run lint && npm test && npm run build",
+    "sync:mascot": "node scripts/sync-mascot.mjs",
+    "check:mascot": "node scripts/sync-mascot.mjs --check",
+    "verify": "npm run check:mascot && npm run typecheck && npm run lint && npm test && npm run build",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "analyse": "node scripts/analyse.ts",
     "simulate": "node scripts/simulate-pilot.ts"

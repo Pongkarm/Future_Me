@@ -32,6 +32,7 @@ browser. There is no model in the decision path, and there is no network call in
 | Refusal gates | `lib/decision-engine/index.ts` | No |
 | 30-day plan generation | `lib/plan/index.ts` | No |
 | **Rewording an explanation already produced** | `app/api/explain/route.ts` | Optional |
+| **Repo-grounded chat companion** | `app/api/chat/route.ts` | Optional; deterministic offline fallback |
 
 The same answers always produce the same routes. That is the property that makes the output
 defensible to a student, a parent or a counsellor — and it is why the model is kept out.
@@ -53,16 +54,24 @@ flowchart TD
 ## A2 · Phase 1 — the interview
 
 **What it is:** 30 Likert items, five per RIASEC dimension and interleaved rather than blocked, plus four context questions and one
-optional free-text prompt. Static, bilingual Thai/English, and presented in a fixed order.
+optional free-text prompt. FutureMe presents the fixed bilingual Thai/English questions one at a
+time through a vertical chat transcript: the full animated mascot is embedded in the active
+FutureMe turn, questions appear on the left, saved learner answers appear on the right, and the red
+composer stays below the scrollable conversation. A deterministic,
+bilingual whole-reply parser accepts only a numbered option, an exact label, or an explicitly
+approved phrase; anything else stays unsaved and produces a clarification.
 
-**What it is not:** it is not adaptive or conversational, and its Thai translation has not completed
-formal cross-cultural adaptation. It is labelled *"Research-informed demo — not a validated
-test"* on screen for exactly that reason.
+**What it is not:** the mascot-led presentation does not make the instrument adaptive or
+model-generated. No chat model writes, rewords, guesses, or scores these questions, and raw scored
+reply text is not stored. Historical choice bubbles therefore show the localized canonical answer
+that was saved, not a reconstructed raw message. The Thai
+translation has not completed formal cross-cultural adaptation. It is labelled *"Research-informed
+demo — not a validated test"* on screen for exactly that reason.
 
 Unanswered items are excluded from the average rather than scored as zero, so a partial interview
 does not silently look like a low score.
 
-→ `data/questions.json`, `lib/decision-engine/scoring.ts`, `app/interview/page.tsx`
+→ `data/questions.json`, `lib/interview/reply-parser.ts`, `lib/decision-engine/scoring.ts`, `app/interview/page.tsx`
 
 ## A3 · Phase 2 — the scenario mission
 
@@ -147,7 +156,71 @@ away.
 
 → `app/api/explain/route.ts`, `app/routes/page.tsx`
 
-## A7 · What is wrong with the current prototype
+## A7 · The bounded chat companion
+
+`/chat` is a separate, optional open-text companion for questions about the repository's
+career-exploration topics. Its visual language is shared with the guided interview, but its network
+and data paths are not. It is **not** an adaptive assessment and it is not connected to route scoring. It cannot
+score an answer, select a mission, add or remove a route, change route order, or write to the guest
+assessment session.
+
+The browser sends this shape to `POST /api/chat` only when the learner presses **Send**:
+
+```json
+{
+  "language": "th",
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+The endpoint is deliberately stateless. Each request contains the current bounded conversation:
+1–11 `user`/`assistant` messages, at most 2,000 characters per message and 8,000 characters in
+total. The raw encoded body is rejected above 64,000 bytes before JSON parsing. Turns must
+alternate, beginning and ending with `user`; the server rejects any other role or order. The
+transcript lives only in React state in the current tab; clearing the chat or refreshing
+the page resets it. Stateless does not mean device-only: the raw submitted messages still travel
+to the application server. FutureMe application code does not log or persist those bodies, but the
+deployment host's and provider's current processing and retention terms still require review. This
+is not a PDPA compliance claim.
+
+The server uses deterministic in-process lexical matching against two bounded sources: the demo
+route catalogue in `data/routes.json`, and a small audited registry in `lib/chat/knowledge.ts`
+curated from the repository's research metadata and summaries. It normalises Unicode and case,
+uses exact English token/phrase matching plus bounded Thai phrase matching, carries the nearest
+prior user topic into short follow-ups, keeps stable ordering, and returns at most four records. It
+does not crawl the web or index arbitrary Markdown at request
+time. Audited facts are limited to `verified` or time-scoped `conditional` entries; quarantined
+claims are absent. Route entries retain their declared status and are framed only as illustrative
+demo examples, not current admission, cost or outcome facts.
+
+When `ANTHROPIC_API_KEY` is set, the bounded transcript and selected context may be sent to
+Anthropic for generation. A query with no matched repository source is not sent to the provider.
+Without a key, after the eight-second provider timeout, on a provider error, or on an
+empty/malformed/truncated provider response, the same endpoint returns HTTP 200 with a
+deterministic, language-matched offline response and the retrieved sources. Provider output is
+limited to 500 tokens; adaptive thinking is disabled for this short task. A post-generation guard
+requires at least one retrieved source id, rejects invented source ids, and discards recognised
+route-selection or ranking language before returning the offline response.
+
+Safety is checked twice. The client applies the existing prototype keyword check before appending
+or sending a message; a match opens the existing safety pause and makes no `/api/chat` request.
+The server checks every submitted turn again before any provider call. This remains a bounded
+prototype safeguard, not a clinical risk assessment.
+
+The mascot on `/chat` communicates listening, thinking, answer-ready, project-data and network-error
+states; the interview mascot similarly changes for asking, listening, clarification and saved-answer
+states. [`99-Model`](../../../99-Model/) remains the visual concept kit, not LLM weights or
+executable inference assets. The live SVG implementation comes from
+[`04_Design/FutureMe_Mascot_Lab`](../../../04_Design/FutureMe_Mascot_Lab/) and is synchronized into
+the app by `scripts/sync-mascot.mjs`; `npm run verify` fails if those source-owned files drift.
+Stable React ids prevent duplicated SVG gradient ids during hydration. Visible, live status text
+carries the meaning for assistive technology. Motion follows the operating-system reduced-motion
+preference by default; `/chat` and `/interview` provide a localized, persisted **Always animate** opt-in for
+users who explicitly want the action animations despite that system setting.
+
+→ `app/chat/page.tsx`, `app/api/chat/route.ts`, `components/chat/`
+
+## A8 · What is wrong with the current prototype
 
 Stated plainly, because a working demo hides all of this.
 
@@ -162,7 +235,9 @@ Stated plainly, because a working demo hides all of this.
 | Route data is illustrative | Cost, location, timing and flexibility carry no source. See [02 · Research](02-research-and-evidence.md#source-registry) |
 | The safeguarding rule is a keyword match | It will miss cases and produce false positives, and nobody is alerted |
 | The Thai translation is a first draft | The interface, the question bank, the mission and route copy are all bilingual, but the Thai has not been through a formal cross-cultural adaptation — no second forward translation, no back-translation, no expert committee, no cognitive debriefing. See [validation-plan.md §2](validation-plan.md) |
-| No production abuse controls on `/api/explain` | Route and reason input is constrained, but a public deployment still needs authentication or rate limiting and provider spend limits |
+| Chat is a bounded companion, not a validated counsellor | It can explain repository topics, but it does not conduct or score the assessment and must not present itself as choosing a learner's route |
+| Chat output filters are heuristic | Required source ids and phrase guards reduce unsupported or route-selecting replies, but they cannot prove that every natural-language sentence is supported or harmless. Provider output still needs evaluation before production use |
+| No production abuse controls on the optional endpoints | Input is bounded, but a public deployment still needs authentication or rate limiting, provider spend limits, and verified host/provider retention terms |
 
 ---
 
@@ -175,12 +250,12 @@ submission, not because any of it runs.
 
 | Capability | Status | What the prototype does instead |
 |---|---|---|
-| Adaptive Thai-language Socratic interview | 📐 Planned | Fixed bilingual Likert questionnaire |
+| Adaptive Thai-language Socratic interview | 📐 Planned | Mascot-led chat UI over a fixed bilingual Likert questionnaire; `/chat` is a separate unscored companion |
 | STAR extraction from free text | 📐 Planned | Keyword spotting against a fixed dimension map |
-| Qdrant hybrid retrieval (dense + sparse, RRF-fused) | 📐 Planned | A seeded JSON catalogue of six routes |
+| Qdrant hybrid retrieval (dense + sparse, RRF-fused) | 📐 Planned | Deterministic lexical matching over a small curated chat index; routes remain seeded JSON |
 | BGE-M3 embeddings, 1024-dim | 📐 Planned | No embeddings at all |
-| LLM synthesis into structured JSON | 📐 Planned | Deterministic template text, optionally reworded |
-| FastAPI orchestrator, PostgreSQL, RBAC | 📐 Planned | Learner state is stored in the browser; the optional explanation endpoint is stateless |
+| LLM synthesis into structured JSON | 📐 Planned | Chat returns bounded prose and sources; decisions remain deterministic |
+| FastAPI orchestrator, PostgreSQL, RBAC | 📐 Planned | Learner state is stored in the browser; `/api/explain` and `/api/chat` are stateless |
 | DAG roadmap with topological sort | 📐 Planned | A linear 30-day plan from a four-week template |
 | QLoRA adapter for Thai tone | 🔴 Blocked | Not attempted |
 

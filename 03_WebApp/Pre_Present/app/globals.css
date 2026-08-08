@@ -117,7 +117,11 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  /* Keep the product still by default. The chat mascot's explicit
+   * data-fm-motion="on" opt-in is the only scoped exception. */
+  *:not(.fm-mascot[data-fm-motion="on"]):not(.fm-mascot[data-fm-motion="on"] *),
+  *:not(.fm-mascot[data-fm-motion="on"]):not(.fm-mascot[data-fm-motion="on"] *)::before,
+  *:not(.fm-mascot[data-fm-motion="on"]):not(.fm-mascot[data-fm-motion="on"] *)::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

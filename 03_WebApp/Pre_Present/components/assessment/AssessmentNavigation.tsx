@@ -45,8 +45,8 @@ export default function AssessmentNavigation({
           "inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-200",
           "motion-safe:active:scale-[0.97]",
           answered
-            ? "bg-mint text-mintInk hover:bg-mint/90 shadow-[var(--shadow-primary)]"
-            : "border border-line bg-surface2 text-muted hover:border-muted hover:text-ink",
+            ? "bg-coral text-canvas hover:bg-coral/90 shadow-[var(--shadow-primary)]"
+            : "border border-line bg-surface text-muted hover:border-coral/60 hover:text-ink",
         ].join(" ")}
       >
         {forwardLabel} <span aria-hidden>→</span>

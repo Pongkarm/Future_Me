@@ -19,6 +19,14 @@ import { format, localised } from "@/lib/i18n";
 import type { Dictionary } from "@/lib/i18n";
 import type { Language } from "@/lib/preferences";
 import SafetyPause from "@/components/SafetyPause";
+import provinces from "@/data/provinces.json";
+import { NearbyForRoute } from "@/components/routes/NearbyForRoute";
+import { isProvinceCode, type NearbyProvince } from "@/lib/geo/types";
+import {
+  JourneyChatPanel,
+  JourneyMascotTurn,
+  JourneyMessage,
+} from "@/components/journey/JourneyChat";
 
 /** Descriptive, not ranked — the same words the compare screen uses. */
 function costLabel(band: string, t: Dictionary): string {
@@ -54,9 +62,45 @@ export default function RoutesPage() {
   const [session, setSession] = useState<GuestSession | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [llmAvailable, setLlmAvailable] = useState(false);
+  const [nearby, setNearby] = useState<NearbyProvince | null>(null);
 
   useEffect(() => {
     setSession(loadOrCreate());
+  }, []);
+
+  /*
+   * Places are fetched only once the learner has said where they are, and the
+   * failure is silent: the routes are the point of this screen and they are
+   * complete without this section. A network problem here should cost the
+   * addition, never the page.
+   */
+  const provinceIso = session?.provinceIso ?? null;
+  useEffect(() => {
+    if (!provinceIso) {
+      setNearby(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/nearby?province=${encodeURIComponent(provinceIso)}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: NearbyProvince | null) => {
+        if (!cancelled) setNearby(data);
+      })
+      .catch(() => {
+        if (!cancelled) setNearby(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [provinceIso]);
+
+  const chooseProvince = useCallback((iso: string) => {
+    setSession((current) => {
+      if (!current) return current;
+      const next = { ...current, provinceIso: isProvinceCode(iso) ? iso : null };
+      saveSession(next);
+      return next;
+    });
   }, []);
 
   // Ask once whether the optional rewording layer is configured. The control is
@@ -102,7 +146,19 @@ export default function RoutesPage() {
   if (error) {
     return (
       <Shell step={3}>
-        <Card className="border-coral/40">
+        <JourneyChatPanel
+          title={t.assessment.interviewerName}
+          status={t.assessment.interviewerChecking}
+          transcriptLabel={t.chat.conversationLabel}
+          testIdPrefix="routes"
+        >
+        <JourneyMascotTurn
+          state="error"
+          status={t.assessment.interviewerChecking}
+          toggleMotionLabel={t.chat.motionEnable}
+          label={t.assessment.interviewerName}
+          testIdPrefix="routes"
+        >
           <h1 className="text-xl font-bold">{t.routes.errorTitle}</h1>
           <p className="mt-2 text-sm text-muted">
             The engine could not process this session. Your answers are still saved.
@@ -116,7 +172,8 @@ export default function RoutesPage() {
               Review my answers
             </Button>
           </div>
-        </Card>
+        </JourneyMascotTurn>
+        </JourneyChatPanel>
       </Shell>
     );
   }
@@ -133,7 +190,19 @@ export default function RoutesPage() {
   if (result.insufficientEvidence) {
     return (
       <Shell step={3}>
-        <Card className="border-warning/40">
+        <JourneyChatPanel
+          title={t.assessment.interviewerName}
+          status={t.assessment.interviewerListening}
+          transcriptLabel={t.chat.conversationLabel}
+          testIdPrefix="routes"
+        >
+        <JourneyMascotTurn
+          state="thinking"
+          status={t.assessment.interviewerListening}
+          toggleMotionLabel={t.chat.motionEnable}
+          label={t.assessment.interviewerName}
+          testIdPrefix="routes"
+        >
           <h1 className="text-2xl font-bold" data-testid="insufficient-heading">
             {t.routes.insufficientTitle}
           </h1>
@@ -155,7 +224,8 @@ export default function RoutesPage() {
               {t.routes.redoMission}
             </Button>
           </div>
-        </Card>
+        </JourneyMascotTurn>
+        </JourneyChatPanel>
       </Shell>
     );
   }
@@ -164,8 +234,21 @@ export default function RoutesPage() {
 
   return (
     <Shell step={3}>
+      <JourneyChatPanel
+        title={t.assessment.interviewerName}
+        status={t.assessment.interviewerListening}
+        transcriptLabel={t.chat.conversationLabel}
+        testIdPrefix="routes"
+      >
       {/* Level 1 — understand what the options are, fast. */}
-      <header className="mb-6">
+      <JourneyMascotTurn
+        state="speaking"
+        status={t.assessment.interviewerListening}
+        toggleMotionLabel={t.chat.motionEnable}
+        label={t.assessment.interviewerName}
+        testIdPrefix="routes"
+      >
+      <header>
         <h1 className="text-2xl font-bold sm:text-3xl" data-testid="routes-heading">
           {many ? format(t.routes.headingMany, { n: result.routes.length }) : t.routes.headingOne}
         </h1>
@@ -174,25 +257,68 @@ export default function RoutesPage() {
         </p>
       </header>
 
-      <SignalSummary result={result} t={t} />
+      <div className="mt-4">
+        <SignalSummary result={result} t={t} />
+      </div>
+      </JourneyMascotTurn>
+
+      {/*
+        Asked once, here, and remembered. Every route card below is then able to
+        name real places, which is the difference between a suggestion a learner
+        reads and one they can act on. It is a province, chosen from a list —
+        never the device's location, which for a thirteen-year-old would be a
+        home address we have no need for.
+      */}
+      <div className="mb-5 flex flex-wrap items-center gap-2">
+        <label htmlFor="routes-province" className="text-xs font-bold text-muted">
+          {provinceIso ? t.routes.nearbyChangeProvince : t.routes.nearbySetProvince}
+        </label>
+        <select
+          id="routes-province"
+          data-testid="routes-province"
+          value={provinceIso ?? ""}
+          onChange={(event) => chooseProvince(event.target.value)}
+          className="min-w-0 flex-1 rounded-control border border-line bg-surface px-3 py-1.5 text-sm sm:max-w-xs"
+        >
+          <option value="">{t.nearby.pickPlaceholder}</option>
+          {provinces.map((province) => (
+            <option key={province.iso} value={province.iso}>
+              {province.th} · {province.en}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Equal weight by construction: same grid cell, same card, same actions. */}
-      <ul className="mt-6 grid gap-4 lg:grid-cols-3">
+      <ul className="space-y-6" data-testid="route-options">
         {result.routes.map((route) => (
-          <RouteCard
+          <li
             key={route.routeId}
-            route={route}
-            llmAvailable={llmAvailable}
-            onSelect={() => select(route.routeId)}
-            t={t}
-            lang={lang}
-          />
+            data-route-id={route.routeId}
+            data-testid={`route-option-${route.routeId}`}
+          >
+            <JourneyMessage role="assistant" label={t.assessment.interviewerName}>
+              <RouteCard
+                route={route}
+                llmAvailable={llmAvailable}
+                onSelect={() => select(route.routeId)}
+                t={t}
+                lang={lang}
+                nearby={nearby}
+              />
+            </JourneyMessage>
+          </li>
         ))}
       </ul>
 
       {/* Level 2 — comparison is the intended next step, so it is the one strong CTA. */}
+      <JourneyMessage
+        role="assistant"
+        label={t.assessment.interviewerName}
+        testId="routes-compare-message"
+      >
       {many ? (
-        <section className="mt-8 rounded-card border border-mint/30 bg-mint/5 p-5 text-center">
+        <section className="text-center">
           <h2 className="text-base font-bold">{t.routes.notSureTitle}</h2>
           <p className="mx-auto mt-1 max-w-md text-sm text-muted">{t.routes.notSureBody}</p>
           <div className="mt-4">
@@ -202,15 +328,17 @@ export default function RoutesPage() {
           </div>
         </section>
       ) : (
-        <div className="mt-8">
+        <div>
           <Button href="/compare" variant="secondary" data-testid="go-compare">
             {t.routes.compareOne}
           </Button>
         </div>
       )}
+      </JourneyMessage>
 
       {result.ineligible.length > 0 ? (
-        <details className="mt-8 rounded-card border border-line bg-surface p-5">
+        <JourneyMessage role="assistant" label={t.assessment.interviewerName}>
+        <details>
           <summary className="cursor-pointer text-sm font-bold">
             {format(t.routes.filteredSummary, { n: result.ineligible.length })}
           </summary>
@@ -227,17 +355,24 @@ export default function RoutesPage() {
             ))}
           </ul>
         </details>
+        </JourneyMessage>
       ) : null}
 
       {/* Level 3 (shared) — source and freshness, once, not repeated per card. */}
-      <DataFreshness t={t} />
-
-      <p className="mt-4 text-xs text-muted">
-        {format(t.routes.generatedBy, {
-          version: result.engineVersion,
-          date: routeDataAsOf(),
-        })}
-      </p>
+      <JourneyMessage
+        role="assistant"
+        label={t.assessment.interviewerName}
+        testId="routes-source-message"
+      >
+        <DataFreshness t={t} />
+        <p className="mt-4 text-xs text-muted">
+          {format(t.routes.generatedBy, {
+            version: result.engineVersion,
+            date: routeDataAsOf(),
+          })}
+        </p>
+      </JourneyMessage>
+      </JourneyChatPanel>
     </Shell>
   );
 }
@@ -259,9 +394,19 @@ function SignalSummary({ result, t }: { result: Recommendation; t: Dictionary })
       : t.routes.missionAgreed;
 
   return (
-    <section className="rounded-card border border-line bg-surface p-5" data-testid="signal-summary">
-      <h2 className="text-sm font-bold">{t.routes.summaryTitle}</h2>
-      <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+    /*
+     * A disclosure rather than a panel. This explains how the engine reached
+     * its answer, which matters — but on a 390px screen it was 400px of
+     * preamble in front of the answer itself, and a learner who has just
+     * answered thirty questions should meet the routes first.
+     */
+    <details className="rounded-card border border-line bg-surface" data-testid="signal-summary">
+      <summary className="cursor-pointer list-none p-4 text-sm font-bold marker:hidden">
+        {t.routes.summaryTitle}
+        <span className="ml-2 font-normal text-muted">▾</span>
+      </summary>
+      <div className="px-4 pb-4">
+      <dl className="mt-1 grid gap-3 sm:grid-cols-2">
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
             {t.routes.summaryInterview}
@@ -291,7 +436,8 @@ function SignalSummary({ result, t }: { result: Recommendation; t: Dictionary })
           </div>
         </details>
       ) : null}
-    </section>
+    </div>
+    </details>
   );
 }
 
@@ -350,18 +496,20 @@ function RouteCard({
   onSelect,
   t,
   lang,
+  nearby,
 }: {
   route: RouteResult;
   llmAvailable: boolean;
   onSelect: () => void;
   t: Dictionary;
   lang: Language;
+  nearby: NearbyProvince | null;
 }) {
   const [open, setOpen] = useState(false);
   const panelId = `route-detail-${route.routeId}`;
 
   return (
-    <Card as="li" className="flex flex-col">
+    <Card className="flex flex-col border-indigo/25 bg-surface/80">
       {/* Identity */}
       <h2 className="text-base font-bold leading-snug">{localised(route.name, lang)}</h2>
       {localised(route.shortName, lang) !== localised(route.name, lang) ? (
@@ -403,6 +551,13 @@ function RouteCard({
         <p className="text-xs font-bold uppercase tracking-wide text-muted">{t.routes.tryThisNext}</p>
         <p className="mt-1 text-sm">{localised(route.nextExperiment, lang)}</p>
       </div>
+
+      {/*
+        Shown above the fold on the card rather than inside the details panel:
+        for a learner weighing routes, whether a place exists within reach is
+        not extra detail, it is part of what the route would mean.
+      */}
+      <NearbyForRoute routeId={route.routeId} province={nearby} />
 
       <div className="flex-1" />
 

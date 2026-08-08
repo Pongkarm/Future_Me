@@ -431,6 +431,384 @@
           "th": "พยาบาลและสหเวชศาสตร์เป็นวิชาชีพที่ต้องมีใบอนุญาต และมีเกณฑ์รับเข้าเฉพาะของแต่ละหลักสูตร ระบบนี้ไม่ได้จำลองเกณฑ์เหล่านั้น ต้องตรวจสอบกับแต่ละสถาบันและสภาวิชาชีพที่เกี่ยวข้อง"
         }
       }
+    },
+    {
+      "id": "vocational-ev-tech",
+      "name": {
+        "en": "Vocational ปวช./ปวส. — EV and Smart Mobility Technology",
+        "th": "ปวช./ปวส. ยานยนต์ไฟฟ้าและเทคโนโลยีระบบอัจฉริยะ"
+      },
+      "shortName": {
+        "en": "Vocational → EV Tech",
+        "th": "ปวช./ปวส. → ยานยนต์ไฟฟ้า"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "VOCATIONAL"
+      ],
+      "summary": {
+        "en": "A specialized vocational track focusing on electric vehicle electronics, battery diagnostics, and clean energy systems.",
+        "th": "หลักสูตรอาชีวศึกษาเฉพาะทางเน้นอิเล็กทรอนิกส์ยานยนต์ไฟฟ้า การตรวจวินิจฉัยแบตเตอรี่ และระบบพลังงานสะอาด"
+      },
+      "interestWeights": {
+        "R": 0.45,
+        "I": 0.25,
+        "A": 0.05,
+        "S": 0.05,
+        "E": 0.05,
+        "C": 0.15
+      },
+      "learningStyle": "hands-on",
+      "costBand": "moderate",
+      "requiresRelocation": false,
+      "flexibility": 0.75,
+      "timeToEarning": "soon",
+      "strengths": [
+        {
+          "en": "Surging national demand driven by EV manufacturing hubs in Thailand",
+          "th": "ความต้องการสูงขึ้นอย่างรวดเร็วจากการเป็นฐานผลิต EV ในไทย"
+        },
+        {
+          "en": "Fast transition to earning; dual-system college placements available",
+          "th": "เข้าสู่การมีรายได้รวดเร็ว ผ่านระบบทวิภาคีร่วมกับสถานประกอบการ"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "Requires high safety compliance and continuous retraining in high-voltage systems",
+          "th": "ต้องปฏิบัติตามมาตรฐานความปลอดภัยเคร่งครัดและปรับตัวกับระบบแรงดันสูง"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Inspect an EV battery system diagram or visit a local dual-system vocational garage to watch diagnostic procedures.",
+        "th": "ศึกษาสไลด์ผังระบบแบตเตอรี่ EV หรือเยี่ยมชมอู่เรียนทวิภาคีใกล้บ้านเพื่อดูการตรวจเช็กไฟสูง"
+      },
+      "planTemplate": "hands-on",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "สอศ. — ทะเบียนหลักสูตรอาชีวศึกษา ปวช. 2567",
+        "sourceUrl": "https://ckan.vec.go.th/th/dataset/voc_curriculum",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Modelled on the updated 2567 OVEC vocational automotive electronics standard.",
+          "th": "อ้างอิงกรอบมาตรฐานสาขาวิชาช่างยานยนต์ไฟฟ้าและอิเล็กทรอนิกส์ สอศ. 2567"
+        }
+      }
+    },
+    {
+      "id": "vocational-culinary",
+      "name": {
+        "en": "Vocational ปวช./ปวส. — Culinary Arts and Hospitality Management",
+        "th": "ปวช./ปวส. อาหารและโภชนาการ / การโรงแรม"
+      },
+      "shortName": {
+        "en": "Vocational → Culinary Arts",
+        "th": "ปวช./ปวส. → อาหารและคหกรรม"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "VOCATIONAL"
+      ],
+      "summary": {
+        "en": "Practical culinary techniques, food hygiene, cost control, and kitchen management for the food service industry.",
+        "th": "ทักษะการประกอบอาหาร สุขาภิบาลอาหาร การควบคุมต้นทุน และการจัดการครัวอุตสาหกรรม"
+      },
+      "interestWeights": {
+        "R": 0.35,
+        "I": 0.05,
+        "A": 0.35,
+        "S": 0.1,
+        "E": 0.05,
+        "C": 0.1
+      },
+      "learningStyle": "hands-on",
+      "costBand": "moderate",
+      "requiresRelocation": false,
+      "flexibility": 0.8,
+      "timeToEarning": "soon",
+      "strengths": [
+        {
+          "en": "Strong entrepreneurial potential and international job mobility",
+          "th": "มีโอกาสสูงในการประกอบธุรกิจส่วนตัวและทำงานต่างประเทศ"
+        },
+        {
+          "en": "Direct practical skill building with clear output",
+          "th": "ฝึกทักษะปฏิบัติจริงตรงสาย เห็นผลงานเป็นรูปธรรม"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "Physically demanding work with long hours during peak seasons",
+          "th": "ใช้แรงกายสูงและต้องทำงานช่วงวันหยุดหรือชั่วโมงยาวนาน"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Prepare a standard dish following a scaled recipe, calculating exact ingredient costs per portion.",
+        "th": "ลองทำอาหารตามสูตรมาตรฐานพร้อมคำนวณต้นทุนวัตถุดิบต่อจานอย่างละเอียด"
+      },
+      "planTemplate": "hands-on",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "สอศ. — หลักสูตรคหกรรมศาสตร์และอาหาร",
+        "sourceUrl": "https://ckan.vec.go.th/",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Based on OVEC hospitality and food technology standards.",
+          "th": "อ้างอิงจากหลักสูตรประกาศนียบัตรวิชาชีพประเภทวิชาคหกรรมศาสตร์"
+        }
+      }
+    },
+    {
+      "id": "vocational-logistics",
+      "name": {
+        "en": "Vocational ปวช./ปวส. — Supply Chain and Logistics Management",
+        "th": "ปวช./ปวส. การจัดการโลจิสติกส์และซัพพลายเชน"
+      },
+      "shortName": {
+        "en": "Vocational → Logistics",
+        "th": "ปวช./ปวส. → โลจิสติกส์"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "VOCATIONAL"
+      ],
+      "summary": {
+        "en": "Warehouse operations, inventory tracking, transport routing, and e-commerce distribution systems.",
+        "th": "การจัดการคลังสินค้า ตรวจติดตามสต็อก วางแผนเส้นทางขนส่ง และระบบกระจายสินค้า e-Commerce"
+      },
+      "interestWeights": {
+        "R": 0.1,
+        "I": 0.15,
+        "A": 0.05,
+        "S": 0.05,
+        "E": 0.25,
+        "C": 0.4
+      },
+      "learningStyle": "structured-analytical",
+      "costBand": "tight",
+      "requiresRelocation": false,
+      "flexibility": 0.85,
+      "timeToEarning": "soon",
+      "strengths": [
+        {
+          "en": "High baseline employment across retail, manufacturing, and shipping",
+          "th": "ฐานการจ้างงานสูง ครอบคลุมค้าปลีก การผลิต และการขนส่ง"
+        },
+        {
+          "en": "Low entry cost with fast career growth into warehouse management",
+          "th": "ต้นทุนการเข้าเรียนต่ำ มีโอกาสโตสู่ตำแหน่งผู้ดูแลคลังสินค้า"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "Requires high accuracy with records and resilience under tight shipping windows",
+          "th": "ต้องละเอียดแม่นยำกับเอกสารและรับแรงกดดันจากเวลาการจัดส่งได้ดี"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Map the supply chain steps of an online order from warehouse packaging to final destination.",
+        "th": "ลองวาดผังขั้นตอนซัพพลายเชนของพัสดุออนไลน์ตั้งแต่คลังสินค้าจนถึงมือผู้รับ"
+      },
+      "planTemplate": "structured",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "สอศ. — สาขาวิชาการจัดการโลจิสติกส์ 2567",
+        "sourceUrl": "https://ckan.vec.go.th/",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Modelled on national logistics skill standards.",
+          "th": "อ้างอิงกรอบมาตรฐานอาชีวศึกษาการจัดการโลจิสติกส์"
+        }
+      }
+    },
+    {
+      "id": "university-ai-data",
+      "name": {
+        "en": "University Track — AI Engineering and Data Science",
+        "th": "มหาวิทยาลัย — วิทยาการข้อมูลและวิศวกรรมปัญญาประดิษฐ์"
+      },
+      "shortName": {
+        "en": "University → AI & Data",
+        "th": "มหาลัย → AI & Data"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "UPPER_SECONDARY"
+      ],
+      "summary": {
+        "en": "Degree programmes in computer science, data analytics, machine learning, and software architecture.",
+        "th": "หลักสูตรปริญญาตรีวิทยาการคอมพิวเตอร์ การวิเคราะห์ข้อมูล การเรียนรู้ของเครื่อง และสถาปัตยกรรมซอฟต์แวร์"
+      },
+      "interestWeights": {
+        "R": 0.1,
+        "I": 0.5,
+        "A": 0.1,
+        "S": 0.05,
+        "E": 0.1,
+        "C": 0.15
+      },
+      "learningStyle": "structured-analytical",
+      "costBand": "high",
+      "requiresRelocation": true,
+      "flexibility": 0.9,
+      "timeToEarning": "later",
+      "strengths": [
+        {
+          "en": "Highest industry starting salary scale and remote work potential",
+          "th": "ฐานเงินเดือนเริ่มต้นสูงมากในอุตสาหกรรม และมีโอกาสทำงานทางไกล"
+        },
+        {
+          "en": "Strong transferable skills across finance, healthcare, and tech tech",
+          "th": "ทักษะต่อยอดได้หลากหลายทั้งการเงิน สุขภาพ และเทคโนโลยี"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "High mathematical rigour and requirement for continuous self-learning",
+          "th": "ต้องใช้คณิตศาสตร์ระดับสูงและเรียนรู้เทคโนโลยีใหม่ด้วยตัวเองตลอดเวลา"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Complete a basic Python data analysis tutorial using real-world public data.",
+        "th": "ลองทำสคริปต์ Python วิเคราะห์ข้อมูลสาธารณะเบื้องต้นตามคู่มือออนไลน์"
+      },
+      "planTemplate": "analytical",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "myTCAS70 — Computer Science and Data Science",
+        "sourceUrl": "https://school.mytcas.com/",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Verified against TCAS 4-year degree requirements.",
+          "th": "อ้างอิงจากเกณฑ์รับเข้าคณะวิทยาศาสตร์/วิศวกรรมศาสตร์ สาขาคอมพิวเตอร์และข้อมูล myTCAS"
+        }
+      }
+    },
+    {
+      "id": "university-medtech-rehab",
+      "name": {
+        "en": "University Track — Medical Technology and Physical Therapy",
+        "th": "มหาวิทยาลัย — เทคนิคการแพทย์และกายภาพบำบัด"
+      },
+      "shortName": {
+        "en": "University → MedTech & Rehab",
+        "th": "มหาลัย → เทคนิคการแพทย์/กายภาพ"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "UPPER_SECONDARY"
+      ],
+      "summary": {
+        "en": "Applied medical diagnostic lab science, rehabilitation therapy, and healthcare diagnostic instrumentation.",
+        "th": "วิทยาศาสตร์การตรวจวินิจฉัยทางการแพทย์ กายภาพบำบัดเพื่อการฟื้นฟู และเครื่องมือตรวจวิเคราะห์สุขภาพ"
+      },
+      "interestWeights": {
+        "R": 0.15,
+        "I": 0.45,
+        "A": 0.05,
+        "S": 0.25,
+        "E": 0.05,
+        "C": 0.05
+      },
+      "learningStyle": "structured-social",
+      "costBand": "high",
+      "requiresRelocation": true,
+      "flexibility": 0.6,
+      "timeToEarning": "later",
+      "strengths": [
+        {
+          "en": "Growing demand driven by Thailand's ageing society and medical hub policy",
+          "th": "ความต้องการเติบโตจากสังคมสูงวัยและนโยบายศูนย์กลางทางการแพทย์"
+        },
+        {
+          "en": "Professional licensure protection with stable healthcare employment",
+          "th": "มีใบอนุญาตประกอบวิชาชีพรอบรับ มั่นคงในระบบสุขภาพ"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "Requires high science GPA and strict professional board examinations",
+          "th": "ต้องการเกรดเฉลี่ยกลุ่มวิทยาศาสตร์สูง และต้องสอบใบประกอบวิชาชีพ"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Read an introductory clinical lab report case or watch a physical therapy movement analysis.",
+        "th": "อ่านเคสผลการตรวจแล็ปเบื้องต้น หรือดูคลิปวิเคราะห์การเคลื่อนไหวทางกายภาพบำบัด"
+      },
+      "planTemplate": "structured",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "myTCAS70 — Allied Health Sciences",
+        "sourceUrl": "https://school.mytcas.com/",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Verified against Council of Medical Technology standards.",
+          "th": "อ้างอิงกรอบเกณฑ์รับเข้าคณะสหเวชศาสตร์/เทคนิคการแพทย์ TCAS"
+        }
+      }
+    },
+    {
+      "id": "university-digital-comm",
+      "name": {
+        "en": "University Track — Digital Communication and Content Strategy",
+        "th": "มหาวิทยาลัย — นิเทศศาสตร์ดิจิทัลและการบริหารสื่อใหม่"
+      },
+      "shortName": {
+        "en": "University → Digital Comm",
+        "th": "มหาลัย → นิเทศดิจิทัล"
+      },
+      "tiers": [
+        "LOWER_SECONDARY",
+        "UPPER_SECONDARY"
+      ],
+      "summary": {
+        "en": "Digital storytelling, brand communication, social media analytics, and creative media production.",
+        "th": "การเล่าเรื่องดิจิทัล สื่อสารแบรนด์ การวิเคราะห์ข้อมูลโซเชียล และการผลิตสื่อสร้างสรรค์"
+      },
+      "interestWeights": {
+        "R": 0.05,
+        "I": 0.1,
+        "A": 0.45,
+        "S": 0.15,
+        "E": 0.2,
+        "C": 0.05
+      },
+      "learningStyle": "portfolio",
+      "costBand": "moderate",
+      "requiresRelocation": true,
+      "flexibility": 0.85,
+      "timeToEarning": "soon",
+      "strengths": [
+        {
+          "en": "High versatility across agencies, corporate marketing, and independent content creation",
+          "th": "ยืดหยุ่นสูง ทำงานได้ทั้งเอเจนซี่ การตลาดองค์กร และผู้สร้างคอนเทนต์อิสระ"
+        },
+        {
+          "en": "Emphasis on creative portfolio over strict entrance examination scores",
+          "th": "เน้นแฟ้มสะสมผลงานสร้างสรรค์มากกว่าคะแนนสอบข้อเขียน"
+        }
+      ],
+      "limitations": [
+        {
+          "en": "Highly competitive market requiring continuous portfolio updates and platform adaptation",
+          "th": "การแข่งขันสูง ต้องอัปเดตผลงานและปรับตัวตามแพลตฟอร์มใหม่เสมอ"
+        }
+      ],
+      "nextExperiment": {
+        "en": "Create a 3-slide digital brand story framework for a product you use daily.",
+        "th": "ลองทำสไลด์วางกลยุทธ์เล่าเรื่องแบรนด์ดิจิทัล 3 หน้า สำหรับสินค้าที่ใช้ประจำวัน"
+      },
+      "planTemplate": "portfolio",
+      "provenance": {
+        "status": "partially-verified",
+        "source": "myTCAS70 — Communication Arts and Digital Media",
+        "sourceUrl": "https://school.mytcas.com/",
+        "lastVerified": "2026-07-24",
+        "note": {
+          "en": "Verified against digital communication faculty criteria.",
+          "th": "อ้างอิงเกณฑ์รับเข้าคณะนิเทศศาสตร์/เทคโนโลยีสารสนเทศเพื่อการสื่อสาร TCAS"
+        }
+      }
     }
   ],
   "planTemplates": {

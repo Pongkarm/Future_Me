@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import routesData from "@/data/routes.json";
+import { extractAnthropicUsage } from "@/lib/chat/provider";
+import { clientKeyFromHeaders, requestLimiter, spendLedger, spendLimiter } from "@/lib/chat";
 import { REASON_TEXT } from "@/lib/decision-engine/explanations";
 import type { ReasonCode } from "@/lib/decision-engine/types";
 
@@ -52,6 +54,27 @@ export function GET() {
 }
 
 export async function POST(request: Request) {
+  const clientKey = clientKeyFromHeaders(request.headers);
+
+  /*
+   * Server load only — the provider allowance is checked further down, once
+   * there is a real route and real reason codes to spend it on.
+   *
+   * Still a 200 with the endpoint's usual shape, because this endpoint's whole
+   * contract is that the page it feeds never breaks. An empty `text` is what
+   * the caller already gets for a body it cannot use; app/routes keeps the
+   * deterministic sentence on screen and disables the reword control. The
+   * Retry-After header is there for whoever is flooding it, not for the page.
+   */
+  const throttle = requestLimiter.check(clientKey);
+  if (!throttle.allowed) {
+    console.warn(`[explain] throttled (${throttle.scope})`);
+    return NextResponse.json(
+      { source: "fallback", text: "", note: "Too many requests." },
+      { status: 200, headers: { "Retry-After": String(throttle.retryAfterSeconds) } },
+    );
+  }
+
   let body: ExplainRequest;
 
   try {
@@ -104,6 +127,45 @@ export async function POST(request: Request) {
     );
   }
 
+  /*
+   * Shares one allowance with /api/chat, because they share one budget.
+   * Rationing only the busier endpoint would move the attack to the quieter
+   * one rather than stopping it.
+   *
+   * Deliberately the last check before the fetch: everything above it — a
+   * malformed body, an unknown route id, no recognised reason codes, no key
+   * configured — is a request that was never going to cost anything, and none
+   * of them should eat into the budget.
+   *
+   * Answered with the deterministic text and a 200 rather than a 429: this
+   * endpoint's whole contract is that it always returns usable wording, and
+   * the screen it feeds is meant to degrade without the reader noticing. The
+   * learner reads the engine's own sentence, which was always the fallback.
+   */
+  const decision = spendLimiter.check(clientKey);
+  if (!decision.allowed) {
+    console.warn(`[explain] provider allowance exhausted (${decision.scope})`);
+    return NextResponse.json(
+      { source: "fallback", text: fallback, note: "Rate limited — deterministic explanation used." },
+      { status: 200, headers: { "Retry-After": String(decision.retryAfterSeconds) } },
+    );
+  }
+
+  /*
+   * Shares the cumulative ceiling with /api/chat, as it shares the allowance
+   * and the key. Exhaustion here is the endpoint's ordinary fallback: the
+   * learner reads the engine's own sentence, which was always what it was.
+   */
+  const budget = spendLedger.check();
+  if (!budget.allowed) {
+    console.warn(`[explain] ${budget.window} ${budget.measure} cap reached`);
+    return NextResponse.json(
+      { source: "fallback", text: fallback, note: "Spending cap reached — deterministic explanation used." },
+      { status: 200 },
+    );
+  }
+  spendLedger.reserve();
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -145,6 +207,8 @@ export async function POST(request: Request) {
     }
 
     const data: unknown = await res.json();
+    const usage = extractAnthropicUsage(data);
+    if (usage) spendLedger.record(usage);
     const text = extractText(data);
 
     if (!text) {

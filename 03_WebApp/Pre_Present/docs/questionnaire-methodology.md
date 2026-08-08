@@ -186,6 +186,22 @@ A **5-point scale**, anchored on liking rather than agreement:
 | 4 | Like | ชอบ |
 | 5 | Strongly like | ชอบอย่างยิ่ง |
 
+**How the chat-style interface records this scale.** FutureMe shows the five labels as numbered
+plain text inside its left-aligned question bubble. The learner types into a separate composer;
+validated answers then appear as right-aligned user bubbles in a scrollable transcript. There are
+no selectable answer cards. The local parser accepts the whole reply only when it matches one number,
+one canonical English or Thai label, or one explicitly reviewed bilingual alias. It does not use an
+LLM, fuzzy matching, sentiment analysis, substring matching, or negation inference. An unclear
+reply changes no answer and asks the learner to clarify. Only the resulting value 1–5 is stored;
+the raw phrase is not, so restored history shows the localized canonical answer rather than claiming
+to reproduce the learner's exact wording. Context questions follow the same numbered, exact-match rule. The optional
+`proud` prompt remains literal free text.
+
+This interaction method is itself unvalidated and may change response behaviour compared with
+pressing a labelled control. The alias registry and its tests live in
+`lib/interview/reply-parser.ts` and `tests/unit/interview-reply-parser.test.ts`; any pilot must treat
+the text-chat administration method as part of the instrument being evaluated.
+
 **Why liking, not agreement.** The items ask about activities. "Strongly agree" is not a coherent
 response to "Repair a bicycle". This matches the O\*NET Interest Profiler Short Form, which uses
 exactly this five-point like/dislike format (0 = strongly dislike … 4 = strongly like).

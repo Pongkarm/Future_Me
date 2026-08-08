@@ -33,24 +33,24 @@ const AnswerOption = forwardRef<
         "group flex w-full min-h-[56px] items-center gap-3.5 rounded-control border px-4 py-3 text-left transition-all duration-200",
         "motion-safe:active:scale-[0.99]",
         selected
-          ? "border-mint bg-mint/10 shadow-[var(--shadow-selected)]"
-          : "border-line bg-surface2 hover:border-muted/70 hover:bg-surface2/60",
+          ? "border-coral bg-coral/10 shadow-[var(--shadow-card)]"
+          : "border-line bg-surface hover:border-coral/55 hover:bg-coral/5",
       ].join(" ")}
     >
       <span
         aria-hidden
         className={[
           "grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-all duration-200",
-          selected ? "border-mint bg-mint" : "border-muted/50 group-hover:border-muted",
+          selected ? "border-coral bg-coral" : "border-muted/50 group-hover:border-coral/70",
         ].join(" ")}
       >
-        {selected ? <span className="h-1.5 w-1.5 rounded-full bg-mintInk" /> : null}
+        {selected ? <span className="h-1.5 w-1.5 rounded-full bg-canvas" /> : null}
       </span>
 
       <span
         className={[
           "text-sm font-semibold leading-snug transition-colors",
-          selected ? "text-ink" : "text-muted group-hover:text-ink",
+          selected ? "text-coral" : "text-muted group-hover:text-ink",
         ].join(" ")}
       >
         {label}

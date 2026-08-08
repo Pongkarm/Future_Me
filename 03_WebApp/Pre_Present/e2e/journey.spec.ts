@@ -1,104 +1,19 @@
-import { expect, test, type Page } from "@playwright/test";
-import questions from "../data/questions.json";
-
-/**
- * Item ids come from the bank, not from literals. The instrument is expected to
- * change as it is revised; the journey it drives is not.
- */
-const ITEMS = questions.interest.map((q) => ({ id: q.id, dimension: q.dimension }));
+import { expect, test } from "@playwright/test";
+import {
+  ITEMS,
+  completeInterview,
+  completeMission,
+  contextReplyNumber,
+  currentMissionId,
+  sendInterviewReply,
+} from "./helpers/journey";
 
 /**
  * End-to-end: the flow a reviewer is asked to complete.
  * Runs against the production build with no ANTHROPIC_API_KEY set.
+ *
+ * The steps themselves live in ./helpers/journey so other suites can reuse them.
  */
-
-/**
- * The assessment shows one question at a time and advances when answered, so
- * this walks the same sequence the learner does: each click lands on the next
- * question, and the optional free text at the end is skipped to reach the
- * review screen, where the continue button lives.
- */
-async function completeInterview(page: Page, high: "practical" | "people" = "practical") {
-  await page.goto("/");
-  await page.getByTestId("start-guest").click();
-  await expect(page).toHaveURL(/\/interview/);
-
-  // Answer every interest item: the chosen dimensions high, the rest low.
-  const highDims = high === "practical" ? ["R", "I"] : ["S", "E"];
-  for (const item of ITEMS) {
-    await page.getByTestId(`q-${item.id}-${highDims.includes(item.dimension) ? 5 : 2}`).click();
-  }
-
-  await page.getByTestId("ctx-tier-LOWER_SECONDARY").click();
-  await page.getByTestId("ctx-cost-moderate").click();
-  await page.getByTestId("ctx-mobility-can_move").click();
-  await page.getByTestId("ctx-horizon-soon").click();
-
-  // Past the optional "something you were proud of" question, onto review.
-  await page.getByTestId("assessment-skip").click();
-  await expect(page.getByTestId("interview-continue")).toBeVisible();
-}
-
-/**
- * Which mission appears depends on the interview, so the helper fills whichever
- * one is on screen rather than assuming a fixed set of fields.
- */
-const MISSION_ANSWERS: Record<
-  string,
-  { texts: Record<string, string>; multi: string[]; single: string }
-> = {
-  "mission-school-problem": {
-    texts: {
-      problem: "The tool cupboard is disorganised and people waste time looking for equipment.",
-      evidence: "I would time how long it takes to find a tool before and after the change.",
-    },
-    multi: ["observe", "organise"],
-    single: "ordering",
-  },
-  "mission-make-something": {
-    texts: {
-      thing: "The club shelf is too shallow, so half the equipment sits on the floor instead.",
-      tradeoff: "I would give up two weekends and some of my own money to buy the timber.",
-    },
-    multi: ["takeapart", "rough"],
-    single: "hands",
-  },
-  "mission-run-something": {
-    texts: {
-      activity: "A revision session before the maths exam for anyone in my year who wants one.",
-      hard: "Nobody turns up, so I would ask people to commit the week before and remind them.",
-    },
-    multi: ["askneed", "teach"],
-    single: "helping",
-  },
-};
-
-async function currentMissionId(page: Page): Promise<string> {
-  await expect(page).toHaveURL(/\/mission/);
-  const id = await page.getByTestId("mission-title").getAttribute("data-mission-id");
-  expect(id, "the mission page must declare which mission it is showing").toBeTruthy();
-  return id!;
-}
-
-async function fillMission(page: Page): Promise<string> {
-  const id = await currentMissionId(page);
-  const answers = MISSION_ANSWERS[id];
-  expect(answers, `no e2e answers defined for mission ${id}`).toBeTruthy();
-
-  for (const [step, text] of Object.entries(answers.texts)) {
-    await page.getByTestId(`m-${step}`).fill(text);
-  }
-  for (const value of answers.multi) {
-    await page.getByTestId(`m-approach-${value}`).click();
-  }
-  await page.getByTestId(`m-energy-${answers.single}`).click();
-  return id;
-}
-
-async function completeMission(page: Page) {
-  await fillMission(page);
-  await page.getByTestId("mission-submit").click();
-}
 
 test("guest completes interview → mission → routes → compare → 30-day plan", async ({ page }) => {
   await completeInterview(page);
@@ -131,15 +46,25 @@ test("guest completes interview → mission → routes → compare → 30-day pl
   // Compare.
   await page.getByTestId("go-compare").click();
   await expect(page).toHaveURL(/\/compare/);
+  await expect(page.getByTestId("compare-chat-panel")).toBeVisible();
+  await expect(page.getByTestId("compare-guide")).toBeVisible();
+
+  // FutureMe asks which lens matters first, then applies it equally to each route.
+  await page.getByTestId("compare-focus-fit").click();
+  await expect(page.getByTestId("compare-focus-reply")).toContainText("Fit signals");
+  await expect(page.getByTestId("compare-focus-results")).toBeVisible();
+  await expect(page.getByText("Evidence strength").first()).toBeVisible();
+
+  // The complete semantic matrix remains available on demand.
+  await page.getByTestId("compare-full-matrix").locator("summary").click();
   await expect(page.getByRole("table")).toBeVisible();
-  await expect(page.getByText("Evidence strength")).toBeVisible();
 
   // The comparison is where estimates are most likely to be read as facts, so
   // the table has to say which rows are unsourced.
   await expect(page.getByText("Where this comes from")).toBeVisible();
   await expect(page.getByTestId("compare-caveat")).toContainText(/estimates/i);
 
-  // Select a route from the comparison table.
+  // Select a route from the guided comparison.
   await page.locator('[data-testid^="compare-select-"]').first().click();
 
   // Plan.
@@ -155,6 +80,48 @@ test("guest completes interview → mission → routes → compare → 30-day pl
   await expect(firstTask).toBeChecked();
   await page.reload();
   await expect(page.locator('[data-testid^="task-"]').first()).toBeChecked();
+});
+
+test("the chatbot-led mission, routes and comparison fit narrow screens", async ({ page }) => {
+  const assertNoDocumentOverflow = async () => {
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
+  };
+
+  await completeInterview(page);
+  await page.getByTestId("interview-continue").click();
+
+  for (const width of [320, 768, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await expect(page.getByTestId("mission-chat-panel")).toBeVisible();
+    await assertNoDocumentOverflow();
+  }
+
+  await completeMission(page);
+  for (const width of [320, 768, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await expect(page.getByTestId("routes-chat-panel")).toBeVisible();
+    await assertNoDocumentOverflow();
+  }
+
+  await page.getByTestId("go-compare").click();
+  await page.getByTestId("compare-focus-practical").click();
+  for (const width of [320, 768, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await expect(page.getByTestId("compare-chat-panel")).toBeVisible();
+    await assertNoDocumentOverflow();
+  }
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.getByTestId("compare-full-matrix").locator("summary").click();
+  const scrollRegion = page.getByTestId("compare-scroll-region");
+  await expect(scrollRegion).toBeVisible();
+  expect(
+    await scrollRegion.evaluate((element) => element.scrollWidth > element.clientWidth),
+  ).toBe(true);
+  await assertNoDocumentOverflow();
 });
 
 test("no route is presented as the winner", async ({ page }) => {
@@ -303,7 +270,7 @@ test("guest progress survives a page refresh mid-interview", async ({ page }) =>
 
 test("an incomplete interview is blocked with an explanation, not a guess", async ({ page }) => {
   await page.goto("/interview");
-  await page.getByTestId(`q-${ITEMS[0].id}-5`).click();
+  await sendInterviewReply(page, "5");
 
   // Skipping ahead to the end is allowed; continuing on one answer is not.
   await page.getByTestId("go-review").click();
@@ -316,14 +283,14 @@ test("an incomplete interview is blocked with an explanation, not a guess", asyn
 test("thin evidence yields no routes rather than invented ones", async ({ page }) => {
   await page.goto("/interview");
   // Clear the answer floor, but answer identically — no dimension stands out.
-  for (const item of ITEMS) {
-    await page.getByTestId(`q-${item.id}-3`).click();
+  for (let i = 0; i < ITEMS.length; i++) {
+    await sendInterviewReply(page, "3");
   }
 
-  await page.getByTestId("ctx-tier-LOWER_SECONDARY").click();
-  await page.getByTestId("ctx-cost-moderate").click();
-  await page.getByTestId("ctx-mobility-can_move").click();
-  await page.getByTestId("ctx-horizon-unsure").click();
+  await sendInterviewReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
+  await sendInterviewReply(page, contextReplyNumber("cost", "moderate"));
+  await sendInterviewReply(page, contextReplyNumber("mobility", "can_move"));
+  await sendInterviewReply(page, contextReplyNumber("horizon", "unsure"));
   await page.getByTestId("assessment-skip").click();
   await page.getByTestId("interview-continue").click();
 
@@ -337,9 +304,8 @@ test("the safety rule pauses recommendations and offers support", async ({ page 
 
   // Back into the optional free text from the review list, then on to continue.
   await page.getByTestId("review-proud").click();
-  await page.getByTestId("ctx-proud").fill("honestly sometimes I want to die");
-  await page.getByTestId("go-review").click();
-  await page.getByTestId("interview-continue").click();
+  await page.getByTestId("assessment-reply").fill("honestly sometimes I want to die");
+  await page.getByTestId("assessment-send").click();
 
   await expect(page.getByText(/pause the career questions/i)).toBeVisible();
   await expect(page.getByText(/not a mental-health service/i)).toBeVisible();
@@ -462,7 +428,11 @@ test("hand-edited local storage is repaired, not trusted", async ({ page }) => {
 
   // Dropping that answer makes it the first unfinished question, so that is where the
   // assessment resumes — with nothing selected rather than a scored 99.
-  await expect(page.getByTestId(`q-${ITEMS[0].id}-5`)).toHaveAttribute("aria-checked", "false");
+  await expect(page.getByTestId("interview-current-question")).toHaveAttribute(
+    "data-question-id",
+    ITEMS[0].id,
+  );
+  await expect(page.getByTestId("assessment-reply")).toHaveValue("");
 
   // Everything valid survived, which the review list shows in one place.
   await page.getByTestId("go-review").click();
@@ -485,7 +455,11 @@ test("unreadable local storage resets to a clean session", async ({ page }) => {
 
   await page.goto("/interview");
   await expect(page.getByText(/start you a new session/i)).toBeVisible();
-  await expect(page.getByTestId(`q-${ITEMS[0].id}-5`)).toHaveAttribute("aria-checked", "false");
+  await expect(page.getByTestId("interview-current-question")).toHaveAttribute(
+    "data-question-id",
+    ITEMS[0].id,
+  );
+  await expect(page.getByTestId("assessment-reply")).toHaveValue("");
 });
 
 test("data deletion clears the guest session", async ({ page }) => {
@@ -495,5 +469,9 @@ test("data deletion clears the guest session", async ({ page }) => {
   await expect(page.getByText(/Deleted\./)).toBeVisible();
 
   await page.goto("/interview");
-  await expect(page.getByTestId(`q-${ITEMS[0].id}-5`)).toHaveAttribute("aria-checked", "false");
+  await expect(page.getByTestId("interview-current-question")).toHaveAttribute(
+    "data-question-id",
+    ITEMS[0].id,
+  );
+  await expect(page.getByTestId("assessment-reply")).toHaveValue("");
 });

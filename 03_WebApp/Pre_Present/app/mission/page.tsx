@@ -19,6 +19,11 @@ import type { Language } from "@/lib/preferences";
 import type { Localised } from "@/lib/decision-engine/types";
 
 import SafetyPause from "@/components/SafetyPause";
+import {
+  JourneyChatPanel,
+  JourneyMascotTurn,
+  JourneyMessage,
+} from "@/components/journey/JourneyChat";
 
 type Answers = Record<string, string | string[]>;
 
@@ -150,6 +155,20 @@ export default function MissionPage() {
 
   return (
     <Shell step={2}>
+      <JourneyChatPanel
+        title={t.assessment.interviewerName}
+        status={t.assessment.interviewerListening}
+        transcriptLabel={t.chat.conversationLabel}
+        testIdPrefix="mission"
+      >
+      <div data-testid="mission-intro-turn">
+        <JourneyMascotTurn
+          state="speaking"
+          status={t.assessment.interviewerListening}
+          toggleMotionLabel={t.chat.motionEnable}
+          label={t.assessment.interviewerName}
+          testIdPrefix="mission"
+        >
       <div className="mb-6">
         <p className="text-[11px] font-bold tracking-widest text-mint">
           {format(t.mission.eyebrow, { min: mission.minutes })}
@@ -188,10 +207,35 @@ export default function MissionPage() {
       <Card className="mb-5 border-indigo/30">
         <p className="text-sm text-muted">{localised(mission.prompt, lang)}</p>
       </Card>
+        </JourneyMascotTurn>
+      </div>
 
       <div className="space-y-4">
         {mission.steps.map((step, i) => (
-          <Card key={step.id}>
+          <div key={step.id} className="space-y-5" data-testid={`mission-step-${step.id}`}>
+            <JourneyMessage
+              role="assistant"
+              label={t.assessment.interviewerName}
+              testId={`mission-question-${step.id}`}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigoText">
+                {i + 1} / {mission.steps.length}
+              </p>
+              <p className="mt-1 font-semibold">
+                {localised(step.label as Localised, lang)}
+                {step.required ? <span className="ml-1 text-coral">*</span> : null}
+              </p>
+              {step.help ? (
+                <p className="mt-2 text-xs text-muted">
+                  {localised(step.help as Localised, lang)}
+                </p>
+              ) : null}
+            </JourneyMessage>
+            <JourneyMessage
+              role="user"
+              label={t.assessment.replyLabel}
+              testId={`mission-reply-${step.id}`}
+            >
             <fieldset>
               <legend className="text-sm font-semibold">
                 <span className="mr-2 text-muted">{i + 1}.</span>
@@ -279,7 +323,8 @@ export default function MissionPage() {
                 </div>
               ) : null}
             </fieldset>
-          </Card>
+            </JourneyMessage>
+          </div>
         ))}
       </div>
 
@@ -307,8 +352,9 @@ export default function MissionPage() {
           {t.mission.backToInterview}
         </Button>
       </div>
+      </JourneyChatPanel>
 
-      <details className="mt-8 rounded-card border border-line bg-surface p-5" data-testid="mission-alternatives">
+      <details className="mx-auto mt-8 max-w-4xl rounded-card border border-line bg-surface p-5" data-testid="mission-alternatives">
         <summary className="cursor-pointer text-sm font-bold">
           {t.mission.alternativesSummary}
         </summary>

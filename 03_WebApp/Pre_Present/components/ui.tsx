@@ -119,13 +119,26 @@ export function Card({
   children,
   className = "",
   as: Tag = "div",
+  testId,
 }: {
   children: React.ReactNode;
   className?: string;
   as?: "div" | "section" | "article" | "li";
+  /**
+   * A `data-testid` written on `<Card>` used to vanish: the component named its
+   * props explicitly and never spread the rest, so the attribute was dropped
+   * without a type error and the test failed looking for an element that had
+   * quietly lost its handle.
+   */
+  testId?: string;
 }) {
   return (
-    <Tag className={`rounded-card border border-line bg-surface p-5 ${className}`}>{children}</Tag>
+    <Tag
+      className={`rounded-card border border-line bg-surface p-5 ${className}`}
+      data-testid={testId}
+    >
+      {children}
+    </Tag>
   );
 }
 
@@ -142,7 +155,7 @@ export function Button({
   children: React.ReactNode;
   onClick?: () => void;
   href?: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "coral";
   disabled?: boolean;
   type?: "button" | "submit";
   className?: string;
@@ -152,7 +165,9 @@ export function Button({
   const styles =
     variant === "primary"
       ? "bg-mint text-mintInk hover:bg-mint/90"
-      : "border border-line bg-surface2 text-ink hover:border-muted";
+      : variant === "coral"
+        ? "bg-coral text-canvas hover:bg-coral/90"
+        : "border border-line bg-surface2 text-ink hover:border-muted";
   const cls = `${base} ${styles} ${className}`;
 
   if (href && !disabled) {

@@ -6,19 +6,35 @@ import questions from "@/data/questions.json";
 import { Button, Notice, Shell } from "@/components/ui";
 import { MIN_INTEREST_ANSWERS } from "@/lib/decision-engine";
 import { checkText } from "@/lib/safety";
-import { loadSessionResult, newSession, saveSession, type GuestSession } from "@/lib/session";
+import {
+  loadSessionResult,
+  newSession,
+  resetInterview,
+  saveSession,
+  type GuestSession,
+} from "@/lib/session";
 import SafetyPause from "@/components/SafetyPause";
 import { usePreferences } from "@/components/PreferencesProvider";
 import { format, localised } from "@/lib/i18n";
 import type { Language } from "@/lib/preferences";
 import AssessmentHeader from "@/components/assessment/AssessmentHeader";
 import AssessmentNavigation from "@/components/assessment/AssessmentNavigation";
-import ChoiceList from "@/components/assessment/ChoiceList";
-import LikertScale from "@/components/assessment/LikertScale";
-import QuestionCard from "@/components/assessment/QuestionCard";
+import AssessmentReplyComposer from "@/components/assessment/AssessmentReplyComposer";
+import QuestionCard, {
+  type AssessmentTranscriptExchange,
+} from "@/components/assessment/QuestionCard";
 import ReviewStep, { type ReviewSection } from "@/components/assessment/ReviewStep";
-import type { SelectionSource } from "@/components/assessment/types";
-import { markSeen, recordAnswer } from "@/lib/research/telemetry";
+import type { MascotState } from "@/components/FutureMeMascot";
+import {
+  MAX_CHOICE_REPLY_LENGTH,
+  parseContextReply,
+  parseInterestReply,
+  type ContextChoiceId,
+  type LikertValue,
+  type ReplyParseFailureReason,
+} from "@/lib/interview/reply-parser";
+import { MASCOT_MOTION_KEY } from "@/lib/mascot/motion-preference";
+import { clearTelemetry, markSeen, recordAnswer } from "@/lib/research/telemetry";
 
 type ContextKey = "tier" | "cost" | "mobility" | "horizon" | "proud";
 
@@ -51,7 +67,7 @@ interface InterestQuestion {
 
 const CONTEXT_QUESTIONS = questions.context as ContextQuestion[];
 const INTEREST_QUESTIONS = questions.interest as InterestQuestion[];
-const SCALE = questions.scale as { value: number; label: Localised }[];
+const SCALE = questions.scale as { value: LikertValue; label: Localised }[];
 
 type Step =
   | { kind: "interest"; q: InterestQuestion }
@@ -75,8 +91,11 @@ const SCORED_QUESTIONS = STEPS.filter(
   (s) => s.kind === "interest" || (s.kind === "context" && s.q.type !== "text"),
 ).length;
 
-/** Long enough to read as a transition, short enough not to feel like waiting. */
-const ADVANCE_MS = 170;
+/** A short visible acknowledgement, not a fake model-generation delay. */
+const ADVANCE_MS = 480;
+const ASKING_MS = 1_250;
+const ERROR_MS = 900;
+const MAX_PROUD_LENGTH = 4_000;
 
 /**
  * How long to wait before moving to the next question.
@@ -103,6 +122,11 @@ export default function InterviewPage() {
   const [recovered, setRecovered] = useState<"repaired" | "reset" | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [safety, setSafety] = useState(false);
+  const [reply, setReply] = useState("");
+  const [replyError, setReplyError] = useState<ReplyParseFailureReason | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [mascotState, setMascotState] = useState<MascotState>("speaking");
+  const [forceMascotMotion, setForceMascotMotion] = useState(false);
 
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "back">("forward");
@@ -110,8 +134,15 @@ export default function InterviewPage() {
   const [returnToReview, setReturnToReview] = useState(false);
 
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mascotTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const replyRef = useRef<HTMLTextAreaElement | null>(null);
   const firstRender = useRef(true);
+  const safetyReturnRef = useRef<HTMLElement | null>(null);
+  const sessionRef = useRef<GuestSession | null>(null);
+  const forceMotionRef = useRef(false);
+  sessionRef.current = session;
+  forceMotionRef.current = forceMascotMotion;
 
   useEffect(() => {
     const result = loadSessionResult();
@@ -124,11 +155,22 @@ export default function InterviewPage() {
     else if (result.status === "repaired" && result.discarded.length > 0) setRecovered("repaired");
   }, []);
 
-  useEffect(() => () => clearAdvance(advanceTimer), []);
+  useEffect(() => {
+    try {
+      setForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY) === "on");
+    } catch {
+      setForceMascotMotion(false);
+    }
+  }, []);
 
-  // Move focus into the new step's choices. The radiogroup is labelled by the
-  // question heading, so landing here announces the question and leaves the
-  // arrow keys immediately usable.
+  useEffect(
+    () => () => {
+      clearAdvance(advanceTimer);
+      clearTimer(mascotTimer);
+    },
+    [],
+  );
+
   // Response-process capture for a pilot. Local-only; nothing is transmitted,
   // and it is exported only by a deliberate action on /research.
   useEffect(() => {
@@ -136,16 +178,37 @@ export default function InterviewPage() {
     if (step?.kind === "interest") markSeen(step.q.id, stepIndex);
   }, [stepIndex]);
 
+  const sessionReady = session !== null;
+
+  useEffect(() => {
+    if (!sessionReady) return;
+    const activeSession = sessionRef.current;
+    const activeStep = STEPS[stepIndex];
+    if (!activeSession || !activeStep || activeStep.kind === "review") return;
+
+    clearTimer(mascotTimer);
+    setReply(replyForStep(activeSession, activeStep, lang));
+    setReplyError(null);
+    setSubmitting(false);
+    setMascotState("speaking");
+
+    const reduced =
+      !forceMotionRef.current &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setMascotState("idle");
+      return;
+    }
+    mascotTimer.current = setTimeout(() => setMascotState("idle"), ASKING_MS);
+  }, [lang, sessionReady, stepIndex]);
+
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    // Steps without a radiogroup — the free text and the review list — would
-    // otherwise drop focus to <body> when the previous step unmounted, leaving
-    // a keyboard user to tab from the top of the document.
     const target =
-      cardRef.current?.querySelector<HTMLElement>('[role="radio"][tabindex="0"]') ??
+      cardRef.current?.querySelector<HTMLElement>('[data-testid="assessment-reply"]') ??
       cardRef.current?.querySelector<HTMLElement>("#assessment-question") ??
       cardRef.current;
     target?.focus();
@@ -173,13 +236,17 @@ export default function InterviewPage() {
 
   const goTo = (index: number, dir: "forward" | "back") => {
     clearAdvance(advanceTimer);
+    clearTimer(mascotTimer);
+    setSubmitting(false);
+    setReplyError(null);
     setDirection(dir);
     setStepIndex(index);
   };
 
   const goNext = () => {
+    const destination = returnToReview ? REVIEW_INDEX : Math.min(stepIndex + 1, REVIEW_INDEX);
     setReturnToReview(false);
-    goTo(Math.min(stepIndex + 1, REVIEW_INDEX), "forward");
+    goTo(destination, "forward");
   };
 
   const goPrev = () => {
@@ -192,7 +259,39 @@ export default function InterviewPage() {
     goTo(index, "back");
   };
 
-  /** Answering moves on by itself — the learner's click is the whole gesture. */
+  /**
+   * Discard every reply and start the questions again.
+   *
+   * The confirmation lives in the header, which owns the two-step control; by
+   * the time this runs the learner has already said yes. Reviewing state is
+   * dropped as well — returning to a review of answers that no longer exist
+   * would be a dead end.
+   */
+  const handleReset = () => {
+    if (!session) return;
+    persist(resetInterview(session));
+    /*
+     * Response timing lives under its own key, and it has to go with the
+     * answers it describes. Left behind, the next attempt's replies are filed
+     * against the first attempt's timings — a learner who restarts looks in the
+     * pilot data like one who deliberated for a very long time and then
+     * revised, which is a finding about a bug rather than about them.
+     */
+    clearTelemetry();
+    setReply("");
+    setShowErrors(false);
+    setReturnToReview(false);
+    goTo(0, "back");
+    /*
+     * `goTo` moves focus only when the step index changes, and resetting from
+     * the first question leaves it at zero. The confirm button the learner just
+     * pressed is unmounted either way, so without this focus lands on <body>
+     * and a keyboard user restarts from the top of the page.
+     */
+    window.requestAnimationFrame(() => replyRef.current?.focus());
+  };
+
+  /** A sent and accepted reply advances after the mascot acknowledges it. */
   const scheduleAdvance = () => {
     clearAdvance(advanceTimer);
     const destination = returnToReview ? REVIEW_INDEX : Math.min(stepIndex + 1, REVIEW_INDEX);
@@ -200,37 +299,123 @@ export default function InterviewPage() {
       setReturnToReview(false);
       setDirection("forward");
       setStepIndex(destination);
+      setSubmitting(false);
     }, advanceDelay());
   };
 
-  /**
-   * Only a committed choice moves the assessment on.
-   *
-   * Arrow keys traverse the scale, so advancing on every change would mean the
-   * first arrow press answered the question and scrolled the learner away from
-   * it. Enter and Space still advance, because a button turns them into a
-   * click.
-   */
-  const setInterest = (id: string, value: number, source: SelectionSource) => {
-    if (!session) return;
-    recordAnswer(id, stepIndex);
-    persist({
-      ...session,
-      interview: {
-        ...session.interview,
-        interest: { ...session.interview.interest, [id]: value },
-      },
-    });
-    if (source === "pointer") scheduleAdvance();
+  const showClarification = (reason: ReplyParseFailureReason) => {
+    clearTimer(mascotTimer);
+    setReplyError(reason);
+    setSubmitting(false);
+    setMascotState("error");
+    mascotTimer.current = setTimeout(() => setMascotState("idle"), ERROR_MS);
+    window.requestAnimationFrame(() => replyRef.current?.focus());
   };
 
-  const setContext = (key: ContextKey, value: string, source: SelectionSource | "typing") => {
-    if (!session) return;
-    persist({
-      ...session,
-      interview: { ...session.interview, context: { ...session.interview.context, [key]: value } },
+  const handleReplyChange = (value: string) => {
+    setReply(value);
+    if (replyError) setReplyError(null);
+    if (mascotState === "error") setMascotState("idle");
+
+    const activeStep = STEPS[stepIndex];
+    if (session && activeStep?.kind === "context" && activeStep.q.type === "text") {
+      persist({
+        ...session,
+        interview: {
+          ...session.interview,
+          context: { ...session.interview.context, proud: value },
+        },
+      });
+    }
+  };
+
+  /**
+   * @param quickReply text chosen by tapping an option instead of typing it.
+   *   It takes the same path as anything typed — the safety check, the parser,
+   *   the clarification on a miss — because a tap and a typed word are the same
+   *   answer and must not be recorded two different ways.
+   */
+  const handleReplySubmit = (quickReply?: string) => {
+    const activeStep = STEPS[stepIndex];
+    if (!session || submitting || !activeStep || activeStep.kind === "review") return;
+
+    const raw = (quickReply ?? reply).trim();
+    if (!raw) {
+      showClarification("empty");
+      return;
+    }
+
+    const safetyCheck = checkText(raw);
+    if (safetyCheck.triggered) {
+      safetyReturnRef.current = replyRef.current;
+      persist({ ...session, safetyTriggered: true });
+      setReply("");
+      setSafety(true);
+      return;
+    }
+
+    let next: GuestSession;
+    if (activeStep.kind === "interest") {
+      const parsed = parseInterestReply(raw, SCALE);
+      if (!parsed.ok) {
+        showClarification(parsed.reason);
+        return;
+      }
+      recordAnswer(activeStep.q.id, stepIndex);
+      next = {
+        ...session,
+        interview: {
+          ...session.interview,
+          interest: { ...session.interview.interest, [activeStep.q.id]: parsed.value },
+        },
+      };
+    } else if (activeStep.q.type === "text") {
+      next = {
+        ...session,
+        interview: {
+          ...session.interview,
+          context: { ...session.interview.context, proud: raw.slice(0, MAX_PROUD_LENGTH) },
+        },
+      };
+    } else {
+      const questionId = activeStep.q.id as ContextChoiceId;
+      const options = activeStep.q.options ?? [];
+      const parsed = parseContextReply(questionId, raw, options as never);
+      if (!parsed.ok) {
+        showClarification(parsed.reason);
+        return;
+      }
+      if (!options.some((option) => option.value === parsed.value)) {
+        showClarification("no_match");
+        return;
+      }
+      next = {
+        ...session,
+        interview: {
+          ...session.interview,
+          context: { ...session.interview.context, [questionId]: parsed.value },
+        },
+      };
+    }
+
+    clearTimer(mascotTimer);
+    setReplyError(null);
+    setSubmitting(true);
+    setMascotState("offline");
+    persist(next);
+    scheduleAdvance();
+  };
+
+  const toggleMascotMotion = () => {
+    setForceMascotMotion((current) => {
+      const next = !current;
+      try {
+        window.localStorage.setItem(MASCOT_MOTION_KEY, next ? "on" : "system");
+      } catch {
+        // The visible preference still works for this page when storage is blocked.
+      }
+      return next;
     });
-    if (source === "pointer") scheduleAdvance();
   };
 
   const handleContinue = () => {
@@ -242,6 +427,7 @@ export default function InterviewPage() {
     }
     const check = checkText(session.interview.context.proud);
     if (check.triggered) {
+      safetyReturnRef.current = document.activeElement as HTMLElement | null;
       persist({ ...session, safetyTriggered: true });
       setSafety(true);
       return;
@@ -257,14 +443,76 @@ export default function InterviewPage() {
     );
   }
 
-  if (safety) return <SafetyPause onDismiss={() => setSafety(false)} />;
+  if (safety) {
+    return (
+      <SafetyPause
+        onDismiss={() => {
+          setSafety(false);
+          window.requestAnimationFrame(() => {
+            const fallback =
+              cardRef.current?.querySelector<HTMLElement>('[data-testid="assessment-reply"]') ??
+              cardRef.current?.querySelector<HTMLElement>("#assessment-question");
+            const target = safetyReturnRef.current?.isConnected ? safetyReturnRef.current : fallback;
+            target?.focus();
+          });
+        }}
+      />
+    );
+  }
 
   const step = STEPS[stepIndex];
   const onReview = stepIndex === REVIEW_INDEX;
+  const conversationLabels = {
+    interviewerName: t.assessment.interviewerName,
+    interviewerAsking: t.assessment.interviewerAsking,
+    interviewerListening: t.assessment.interviewerListening,
+    replyLabel: t.assessment.replyLabel,
+    replyHint: t.assessment.textChatHint,
+    optionsIntro: t.assessment.optionsIntro,
+    transcriptLabel: t.chat.conversationLabel,
+  };
+  const replyOptions = optionsForStep(step, lang);
+  const composerMaxLength =
+    step.kind === "context" && step.q.type === "text"
+      ? MAX_PROUD_LENGTH
+      : MAX_CHOICE_REPLY_LENGTH;
+  const composerPlaceholder =
+    step.kind === "context" && step.q.type === "text" && step.q.placeholder
+      ? localised(step.q.placeholder, lang)
+      : t.assessment.replyPlaceholder;
+  const replyErrorText = replyError
+    ? replyError === "too_long"
+      ? t.assessment.replyTooLong
+      : t.assessment.replyNotRecognised
+    : null;
+  const transcriptHistory =
+    step.kind === "review" ? [] : conversationHistory(session, stepIndex, lang);
+  const acceptedReply =
+    step.kind === "review"
+      ? null
+      : step.kind === "context" && step.q.type === "text"
+        ? submitting
+          ? reply.trim()
+          : null
+        : stepHasAnswer(session, step)
+          ? replyForStep(session, step, lang)
+          : null;
+  const acceptedReplyValue =
+    step.kind === "review" || !acceptedReply ? undefined : replyValueForStep(session, step);
+  const mascotStatus =
+    mascotState === "thinking"
+      ? t.assessment.interviewerChecking
+      : mascotState === "offline"
+        ? t.assessment.interviewerSaved
+        : mascotState === "error"
+          ? t.assessment.interviewerClarifying
+          : mascotState === "speaking"
+            ? t.assessment.interviewerAsking
+            : t.assessment.interviewerListening;
 
   return (
     <Shell step={1}>
-      <div className="mx-auto w-full max-w-2xl">
+      <div className="mx-auto w-full max-w-5xl">
         <AssessmentHeader
           title={t.assessment.title}
           position={stepIndex + 1}
@@ -277,6 +525,14 @@ export default function InterviewPage() {
           progressLabel={t.chrome.progressLabel}
           reviewLabel={t.assessment.reviewAnswers}
           onReview={stepIndex === REVIEW_INDEX ? undefined : () => goTo(REVIEW_INDEX, "forward")}
+          resetLabel={t.assessment.resetAnswers}
+          resetConfirmPrompt={t.assessment.resetConfirmPrompt}
+          resetConfirmLabel={t.assessment.resetConfirm}
+          resetCancelLabel={t.assessment.resetCancel}
+          resetDoneLabel={t.assessment.resetDone}
+          // Nothing to discard yet on a clean session, so the control stays out
+          // of the way until there is something it could undo.
+          onReset={answeredScored > 0 ? handleReset : undefined}
         />
 
         <p className="mb-5 inline-block rounded-full border border-warning/40 bg-warning/5 px-3 py-1 text-[11px] font-bold text-warning">
@@ -311,96 +567,80 @@ export default function InterviewPage() {
         ) : null}
 
         <div ref={cardRef}>
-          {step.kind === "interest" ? (
+          {step.kind !== "review" ? (
             <QuestionCard
-              motionKey={`interest-${step.q.id}`}
+              motionKey={`${step.kind}-${step.q.id}`}
               direction={direction}
-              // The RIASEC dimension is deliberately not shown. Naming the trait
-              // a statement measures invites the answer the learner thinks it
-              // wants rather than the one that is true.
-              eyebrow={t.assessment.eyebrowInterests}
+              questionId={step.q.id}
+              eyebrow={
+                step.kind === "interest"
+                  ? t.assessment.eyebrowInterests
+                  : step.q.type === "text"
+                    ? t.assessment.eyebrowOptional
+                    : t.assessment.eyebrowSituation
+              }
               question={localised(step.q.text, lang)}
-              helper={t.assessment.interestHelper}
+              helper={
+                step.kind === "interest"
+                  ? t.assessment.interestHelper
+                  : step.q.help
+                    ? localised(step.q.help, lang)
+                    : undefined
+              }
+              replyOptions={replyOptions}
+              onQuickReply={(option) => handleReplySubmit(option)}
+              quickReplyBusy={submitting}
+              history={transcriptHistory}
+              acceptedReply={acceptedReply}
+              acceptedReplyValue={acceptedReplyValue}
+              labels={conversationLabels}
+              mascotState={mascotState}
+              mascotStatus={mascotStatus}
+              forceMascotMotion={forceMascotMotion}
+              onToggleMascotMotion={toggleMascotMotion}
+              motionToggleLabel={
+                forceMascotMotion ? t.chat.motionSystem : t.chat.motionEnable
+              }
               footer={
                 <AssessmentNavigation
                   onPrev={goPrev}
                   onNext={goNext}
                   canGoBack={stepIndex > 0}
-                  answered={session.interview.interest[step.q.id] !== undefined}
+                  answered={stepHasAnswer(session, step)}
                   labels={t.assessment}
                 />
               }
             >
-              <LikertScale
-                points={SCALE.map((s) => ({ value: s.value, label: localised(s.label, lang) }))}
-                value={session.interview.interest[step.q.id]}
-                onChange={(v, source) => setInterest(step.q.id, v, source)}
-                testIdPrefix={`q-${step.q.id}`}
-                labelledBy="assessment-question"
-              />
-            </QuestionCard>
-          ) : null}
-
-          {step.kind === "context" && step.q.type !== "text" ? (
-            <QuestionCard
-              motionKey={`context-${step.q.id}`}
-              direction={direction}
-              eyebrow={t.assessment.eyebrowSituation}
-              question={localised(step.q.text, lang)}
-              helper={step.q.help ? localised(step.q.help, lang) : undefined}
-              footer={
-                <AssessmentNavigation
-                  onPrev={goPrev}
-                  onNext={goNext}
-                  canGoBack={stepIndex > 0}
-                  answered={Boolean(
-                    session.interview.context[step.q.id as Exclude<ContextKey, "proud">],
-                  )}
-                  labels={t.assessment}
-                />
-              }
-            >
-              <ChoiceList
-                choices={(step.q.options ?? []).map((o) => ({ value: o.value, label: localised(o.label, lang) }))}
-                value={session.interview.context[step.q.id as Exclude<ContextKey, "proud">]}
-                onChange={(v, source) => setContext(step.q.id as ContextKey, v, source)}
-                testIdPrefix={`ctx-${step.q.id}`}
-                labelledBy="assessment-question"
-              />
-            </QuestionCard>
-          ) : null}
-
-          {step.kind === "context" && step.q.type === "text" ? (
-            <QuestionCard
-              motionKey={`context-${step.q.id}`}
-              direction={direction}
-              eyebrow={t.assessment.eyebrowOptional}
-              question={localised(step.q.text, lang)}
-              helper={step.q.help ? localised(step.q.help, lang) : undefined}
-              footer={
-                <AssessmentNavigation
-                  onPrev={goPrev}
-                  onNext={goNext}
-                  canGoBack={stepIndex > 0}
-                  answered={Boolean(session.interview.context.proud?.trim())}
-                  labels={t.assessment}
-                />
-              }
-            >
-              <textarea
-                data-testid={`ctx-${step.q.id}`}
-                rows={5}
-                placeholder={step.q.placeholder ? localised(step.q.placeholder, lang) : undefined}
-                value={session.interview.context.proud ?? ""}
-                onChange={(e) => setContext("proud", e.target.value, "typing")}
-                aria-labelledby="assessment-question"
-                className="w-full resize-y rounded-control border border-line bg-surface2 px-4 py-3 text-sm leading-relaxed text-ink transition placeholder:text-muted/80 hover:border-muted/70 focus:border-mint"
+              <AssessmentReplyComposer
+                value={reply}
+                onChange={handleReplyChange}
+                onSubmit={handleReplySubmit}
+                disabled={submitting}
+                questionId={step.q.id}
+                placeholder={composerPlaceholder}
+                hint={t.assessment.composerHint}
+                sendLabel={t.assessment.sendReply}
+                sendingLabel={t.assessment.savingReply}
+                error={replyErrorText}
+                maxLength={composerMaxLength}
+                rows={step.kind === "context" && step.q.type === "text" ? 4 : 3}
+                inputRef={replyRef}
               />
             </QuestionCard>
           ) : null}
 
           {onReview ? (
-            <ReviewStep sections={reviewSections(session, lang, t)} onJump={jumpTo} labels={t.assessment} />
+            <ReviewStep
+              sections={reviewSections(session, lang, t)}
+              onJump={jumpTo}
+              labels={t.assessment}
+              transcriptLabel={t.chat.conversationLabel}
+              forceMascotMotion={forceMascotMotion}
+              onToggleMascotMotion={toggleMascotMotion}
+              motionToggleLabel={
+                forceMascotMotion ? t.chat.motionSystem : t.chat.motionEnable
+              }
+            />
           ) : null}
         </div>
 
@@ -446,7 +686,7 @@ export default function InterviewPage() {
               <span className="text-xs text-muted">
                 {canContinue ? t.assessment.readyToContinue : t.assessment.answerRequired}
               </span>
-              <Button onClick={handleContinue} data-testid="interview-continue">
+              <Button onClick={handleContinue} data-testid="interview-continue" variant="coral">
                 {t.assessment.continueToMission}
               </Button>
             </div>
@@ -459,16 +699,16 @@ export default function InterviewPage() {
         </p>
 
         <p className="mt-4 text-xs">
-          <a
-            href="#"
+          <button
+            type="button"
             onClick={(e) => {
-              e.preventDefault();
+              safetyReturnRef.current = e.currentTarget;
               setSafety(true);
             }}
-            className="text-muted underline underline-offset-2"
+            className="text-muted underline underline-offset-2 transition hover:text-ink"
           >
             {t.assessment.needToTalk}
-          </a>
+          </button>
         </p>
 
         <p className="sr-only">{t.safety.disclaimer}</p>
@@ -482,6 +722,78 @@ function clearAdvance(ref: React.MutableRefObject<ReturnType<typeof setTimeout> 
     clearTimeout(ref.current);
     ref.current = null;
   }
+}
+
+function clearTimer(ref: React.MutableRefObject<ReturnType<typeof setTimeout> | null>) {
+  if (ref.current) {
+    clearTimeout(ref.current);
+    ref.current = null;
+  }
+}
+
+function optionsForStep(step: Step, lang: Language): string[] | undefined {
+  if (step.kind === "interest") return SCALE.map((point) => localised(point.label, lang));
+  if (step.kind === "context" && step.q.type !== "text") {
+    return (step.q.options ?? []).map((option) => localised(option.label, lang));
+  }
+  return undefined;
+}
+
+function replyForStep(session: GuestSession, step: Step, lang: Language): string {
+  if (step.kind === "interest") {
+    const value = session.interview.interest[step.q.id];
+    const point = SCALE.find((candidate) => candidate.value === value);
+    return point ? localised(point.label, lang) : "";
+  }
+  if (step.kind === "context") {
+    if (step.q.type === "text") return session.interview.context.proud ?? "";
+    const value = session.interview.context[step.q.id as Exclude<ContextKey, "proud">];
+    const option = step.q.options?.find((candidate) => candidate.value === value);
+    return option ? localised(option.label, lang) : "";
+  }
+  return "";
+}
+
+function replyValueForStep(session: GuestSession, step: Exclude<Step, { kind: "review" }>): string | undefined {
+  if (step.kind === "interest") {
+    const value = session.interview.interest[step.q.id];
+    return value === undefined ? undefined : String(value);
+  }
+  if (step.q.type === "text") return undefined;
+  const value = session.interview.context[step.q.id as Exclude<ContextKey, "proud">];
+  return value ? String(value) : undefined;
+}
+
+/**
+ * Project saved assessment answers into a chat history without storing a
+ * second transcript or reconstructing wording that the learner did not save.
+ */
+function conversationHistory(
+  session: GuestSession,
+  activeIndex: number,
+  lang: Language,
+): AssessmentTranscriptExchange[] {
+  const history: AssessmentTranscriptExchange[] = [];
+
+  for (let index = 0; index < Math.min(activeIndex, REVIEW_INDEX); index += 1) {
+    const step = STEPS[index];
+    if (step.kind === "review") continue;
+    const answer = replyForStep(session, step, lang).trim();
+    history.push({
+      questionId: step.q.id,
+      question: localised(step.q.text, lang),
+      answer: answer || null,
+      answerValue: answer ? replyValueForStep(session, step) : undefined,
+    });
+  }
+
+  return history;
+}
+
+function stepHasAnswer(session: GuestSession, step: Exclude<Step, { kind: "review" }>): boolean {
+  if (step.kind === "interest") return session.interview.interest[step.q.id] !== undefined;
+  if (step.q.type === "text") return Boolean(session.interview.context.proud?.trim());
+  return Boolean(session.interview.context[step.q.id as Exclude<ContextKey, "proud">]);
 }
 
 /** The first screen the learner has not completed, or the review if none. */

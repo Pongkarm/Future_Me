@@ -20,8 +20,13 @@ flowchart LR
     B --> D["Decision engine<br/>lib/decision-engine, runs client-side"]
     D --> E["Routes, comparison, 30-day plan"]
     B -.->|"optional, off by default"| F["/api/explain<br/>LLM rewording only"]
+    B --> G["/chat<br/>current-tab React state"]
+    G --> H["/api/chat<br/>stateless + bounded"]
+    H -.->|"optional, off by default"| I["Anthropic"]
+    H --> J["Deterministic<br/>offline fallback"]
 
     style F stroke-dasharray: 5 5
+    style I stroke-dasharray: 5 5
 ```
 
 | Concern | How the prototype handles it |
@@ -31,8 +36,10 @@ flowchart LR
 | Mission selection | A rule over the interview profile in `lib/mission/`. Deterministic, explained on screen, overridable by the learner. |
 | Recommendation | Deterministic TypeScript, executed in the browser. No network call. |
 | Explanation | Deterministic templates. Optional LLM rewording via `/api/explain`, absent without an API key, labelled when used. |
+| Chat companion | Stateless `POST /api/chat`; deterministic repository retrieval plus an optional Anthropic response, with an offline fallback. It cannot read or change the recommendation state. |
+| Chat transcript | React component state in the current tab only. Clear or refresh resets it; pressing Send transmits the bounded messages to the app server and, only when configured, Anthropic. |
 | Data provenance | Every route carries its source, status and last-checked date; the page reports the catalogue's age and names the unsourced fields. |
-| Storage | No server-side storage of any kind. |
+| Storage | No application database or server-side transcript store. Assessment state remains in `localStorage`; chat bodies are processed in memory per request. Deployment hosts may still log request metadata or bodies depending on their configuration. |
 
 Source: `app/`, `components/`, `lib/`, `data/`. Tests: `tests/`, `e2e/`.
 
@@ -125,8 +132,8 @@ The **Implemented** column is what runs in this repository today.
 | Frontend | Next.js 15 + React 19 + TypeScript + Tailwind | Same |
 | Recommendation | Deterministic TypeScript, client-side | Same rules, served by FastAPI |
 | Persistence | `localStorage` | PostgreSQL |
-| Retrieval | None — routes are a seeded JSON catalogue | Qdrant hybrid search + BGE-M3 |
-| LLM | Optional, wording only, off by default | Same, plus QLoRA-adapted Thai model |
+| Retrieval | Deterministic in-process lexical matching for chat; recommendation routes remain a seeded JSON catalogue | Qdrant hybrid search + BGE-M3 |
+| LLM | Optional Anthropic generation for explanation wording and bounded chat; deterministic fallbacks, off by default | Same decision boundary, plus an evaluated Thai-capable model if justified |
 | Identity | None (guest only) | AIS Open APIs — Number Verify, OTP, SIM Swap |
 | Hosting | Any Node host or Vercel | AIS Cloud on OCI, Kubernetes (OKE) |
 
@@ -190,8 +197,11 @@ Privacy is an architectural constraint here, not a policy page. The users are mi
 **What the current prototype enforces**
 
 - **Guest mode** allows a full session with no account or persistent real-world identity.
-- **Learner answers and progress remain in browser storage.**
-- **Delete everything** clears the FutureMe session from that browser.
+- **Assessment answers and progress remain in browser storage.**
+- **Chat history is current-tab memory only**, but submitted chat text is sent to the application
+  server and to Anthropic when the operator has configured it.
+- **Delete assessment data** clears the FutureMe guest session from that browser; **Clear chat**
+  resets the current-tab transcript but cannot recall requests already processed by a host/provider.
 
 **What the production design would need to enforce**
 
@@ -247,10 +257,21 @@ class at once. Container auto-scaling suits that pattern better than fixed provi
 |---|---|---|
 | `GET` | `/api/explain` | Availability probe. Returns `{ available: boolean }` so the UI can offer the rewording control only when it is configured, rather than showing a button that always falls back. |
 | `POST` | `/api/explain` | Optional LLM rewording of an explanation the engine already produced. Accepts a catalogue route id and reason codes, then resolves both against server-owned data. Returns `{ source: "fallback" }` with server-generated deterministic text when no API key is set, on timeout, on a provider error, or on a malformed response — always HTTP 200, so the caller never breaks. |
+| `GET` | `/api/chat` | Capability probe returning `{ available, mode, limits }` without exposing a key or other secret. |
+| `POST` | `/api/chat` | Stateless companion request. Accepts `{ language, messages }`, where `language` is `en` or `th`; 1–11 `user`/`assistant` messages must alternate, starting and ending with `user`; each message is at most 2,000 characters, the total at most 8,000, and the raw body at most 64,000 bytes. Returns `{ message, mode, sources, note?, safety? }`, where `mode` is `ai`, `offline` or `safety`. |
+
+Each chat source contains `id`, `title` and optional `excerpt`, `url` and `status`. A safety-mode
+response contains a support heading, action, hotline and disclaimer; it is returned before any
+provider call. Queries with no matched source bypass the provider. Provider output must cite at
+least one retrieved id; invented ids, truncated output, and recognised route-selection or ranking
+language are discarded and replaced by the offline response. These natural-language guards are
+heuristics, not proof that every sentence is supported.
 
 There is no recommendation endpoint, by design: the engine runs in the browser, which is what
-keeps learner answers and recommendation state local in the normal flow. `/api/explain` is never
-given the list of routes, so it cannot add, remove or reorder one.
+keeps assessment answers and recommendation state local in the normal flow. `/api/explain` is
+never given the list of routes. `/api/chat` receives only its bounded transcript and language; it
+has no scoring or route-selection interface. Neither endpoint can add, remove, select or reorder a
+route.
 
 ### Planned
 

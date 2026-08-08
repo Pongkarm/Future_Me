@@ -294,18 +294,23 @@ describe("route matching is fair across interest types", () => {
   });
 
   it("records which dimensions the route catalogue can actually serve", () => {
-    // Not a scoring property — a data-coverage one. Five of six dimensions have
-    // a route that leans their way. Conventional does not: the highest C weight
-    // in data/routes.json is 0.20, so a strongly Conventional learner has
-    // nothing in the demo catalogue to be matched to. That is a gap in the route
-    // data, not in the instrument, and it is asserted here so it stays visible
-    // instead of being discovered by a learner.
+    /*
+     * Not a scoring property — a data-coverage one, and it used to record a
+     * gap. With the six-route catalogue, five of six dimensions had a route
+     * leaning their way and Conventional did not: the highest C weight was
+     * 0.20, so a strongly Conventional learner had nothing to be matched to.
+     *
+     * The expanded catalogue closes it — logistics and business administration
+     * lean that way — so all six are now served. This stays asserted because
+     * the failure it guards is silent: a dimension losing its route would be
+     * discovered by a learner who gets no suggestion, not by anything else here.
+     */
     const served = DIMENSIONS.filter(
       (dim) =>
         Math.max(...routesData.routes.map((r) => interestFit(oneHot(dim), r.interestWeights))) >=
         0.6,
     );
-    expect(served.sort()).toEqual(["A", "E", "I", "R", "S"]);
+    expect(served.sort()).toEqual([...DIMENSIONS].sort());
   });
 
   it("still discriminates — a focused profile does not match every route equally", () => {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Card, Notice, Shell } from "@/components/ui";
+import { clearTelemetry } from "@/lib/research/telemetry";
 import { clearSession, SESSION_KEY } from "@/lib/session";
 import { useT } from "@/components/PreferencesProvider";
 
@@ -70,7 +71,17 @@ export default function PrivacyPage() {
                 <td className="p-2">{t.privacy.untilCleared}</td>
               </tr>
               <tr className="border-b border-line/50">
+                <td className="p-2">{t.privacy.rowChat}</td>
+                <td className="p-2">{t.privacy.chatWhere}</td>
+                <td className="p-2">{t.privacy.chatKept}</td>
+              </tr>
+              <tr className="border-b border-line/50">
                 <td className="p-2">{t.privacy.rowRoutes}</td>
+                <td className="p-2">{t.privacy.thisBrowser}</td>
+                <td className="p-2">{t.privacy.untilCleared}</td>
+              </tr>
+              <tr className="border-b border-line/50">
+                <td className="p-2">{t.privacy.rowProvince}</td>
                 <td className="p-2">{t.privacy.thisBrowser}</td>
                 <td className="p-2">{t.privacy.untilCleared}</td>
               </tr>
@@ -155,6 +166,14 @@ export default function PrivacyPage() {
           <Button
             onClick={() => {
               clearSession();
+              /*
+               * Response timing is held under its own key so a facilitator can
+               * clear research data without destroying a learner's answers.
+               * The obligation only runs one way: a learner deleting their
+               * answers must not leave telemetry about them behind, and this
+               * button is where that promise is either kept or broken.
+               */
+              clearTelemetry();
               setCleared(true);
             }}
             data-testid="delete-data"

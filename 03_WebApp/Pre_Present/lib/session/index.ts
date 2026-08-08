@@ -11,6 +11,7 @@ import type {
   Mobility,
   Tier,
 } from "@/lib/decision-engine/types";
+import { isProvinceCode } from "@/lib/geo/types";
 
 export const SESSION_KEY = "futureme.guest.v1";
 export const SESSION_VERSION = 3;
@@ -42,6 +43,16 @@ export interface GuestSession {
    */
   mission: MissionInput | null;
   selectedRouteId: string | null;
+  /**
+   * The province the learner picked so route results can name real places.
+   *
+   * A province is not an address — there are 77 of them and millions of people
+   * in each — but it is still theirs, so it is stored under the same key as
+   * everything else, listed on the privacy page, and cleared by the same
+   * button. It survives a reset of the interview, because where they live did
+   * not change when they decided to answer the questions again.
+   */
+  provinceIso: string | null;
   planProgress: Record<string, boolean>;
   safetyTriggered: boolean;
 }
@@ -97,6 +108,7 @@ export function newSession(): GuestSession {
     interview: { interest: {}, context: {} },
     mission: null,
     selectedRouteId: null,
+    provinceIso: null,
     planProgress: {},
     safetyTriggered: false,
   };
@@ -164,6 +176,15 @@ export function parseSession(value: unknown): LoadResult {
   } else {
     session.selectedRouteId = null;
     discarded.push("selectedRouteId");
+  }
+
+  if (value.provinceIso === null || value.provinceIso === undefined) {
+    session.provinceIso = null;
+  } else if (isProvinceCode(value.provinceIso)) {
+    session.provinceIso = value.provinceIso;
+  } else {
+    session.provinceIso = null;
+    discarded.push("provinceIso");
   }
 
   session.planProgress = parsePlanProgress(value.planProgress, discarded);
@@ -401,6 +422,31 @@ export function saveSession(session: GuestSession): boolean {
 
 export function clearSession(): void {
   forget();
+}
+
+/**
+ * Start the questions again, keeping the same guest.
+ *
+ * Everything downstream of the answers goes with them. A mission, a chosen
+ * route and its plan progress were all derived from replies that no longer
+ * exist, and leaving them would let the learner walk into a plan built on
+ * answers they have just withdrawn.
+ *
+ * `safetyTriggered` is the deliberate exception. It gates the support screen on
+ * /routes, so clearing it here would turn "start over" into a way to dismiss
+ * that screen — a safety state must not be undone as a side effect of an
+ * unrelated action. Identity is kept too: this is the same learner starting
+ * again, not a new one, so `id` and `createdAt` survive.
+ */
+export function resetInterview(session: GuestSession): GuestSession {
+  return {
+    ...session,
+    updatedAt: new Date().toISOString(),
+    interview: { interest: {}, context: {} },
+    mission: null,
+    selectedRouteId: null,
+    planProgress: {},
+  };
 }
 
 function forget(): void {

@@ -118,8 +118,8 @@ export default function LikertScale({
               "sm:min-h-[124px] sm:flex-col sm:justify-center sm:gap-3 sm:px-2 sm:py-4 sm:text-center",
               "motion-safe:active:scale-[0.97]",
               active
-                ? "border-mint bg-mint/10 shadow-[var(--shadow-selected-lift)] sm:-translate-y-0.5"
-                : "border-line bg-surface2 hover:border-muted/70 hover:bg-surface2/60 motion-safe:hover:-translate-y-0.5",
+                ? "border-coral bg-coral/10 shadow-[var(--shadow-card)] sm:-translate-y-0.5"
+                : "border-line bg-surface hover:border-coral/55 hover:bg-coral/5 motion-safe:hover:-translate-y-0.5",
             ].join(" ")}
           >
             <span aria-hidden className="grid h-8 w-8 shrink-0 place-items-center">
@@ -128,18 +128,18 @@ export default function LikertScale({
                   "grid place-items-center rounded-full border-2 transition-all duration-200",
                   dotSize[i] ?? "h-5 w-5",
                   active
-                    ? "border-mint bg-mint motion-safe:scale-110"
-                    : `${dotBorder[i] ?? "border-muted/50"} bg-transparent group-hover:border-muted`,
+                    ? "border-coral bg-coral motion-safe:scale-110"
+                    : `${dotBorder[i] ?? "border-muted/50"} bg-transparent group-hover:border-coral/70`,
                 ].join(" ")}
               >
-                {active ? <span className="h-1.5 w-1.5 rounded-full bg-mintInk" /> : null}
+                {active ? <span className="h-1.5 w-1.5 rounded-full bg-canvas" /> : null}
               </span>
             </span>
 
             <span
               className={[
                 "text-sm font-semibold leading-tight transition-colors sm:text-[12px]",
-                active ? "text-ink" : "text-muted group-hover:text-ink",
+                active ? "text-coral" : "text-muted group-hover:text-ink",
               ].join(" ")}
             >
               {point.label}

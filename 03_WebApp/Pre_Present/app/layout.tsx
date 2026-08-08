@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./mascot.css";
+import "./chat-mascot.css";
 import { PreferencesProvider } from "@/components/PreferencesProvider";
 import { SkipLink } from "@/components/PreferenceControls";
 import { PREFS_KEY } from "@/lib/preferences";

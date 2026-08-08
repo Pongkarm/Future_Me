@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg" alt="Continuous integration status"></a>
+  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg?branch=main" alt="Continuous integration status"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="MIT license"></a>
 </p>
@@ -82,6 +82,31 @@ Reflect → Try → Explore → Compare → Act
   คิด      ลอง      สำรวจ       เทียบ      ลงมือ
 ```
 
+### Where the route could actually be studied · เรียนได้ที่ไหนจริง
+
+A route is a phrase until a learner knows where a person does it. Pick a
+province — from a list, never from the device — and every suggestion names real
+institutions with **road** distance, driving time, and the vehicles the journey
+would actually take.
+
+หนึ่งเส้นทางยังเป็นแค่คำ จนกว่าผู้เรียนจะรู้ว่าคนเรียนกันที่ไหน เลือกจังหวัดจากรายการ
+แล้วทุกข้อเสนอจะบอกสถานศึกษาจริง พร้อมระยะทางตามถนน เวลาเดินทาง และพาหนะที่ใช้ได้จริง
+
+| Band · ระดับ | Distance | What the journey is |
+|---|---|---|
+| `walkable` | ≤ 3 km | Walking or cycling · เดินหรือปั่นจักรยานไปได้ |
+| `local` | ≤ 10 km | An ordinary daily journey · ไปกลับทุกวันได้ตามปกติ |
+| `commute` | ≤ 30 km | Reachable daily, at a cost in time and fare |
+| `hard_commute` | ≤ 80 km | Worth thinking about lodging · ควรคิดเรื่องหอพัก |
+| `relocate` | > 80 km | Moving there, not commuting · ต้องย้ายไปอยู่ |
+
+A route with nothing in reach **says so** rather than being hidden — that a
+direction would mean living away from home is a fact about the learner's life,
+not a reason to steer them elsewhere.
+
+Built from 1,358 institutions in the OVEC and MHESI registers with OSRM road
+routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geography_and_Access/).
+
 <table width="100%">
 <tr>
 <td width="50%" valign="top">
@@ -119,8 +144,8 @@ Reflect → Try → Explore → Compare → Act
 | **Missions** | 3 scenario missions chosen by a transparent rule; the learner may override the choice |
 | **Routes** | 6 illustrative routes; the engine may show 0–3 and can refuse to guess |
 | **Decision system** | Deterministic client-side TypeScript with hard filters, fixed weights, ties, contradictions, and evidence-strength labels |
-| **AI** | Optional LLM wording layer only; it cannot add, remove, select, or reorder routes |
-| **Privacy** | Guest answers stay in browser storage by default and can be deleted immediately |
+| **AI** | Optional repo-grounded chat companion and explanation rewording, both with deterministic offline fallbacks; neither can add, remove, select, or reorder routes |
+| **Privacy** | Assessment and mission answers stay in browser storage by default and can be deleted immediately; submitted chat follows the separate network flow documented below |
 | **Research tooling** | Optional anonymous export at `/research`, plus a reproducible pilot-analysis pipeline |
 
 <details>
@@ -164,10 +189,12 @@ flowchart LR
     I -.->|"optional wording only"| L["LLM rewording"]
 ```
 
-**Rules decide; AI may explain.** The same answers produce the same routes. Route eligibility,
+**Rules decide; AI may explain or answer bounded repo-grounded questions.** The same answers produce the same routes. Route eligibility,
 weights, refusal gates, and ties run locally in deterministic TypeScript. If an operator enables
-the optional provider, the model receives only a validated route id and fixed reason codes after
-the route decision has already been made.
+the optional provider, `/api/explain` receives only a validated route id and fixed reason codes
+after the route decision has already been made. `/api/chat` receives only the bounded chat
+transcript and selected repository context, never the assessment session. It has no interface to
+the scorer or route engine.
 
 The five design-judgement weights are:
 
@@ -185,7 +212,12 @@ These thresholds are product rules—not psychometric findings.
 - **Alternatives over a winner.** Routes are hypotheses to explore, not an identity assigned by a score.
 - **Evidence before confidence.** Reasons, unknowns, sources, and stale data remain visible.
 - **Action after reflection.** A 30-day experiment turns a recommendation into something testable.
-- **Private by default.** The working prototype needs no account and does not store learner answers on a server.
+- **Private assessment by default.** The working prototype needs no account and does not store
+  assessment answers on a server. Chat history is current-tab memory, but messages are sent to the
+  app server when the learner presses Send and to Anthropic only when an operator configures it.
+
+The deployment host's and provider's current processing and retention terms must be verified
+before deployment. These design choices are not a PDPA compliance claim.
 
 FutureMe draws on Holland's RIASEC interest structure, but the project-specific instrument does
 **not** inherit the reliability or validity of another test. See
@@ -202,7 +234,7 @@ Requires Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/winxtxrgit/futureme-ai.git
-cd futureme-ai
+cd futureme-ai/03_WebApp/Pre_Present
 npm ci
 npm run dev
 ```
@@ -219,8 +251,16 @@ npm run simulate -- /tmp/futureme-sim --n 300 --seed 7
 npm run analyse -- /tmp/futureme-sim
 ```
 
-The optional explanation layer is documented in [`.env.example`](.env.example). It never enters
-the route-selection path.
+The optional provider-backed explanation and chat layers are documented in
+[`.env.example`](.env.example). Both have offline fallbacks and neither enters the route-selection
+path. Do not enable a funded provider key on a public deployment without authentication or rate
+limiting, provider spend caps, and verified host/provider retention terms.
+
+The live chatbot mascot is synchronized from
+[`04_Design/FutureMe_Mascot_Lab`](../../04_Design/FutureMe_Mascot_Lab/). Run
+`npm run sync:mascot` after changing the design source; `npm run verify` checks for drift. On
+`/chat`, the mascot animates its listening, thinking, presenting, and error actions. It follows the
+system reduced-motion preference by default and includes an explicit **Always animate** opt-in.
 
 ---
 
@@ -249,18 +289,21 @@ The next milestone is **validation, not more AI**:
 
 ---
 
-<table width="100%">
-<tr>
-<td align="center" width="50%">
-<h3><a href="READMEEN.md">Read the full English README →</a></h3>
-<sub>Product · architecture · research integrity · setup</sub>
-</td>
-<td align="center" width="50%">
-<h3><a href="READMETH.md">อ่าน README ภาษาไทย →</a></h3>
-<sub>ผลิตภัณฑ์ · สถาปัตยกรรม · ความน่าเชื่อถือ · วิธีรัน</sub>
-</td>
-</tr>
-</table>
+<div align="center">
+
+<h3>🌐 Choose your language</h3>
+
+<a href="./READMEEN.md">
+  <img src="https://img.shields.io/badge/English-README-2F81F7?style=for-the-badge" alt="Full English README">
+</a>
+&nbsp;&nbsp;
+<a href="./READMETH.md">
+  <img src="https://img.shields.io/badge/Thai-README-2F81F7?style=for-the-badge" alt="Full Thai README">
+</a>
+
+</div>
+
+<br>
 
 <p align="center">
   <sub>

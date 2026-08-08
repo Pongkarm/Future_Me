@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg" alt="สถานะ Continuous Integration"></a>
+  <a href="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml"><img src="https://github.com/winxtxrgit/futureme-ai/actions/workflows/ci.yml/badge.svg?branch=main" alt="สถานะ Continuous Integration"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 ขึ้นไป">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="สัญญาอนุญาต MIT"></a>
 </p>
@@ -170,7 +170,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 | **แคตตาล็อก** | เส้นทางเรียน/งานตัวอย่าง 6 ทาง พร้อมคำเตือนระดับฟิลด์และวันที่ของข้อมูล |
 | **คำแนะนำ** | แสดง 0–3 เส้นทาง มี refusal gate, hard constraint, tie, contradiction, provenance และสิ่งที่ยังไม่รู้ |
 | **เปรียบเทียบและแผน** | เทียบทุกทางด้วยเกณฑ์เดียวกัน และสร้างแผน 30 วันพร้อมงานเพิ่มเติมตามช่องว่างของหลักฐาน |
-| **AI ทางเลือก** | เรียบเรียงคำอธิบายเท่านั้น ปิดไว้เป็นค่าเริ่มต้น และไม่มีสิทธิ์เลือกเส้นทาง |
+| **AI ทางเลือก** | แชตที่อ้างอิงข้อมูลใน repository และการเรียบเรียงคำอธิบาย ทั้งคู่มี offline fallback และไม่มีสิทธิ์เลือกหรือจัดลำดับเส้นทาง |
 | **เครื่องมือ pilot** | เก็บ response process, ส่งออกข้อมูลรายคนแบบไม่ระบุตัวตน, จำลองข้อมูล และสร้างรายงานวิเคราะห์ |
 
 แอปทำงานครบเส้นทางโดยไม่ต้องมีบัญชี ฐานข้อมูล environment variable
@@ -231,9 +231,15 @@ endpoint `/api/explain` ซึ่งเป็นทางเลือกสา�
 หลังจาก deterministic result ถูกสร้างแล้ว เบราว์เซอร์ส่งเพียง route id และรหัสเหตุผลตายตัว
 server ตรวจทั้งสองค่าและใช้ข้อความของตัวเองก่อนติดต่อผู้ให้บริการโมเดล
 
-โมเดลไม่เห็นคำตอบของผู้เรียน free text คะแนน หรือรายการเส้นทาง
+สำหรับ `/api/explain` โมเดลไม่เห็นคำตอบของผู้เรียน free text คะแนน หรือรายการเส้นทาง
 จึงเพิ่ม ลบ เลือก หรือสลับลำดับเส้นทางไม่ได้
 หากผู้ให้บริการมีปัญหา แอปยังใช้คำอธิบาย deterministic เดิมได้
+
+หน้า `/chat` เป็นผู้ช่วยแยกจากแบบสำรวจ ใช้ข้อมูลจากคลังขนาดเล็กที่คัดจาก repository
+บทสนทนาอยู่ในหน่วยความจำของ tab ปัจจุบัน และจะส่งไปยัง app server เมื่อผู้เรียนกด Send เท่านั้น
+หากตั้งค่า Anthropic ข้อความแบบจำกัดขนาดและบริบทที่ค้นได้อาจถูกส่งต่อไปยังผู้ให้บริการ
+หากไม่ตั้งค่าหรือผู้ให้บริการมีปัญหา ระบบจะตอบแบบ offline พร้อมแหล่งข้อมูล
+แชตไม่เห็น guest session และไม่สามารถเรียกตัวให้คะแนนหรือเอนจินเลือกเส้นทางได้
 
 ---
 
@@ -262,8 +268,13 @@ server ตรวจทั้งสองค่าและใช้ข้อค�
 - เอนจินคำแนะนำทำงานฝั่ง client โดยไม่เรียก network
 - ไม่มีระบบบัญชี analytics library, advertising tracker, sharing flow หรือที่เก็บคำตอบฝั่ง server
 - หน้าความเป็นส่วนตัวลบ guest session ทั้งหมดได้ทันที
+- ประวัติแชตอยู่ในหน่วยความจำของ tab ปัจจุบันและหายเมื่อ refresh หรือกด Clear chat
+  แต่เมื่อกด Send ข้อความจะถูกส่งไปยัง app server และส่งต่อไป Anthropic เฉพาะเมื่อตั้งค่าไว้
 - การร่วมวิจัยถูกแยกออกมาและเป็นทางเลือก หน้า `/research` บันทึกไฟล์ลงอุปกรณ์
   โดยไม่มีการส่งอัตโนมัติ
+
+ก่อน deployment ต้องตรวจเงื่อนไขการประมวลผลและ retention ปัจจุบันของ host และผู้ให้บริการ
+ต้นแบบนี้ยังไม่ผ่านการตรวจความสอดคล้องกับ PDPA
 
 การ hosting เว็บยังอาจทำให้ผู้ให้บริการประมวลผล request metadata เช่น IP address
 คำว่า “คำตอบอยู่ในเบราว์เซอร์” ไม่ได้หมายความว่าเว็บไซต์ทำงานโดยไม่มีเครือข่าย
@@ -343,7 +354,7 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 
 ```bash
 git clone https://github.com/winxtxrgit/futureme-ai.git
-cd futureme-ai
+cd futureme-ai/03_WebApp/Pre_Present
 npm ci
 npm run dev
 ```
@@ -359,9 +370,9 @@ npm run simulate -- /tmp/futureme-sim --n 300 --seed 7
 npm run analyse -- /tmp/futureme-sim
 ```
 
-ชั้นเรียบเรียงคำอธิบายแบบทางเลือกตั้งค่าผ่าน [`.env.example`](.env.example)
-ไม่ควรเปิด funded provider key บน public deployment
-ก่อนเพิ่ม authentication หรือ rate limit
+ชั้นเรียบเรียงคำอธิบายและแชตแบบใช้ provider ตั้งค่าผ่าน [`.env.example`](.env.example)
+ไม่ควรเปิด funded provider key บน public deployment ก่อนเพิ่ม authentication, rate limit
+และตรวจเงื่อนไข retention ของ host และผู้ให้บริการ
 
 ---
 

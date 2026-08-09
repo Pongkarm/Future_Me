@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <p align="center">
-  <img src="assets/banner/banner-th.svg" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
+  <img src="assets/banner/banner.png" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
 </p>
 
 # FutureMe AI

@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <p align="center">
-  <img src="03_WebApp/Pre_Present/assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
+  <img src="03_WebApp/Pre_Present/assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
 
 # FutureMe AI

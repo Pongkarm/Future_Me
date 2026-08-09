@@ -124,32 +124,22 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-th-light-desktop.png"><img src="assets/screenshots/app/interview-th-light-desktop.png" alt="หน้าตอบคำถามของ FutureMe ภาษาไทย ธีมสว่าง"></a><br>
-<strong>ตอบคำถาม</strong><br><sub>คำถามความสนใจ 30 ข้อ แสดงทีละข้อ บนสเกลชอบ–ไม่ชอบ 5 ระดับ</sub>
+<a href="assets/screenshots/app/landing-2026-08-09.png"><img src="assets/screenshots/app/landing-2026-08-09.png" alt="หน้าเริ่มต้นล่าสุดของ FutureMe พร้อมมาสคอตและปุ่มเริ่มแบบผู้เยี่ยมชม"></a><br>
+<strong>เริ่มต้น</strong><br><sub>เข้าใจสิ่งที่ต้นแบบทำและเริ่มได้โดยไม่ต้องสร้างบัญชี</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="หน้าเดียวกันในภาษาอังกฤษ ธีมมืด"></a><br>
-<strong>หน้าเดียวกัน อังกฤษ ธีมมืด</strong><br><sub>ทั้งภาษาและธีมถูกจำไว้ กลับมาใหม่ก็ยังเป็นค่าเดิม</sub>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-<a href="assets/screenshots/app/mission-desktop.png"><img src="assets/screenshots/app/mission-desktop.png" alt="หน้าภารกิจของ FutureMe ที่สร้างแล้ว"></a><br>
-<strong>ลอง</strong><br><sub>ภารกิจสถานการณ์สั้น ๆ ที่เลือกด้วยกฎซึ่งอธิบายได้</sub>
-</td>
-<td width="50%" valign="top">
-<a href="assets/screenshots/app/compare-desktop.png"><img src="assets/screenshots/app/compare-desktop.png" alt="หน้าเปรียบเทียบเส้นทางของ FutureMe ที่สร้างแล้ว"></a><br>
-<strong>เทียบ</strong><br><sub>ใช้เกณฑ์ ข้อจำกัด และหลักฐานชุดเดียวกันกับทุกเส้นทาง</sub>
+<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="หน้าสัมภาษณ์ล่าสุดที่มีมาสคอต FutureMe ช่วยสนทนา"></a><br>
+<strong>ทบทวน</strong><br><sub>สนทนาเรื่องความสนใจและบริบทจริงไปพร้อมกับมาสคอต FutureMe</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-review-desktop.png"><img src="assets/screenshots/app/interview-review-desktop.png" alt="หน้าทบทวนคำตอบของ FutureMe"></a><br>
-<strong>ทบทวน</strong><br><sub>ทุกคำตอบยังแก้ได้ก่อนส่ง โดยแตะที่บรรทัดเพื่อย้อนกลับไปแก้</sub>
+<a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="หน้าผลลัพธ์เส้นทางล่าสุดที่มีมาสคอต FutureMe ช่วยอธิบาย"></a><br>
+<strong>สำรวจ</strong><br><sub>ดูหลายเส้นทางพร้อมหลักฐานและข้อจำกัดที่มองเห็นได้</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผน 30 วันของ FutureMe ที่สร้างแล้ว"></a><br>
-<strong>ลงมือ</strong><br><sub>ทดลองเส้นทาง 30 วัน โดยเก็บความคืบหน้าไว้ในเบราว์เซอร์</sub>
+<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผนทดลอง 30 วันล่าสุดของ FutureMe"></a><br>
+<strong>ลงมือ</strong><br><sub>ทดลองหนึ่งเส้นทางผ่านแผน 30 วันที่เปลี่ยนใจได้</sub>
 </td>
 </tr>
 </table>

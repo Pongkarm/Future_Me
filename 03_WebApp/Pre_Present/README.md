@@ -85,26 +85,27 @@ Reflect → Try → Explore → Compare → Act
 <table width="100%">
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="The assessment showing a single interest item on a five-point strongly-dislike to strongly-like scale, in English on the dark theme"></a>
-<p align="center"><sub><strong>Step 1 · one question at a time</strong><br>English · dark · ทีละคำถาม</sub></p>
+<a href="assets/screenshots/app/landing-2026-08-09.png"><img src="assets/screenshots/app/landing-2026-08-09.png" alt="Current FutureMe landing page with the mascot and guest start button"></a>
+<p align="center"><sub><strong>Start · เริ่มต้น</strong><br>Understand the process before beginning</sub></p>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-th-light-desktop.png"><img src="assets/screenshots/app/interview-th-light-desktop.png" alt="The same assessment screen rendered in Thai on the light theme, with one answer selected"></a>
-<p align="center"><sub><strong>Same screen · Thai · light</strong><br>หน้าเดียวกัน ภาษาไทย ธีมสว่าง</sub></p>
+<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="Current mascot-led FutureMe interview"></a>
+<p align="center"><sub><strong>Reflect · ทบทวน</strong><br>Chat through interests and context</sub></p>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="Current mascot-led route exploration results"></a>
+<p align="center"><sub><strong>Explore · สำรวจ</strong><br>Review several explainable directions</sub></p>
+</td>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="Current FutureMe 30-day exploration plan"></a>
+<p align="center"><sub><strong>Act · ลงมือ</strong><br>Test one route with a reversible plan</sub></p>
 </td>
 </tr>
 </table>
 
-<p align="center">
-  <a href="assets/screenshots/app/interview-review-desktop.png"><img src="assets/screenshots/app/interview-review-desktop.png" alt="The review step listing every interest and context answer, each row selectable to jump back and change it" width="92%"></a>
-</p>
-
-<p align="center">
-  <sub>
-  Answering advances automatically; the review step keeps every answer changeable before you continue.<br>
-  ตอบแล้วเลื่อนให้เอง และหน้าทบทวนทำให้ยังแก้ทุกคำตอบได้ก่อนไปต่อ
-  </sub>
-</p>
+<p align="center"><sub>Latest runnable journey · เส้นทางล่าสุดจากแอปที่รันได้จริง</sub></p>
 
 ---
 

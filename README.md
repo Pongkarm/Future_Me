@@ -1,290 +1,321 @@
 <a id="top"></a>
 
 <p align="center">
-  <img src="assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
+  <img src="03_WebApp/Pre_Present/assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
 
 # FutureMe AI
 
 <p align="center">
-  <strong>Career and study exploration for Thai students.</strong><br>
+  <strong>Career and study exploration for Thai students</strong><br>
   <strong>ตัวช่วยสำรวจเส้นทางเรียนและอาชีพสำหรับนักเรียนไทย</strong>
 </p>
 
 <p align="center">
-  Reflect on interests. Try a small mission. Compare several routes. Plan one reversible next step.<br>
-  ทบทวนความสนใจ ลองทำภารกิจ เปรียบเทียบหลายเส้นทาง แล้ววางก้าวถัดไปที่เปลี่ยนใจได้
+  Reflect → Try → Compare → Act<br>
+  ทบทวน → ทดลอง → เปรียบเทียบ → ลงมือทำ
 </p>
 
 <p align="center">
-  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=winxtxrgit" alt="Continuous integration status"></a>
-  <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="MIT license"></a>
-</p>
-
-<p align="center">
-  <strong><a href="#run-locally--รันในเครื่อง">Run the prototype · ทดลองใช้ต้นแบบ</a></strong>
+  <a href="#how-the-project-works--โปรเจกต์ทำงานอย่างไร">How it works · วิธีทำงาน</a>
   &nbsp;·&nbsp;
-  <a href="#product-journey--เส้นทางผู้ใช้">How it works · วิธีทำงาน</a>
+  <a href="#where-we-are-now--สถานะปัจจุบัน">Current status · สถานะปัจจุบัน</a>
   &nbsp;·&nbsp;
-  <a href="#current-status--สถานะปัจจุบัน">Current status · สถานะ</a>
+  <a href="#run-locally--รันในเครื่อง">Run locally · รันในเครื่อง</a>
   &nbsp;·&nbsp;
-  <a href="READMEEN.md">English</a>
-  &nbsp;·&nbsp;
-  <a href="READMETH.md">ภาษาไทย</a>
-</p>
-
-<p align="center">
-  <sub>Runnable guest prototype · Thai and English · light, dark, and system themes · no API key required</sub>
+  <a href="#quick-faq--คำถามที่พบบ่อย">FAQ · คำถามที่พบบ่อย</a>
 </p>
 
 ---
 
-## FutureMe in one minute · FutureMe ในหนึ่งนาที
+## Overview · ภาพรวม
 
-FutureMe does not try to decide **“the perfect career.”** It helps a student ask a more useful
-question: **“What should I explore next, and what evidence would help me decide?”**
+**EN:** FutureMe is a decision-support prototype for Thai lower-secondary, upper-secondary, and
+vocational students. It combines interest reflection, a short scenario mission, explainable route
+comparison, and a reversible 30-day action plan. It does not choose one “perfect career.”
 
-FutureMe ไม่ได้ฟันธง **“อาชีพที่ใช่ที่สุด”** แต่ช่วยให้นักเรียนตอบคำถามที่นำไปใช้ได้จริงกว่า:
-**“ควรลองสำรวจอะไรต่อ และต้องมีหลักฐานอะไรเพิ่มก่อนตัดสินใจ?”**
+**TH:** FutureMe เป็นต้นแบบเครื่องมือช่วยตัดสินใจสำหรับนักเรียนมัธยมต้น มัธยมปลาย และอาชีวศึกษา
+ระบบนำความสนใจ ภารกิจจำลอง และข้อจำกัดของผู้เรียนมาประกอบกัน ก่อนเสนอหลายเส้นทางให้เปรียบเทียบ
+พร้อมแผนทดลองลงมือทำ 30 วัน โดยไม่ฟันธงว่าอาชีพใดคือคำตอบเดียวที่ถูกต้อง
 
-| | |
+| Question · คำถาม | Answer · คำตอบ |
 |---|---|
-| **Users · ผู้ใช้** | Thai lower-secondary, upper-secondary, and vocational students · นักเรียนมัธยมต้น มัธยมปลาย และอาชีวศึกษา |
-| **Problem · ปัญหา** | Important study choices often arrive before students can test what a route feels like · ต้องเลือกเส้นทางสำคัญก่อนมีโอกาสลองสัมผัสงานหรือการเรียนจริง |
-| **Approach · วิธี** | Structured reflection + one scenario mission + comparable routes + a 30-day experiment |
-| **Position · ขอบเขต** | Decision support—not a career verdict, admission predictor, or replacement for a counsellor · เครื่องมือช่วยคิด ไม่ใช่ผู้ตัดสินอนาคต |
+| **Who is it for? · เหมาะกับใคร?** | Thai students exploring their next study or career direction · นักเรียนไทยที่กำลังสำรวจเส้นทางเรียนหรืออาชีพ |
+| **What does it produce? · ได้ผลลัพธ์อะไร?** | Zero to three route hypotheses, reasons, limitations, comparisons, and a 30-day plan · เส้นทาง 0–3 ทาง เหตุผล ข้อจำกัด การเปรียบเทียบ และแผน 30 วัน |
+| **Does AI decide the result? · AI ตัดสินผลหรือไม่?** | No. A deterministic rule engine selects routes; AI is optional and may only explain · ไม่ ระบบกฎเป็นผู้เลือกเส้นทาง ส่วน AI ใช้อธิบายแบบไม่บังคับ |
+| **Is it production-ready? · พร้อมใช้จริงหรือยัง?** | No. It is a runnable and tested hackathon prototype that still needs validated data and a real-student pilot · ยัง เป็นต้นแบบที่รันและทดสอบได้ แต่ยังต้องตรวจข้อมูลและทดลองกับนักเรียนจริง |
 
-<p align="center">
-  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="Current FutureMe routes screen showing several directions with equal visual weight" width="92%"></a>
-</p>
+### Latest web app preview · ตัวอย่างเว็บแอปล่าสุด
 
-<p align="center">
-  <sub>Captured from the current application · ภาพจากแอปที่ทำงานอยู่จริง</sub>
-</p>
+Captured from this repository's running production build on 9 August 2026.
+ถ่ายใหม่จาก production build ที่รันจริงของ repository นี้เมื่อวันที่ 9 สิงหาคม 2569
 
----
-
-<a id="product-journey--เส้นทางผู้ใช้"></a>
-
-## Product journey · เส้นทางผู้ใช้
-
-| Step | What happens |
-|---|---|
-| **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English, one at a time, then review every answer. |
-| **2 · Try · ลอง** | Complete one of 3 short scenario missions; the suggested mission can be changed. |
-| **3 · Explore · สำรวจ** | Receive 0–3 route hypotheses with reasons, unknowns, provenance, and data-age warnings. |
-| **4 · Compare · เทียบ** | Compare routes using the same five criteria instead of treating the first result as a winner. |
-| **5 · Act · ลงมือ** | Turn one route into a reversible 30-day exploration plan with progress saved locally. |
-
-```text
-Reflect → Try → Explore → Compare → Act
-  คิด      ลอง      สำรวจ       เทียบ      ลงมือ
-```
-
-<table width="100%">
-<tr>
-<td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="The assessment showing a single interest item on a five-point strongly-dislike to strongly-like scale, in English on the dark theme"></a>
-<p align="center"><sub><strong>Step 1 · one question at a time</strong><br>English · dark · ทีละคำถาม</sub></p>
-</td>
-<td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-th-light-desktop.png"><img src="assets/screenshots/app/interview-th-light-desktop.png" alt="The same assessment screen rendered in Thai on the light theme, with one answer selected"></a>
-<p align="center"><sub><strong>Same screen · Thai · light</strong><br>หน้าเดียวกัน ภาษาไทย ธีมสว่าง</sub></p>
-</td>
-</tr>
+<table>
+  <tr>
+    <th>Landing · หน้าเริ่มต้น</th>
+    <th>Interview · สัมภาษณ์ความสนใจ</th>
+  </tr>
+  <tr>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png" alt="Latest FutureMe landing page" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
+  </tr>
+  <tr>
+    <th>Routes · เส้นทางที่แนะนำ</th>
+    <th>30-day plan · แผนทดลอง 30 วัน</th>
+  </tr>
+  <tr>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
+  </tr>
 </table>
 
-<p align="center">
-  <a href="assets/screenshots/app/interview-review-desktop.png"><img src="assets/screenshots/app/interview-review-desktop.png" alt="The review step listing every interest and context answer, each row selectable to jump back and change it" width="92%"></a>
-</p>
-
-<p align="center">
-  <sub>
-  Answering advances automatically; the review step keeps every answer changeable before you continue.<br>
-  ตอบแล้วเลื่อนให้เอง และหน้าทบทวนทำให้ยังแก้ทุกคำตอบได้ก่อนไปต่อ
-  </sub>
-</p>
-
 ---
 
-<a id="current-status--สถานะปัจจุบัน"></a>
+## How the project works · โปรเจกต์ทำงานอย่างไร
 
-## Current status · สถานะปัจจุบัน
-
-| Area | Implemented today |
-|---|---|
-| **Experience** | Complete guest journey, responsive layouts, Thai/English, and persistent light/dark/system preferences |
-| **Assessment** | 30 interleaved RIASEC-shaped interest items + 4 required context questions + 1 optional free-text prompt |
-| **Missions** | 3 scenario missions chosen by a transparent rule; the learner may override the choice |
-| **Routes** | 6 illustrative routes; the engine may show 0–3 and can refuse to guess |
-| **Decision system** | Deterministic client-side TypeScript with hard filters, fixed weights, ties, contradictions, and evidence-strength labels |
-| **AI** | Optional repo-grounded chat companion and explanation rewording, both with deterministic offline fallbacks; neither can add, remove, select, or reorder routes |
-| **Privacy** | Assessment and mission answers stay in browser storage by default and can be deleted immediately; submitted chat follows the separate network flow documented below |
-| **Research tooling** | Optional anonymous export at `/research`, plus a reproducible pilot-analysis pipeline |
-
-<details>
-<summary><strong>What is not complete yet · สิ่งที่ยังไม่เสร็จ</strong></summary>
-
-<br>
-
-- The instrument has never been administered to real participants. No reliability, norms, or
-  validity results exist.
-- The Thai translation is a first draft, not a completed cross-cultural adaptation.
-- Mission rubrics and fixed decision weights are team design judgement, not fitted parameters.
-- The route catalogue is illustrative; cost, relocation, time-to-earning, and flexibility contain
-  unsourced estimates.
-- No real-student pilot, ethics approval, bias audit, or effectiveness study has run.
-- The safety pause is a bilingual keyword rule, not a risk assessment, and it alerts nobody.
-- Retrieval, accounts, counsellor tools, school integrations, and cloud infrastructure are planned
-  directions—not current capabilities or confirmed partnerships.
-
-แบบประเมินยังไม่เคยใช้กับกลุ่มตัวอย่างจริง จึงยังไม่มีค่าความเที่ยง norm
-หรือผลตรวจสอบความตรง คำแปลไทยยังเป็นฉบับร่าง และยังไม่มี pilot กับนักเรียนจริง
-การรับรองจริยธรรม หรือผลลัพธ์ที่ใช้กล่าวอ้างประสิทธิผลได้
-
-</details>
-
----
-
-## How the decision system works · ระบบตัดสินใจทำงานอย่างไร
+### Complete project workflow · เวิร์กโฟลว์ทั้งโปรเจกต์
 
 ```mermaid
 flowchart LR
-    A["30 interest items<br/>+ context"] --> B["RIASEC-shaped<br/>interest profile"]
-    C["Scenario mission"] --> D["Independent<br/>mission evidence"]
-    B --> E{"Enough evidence?"}
-    D --> E
-    E -->|"No"| F["Explain why<br/>and stop"]
-    E -->|"Yes"| G["Hard filters<br/>tier · cost · location"]
-    G --> H["Five-criterion<br/>decision matrix"]
-    H --> I["0–3 routes"]
-    I --> J["Compare"]
-    J --> K["30-day plan"]
-    I -.->|"optional wording only"| L["LLM rewording"]
+    A["Official sources<br/>แหล่งข้อมูลทางการ"] --> B["Audit + demo data<br/>ตรวจแหล่ง + ข้อมูลเดโม"]
+    B --> C["Interview + mission<br/>คำถาม + ภารกิจ"]
+    C --> D["Rule engine<br/>ระบบกฎ"]
+    D --> E["0–3 routes + comparison<br/>0–3 เส้นทาง + เปรียบเทียบ"]
+    E --> F["Reversible 30-day plan<br/>แผนทดลอง 30 วัน"]
+    F --> G["Student pilot + validation<br/>ทดลองกับนักเรียน + ตรวจสอบ"]
+    G -. "revise from evidence<br/>ปรับจากหลักฐาน" .-> B
+    G --> H["Production services<br/>ระบบใช้งานจริง"]
+
+    I["Optional bounded AI<br/>AI เสริมแบบจำกัดขอบเขต"] -. "explain only<br/>อธิบายเท่านั้น" .-> E
+    J["FastAPI prototype<br/>ต้นแบบแบ็กเอนด์"] -. "future integration<br/>เชื่อมในอนาคต" .-> D
+
+    classDef working fill:#d1fae5,stroke:#047857,color:#064e3b;
+    classDef validating fill:#fef3c7,stroke:#d97706,color:#78350f;
+    classDef planned fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
+    class A,B,C,D,E,F,I,J working;
+    class G validating;
+    class H planned;
 ```
 
-**Rules decide; AI may explain or answer bounded repo-grounded questions.** The same answers produce the same routes. Route eligibility,
-weights, refusal gates, and ties run locally in deterministic TypeScript. If an operator enables
-the optional provider, `/api/explain` receives only a validated route id and fixed reason codes
-after the route decision has already been made. `/api/chat` receives only the bounded chat
-transcript and selected repository context, never the assessment session. It has no interface to
-the scorer or route engine.
+**Current position · จุดที่อยู่ตอนนี้:** the end-to-end prototype is runnable (green). Real-student
+validation is next (yellow); production accounts, permanent storage, and deployment remain planned
+(red). · ต้นแบบครบเส้นทางรันได้แล้ว (สีเขียว) ขั้นต่อไปคือทดลองกับนักเรียนจริง (สีเหลือง)
+ส่วนบัญชี ฐานข้อมูลถาวร และระบบ production ยังเป็นแผน (สีแดง)
 
-The five design-judgement weights are:
+### Student journey · ขั้นตอนของผู้เรียน
 
-`Interests 30% · Feasibility 25% · Mission-derived strengths 20% · Learning style 15% · Flexibility 10%`
+| Step | EN | TH |
+|---|---|---|
+| **1. Reflect** | Answer 30 RIASEC-shaped interest items, four required context questions, and one optional prompt | ตอบคำถามความสนใจ 30 ข้อ คำถามบริบทที่จำเป็น 4 ข้อ และคำถามปลายเปิด 1 ข้อ |
+| **2. Try** | Complete one of three short scenario missions | ทำภารกิจจำลองสั้น ๆ หนึ่งในสามภารกิจ |
+| **3. Explore** | The rule engine checks evidence and returns zero to three routes | ระบบกฎตรวจหลักฐานและเสนอเส้นทาง 0–3 ทาง |
+| **4. Compare** | Compare every route using the same five criteria | เปรียบเทียบทุกเส้นทางด้วยเกณฑ์เดียวกัน 5 ด้าน |
+| **5. Act** | Choose one route to explore through a reversible 30-day plan | เลือกหนึ่งเส้นทางไปทดลองผ่านแผน 30 วันที่เปลี่ยนใจได้ |
 
-The engine requires at least 23 of 30 interest answers, refuses a nearly flat profile, can return
-no route when all remaining evidence is insufficient, and marks totals within 4 points as tied.
-These thresholds are product rules—not psychometric findings.
+### How recommendations are calculated · วิธีคำนวณคำแนะนำ
+
+The current design weights are:
+
+`Interests 30% · Feasibility 25% · Mission evidence 20% · Learning style 15% · Flexibility 10%`
+
+น้ำหนักที่ใช้ในต้นแบบปัจจุบันคือ ความสนใจ 30% ความเป็นไปได้ 25% หลักฐานจากภารกิจ 20%
+รูปแบบการเรียนรู้ 15% และความยืดหยุ่น 10%
+
+The engine can refuse to recommend, show ties, and identify contradictions. These weights are
+product rules, not validated psychometric findings.
+
+ระบบสามารถปฏิเสธการสรุปเมื่อข้อมูลไม่พอ แสดงผลเสมอ และชี้ความขัดแย้งของคำตอบได้
+น้ำหนักเหล่านี้เป็นกฎของต้นแบบ ไม่ใช่ผลการวัดทางจิตวิทยาที่ผ่านการรับรอง
+
+### AI, privacy, and data flow · AI ความเป็นส่วนตัว และการไหลของข้อมูล
+
+- Assessment, mission, route, and plan data stay in browser storage by default.
+  ข้อมูลแบบประเมิน ภารกิจ เส้นทาง และแผนเก็บในเบราว์เซอร์เป็นค่าเริ่มต้น
+- Route selection works without an account, database, backend, or API key.
+  การเลือกเส้นทางทำงานได้โดยไม่ต้องมีบัญชี ฐานข้อมูล แบ็กเอนด์ หรือ API key
+- Optional AI can reword fixed explanations or answer bounded repository questions; it cannot change routes.
+  AI เสริมใช้เรียบเรียงคำอธิบายหรือตอบคำถามในขอบเขตคลังข้อมูล แต่เปลี่ยนเส้นทางไม่ได้
+- A funded provider key must not be exposed publicly without authentication, rate limits, spend controls, and reviewed retention terms.
+  ห้ามเปิดใช้คีย์แบบมีค่าใช้จ่ายบนระบบสาธารณะก่อนมีการยืนยันตัวตน จำกัดคำขอ จำกัดงบ และตรวจนโยบายเก็บข้อมูล
 
 ---
 
-## Why this approach · เหตุผลของการออกแบบ
+## Architecture · สถาปัตยกรรม
 
-- **More than self-report.** A mission can support or contradict what the student initially said.
-- **Alternatives over a winner.** Routes are hypotheses to explore, not an identity assigned by a score.
-- **Evidence before confidence.** Reasons, unknowns, sources, and stale data remain visible.
-- **Action after reflection.** A 30-day experiment turns a recommendation into something testable.
-- **Private assessment by default.** The working prototype needs no account and does not store
-  assessment answers on a server. Chat history is current-tab memory, but messages are sent to the
-  app server when the learner presses Send and to Anthropic only when an operator configures it.
+| Component · ส่วนประกอบ | Role · หน้าที่ | Current state · สถานะ |
+|---|---|---|
+| **Next.js web app** | Student journey, local session, decision engine, comparison, plan, chat UI · ประสบการณ์ผู้เรียนและระบบตัดสินใจ | ✅ Runnable · รันได้ |
+| **Seed data** | 30 questions, 3 missions, 6 illustrative routes · คำถาม ภารกิจ และเส้นทางตัวอย่าง | 🟡 Demo data · ข้อมูลเดโม |
+| **Research layer** | Source audit, curricula, labour data, claim status, and technical research · งานตรวจแหล่งและฐานความรู้ | 🟡 First audit complete · ตรวจรอบแรกแล้ว |
+| **FastAPI backend** | Mission and future-path API reference with in-memory storage · ต้นแบบ API และที่เก็บข้อมูลในหน่วยความจำ | 🟡 Separate prototype · ต้นแบบแยก |
+| **Optional AI** | Bounded chat and explanation rewording · แชตและเรียบเรียงคำอธิบาย | 🟡 Optional · ไม่บังคับ |
+| **Production services** | Accounts, permanent database, RAG, school tools, and cloud deployment · บัญชี ฐานข้อมูล RAG เครื่องมือโรงเรียน และคลาวด์ | 🔴 Planned · ยังเป็นแผน |
 
-The deployment host's and provider's current processing and retention terms must be verified
-before deployment. These design choices are not a PDPA compliance claim.
+The current web app is the product source of truth. The FastAPI backend is not required by or wired
+into the main demo journey. Some backend files still use the older name **FuturePath AI**; the
+current product name is **FutureMe AI**.
 
-FutureMe draws on Holland's RIASEC interest structure, but the project-specific instrument does
-**not** inherit the reliability or validity of another test. See
-[Questionnaire methodology](docs/questionnaire-methodology.md) and
-[Validation plan](docs/validation-plan.md).
+เว็บปัจจุบันคือแหล่งอ้างอิงหลักของผลิตภัณฑ์ แบ็กเอนด์ FastAPI ยังไม่เชื่อมกับเส้นทางเดโมหลัก
+และไฟล์แบ็กเอนด์บางส่วนยังใช้ชื่อเดิมว่า **FuturePath AI** ส่วนชื่อผลิตภัณฑ์ปัจจุบันคือ **FutureMe AI**
 
 ---
 
-<a id="run-locally--รันในเครื่อง"></a>
+## Where we are now · สถานะปัจจุบัน
+
+### ✅ Working now · ทำงานได้แล้ว
+
+- Complete guest journey from assessment to a 30-day plan · เส้นทางผู้ใช้ตั้งแต่แบบประเมินถึงแผน 30 วัน
+- Thai/English, responsive layouts, and light/dark/system themes · ภาษาไทย/อังกฤษ รองรับหลายหน้าจอและหลายธีม
+- Deterministic scoring, refusal gates, ties, provenance, and freshness warnings · ระบบกฎ การปฏิเสธเมื่อข้อมูลไม่พอ ผลเสมอ แหล่งที่มา และคำเตือนความเก่า
+- Local persistence, deletion controls, optional research export, and analysis scripts · การบันทึกในเครื่อง การลบข้อมูล การส่งออกเพื่อวิจัย และสคริปต์วิเคราะห์
+- Unit, integration, production-build, and Playwright tests · การทดสอบ unit, integration, build และ Playwright
+- Mascot UI with offline fallbacks for optional chat and explanations · มาสคอตพร้อมระบบสำรองแบบออฟไลน์
+- Web verification passes: mascot sync, types, lint, 234 unit/integration tests, production build,
+  and 35 Playwright browser journeys. · การตรวจเว็บผ่านครบทั้ง mascot, type, lint, 234 tests,
+  production build และ Playwright 35 เส้นทาง
+
+### 🟡 Needs validation · ต้องตรวจสอบต่อ
+
+- The question set and Thai adaptation have not been validated with real students.
+  ชุดคำถามและฉบับภาษาไทยยังไม่ผ่านการตรวจสอบกับนักเรียนจริง
+- Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates.
+  ค่าใช้จ่าย การย้ายที่อยู่ ระยะเวลาก่อนมีรายได้ ความยืดหยุ่น จุดแข็ง และข้อจำกัดบางส่วนเป็นค่าประมาณของทีม
+- Route data is dated `2026-01-15` and has passed its 180-day review threshold.
+  ข้อมูลเส้นทางลงวันที่ `2026-01-15` และเกินรอบทบทวน 180 วันแล้ว
+- Research has passed a first source audit, not a guarantee of 100% permanent accuracy.
+  งานวิจัยผ่านการตรวจแหล่งรอบแรก ไม่ใช่การรับรองว่าถูกต้องถาวร 100%
+- The latest teammate web-app changes and this consolidated workspace still need one formal integration review.
+  เว็บเวอร์ชันล่าสุดของเพื่อนร่วมทีมและ workspace รวมนี้ยังต้องผ่าน integration review อย่างเป็นทางการ
+
+### 🔴 Not implemented · ยังไม่ได้ทำ
+
+- Real accounts, permanent server storage, and production authentication · บัญชีจริง ที่เก็บข้อมูลถาวร และการยืนยันตัวตนระดับใช้งานจริง
+- Parent and counsellor dashboards · แดชบอร์ดผู้ปกครองและครูแนะแนว
+- Live school, TCAS, NDLP/DEEP, or AIS API integration · การเชื่อมโรงเรียน TCAS, NDLP/DEEP หรือ AIS API แบบใช้งานจริง
+- Production RAG, cloud deployment, ethics approval, and real-student pilot · RAG และคลาวด์ระดับใช้งานจริง การรับรองจริยธรรม และ pilot กับนักเรียนจริง
+
+---
 
 ## Run locally · รันในเครื่อง
 
-Requires Node.js 20 or newer.
+Requirements: Node.js 20 or newer.
 
 ```bash
-git clone --branch winxtxrgit https://github.com/Pongkarm/Future_Me.git
-cd Future_Me/03_WebApp/Pre_Present
+cd 03_WebApp/Pre_Present
 npm ci
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) and choose **Start as guest**.
-The complete journey works without an account, database, or API key.
+เปิด [http://localhost:3000](http://localhost:3000) แล้วเลือก **Start as guest**
 
 ```bash
-npm run verify       # typecheck + lint + unit/integration tests + production build
-npm run test:e2e     # full browser journeys against the production build
-
-# Optional: self-test the research pipeline with simulated data
-npm run simulate -- /tmp/futureme-sim --n 300 --seed 7
-npm run analyse -- /tmp/futureme-sim
+npm run verify       # mascot check + typecheck + lint + tests + production build
+npm run test:e2e     # full browser journeys with Playwright
 ```
 
-The optional provider-backed explanation and chat layers are documented in
-[`.env.example`](.env.example). Both have offline fallbacks and neither enters the route-selection
-path. Do not enable a funded provider key on a public deployment without authentication or rate
-limiting, provider spend caps, and verified host/provider retention terms.
+Optional AI configuration · การตั้งค่า AI แบบไม่บังคับ:
+[`03_WebApp/Pre_Present/.env.example`](03_WebApp/Pre_Present/.env.example)
 
-The live chatbot mascot is synchronized from
-[`04_Design/FutureMe_Mascot_Lab`](../../04_Design/FutureMe_Mascot_Lab/). Run
-`npm run sync:mascot` after changing the design source; `npm run verify` checks for drift. On
-`/chat`, the mascot animates its listening, thinking, presenting, and error actions. It follows the
-system reduced-motion preference by default and includes an explicit **Always animate** opt-in.
+The backend can be explored separately from `02_Backend/` with compatible FastAPI, Pydantic,
+Uvicorn, and test dependencies installed:
+
+```bash
+uvicorn app.main:app --reload --port 8000
+pytest
+```
+
+Backend dependency versions are not yet pinned, and its storage resets when the process stops.
+เวอร์ชัน dependency ของแบ็กเอนด์ยังไม่ได้ล็อก และข้อมูลจะหายเมื่อหยุดโปรเซส
 
 ---
 
-## Documentation · เอกสาร
+## Repository map · แผนผังไฟล์
 
-| Topic | Documents |
+| Path | Contents · เนื้อหา |
 |---|---|
-| **Product and UX** | [Project overview](docs/01-project-overview.md) · [User experience](docs/03-user-experience.md) |
-| **Decision system** | [AI and decision logic](docs/04-ai-system.md) · [System architecture](docs/05-system-architecture.md) |
-| **Instrument** | [Methodology](docs/questionnaire-methodology.md) · [Question bank](docs/question-bank.md) · [Research summary](docs/research-summary.md) |
-| **Validation** | [Validation plan](docs/validation-plan.md) · [Pilot protocol](docs/pilot-protocol.md) |
-| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) |
-| **Delivery** | [Development plan](docs/06-development-plan.md) · [Roadmap](docs/07-roadmap.md) · [Contributing](CONTRIBUTING.md) |
+| [`01_Research/`](01_Research/) | Audited research, sources, curricula, labour data, and AI-system references · งานวิจัย แหล่งอ้างอิง หลักสูตร ตลาดแรงงาน และข้อมูลระบบ AI |
+| [`02_Backend/`](02_Backend/) | FastAPI prototype, schemas, decision experiments, RAG scaffolding, and tests · ต้นแบบแบ็กเอนด์ schema ระบบทดลอง RAG และ tests |
+| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | Current runnable product and its documentation/tests · ผลิตภัณฑ์ปัจจุบันที่รันได้ พร้อมเอกสารและ tests |
+| [`04_Design/`](04_Design/) | Design concepts, selected visual direction, and mascot lab · แนวคิดการออกแบบ ทิศทางภาพ และ mascot lab |
+| [`05_Team_Repo/`](05_Team_Repo/) | Team snapshots; check freshness before reuse · สำเนางานทีมที่ต้องตรวจความใหม่ก่อนใช้ |
+| [`06_Assets/`](06_Assets/) | Original media references · สื่อต้นฉบับ |
+| [`90_Archive/`](90_Archive/) | Historical material, not current truth · เอกสารย้อนหลัง ไม่ใช่ข้อมูลหลักปัจจุบัน |
+| [`99-Model/`](99-Model/) | Mascot/model assets and generation notes · ไฟล์โมเดล มาสคอต และบันทึกการสร้าง |
+| [`99_Process/`](99_Process/) | Historical audits and implementation handoffs · บันทึก audit และ handoff ย้อนหลัง |
+| [`Presentation/`](Presentation/) | Editable deck, PDF, renders, generator, and QA · สไลด์ PDF ภาพเรนเดอร์ ตัวสร้าง และ QA |
+
+When files disagree, prefer the runnable web app and tests, then corrected research under
+`01_Research/Data/`. Treat team snapshots and archives as historical context.
+
+เมื่อข้อมูลขัดกัน ให้ยึดเว็บและ tests ที่รันได้ก่อน ตามด้วยงานวิจัยที่แก้ไขแล้วใน
+`01_Research/Data/` ส่วนสำเนางานทีมและ archive ใช้เป็นข้อมูลย้อนหลังเท่านั้น
 
 ---
 
-## Next milestone · เป้าหมายถัดไป
+## Quick FAQ · คำถามที่พบบ่อย
 
-The next milestone is **validation, not more AI**:
+<details>
+<summary><strong>Can I use the demo without AI or the backend? · ใช้เดโมโดยไม่มี AI หรือแบ็กเอนได้ไหม?</strong></summary>
 
-1. Complete Thai translation adaptation and cognitive debriefing.
-2. Obtain ethics approval, parental consent, and student assent before collecting data.
-3. Pilot the instrument and missions; report reliability, item quality, and structure honestly.
-4. Replace illustrative route constraints with licensed, current, source-traceable data.
-5. Run accessibility, safety, and bias reviews before any school pilot.
+Yes. The complete student journey runs locally in the browser without either one.
+ได้ เส้นทางผู้เรียนทั้งหมดทำงานในเบราว์เซอร์โดยไม่ต้องใช้ทั้งสองส่วน
+</details>
+
+<details>
+<summary><strong>Does FutureMe guarantee admission or employment? · FutureMe รับประกันการสอบติดหรือได้งานไหม?</strong></summary>
+
+No. Routes are hypotheses to explore, not predictions or guarantees.
+ไม่ เส้นทางเป็นสมมติฐานสำหรับทดลองสำรวจ ไม่ใช่คำทำนายหรือการรับประกัน
+</details>
+
+<details>
+<summary><strong>Is this a validated RIASEC test? · นี่คือแบบทดสอบ RIASEC ที่ผ่านการรับรองหรือไม่?</strong></summary>
+
+No. It uses the RIASEC structure for reflection, but this item set and Thai adaptation still require validation.
+ไม่ ระบบใช้โครงสร้าง RIASEC เพื่อช่วยทบทวนตนเอง แต่ชุดคำถามและภาษาไทยยังต้องผ่านการตรวจสอบ
+</details>
+
+<details>
+<summary><strong>Where is learner data stored? · ข้อมูลผู้เรียนเก็บที่ไหน?</strong></summary>
+
+Assessment progress is stored in the current browser by default. Optional chat messages follow a
+separate network flow only when the learner sends them.
+ความคืบหน้าแบบประเมินเก็บในเบราว์เซอร์เป็นค่าเริ่มต้น ส่วนข้อความแชตใช้เส้นทางเครือข่ายแยกเมื่อผู้เรียนกดส่ง
+</details>
+
+<details>
+<summary><strong>Which part should developers change first? · นักพัฒนาควรแก้ส่วนใดก่อน?</strong></summary>
+
+Use `03_WebApp/Pre_Present/` for current product work. Refresh and validate route data before a pilot.
+ใช้ `03_WebApp/Pre_Present/` สำหรับงานผลิตภัณฑ์ปัจจุบัน และอัปเดตข้อมูลเส้นทางก่อนทำ pilot
+</details>
+
+<details>
+<summary><strong>Where did the README screenshots come from? · ภาพใน README มาจากไหน?</strong></summary>
+
+They were captured directly from the production build in `03_WebApp/Pre_Present/` by completing a
+real guest journey in the running app. · ภาพถูกถ่ายโดยตรงจาก production build ใน
+`03_WebApp/Pre_Present/` หลังทดลองใช้งานเส้นทาง guest จริงในเว็บ
+</details>
+
+<details>
+<summary><strong>Where are the main documents? · เอกสารหลักอยู่ที่ไหน?</strong></summary>
+
+[Web README](03_WebApp/Pre_Present/README.md) ·
+[Architecture](03_WebApp/Pre_Present/docs/05-system-architecture.md) ·
+[Source review](03_WebApp/Pre_Present/docs/09-source-review.md) ·
+[Research guide](01_Research/Data/README.md) ·
+[Presentation PDF](Presentation/FutureMe_Project_Presentation.pdf)
+</details>
 
 ---
 
-<div align="center">
+FutureMe is a student-built exploration prototype for JUMP THAILAND Hackathon 2026. It cannot
+predict admission, employment, income, or mental-health risk and should not replace official,
+current information or human guidance.
 
-<h3>🌐 Choose your language</h3>
+FutureMe เป็นต้นแบบที่นักศึกษาพัฒนาสำหรับ JUMP THAILAND Hackathon 2026 ระบบไม่สามารถทำนาย
+การสอบติด การได้งาน รายได้ หรือความเสี่ยงด้านสุขภาพจิต และไม่ควรใช้แทนข้อมูลทางการล่าสุดหรือคำแนะนำจากมนุษย์
 
-<a href="./READMEEN.md">
-  <img src="https://img.shields.io/badge/English-README-2F81F7?style=for-the-badge" alt="Full English README">
-</a>
-&nbsp;&nbsp;
-<a href="./READMETH.md">
-  <img src="https://img.shields.io/badge/Thai-README-2F81F7?style=for-the-badge" alt="Full Thai README">
-</a>
-
-</div>
-
-<br>
-
-<p align="center">
-  <sub>
-  Built for <a href="https://www.jumpthailand.com/">JUMP THAILAND Hackathon 2026</a> ·
-  AI for the Future of Thai Education · MIT licensed
-  </sub>
-  <br><br>
-  <a href="#top">Back to top · กลับขึ้นด้านบน</a>
-</p>
+<p align="center"><a href="#top">Back to top · กลับขึ้นด้านบน</a></p>

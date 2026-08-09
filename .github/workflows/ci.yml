@@ -1,0 +1,99 @@
+name: CI
+
+# This file has to live at the repository root: GitHub only reads
+# .github/workflows/ from there. It sat under 03_WebApp/Pre_Present/ and so had
+# never run — everything below was already written, just never reachable.
+
+# Most of this repository is research, design and slides. Scoping to the app's
+# own paths keeps a red tick meaningful — a run that fires on a slide edit is a
+# run people learn to ignore. The workflow lists itself so a change to these
+# rules is itself checked.
+#
+# `push` only, deliberately. Everyone here works on a branch in this repository
+# rather than a fork, so the push run's status already appears on any pull
+# request opened from that branch. Adding a `pull_request` trigger would run
+# the whole suite a second time for the same commit — the concurrency group
+# below cannot collapse them, because the two events carry different refs
+# (refs/heads/… vs refs/pull/N/merge). Add it back only if outside forks start
+# contributing, since fork pushes do not reach this workflow.
+on:
+  push:
+    paths:
+      - '03_WebApp/Pre_Present/**'
+      - '04_Design/FutureMe_Mascot_Lab/**'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Typecheck · lint · test · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: 03_WebApp/Pre_Present
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          # `defaults.run` does not reach action inputs, only `run:` steps.
+          cache-dependency-path: 03_WebApp/Pre_Present/package-lock.json
+
+      # `npm ci` fails the job if package.json and the lockfile disagree,
+      # which is the check we want on every PR.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Mascot is in sync with the design lab
+        run: node scripts/sync-mascot.mjs --check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      # Cached separately from node_modules: the browser is ~150 MB and does
+      # not change when a dependency does.
+      - name: Cache Playwright browser
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('03_WebApp/Pre_Present/package-lock.json') }}
+
+      - name: Install Playwright browser
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # Reuses the build produced above; the config starts `next start` itself.
+      - name: End-to-end tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          # An action input, so this one is repo-relative rather than
+          # relative to the working directory above.
+          path: 03_WebApp/Pre_Present/playwright-report/
+          name: playwright-report
+          retention-days: 7

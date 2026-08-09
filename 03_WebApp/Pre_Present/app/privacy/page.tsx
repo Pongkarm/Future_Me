@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Card, Notice, Shell } from "@/components/ui";
+import { clearTelemetry } from "@/lib/research/telemetry";
 import { clearSession, SESSION_KEY } from "@/lib/session";
 import { useT } from "@/components/PreferencesProvider";
 
@@ -160,6 +161,14 @@ export default function PrivacyPage() {
           <Button
             onClick={() => {
               clearSession();
+              /*
+               * Response timing is held under its own key so a facilitator can
+               * clear research data without destroying a learner's answers.
+               * The obligation only runs one way: a learner deleting their
+               * answers must not leave telemetry about them behind, and this
+               * button is where that promise is either kept or broken.
+               */
+              clearTelemetry();
               setCleared(true);
             }}
             data-testid="delete-data"

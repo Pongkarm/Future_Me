@@ -13,20 +13,75 @@ export interface AnthropicRequest {
   fetchImpl?: typeof fetch;
 }
 
+/**
+ * Why a provider call did not produce an answer.
+ *
+ * Every one of these ends the same way for the learner — the offline reply —
+ * so the value here is entirely operational. Without it, a drained quota, an
+ * expired key, a safety refusal and a flaky network are one indistinguishable
+ * "chat is offline", and the first thing anyone asks when the AI layer goes
+ * quiet is which of those it was.
+ */
+export type ChatProviderFailure =
+  | "unauthorized"
+  | "rate_limited"
+  | "overloaded"
+  | "bad_request"
+  | "server_error"
+  | "refused"
+  | "truncated"
+  | "malformed"
+  | "empty"
+  | "timeout"
+  | "unreachable";
+
 export class ChatProviderError extends Error {
-  constructor(message: string) {
+  readonly reason: ChatProviderFailure;
+  /** Seconds the provider asked us to wait, when it said so. */
+  readonly retryAfterSeconds?: number;
+
+  constructor(reason: ChatProviderFailure, message: string, retryAfterSeconds?: number) {
     super(message);
     this.name = "ChatProviderError";
+    this.reason = reason;
+    this.retryAfterSeconds = retryAfterSeconds;
   }
 }
 
-export function extractAnthropicText(value: unknown): string | null {
-  if (typeof value !== "object" || value === null) return null;
+/** Maps a provider status onto a reason. Retrying is the caller's decision. */
+export function failureForStatus(status: number): ChatProviderFailure {
+  if (status === 401 || status === 403) return "unauthorized";
+  if (status === 429) return "rate_limited";
+  if (status === 529) return "overloaded";
+  if (status >= 500) return "server_error";
+  return "bad_request";
+}
+
+/** What a well-formed response turned out to be. */
+export type ExtractResult =
+  | { ok: true; text: string }
+  | { ok: false; reason: Extract<ChatProviderFailure, "refused" | "truncated" | "malformed" | "empty"> };
+
+export function extractAnthropicResult(value: unknown): ExtractResult {
+  if (typeof value !== "object" || value === null) return { ok: false, reason: "malformed" };
   const response = value as { content?: unknown; stop_reason?: unknown };
-  // A hard output-limit stop can leave a sentence or citation incomplete.
-  if (response.stop_reason === "max_tokens") return null;
+
+  /*
+   * A refusal is a 200 with an empty or partial body, so it has to be checked
+   * before the content is read. Sonnet 5's safeguards can decline a request
+   * outright, and a learner asking about, say, a security career is exactly
+   * the benign case that occasionally trips them.
+   */
+  if (response.stop_reason === "refusal") return { ok: false, reason: "refused" };
+
+  // A hard output-limit stop can leave a sentence or citation incomplete, and
+  // a half-written citation is worse than no answer: the guards downstream
+  // check that a source id is present, not that the sentence around it
+  // finished.
+  if (response.stop_reason === "max_tokens") return { ok: false, reason: "truncated" };
+
   const content = response.content;
-  if (!Array.isArray(content)) return null;
+  if (!Array.isArray(content)) return { ok: false, reason: "malformed" };
 
   const text = content
     .map((block) => {
@@ -37,7 +92,14 @@ export function extractAnthropicText(value: unknown): string | null {
     .join("\n")
     .trim();
 
-  return text.length > 0 ? text.slice(0, MAX_REPLY_CHARS) : null;
+  if (text.length === 0) return { ok: false, reason: "empty" };
+  return { ok: true, text: text.slice(0, MAX_REPLY_CHARS) };
+}
+
+/** Kept for callers that only need the text. */
+export function extractAnthropicText(value: unknown): string | null {
+  const result = extractAnthropicResult(value);
+  return result.ok ? result.text : null;
 }
 
 export async function requestAnthropic(input: AnthropicRequest): Promise<string> {
@@ -56,31 +118,52 @@ export async function requestAnthropic(input: AnthropicRequest): Promise<string>
       },
       body: JSON.stringify({
         model: input.model,
-        max_tokens: 500,
+        /*
+         * Sized for a Thai answer that also has to carry citations, not for
+         * the shortest plausible reply. Truncation here is not a shorter
+         * answer — the extractor discards a truncated body outright — so a tight
+         * cap silently turned every longer reply into an offline fallback.
+         * Thai spends noticeably more tokens per sentence than English, and
+         * Sonnet 5's tokenizer more again, so the old 500 was reachable in
+         * ordinary use rather than at the extreme.
+         */
+        max_tokens: 2_000,
         // This is a short, scoped explanation task. Sonnet 5 otherwise enables
-        // adaptive thinking, which shares this deliberately small token cap.
+        // adaptive thinking, which would share the cap above.
         thinking: { type: "disabled" },
         system: input.system,
         messages: input.messages,
       }),
     });
 
-    if (!response.ok) throw new ChatProviderError(`Provider returned ${response.status}.`);
+    if (!response.ok) {
+      const retryAfter = Number(response.headers.get("retry-after"));
+      throw new ChatProviderError(
+        failureForStatus(response.status),
+        `Provider returned ${response.status}.`,
+        Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined,
+      );
+    }
 
     let data: unknown;
     try {
       data = await response.json();
     } catch {
-      throw new ChatProviderError("Provider returned malformed JSON.");
+      throw new ChatProviderError("malformed", "Provider returned malformed JSON.");
     }
 
-    const text = extractAnthropicText(data);
-    if (!text) throw new ChatProviderError("Provider returned no usable text.");
-    return text;
+    const result = extractAnthropicResult(data);
+    if (!result.ok) {
+      throw new ChatProviderError(result.reason, `Provider returned no usable text (${result.reason}).`);
+    }
+    return result.text;
   } catch (error) {
     if (error instanceof ChatProviderError) throw error;
     const timedOut = error instanceof Error && error.name === "AbortError";
-    throw new ChatProviderError(timedOut ? "Provider timed out." : "Provider is unreachable.");
+    throw new ChatProviderError(
+      timedOut ? "timeout" : "unreachable",
+      timedOut ? "Provider timed out." : "Provider is unreachable.",
+    );
   } finally {
     clearTimeout(timer);
   }

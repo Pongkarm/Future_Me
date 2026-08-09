@@ -49,6 +49,12 @@ export const en = {
     reviewLabel: "Review",
     answeredCounter: "{answered} of {total} answered",
     reviewAnswers: "Review answers",
+    resetAnswers: "Start over",
+    resetConfirmPrompt:
+      "This clears every answer you have given and returns you to the first question. Any mission or plan built from them goes too. It cannot be undone.",
+    resetConfirm: "Yes, clear my answers",
+    resetCancel: "Keep my answers",
+    resetDone: "Your answers were cleared. You are back at the first question.",
     eyebrowInterests: "Interests",
     eyebrowSituation: "Your situation",
     eyebrowOptional: "Optional",
@@ -137,6 +143,10 @@ export const en = {
     honest4:
       "This does not replace a qualified counsellor, and it has not been tested with real students.",
     readData: "Read exactly what data is collected →",
+    howItWorks: "How this works →",
+    howTitle: "How this works",
+    howIntro: "Three steps, and what each one can and cannot tell you.",
+    backHome: "Back to the start",
   },
 
   chat: {
@@ -174,6 +184,8 @@ export const en = {
     sending: "Sending…",
     networkError:
       "I could not reach the chat service just now. You can try again, or use the structured assessment, which still works without the chat service.",
+    rateLimited:
+      "That is more messages than I can take at once. Please wait about {seconds} seconds and send it again — nothing you have written is lost.",
     mascotReady: "FutureMe is ready to listen",
     mascotThinking: "FutureMe is checking the project data",
     mascotSpeaking: "FutureMe has answered with AI assistance",
@@ -276,6 +288,9 @@ export const en = {
     progress: "{completed} of {total} tasks checked in",
     progressLabel: "Plan progress",
     week: "WEEK {n}",
+    weekComplete: "All tasks ticked",
+    weekCurrent: "Start here",
+    gapTaskMarker: "added for a gap",
     noRouteTitle: "No route selected yet",
     noRouteChanged:
       "The route you picked is no longer among your results — your answers may have changed since.",

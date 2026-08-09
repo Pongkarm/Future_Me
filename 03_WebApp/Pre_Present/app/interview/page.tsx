@@ -6,7 +6,13 @@ import questions from "@/data/questions.json";
 import { Button, Notice, Shell } from "@/components/ui";
 import { MIN_INTEREST_ANSWERS } from "@/lib/decision-engine";
 import { checkText } from "@/lib/safety";
-import { loadSessionResult, newSession, saveSession, type GuestSession } from "@/lib/session";
+import {
+  loadSessionResult,
+  newSession,
+  resetInterview,
+  saveSession,
+  type GuestSession,
+} from "@/lib/session";
 import SafetyPause from "@/components/SafetyPause";
 import { usePreferences } from "@/components/PreferencesProvider";
 import { format, localised } from "@/lib/i18n";
@@ -28,7 +34,7 @@ import {
   type ReplyParseFailureReason,
 } from "@/lib/interview/reply-parser";
 import { MASCOT_MOTION_KEY } from "@/lib/mascot/motion-preference";
-import { markSeen, recordAnswer } from "@/lib/research/telemetry";
+import { clearTelemetry, markSeen, recordAnswer } from "@/lib/research/telemetry";
 
 type ContextKey = "tier" | "cost" | "mobility" | "horizon" | "proud";
 
@@ -253,6 +259,38 @@ export default function InterviewPage() {
     goTo(index, "back");
   };
 
+  /**
+   * Discard every reply and start the questions again.
+   *
+   * The confirmation lives in the header, which owns the two-step control; by
+   * the time this runs the learner has already said yes. Reviewing state is
+   * dropped as well — returning to a review of answers that no longer exist
+   * would be a dead end.
+   */
+  const handleReset = () => {
+    if (!session) return;
+    persist(resetInterview(session));
+    /*
+     * Response timing lives under its own key, and it has to go with the
+     * answers it describes. Left behind, the next attempt's replies are filed
+     * against the first attempt's timings — a learner who restarts looks in the
+     * pilot data like one who deliberated for a very long time and then
+     * revised, which is a finding about a bug rather than about them.
+     */
+    clearTelemetry();
+    setReply("");
+    setShowErrors(false);
+    setReturnToReview(false);
+    goTo(0, "back");
+    /*
+     * `goTo` moves focus only when the step index changes, and resetting from
+     * the first question leaves it at zero. The confirm button the learner just
+     * pressed is unmounted either way, so without this focus lands on <body>
+     * and a keyboard user restarts from the top of the page.
+     */
+    window.requestAnimationFrame(() => replyRef.current?.focus());
+  };
+
   /** A sent and accepted reply advances after the mascot acknowledges it. */
   const scheduleAdvance = () => {
     clearAdvance(advanceTimer);
@@ -291,11 +329,17 @@ export default function InterviewPage() {
     }
   };
 
-  const handleReplySubmit = () => {
+  /**
+   * @param quickReply text chosen by tapping an option instead of typing it.
+   *   It takes the same path as anything typed — the safety check, the parser,
+   *   the clarification on a miss — because a tap and a typed word are the same
+   *   answer and must not be recorded two different ways.
+   */
+  const handleReplySubmit = (quickReply?: string) => {
     const activeStep = STEPS[stepIndex];
     if (!session || submitting || !activeStep || activeStep.kind === "review") return;
 
-    const raw = reply.trim();
+    const raw = (quickReply ?? reply).trim();
     if (!raw) {
       showClarification("empty");
       return;
@@ -481,6 +525,14 @@ export default function InterviewPage() {
           progressLabel={t.chrome.progressLabel}
           reviewLabel={t.assessment.reviewAnswers}
           onReview={stepIndex === REVIEW_INDEX ? undefined : () => goTo(REVIEW_INDEX, "forward")}
+          resetLabel={t.assessment.resetAnswers}
+          resetConfirmPrompt={t.assessment.resetConfirmPrompt}
+          resetConfirmLabel={t.assessment.resetConfirm}
+          resetCancelLabel={t.assessment.resetCancel}
+          resetDoneLabel={t.assessment.resetDone}
+          // Nothing to discard yet on a clean session, so the control stays out
+          // of the way until there is something it could undo.
+          onReset={answeredScored > 0 ? handleReset : undefined}
         />
 
         <p className="mb-5 inline-block rounded-full border border-warning/40 bg-warning/5 px-3 py-1 text-[11px] font-bold text-warning">
@@ -536,6 +588,8 @@ export default function InterviewPage() {
                     : undefined
               }
               replyOptions={replyOptions}
+              onQuickReply={(option) => handleReplySubmit(option)}
+              quickReplyBusy={submitting}
               history={transcriptHistory}
               acceptedReply={acceptedReply}
               acceptedReplyValue={acceptedReplyValue}

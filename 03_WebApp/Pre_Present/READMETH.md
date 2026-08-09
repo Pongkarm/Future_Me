@@ -114,7 +114,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 | **5 · ลงมือ** | เปลี่ยนหนึ่งเส้นทางเป็นแผน 30 วันที่ประกอบด้วยงานเล็ก ๆ และเปลี่ยนใจได้ | หลักฐานใหม่จากการลงมือ |
 
 <p align="center">
-  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="หน้าเส้นทางที่สร้างแล้ว พร้อมหลักฐานของหลายทางเลือก" width="92%"></a>
+  <a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="หน้าเส้นทางที่สร้างแล้ว พร้อมหลักฐานของหลายทางเลือก" width="92%"></a>
 </p>
 
 <p align="center">
@@ -128,7 +128,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 <strong>ตอบคำถาม</strong><br><sub>คำถามความสนใจ 30 ข้อ แสดงทีละข้อ บนสเกลชอบ–ไม่ชอบ 5 ระดับ</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="หน้าเดียวกันในภาษาอังกฤษ ธีมมืด"></a><br>
+<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="หน้าเดียวกันในภาษาอังกฤษ ธีมมืด"></a><br>
 <strong>หน้าเดียวกัน อังกฤษ ธีมมืด</strong><br><sub>ทั้งภาษาและธีมถูกจำไว้ กลับมาใหม่ก็ยังเป็นค่าเดิม</sub>
 </td>
 </tr>
@@ -148,7 +148,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 <strong>ทบทวน</strong><br><sub>ทุกคำตอบยังแก้ได้ก่อนส่ง โดยแตะที่บรรทัดเพื่อย้อนกลับไปแก้</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/plan-desktop.png"><img src="assets/screenshots/app/plan-desktop.png" alt="หน้าแผน 30 วันของ FutureMe ที่สร้างแล้ว"></a><br>
+<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผน 30 วันของ FutureMe ที่สร้างแล้ว"></a><br>
 <strong>ลงมือ</strong><br><sub>ทดลองเส้นทาง 30 วัน โดยเก็บความคืบหน้าไว้ในเบราว์เซอร์</sub>
 </td>
 </tr>

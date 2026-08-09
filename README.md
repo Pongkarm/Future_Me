@@ -56,16 +56,16 @@ Captured from this repository's running production build on 9 August 2026.
     <th>Interview · สัมภาษณ์ความสนใจ</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png" alt="Latest FutureMe landing page" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png" alt="Latest FutureMe landing page" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
   </tr>
   <tr>
     <th>Routes · เส้นทางที่แนะนำ</th>
     <th>30-day plan · แผนทดลอง 30 วัน</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
   </tr>
 </table>
 

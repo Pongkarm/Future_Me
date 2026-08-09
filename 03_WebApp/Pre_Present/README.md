@@ -56,7 +56,7 @@ FutureMe ไม่ได้ฟันธง **“อาชีพที่ใช�
 | **Position · ขอบเขต** | Decision support—not a career verdict, admission predictor, or replacement for a counsellor · เครื่องมือช่วยคิด ไม่ใช่ผู้ตัดสินอนาคต |
 
 <p align="center">
-  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="Current FutureMe routes screen showing several directions with equal visual weight" width="92%"></a>
+  <a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="Current FutureMe routes screen showing several directions with equal visual weight" width="92%"></a>
 </p>
 
 <p align="center">
@@ -85,7 +85,7 @@ Reflect → Try → Explore → Compare → Act
 <table width="100%">
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="The assessment showing a single interest item on a five-point strongly-dislike to strongly-like scale, in English on the dark theme"></a>
+<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="The assessment showing a single interest item on a five-point strongly-dislike to strongly-like scale, in English on the dark theme"></a>
 <p align="center"><sub><strong>Step 1 · one question at a time</strong><br>English · dark · ทีละคำถาม</sub></p>
 </td>
 <td width="50%" valign="top">

@@ -112,7 +112,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **5 · Act** | Turn one route into a 30-day plan of small, reversible tasks. | New evidence from action |
 
 <p align="center">
-  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="Implemented routes screen with several routes and visible evidence" width="92%"></a>
+  <a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="Implemented routes screen with several routes and visible evidence" width="92%"></a>
 </p>
 
 <p align="center">
@@ -122,7 +122,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="Implemented FutureMe assessment screen showing one interest item on a five-point scale"></a><br>
+<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="Implemented FutureMe assessment screen showing one interest item on a five-point scale"></a><br>
 <strong>Reflect</strong><br><sub>Thirty interest items, one at a time, on a five-point like-to-dislike scale.</sub>
 </td>
 <td width="50%" valign="top">
@@ -146,7 +146,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 <strong>Review</strong><br><sub>Every answer stays changeable before the assessment is submitted.</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/plan-desktop.png"><img src="assets/screenshots/app/plan-desktop.png" alt="Implemented FutureMe 30-day plan screen"></a><br>
+<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="Implemented FutureMe 30-day plan screen"></a><br>
 <strong>Act</strong><br><sub>A 30-day experiment whose progress stays in the browser.</sub>
 </td>
 </tr>

@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=winxtxrgit" alt="Continuous integration status"></a>
+  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="Continuous integration status"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="MIT license"></a>
 </p>
@@ -340,7 +340,7 @@ No school, platform, or cloud partnership is presented as confirmed until an agr
 Requires Node.js 20 or newer.
 
 ```bash
-git clone --branch winxtxrgit https://github.com/Pongkarm/Future_Me.git
+git clone --branch Panussu https://github.com/Pongkarm/Future_Me.git
 cd Future_Me/03_WebApp/Pre_Present
 npm ci
 npm run dev

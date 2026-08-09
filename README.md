@@ -170,9 +170,9 @@ current product name is **FutureMe AI**.
 - Local persistence, deletion controls, optional research export, and analysis scripts · การบันทึกในเครื่อง การลบข้อมูล การส่งออกเพื่อวิจัย และสคริปต์วิเคราะห์
 - Unit, integration, production-build, and Playwright tests · การทดสอบ unit, integration, build และ Playwright
 - Mascot UI with offline fallbacks for optional chat and explanations · มาสคอตพร้อมระบบสำรองแบบออฟไลน์
-- Web verification passes: mascot sync, types, lint, 234 unit/integration tests, production build,
-  and 35 Playwright browser journeys. · การตรวจเว็บผ่านครบทั้ง mascot, type, lint, 234 tests,
-  production build และ Playwright 35 เส้นทาง
+- Web verification passes: mascot sync, types, lint, 400 unit/integration tests, production build,
+  and 64 Playwright browser journeys. · การตรวจเว็บผ่านครบทั้ง mascot, type, lint, 400 tests,
+  production build และ Playwright 64 เส้นทาง
 
 ### 🟡 Needs validation · ต้องตรวจสอบต่อ
 
@@ -184,8 +184,9 @@ current product name is **FutureMe AI**.
   ข้อมูลเส้นทางลงวันที่ `2026-01-15` และเกินรอบทบทวน 180 วันแล้ว
 - Research has passed a first source audit, not a guarantee of 100% permanent accuracy.
   งานวิจัยผ่านการตรวจแหล่งรอบแรก ไม่ใช่การรับรองว่าถูกต้องถาวร 100%
-- The latest teammate web-app changes and this consolidated workspace still need one formal integration review.
-  เว็บเวอร์ชันล่าสุดของเพื่อนร่วมทีมและ workspace รวมนี้ยังต้องผ่าน integration review อย่างเป็นทางการ
+- The consolidated workspace passes the automated integration checks; source-data review and a
+  real-student pilot are still required. · workspace รวมผ่านการตรวจ integration อัตโนมัติแล้ว
+  แต่ยังต้องทบทวนแหล่งข้อมูลและทดลองกับนักเรียนจริง
 
 ### 🔴 Not implemented · ยังไม่ได้ทำ
 

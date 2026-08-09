@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=winxtxrgit" alt="สถานะ Continuous Integration"></a>
+  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="สถานะ Continuous Integration"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 ขึ้นไป">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="สัญญาอนุญาต MIT"></a>
 </p>
@@ -343,7 +343,7 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 ต้องใช้ Node.js 20 ขึ้นไป
 
 ```bash
-git clone --branch winxtxrgit https://github.com/Pongkarm/Future_Me.git
+git clone --branch Panussu https://github.com/Pongkarm/Future_Me.git
 cd Future_Me/03_WebApp/Pre_Present
 npm ci
 npm run dev

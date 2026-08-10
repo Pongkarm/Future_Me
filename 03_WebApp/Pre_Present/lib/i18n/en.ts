@@ -540,7 +540,7 @@ export const en = {
     programmesDeclineLowConfidence: "Too little evidence so far — an “unsure” answer is not counted as evidence.",
     programmesDeclineFlat: "Every dimension scored about the same ({diff} apart, {gate} needed). A flat profile does not mean everything fits; it means we do not know yet.",
     programmesDeclineAction: "Answer another round of questions and come back. Guessing is not something the system will do.",
-    programmesCoverage: "Covering {n} bachelor programmes at {inst} institutions, from the published intake register.",
+    programmesCoverage: "Covering {n} programmes at {inst} institutions — degrees from the MHESI intake register, ปวช./ปวส. from the VEC enrolment register 2568.",
     programmesQuadrantGolden: "Enjoys it + capable",
     programmesQuadrantGrowth: "Enjoys it + not practised yet",
     programmesQuadrantBurnout: "Capable + does not enjoy it · take care",

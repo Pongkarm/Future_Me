@@ -116,12 +116,18 @@ function ProgrammeCard({
       <details className="mt-3">
         <summary className="cursor-pointer text-xs text-muted">{t.routes.programmesWhy}</summary>
         <div className="mt-2 space-y-1 font-mono text-xs text-muted">
-          <p>cos(profile, programme) = {row.congruence.toFixed(3)}</p>
+          <p>{p.level} · cos(profile, programme) = {row.congruence.toFixed(3)}</p>
           {/* Thin fields are common enough to matter: a vector averaged from
               one occupation reads exactly like one averaged from forty. */}
+          {/* The degree side counts occupations per ISCED field. The
+              vocational side is audited per subject instead, so it carries no
+              count — showing "0 occupations" there would read as no evidence
+              rather than evidence recorded elsewhere. */}
           <p>
-            {p.isced} {p.iscedTitle} · RIASEC วัดจาก {p.iscedOccupations} อาชีพ
-            {p.iscedOccupations < 3 ? " ⚠ หลักฐานบาง" : ""}
+            {p.iscedTitle}
+            {p.iscedOccupations > 0
+              ? ` · RIASEC วัดจาก ${p.iscedOccupations} อาชีพ${p.iscedOccupations < 3 ? " ⚠ หลักฐานบาง" : ""}`
+              : " · ดูการจับคู่อาชีพใน vocational_audit.md"}
           </p>
           {p.productionCost !== null && (
             <p>ต้นทุนผลิต/คน/ปี {p.productionCost.toLocaleString("th-TH")} บาท (ไม่ใช่ค่าเทอม)</p>
@@ -158,6 +164,7 @@ export function ProgrammeMatches({
     () =>
       recommendProgrammes(interview.interest, {
         provinceIso: provinceIso ?? undefined,
+        tier: interview.context.tier,
         mobility: interview.context.mobility,
         budgetBand:
           interview.context.cost === "unknown" ? undefined : interview.context.cost,

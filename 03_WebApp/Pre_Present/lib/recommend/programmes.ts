@@ -16,7 +16,7 @@ interface Packed {
     programmes: number;
     institutions: number;
     fields: number;
-    level: string;
+
     riasecSource: string;
     riasecStatus: string;
     costNote: string;
@@ -29,8 +29,9 @@ interface Packed {
   /** [id, nameTh, provinceIso, provinceTh, tuitionBand] */
   institutions: [string, string, string, string, string][];
   titles: string[];
-  /** [titleIndex, institutionIndex, fieldIndex, seats, productionCost] */
-  programmes: [number, number, number, number | null, number | null][];
+  levels: string[];
+  /** [titleIndex, institutionIndex, fieldIndex, seats, productionCost, levelIndex] */
+  programmes: [number, number, number, number | null, number | null, number][];
 }
 
 const data = packed as unknown as Packed;
@@ -59,6 +60,8 @@ export interface Programme {
    * render this as a tuition figure.
    */
   productionCost: number | null;
+  /** ปริญญาตรี · ปวช. · ปวส. — the learner's stated tier gates on this */
+  level: string;
 }
 
 export const PROGRAMME_META = data.meta;
@@ -76,7 +79,7 @@ export function allProgrammes(): Programme[] {
     return vec;
   });
 
-  cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost]) => {
+  cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost, levelIndex]) => {
     const [id, nameTh, provinceIso, provinceTh, tuitionBand] = data.institutions[instIndex];
     const [isced, iscedTitle, , iscedOccupations] = data.fields[fieldIndex];
     return {
@@ -92,6 +95,7 @@ export function allProgrammes(): Programme[] {
       riasec: vectors[fieldIndex],
       seatsPlanned: seats,
       productionCost: cost,
+      level: data.levels[levelIndex],
     };
   });
 

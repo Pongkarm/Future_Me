@@ -20,7 +20,7 @@ Output, all positional:
   institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand]
   titles[j]       = programme title
   programmes[k]   = [titleIndex, institutionIndex, fieldIndex, seats|null,
-                     productionCost|null]
+                     productionCost|null, levelIndex]
 """
 import json
 import os
@@ -31,6 +31,9 @@ OUT = os.path.join(HERE, "..", "..", "..", "03_WebApp", "Pre_Present", "data",
                    "programmes.json")
 
 DIMENSIONS = ["R", "I", "A", "S", "E", "C"]
+
+# index into this list is stored per programme
+LEVELS = ["ปริญญาตรี", "ปวช.", "ปวส."]
 
 
 def main():
@@ -43,7 +46,31 @@ def main():
     titles, title_index = [], {}
     programmes = []
 
-    for p in rows:
+    vocational = []
+    voc_path = os.path.join(HERE, "..", "data", "vocational.json")
+    if os.path.exists(voc_path):
+        with open(voc_path, encoding="utf-8") as fh:
+            voc = json.load(fh)
+        for v in voc["programmes"]:
+            vocational.append({
+                "isced": "VEC:" + v["field_subject"],
+                "isced_title": v["field_subject"],
+                "isced_occupations": 0,   # audited per subject, not per occupation count
+                "name_th": v["name_th"],
+                "institution_id": v["institution_id"],
+                "institution_th": v["institution_th"],
+                "province_iso": v["province_iso"],
+                "province_th": v["province_th"],
+                "tuition_band": v["tuition_band"],
+                "riasec": v["riasec"],
+                "seats_planned": v["students_enrolled"],
+                "cost_per_year_production": None,
+                "level": v["level"],
+            })
+
+    # Degrees first, then ปวช./ปวส. — the engine sorts on score, so order here
+    # only decides tie-break stability.
+    for p in rows + vocational:
         code = p["isced"]
         if code not in field_index:
             field_index[code] = len(fields)
@@ -66,7 +93,8 @@ def main():
         cost = p["cost_per_year_production"]
         programmes.append([title_index[title], inst_index[key], field_index[code],
                            p["seats_planned"],
-                           round(cost) if cost is not None else None])
+                           round(cost) if cost is not None else None,
+                           LEVELS.index(p.get("level", "ปริญญาตรี"))])
 
     out = {
         "meta": {
@@ -75,7 +103,7 @@ def main():
             "programmes": len(programmes),
             "institutions": len(institutions),
             "fields": len(fields),
-            "level": "ปริญญาตรี",
+            "levels": LEVELS,
             "riasecSource": "O*NET 29.1 Interests, Occupational Interest scale, "
                             "US DOL/ETA, CC BY 4.0 — mapped to ISCED-F 2013 fields",
             "riasecStatus": "ค่า RIASEC วัดมาจริง · การจับคู่สาย ISCED กับกลุ่มอาชีพ "
@@ -91,10 +119,12 @@ def main():
                 "scholarships",
             ],
             "coverageNote": (
-                f"{len(programmes)} จาก 7,149 หลักสูตรปริญญาตรีที่ไม่ซ้ำในทะเบียน "
-                f"({len(programmes) / 7149 * 100:.1f}%)"
+                f"ปริญญาตรี {len(rows)} หลักสูตร (88.8% ของที่ไม่ซ้ำในทะเบียน อว.) · "
+                f"ปวช./ปวส. {len(vocational)} หลักสูตร จากทะเบียนนักเรียนของ สอศ. ปี 2568"
             ),
         },
+        # top level, not inside meta: the engine reads it on every row
+        "levels": LEVELS,
         "fields": fields,
         "institutions": institutions,
         "titles": titles,
@@ -106,7 +136,7 @@ def main():
 
     before = os.path.getsize(SRC)
     after = os.path.getsize(OUT)
-    print(f"programmes    {len(programmes)}")
+    print(f"programmes    {len(programmes)}  (ตรี {len(rows)} · อาชีวะ {len(vocational)})")
     print(f"institutions  {len(institutions)}")
     print(f"fields        {len(fields)}  (ISCED-F detailed, each with its own vector)")
     print(f"titles        {len(titles)} unique of {len(programmes)}")

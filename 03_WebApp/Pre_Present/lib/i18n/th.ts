@@ -538,7 +538,7 @@ export const th: Dictionary = {
     programmesDeclineLowConfidence: "หลักฐานยังน้อยเกินไป — ข้อที่ตอบว่า “ไม่แน่ใจ” ไม่ถูกนับเป็นหลักฐาน",
     programmesDeclineFlat: "คะแนนทุกมิติสูสีกันหมด (ต่าง {diff} ต้องการอย่างน้อย {gate}) โปรไฟล์แบนไม่ได้แปลว่าเข้าได้ทุกสาย แต่แปลว่ายังไม่รู้",
     programmesDeclineAction: "ตอบคำถามเพิ่มอีกสักชุด แล้วกลับมาดูใหม่ ระบบจะเดาให้ไม่ได้",
-    programmesCoverage: "ครอบคลุม {n} หลักสูตรปริญญาตรี ใน {inst} สถาบัน จากทะเบียนแผนการรับนักศึกษา",
+    programmesCoverage: "ครอบคลุม {n} หลักสูตร ใน {inst} สถาบัน — ปริญญาตรีจากทะเบียนแผนการรับของ อว. และ ปวช./ปวส. จากทะเบียนนักเรียนของ สอศ. ปี 2568",
     programmesQuadrantGolden: "ชอบ + ถนัด",
     programmesQuadrantGrowth: "ชอบ + ยังไม่ถนัด",
     programmesQuadrantBurnout: "ถนัด + ไม่ชอบ · ควรระวัง",

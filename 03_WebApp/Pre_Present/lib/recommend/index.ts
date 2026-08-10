@@ -87,6 +87,11 @@ export interface ProgrammeRecommendation {
 
 export interface LearnerContext {
   provinceIso?: string;
+  /**
+   * What the learner is leaving. ม.3 can go to ปวช.; ม.6 to ปวส. or a degree.
+   * Absent means no filter — showing everything is better than guessing wrong.
+   */
+  tier?: "LOWER_SECONDARY" | "UPPER_SECONDARY" | "VOCATIONAL";
   mobility?: "local_only" | "can_move" | "unknown";
   budgetBand?: "tight" | "moderate" | "flexible";
   preferSector?: string;
@@ -225,6 +230,18 @@ function contextFit(
   return { score, known, unknown: [...new Set(unknown)].sort() };
 }
 
+/**
+ * Which levels a learner at this tier can actually enter next.
+ * A ม.3 leaver cannot enrol on a bachelor's degree, and offering one is not a
+ * stretch goal — it is a wrong answer.
+ */
+function levelOpenTo(level: string, tier: LearnerContext["tier"]): boolean {
+  if (!tier) return true;
+  if (tier === "LOWER_SECONDARY") return level === "ปวช.";
+  if (tier === "VOCATIONAL") return level === "ปวส." || level === "ปริญญาตรี";
+  return level === "ปริญญาตรี" || level === "ปวส.";
+}
+
 export function recommendProgrammes(
   answers: Record<string, number>,
   learner: LearnerContext = {},
@@ -270,6 +287,10 @@ export function recommendProgrammes(
         ? 100 * congruence
         : 100 * (W_INTEREST * congruence + W_EFFICACY * efficacy);
 
+    if (!levelOpenTo(programme.level, learner.tier)) {
+      rejected += 1;
+      continue;
+    }
     if (core < CORE_GATE) {
       rejected += 1;
       continue;

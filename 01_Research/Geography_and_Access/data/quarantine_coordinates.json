@@ -1,0 +1,102 @@
+[
+ {
+  "id": "mhesi-05700-TH-10",
+  "name_th": "มหาวิทยาลัยเกริก",
+  "province_th": "กรุงเทพมหานคร",
+  "given": {
+   "lat": 15.721413,
+   "lon": 100.05226
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "mhesi-01100-TH-12",
+  "name_th": "มหาวิทยาลัยสุโขทัยธรรมาธิราช",
+  "province_th": "นนทบุรี",
+  "given": {
+   "lat": 13.91137,
+   "lon": 13.9114
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "ovec-pri-1327100012",
+  "name_th": "วิทยาลัยเทคโนโลยี ไฮเทค สระแก้ว",
+  "province_th": "สระแก้ว",
+  "given": {
+   "lat": 16.8505042,
+   "lon": 99.1177851
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "mhesi-26000-TH-30",
+  "name_th": "วิทยาลัยเทคโนโลยีพนมวันท์",
+  "province_th": "นครราชสีมา",
+  "given": {
+   "lat": 13.63334,
+   "lon": 100.50316
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "mhesi-18605-TH-40",
+  "name_th": "มหาวิทยาลัยมหามกุฏราชวิทยาลัย วิทยาเขตศรีล้านช้าง",
+  "province_th": "ขอนแก่น",
+  "given": {
+   "lat": 17.500206,
+   "lon": 101.735608
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "ovec-pri-1342100017",
+  "name_th": "วิทยาลัยเทคโนโลยีสิริปัญญาบริหารธุรกิจ",
+  "province_th": "เลย",
+  "given": {
+   "lat": 13.8439447,
+   "lon": 100.568733
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "mhesi-14000-TH-46",
+  "name_th": "มหาวิทยาลัยกาฬสินธุ์",
+  "province_th": "กาฬสินธุ์",
+  "given": {
+   "lat": 16.45327,
+   "lon": 99.514097
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "ovec-pri-1352100031",
+  "name_th": "วิทยาลัยอาชีวศึกษาเถินเทคโนโลยี",
+  "province_th": "ลำปาง",
+  "given": {
+   "lat": 17.607486,
+   "lon": 99.2343354
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "ovec-pub-1358046401",
+  "name_th": "วิทยาลัยการอาชีพแม่สะเรียง",
+  "province_th": "แม่ฮ่องสอน",
+  "given": {
+   "lat": 18.105771,
+   "lon": 97.93752
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ },
+ {
+  "id": "mhesi-13400-TH-63",
+  "name_th": "วิทยาลัยนอร์ทเทิร์น",
+  "province_th": "ตาก",
+  "given": {
+   "lat": 16.850094,
+   "lon": 16.850094
+  },
+  "reason": "no reconstruction landed inside the assigned province"
+ }
+]

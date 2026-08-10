@@ -80,11 +80,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 13 occupations: Agents and Business Managers of Artists, Performers, and Athletes, Web and Digital Interface Designers, Video Game Designers, Craft Artists, Fine Artists, Including Painters, Sculptors, and Illustrators, Special Effects Artists and Animators, Commercial and Industrial Designers, Fashion Designers, Floral Designers, Graphic Designers, Interior Designers, Set and Exhibit Designers, …and 1 more
 
-## 0221 · Religion and theology
+## 0221 · Religion and theology · named explicitly
 
-`R 0.18` · `I 0.19` · `A 0.41` · `S 0.81` · `E 0.53` · `C 0.30`
+`R 0.14` · `I 0.40` · `A 0.43` · `S 0.94` · `E 0.56` · `C 0.35`
 
-1 occupations: Clergy
+3 occupations: Clergy, Directors, Religious Activities and Education, Philosophy and Religion Teachers, Postsecondary
 
 ## 0222 · History and archaeology
 
@@ -92,17 +92,17 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 5 occupations: Anthropologists and Archeologists, Historians, Anthropology and Archeology Teachers, Postsecondary, Archivists, Curators
 
-## 0223 · Philosophy and ethics
+## 0223 · Philosophy and ethics · named explicitly
 
-`R 0.24` · `I 0.69` · `A 0.46` · `S 1.00` · `E 0.30` · `C 0.38`
+`R 0.17` · `I 0.80` · `A 0.48` · `S 0.79` · `E 0.33` · `C 0.41`
 
-1 occupations: Philosophy and Religion Teachers, Postsecondary
+2 occupations: Philosophy and Religion Teachers, Postsecondary, Sociologists
 
-## 0231 · Language acquisition
+## 0231 · Language acquisition · named explicitly
 
-`R 0.19` · `I 0.57` · `A 0.50` · `S 1.00` · `E 0.26` · `C 0.45`
+`R 0.20` · `I 0.48` · `A 0.51` · `S 0.85` · `E 0.24` · `C 0.47`
 
-1 occupations: Foreign Language and Literature Teachers, Postsecondary
+4 occupations: Interpreters and Translators, Foreign Language and Literature Teachers, Postsecondary, English Language and Literature Teachers, Postsecondary, Adult Basic Education, Adult Secondary Education, and English as a Second Language Instructors
 
 ## 0232 · Literature and linguistics
 
@@ -110,11 +110,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 8 occupations: English Language and Literature Teachers, Postsecondary, Editors, Technical Writers, Writers and Authors, Poets, Lyricists and Creative Writers, Interpreters and Translators, Film and Video Editors, Gambling and Sports Book Writers and Runners
 
-## 0310 · Social and behavioural studies not further defined
+## 0310 · Social and behavioural studies not further defined · named explicitly
 
-`R 0.18` · `I 0.83` · `A 0.46` · `S 0.76` · `E 0.30` · `C 0.41`
+`R 0.21` · `I 0.90` · `A 0.36` · `S 0.38` · `E 0.29` · `C 0.56`
 
-2 occupations: Sociologists, Sociology Teachers, Postsecondary
+5 occupations: Sociologists, Political Scientists, Anthropologists and Archeologists, Survey Researchers, Social Science Research Assistants
 
 ## 0311 · Economics
 
@@ -152,11 +152,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 3 occupations: Archivists, Librarians and Media Collections Specialists, Library Technicians
 
-## 0410 · Business and administration n.f.d.
+## 0410 · Business and administration n.f.d. · named explicitly
 
-`R 0.15` · `I 0.49` · `A 0.07` · `S 0.34` · `E 0.81` · `C 0.79`
+`R 0.11` · `I 0.47` · `A 0.13` · `S 0.43` · `E 0.75` · `C 0.74`
 
-2 occupations: General and Operations Managers, Management Analysts
+6 occupations: General and Operations Managers, Management Analysts, Administrative Services Managers, Business Teachers, Postsecondary, Project Management Specialists, Business Intelligence Analysts
 
 ## 0411 · Accounting and taxation
 
@@ -212,11 +212,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 7 occupations: Microbiologists, Zoologists and Wildlife Biologists, Molecular and Cellular Biologists, Geneticists, Biologists, Biological Technicians, Biological Science Teachers, Postsecondary
 
-## 0512 · Biochemistry
+## 0512 · Biochemistry · named explicitly
 
-`R 0.63` · `I 1.00` · `A 0.24` · `S 0.28` · `E 0.17` · `C 0.46`
+`R 0.69` · `I 0.99` · `A 0.18` · `S 0.19` · `E 0.12` · `C 0.52`
 
-2 occupations: Biochemists and Biophysicists, Medical Scientists, Except Epidemiologists
+4 occupations: Biochemists and Biophysicists, Medical Scientists, Except Epidemiologists, Microbiologists, Chemists
 
 ## 0521 · Environmental sciences
 
@@ -248,11 +248,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 3 occupations: Astronomers, Physicists, Physics Teachers, Postsecondary
 
-## 0541 · Mathematics
+## 0541 · Mathematics · named explicitly
 
-`R 0.32` · `I 0.90` · `A 0.36` · `S 0.51` · `E 0.09` · `C 0.64`
+`R 0.22` · `I 0.86` · `A 0.22` · `S 0.28` · `E 0.20` · `C 0.75`
 
-2 occupations: Mathematicians, Mathematical Science Teachers, Postsecondary
+6 occupations: Mathematicians, Mathematical Science Teachers, Postsecondary, Statisticians, Actuaries, Operations Research Analysts, Data Scientists
 
 ## 0542 · Statistics
 
@@ -260,17 +260,17 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 3 occupations: Statisticians, Data Scientists, Statistical Assistants
 
-## 0610 · ICTs not further defined
+## 0610 · ICTs not further defined · named explicitly
 
-`R 0.26` · `I 0.67` · `A 0.15` · `S 0.21` · `E 0.52` · `C 0.77`
+`R 0.43` · `I 0.67` · `A 0.12` · `S 0.22` · `E 0.29` · `C 0.78`
 
-2 occupations: Computer Systems Analysts, Information Technology Project Managers
+6 occupations: Computer Systems Analysts, Computer Programmers, Computer User Support Specialists, Computer Network Support Specialists, Computer and Information Systems Managers, Software Developers
 
-## 0611 · Computer use
+## 0611 · Computer use · named explicitly
 
-`R 0.45` · `I 0.38` · `A 0.31` · `S 0.26` · `E 0.18` · `C 0.77`
+`R 0.42` · `I 0.35` · `A 0.16` · `S 0.20` · `E 0.19` · `C 0.84`
 
-2 occupations: Computer User Support Specialists, Desktop Publishers
+5 occupations: Computer User Support Specialists, Computer Network Support Specialists, Data Entry Keyers, Desktop Publishers, Word Processors and Typists
 
 ## 0612 · Database and network design and administration
 
@@ -458,11 +458,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 3 occupations: Acupuncturists, Naturopathic Physicians, Massage Therapists
 
-## 0919 · Health n.e.c.
+## 0919 · Health n.e.c. · named explicitly
 
-`R 0.16` · `I 0.54` · `A 0.22` · `S 0.99` · `E 0.26` · `C 0.34`
+`R 0.24` · `I 0.66` · `A 0.20` · `S 0.81` · `E 0.26` · `C 0.52`
 
-1 occupations: Healthcare Social Workers
+6 occupations: Health Education Specialists, Community Health Workers, Health Specialties Teachers, Postsecondary, Healthcare Social Workers, Health Informatics Specialists, Health Information Technologists and Medical Registrars
 
 ## 0921 · Care of elderly and of disabled adults
 
@@ -530,11 +530,11 @@ The RIASEC numbers are measured (O\*NET 29.1, Occupational Interest scale, resca
 
 6 occupations: Health and Safety Engineers, Except Mining Safety Engineers and Inspectors, Mining and Geological Engineers, Including Mining Safety Engineers, Occupational Health and Safety Specialists, Occupational Health and Safety Technicians, Fire Inspectors and Investigators, Forest Fire Inspectors and Prevention Specialists
 
-## 1031 · Military and defence
+## 1031 · Military and defence · named explicitly
 
-`R 0.54` · `I 0.21` · `A 0.01` · `S 0.47` · `E 0.93` · `C 0.65`
+`R 0.41` · `I 0.41` · `A 0.07` · `S 0.49` · `E 0.83` · `C 0.65`
 
-2 occupations: First-Line Supervisors of Police and Detectives, First-Line Supervisors of Firefighting and Prevention Workers
+2 occupations: First-Line Supervisors of Police and Detectives, Emergency Management Directors
 
 ## 1032 · Protection of persons and property
 

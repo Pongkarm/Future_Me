@@ -205,6 +205,70 @@ ISCED_TO_ONET = {
 }
 
 
+# Thirteen fields matched too few occupations for a pattern to be trusted — one
+# in the case of Language acquisition, which 411 programmes then rested on. For
+# these the occupations are named outright rather than inferred from a title
+# pattern, because at this size a single wrong match moves the whole vector.
+#
+# Tested and rejected first: matching against O*NET's 55,120 alternate titles.
+# It widens the net and ruins it — "Arts" then pulls in Software Developers,
+# Database Architects and Blockchain Engineers through their alternate titles,
+# and the field flips from Artistic 0.83 to Realistic 0.63. More data was worse
+# data. The precision of the primary title is what makes these vectors sharp.
+ISCED_TO_ONET_EXPLICIT = {
+    "0231": [  # Language acquisition
+        "Interpreters and Translators",
+        "Foreign Language and Literature Teachers, Postsecondary",
+        "English Language and Literature Teachers, Postsecondary",
+        "Adult Basic Education, Adult Secondary Education, and English as a Second Language Instructors",
+    ],
+    "0610": [  # ICTs not further defined
+        "Computer Systems Analysts", "Computer Programmers",
+        "Computer User Support Specialists", "Computer Network Support Specialists",
+        "Computer and Information Systems Managers", "Software Developers",
+    ],
+    "0611": [  # Computer use — end-user and office computing, not development
+        "Computer User Support Specialists", "Computer Network Support Specialists",
+        "Data Entry Keyers", "Desktop Publishers", "Word Processors and Typists",
+    ],
+    "0541": [  # Mathematics
+        "Mathematicians", "Mathematical Science Teachers, Postsecondary",
+        "Statisticians", "Actuaries", "Operations Research Analysts",
+        "Data Scientists",
+    ],
+    "0410": [  # Business and administration not further defined
+        "General and Operations Managers", "Management Analysts",
+        "Administrative Services Managers", "Business Teachers, Postsecondary",
+        "Project Management Specialists", "Business Intelligence Analysts",
+    ],
+    "0512": [  # Biochemistry
+        "Biochemists and Biophysicists", "Medical Scientists, Except Epidemiologists",
+        "Microbiologists", "Chemists",
+    ],
+    "0221": [  # Religion and theology
+        "Clergy", "Directors, Religious Activities and Education",
+        "Philosophy and Religion Teachers, Postsecondary",
+    ],
+    "0919": [  # Health not elsewhere classified
+        "Health Education Specialists", "Community Health Workers",
+        "Health Specialties Teachers, Postsecondary", "Healthcare Social Workers",
+        "Health Informatics Specialists",
+        "Health Information Technologists and Medical Registrars",
+    ],
+    # O*NET has no philosopher. Two occupations is all the taxonomy offers, and
+    # that is a limit of the source rather than of this mapping.
+    "0223": ["Philosophy and Religion Teachers, Postsecondary", "Sociologists"],
+    "0310": [  # Social and behavioural studies not further defined
+        "Sociologists", "Political Scientists", "Anthropologists and Archeologists",
+        "Survey Researchers", "Social Science Research Assistants",
+    ],
+    # The two military occupations in O*NET carry no interest profile, so this
+    # rests on the adjacent uniformed services. One programme depends on it.
+    "1031": ["First-Line Supervisors of Police and Detectives",
+             "Emergency Management Directors"],
+}
+
+
 def read_tsv(path):
     with open(path, encoding="utf-8") as fh:
         return list(csv.DictReader(fh, delimiter="\t"))
@@ -243,11 +307,22 @@ def main():
             profiles[row["O*NET-SOC Code"]][d] = float(row["Data Value"])
     profiles = {k: v for k, v in profiles.items() if len(v) == 6}
 
+    by_title = {title: soc for soc, title in occupations.items()}
+
     vectors, counts, audit, unmapped = {}, {}, [], []
     for code, pattern in sorted(ISCED_TO_ONET.items()):
-        rx = compile_pattern(pattern)
-        matched = [(soc, title) for soc, title in occupations.items()
-                   if soc in profiles and rx.search(title)]
+        named = ISCED_TO_ONET_EXPLICIT.get(code)
+        if named:
+            missing = [t for t in named if by_title.get(t) not in profiles]
+            if missing:
+                raise SystemExit(
+                    f"{code}: named occupations absent or without an interest "
+                    f"profile: {missing}")
+            matched = [(by_title[t], t) for t in named]
+        else:
+            rx = compile_pattern(pattern)
+            matched = [(soc, title) for soc, title in occupations.items()
+                       if soc in profiles and rx.search(title)]
         if not matched:
             unmapped.append(code)
             continue
@@ -297,7 +372,8 @@ def main():
                  "judgement made by this project and has not been reviewed.** Each row "
                  "below shows exactly what was matched so it can be corrected.\n\n")
         for code, title, matched, vec in audit:
-            fh.write(f"## {code} · {title}\n\n")
+            named = " · named explicitly" if code in ISCED_TO_ONET_EXPLICIT else ""
+            fh.write(f"## {code} · {title}{named}\n\n")
             fh.write("`" + "` · `".join(f"{d} {vec[d]:.2f}" for d in DIMENSIONS) + "`\n\n")
             fh.write(f"{len(matched)} occupations: ")
             fh.write(", ".join(t for _, t in matched[:12]))

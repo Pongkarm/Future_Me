@@ -36,8 +36,8 @@
      86.4  cos 0.964  Social work and counselling                1 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
      85.9  cos 0.965  Law                                       19 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
      85.2  cos 0.966  Political sciences and civics             13 หลักสูตรที่ไปถึงได้  [ชอบ + ยังไม่ถนัด]
-     84.9  cos 0.951  Psychology                                11 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
-     83.1  cos 0.931  Child care and youth services              1 หลักสูตรที่ไปถึงได้  [ชอบ + ยังไม่ถนัด]
+     85.2  cos 0.942  Religion and theology                      1 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
+     85.1  cos 0.949  Business and administration n.f.d.        10 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
 
 ขั้น 6-9 · จัดอันดับหลักสูตร  (1356 หลักสูตรผ่านเกณฑ์ · ตัดออก 4993)
   CoreFit = 100 × (0.7 × cos + 0.3 × efficacy)  ·  Final = CoreFit + 15 × ContextFit
@@ -66,20 +66,20 @@
      บริบทที่คำนวณได้: access 0.85 · cost_band 1.00 · intake_room 0.81
      ไม่มีข้อมูล: required_scores, scholarships, tcas_round, tuition_baht
 
-  4. หลักสูตรนิติศาสตรบัณฑิต
+  4. หลักสูตรบริหารธุรกิจบัณฑิต สาขาวิชาบริหารธุรกิจ (หลักสูตรภาษาจีน)
+     มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ · กรุงเทพมหานคร
+     0410 Business and administration n.f.d.  ·  เจตนารับ 30 คน
+     cos(profile, programme) = 0.949   efficacy(ISEC) = 0.62
+     CoreFit 85.1  +  บริบท 14.0  =  99.1     [ชอบ + ถนัด]
+     บริบทที่คำนวณได้: access 1.00 · cost_band 1.00 · intake_room 0.60
+     ไม่มีข้อมูล: required_scores, scholarships, tcas_round, tuition_baht
+
+  5. หลักสูตรนิติศาสตรบัณฑิต
      มหาวิทยาลัยราชภัฏธนบุรี · กรุงเทพมหานคร
      0421 Law  ·  เจตนารับ 50 คน
      cos(profile, programme) = 0.965   efficacy(IASEC) = 0.61
      CoreFit 85.9  +  บริบท 13.1  =  99.0     [ชอบ + ถนัด]
      บริบทที่คำนวณได้: access 0.85 · cost_band 1.00 · intake_room 0.69
-     ไม่มีข้อมูล: required_scores, scholarships, tcas_round, tuition_baht
-
-  5. หลักสูตรบริหารธุรกิจบัณฑิต สาขาวิชาการจัดการ
-     มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ · กรุงเทพมหานคร
-     0413 Management and administration  ·  เจตนารับ 280 คน
-     cos(profile, programme) = 0.913   efficacy(ISEC) = 0.62
-     CoreFit 82.6  +  บริบท 15.0  =  97.6     [ชอบ + ถนัด]
-     บริบทที่คำนวณได้: access 1.00 · cost_band 1.00 · intake_room 0.99
      ไม่มีข้อมูล: required_scores, scholarships, tcas_round, tuition_baht
 
 ==============================================================================
@@ -109,7 +109,7 @@
      87.6  cos 0.991  Engineering and engineering trades n.e    11 หลักสูตรที่ไปถึงได้  [ชอบ + ถนัด]
      86.7  cos 0.989  Earth sciences                            35 หลักสูตรที่ไปถึงได้  [ชอบ + ยังไม่ถนัด]
 
-ขั้น 6-9 · จัดอันดับหลักสูตร  (6089 หลักสูตรผ่านเกณฑ์ · ตัดออก 260)
+ขั้น 6-9 · จัดอันดับหลักสูตร  (6120 หลักสูตรผ่านเกณฑ์ · ตัดออก 229)
   CoreFit = 100 × (0.7 × cos + 0.3 × efficacy)  ·  Final = CoreFit + 15 × ContextFit
 
   1. หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมสิ่งแวดล้อม

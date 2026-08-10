@@ -13,8 +13,14 @@ those institutions the guess can be replaced with the fact.
 ## The coverage is uneven, and that decides how it is used
 
 188 institutions appear in the admission plan and all of them award degrees.
-None of the 1,013 vocational colleges do — สอศ. does not publish programmes per
-college in this dataset.
+None of the 1,013 vocational colleges do — the MHESI admission plan does not
+reach them.
+
+That is a fact about *this* register, and it was read for a while as "สอศ. does
+not publish programmes per college", which is false. ckan.vec.go.th publishes
+`current_student`: enrolment by college, level and สาขางาน, as open CSV, and a
+college with sixteen first-year accounting students demonstrably teaches
+accounting. See 01_Research/Recommendation_Engine/VOCATIONAL_TRACK.md.
 
 So this is used to *remove* wrong matches, never to display detail. Showing "89
 programmes" under a university and nothing under a technical college would read

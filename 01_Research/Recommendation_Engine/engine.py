@@ -80,7 +80,7 @@ PARAMETERS = {
         "จำนวนหลักสูตรสูงสุดต่อสถาบันใน Top 5 · เพื่อให้รายการเป็นทางเลือกจริง "
         "ไม่ใช่โบรชัวร์ของมหาวิทยาลัยเดียว",
     ),
-    "MAX_PER_ROUTE": (
+    "MAX_PER_FIELD": (
         2,
         "จำนวนหลักสูตรสูงสุดต่อสายใน Top 5 · จำเป็นเพราะความละเอียดของ CoreFit "
         "อยู่ที่ระดับ 'สาย' ไม่ใช่ระดับหลักสูตร ถ้าไม่จำกัด Top 5 จะกลายเป็น "
@@ -119,7 +119,7 @@ PRIOR_MEAN = PARAMETERS["PRIOR_MEAN"][0]
 CORE_GATE = PARAMETERS["CORE_GATE"][0]
 CONTEXT_MAX = PARAMETERS["CONTEXT_MAX"][0]
 MAX_PER_INSTITUTION = PARAMETERS["MAX_PER_INSTITUTION"][0]
-MAX_PER_ROUTE = PARAMETERS["MAX_PER_ROUTE"][0]
+MAX_PER_FIELD = PARAMETERS["MAX_PER_FIELD"][0]
 MIN_ITEMS_PER_DIM = PARAMETERS["MIN_ITEMS_PER_DIMENSION"][0]
 DIFFERENTIATION_GATE = PARAMETERS["DIFFERENTIATION_GATE"][0]
 SCALE_MIDPOINT = 3
@@ -470,16 +470,16 @@ def recommend(student: Student, top_n: int = 5) -> dict:
     # RIASEC vector, so without this cap the whole Top 5 is the same field five
     # times and the ordering inside it is being done entirely by context, which
     # is exactly what CONTEXT_MAX exists to prevent.
-    top, per_inst, per_route = [], {}, {}
+    top, per_inst, per_field = [], {}, {}
     for row in scored:
         inst = row["programme"]["institution_id"]
-        key = "+".join(row["programme"]["routes"])
+        key = row["programme"]["isced"]
         if per_inst.get(inst, 0) >= MAX_PER_INSTITUTION:
             continue
-        if per_route.get(key, 0) >= MAX_PER_ROUTE:
+        if per_field.get(key, 0) >= MAX_PER_FIELD:
             continue
         per_inst[inst] = per_inst.get(inst, 0) + 1
-        per_route[key] = per_route.get(key, 0) + 1
+        per_field[key] = per_field.get(key, 0) + 1
         top.append(row)
         if len(top) == top_n:
             break
@@ -489,8 +489,10 @@ def recommend(student: Student, top_n: int = 5) -> dict:
     # "where can I do this", not "which is academically better".
     fields: dict[str, dict] = {}
     for row in scored:
-        key = "+".join(row["programme"]["routes"])
-        f = fields.setdefault(key, {"route": key, "core": row["core"],
+        key = row["programme"]["isced"]
+        f = fields.setdefault(key, {"isced": key,
+                                    "title": row["programme"]["isced_title"],
+                                    "core": row["core"],
                                     "congruence": row["congruence"],
                                     "quadrant": row["quadrant"], "n": 0})
         f["n"] += 1

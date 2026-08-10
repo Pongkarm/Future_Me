@@ -25,7 +25,7 @@ export const DIFFERENTIATION_GATE = 0.2;
 export const EFFICACY_DIM_FLOOR = 0.15;
 export const MIN_ITEMS_PER_DIMENSION = 2;
 export const MAX_PER_INSTITUTION = 2;
-export const MAX_PER_ROUTE = 2;
+export const MAX_PER_FIELD = 2;
 export const CONFIDENCE_GATE = 0.5;
 
 /** The midpoint of the 1..5 response scale. Answering it is not evidence. */
@@ -77,8 +77,8 @@ export const PARAMETERS: Record<string, Parameter> = {
     value: MAX_PER_INSTITUTION,
     why: "เพื่อให้รายการเป็นทางเลือกจริง ไม่ใช่โบรชัวร์ของมหาวิทยาลัยเดียว",
   },
-  MAX_PER_ROUTE: {
-    value: MAX_PER_ROUTE,
+  MAX_PER_FIELD: {
+    value: MAX_PER_FIELD,
     why: "ความละเอียดของ CoreFit อยู่ที่ระดับสาย ถ้าไม่จำกัด Top 5 จะเป็นสายเดียวกันห้าที่ และลำดับภายในถูกตัดสินด้วยบริบททั้งหมด",
   },
   CONFIDENCE_GATE: {

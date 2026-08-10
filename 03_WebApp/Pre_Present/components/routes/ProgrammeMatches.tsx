@@ -117,6 +117,15 @@ function ProgrammeCard({
         <summary className="cursor-pointer text-xs text-muted">{t.routes.programmesWhy}</summary>
         <div className="mt-2 space-y-1 font-mono text-xs text-muted">
           <p>cos(profile, programme) = {row.congruence.toFixed(3)}</p>
+          {/* Thin fields are common enough to matter: a vector averaged from
+              one occupation reads exactly like one averaged from forty. */}
+          <p>
+            {p.isced} {p.iscedTitle} · RIASEC วัดจาก {p.iscedOccupations} อาชีพ
+            {p.iscedOccupations < 3 ? " ⚠ หลักฐานบาง" : ""}
+          </p>
+          {p.productionCost !== null && (
+            <p>ต้นทุนผลิต/คน/ปี {p.productionCost.toLocaleString("th-TH")} บาท (ไม่ใช่ค่าเทอม)</p>
+          )}
           {row.efficacy !== null && (
             <p>
               efficacy({row.efficacyDimensions.join("")}) = {row.efficacy.toFixed(2)}
@@ -190,11 +199,11 @@ export function ProgrammeMatches({
         <p className="mt-0.5 text-xs text-muted">{t.routes.programmesFieldsNote}</p>
         <ul className="mt-3 space-y-1.5">
           {result.fields.slice(0, 4).map((field) => (
-            <li key={field.routeKey} className="flex items-baseline gap-3 text-sm">
+            <li key={field.isced} className="flex items-baseline gap-3 text-sm">
               <span className="w-12 shrink-0 font-mono font-bold tabular-nums">
                 {field.core.toFixed(1)}
               </span>
-              <span className="min-w-0 flex-1 truncate">{field.routes.join(" + ")}</span>
+              <span className="min-w-0 flex-1 truncate">{field.iscedTitle}</span>
               <span className="shrink-0 text-xs text-muted">
                 {format(t.routes.programmesReachable, { count: field.reachable })}
               </span>

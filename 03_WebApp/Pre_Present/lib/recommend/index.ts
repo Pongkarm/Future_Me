@@ -8,7 +8,7 @@ import {
   DIFFERENTIATION_GATE,
   EFFICACY_DIM_FLOOR,
   MAX_PER_INSTITUTION,
-  MAX_PER_ROUTE,
+  MAX_PER_FIELD,
   W_EFFICACY,
   W_INTEREST,
   type ContextKey,
@@ -62,8 +62,9 @@ export interface ScoredProgramme {
 }
 
 export interface FieldScore {
-  routeKey: string;
-  routes: string[];
+  /** ISCED-F 2013 detailed field code */
+  isced: string;
+  iscedTitle: string;
   core: number;
   congruence: number;
   quadrant: Quadrant;
@@ -308,29 +309,29 @@ export function recommendProgrammes(
   // exists to prevent.
   const top: ScoredProgramme[] = [];
   const perInstitution = new Map<string, number>();
-  const perRoute = new Map<string, number>();
+  const perField = new Map<string, number>();
 
   for (const row of scored) {
     const inst = row.programme.institutionId;
-    const routeKey = row.programme.routes.join("+");
+    const field = row.programme.isced;
     if ((perInstitution.get(inst) ?? 0) >= MAX_PER_INSTITUTION) continue;
-    if ((perRoute.get(routeKey) ?? 0) >= MAX_PER_ROUTE) continue;
+    if ((perField.get(field) ?? 0) >= MAX_PER_FIELD) continue;
     perInstitution.set(inst, (perInstitution.get(inst) ?? 0) + 1);
-    perRoute.set(routeKey, (perRoute.get(routeKey) ?? 0) + 1);
+    perField.set(field, (perField.get(field) ?? 0) + 1);
     top.push(row);
     if (top.length === topN) break;
   }
 
   const fieldMap = new Map<string, FieldScore>();
   for (const row of scored) {
-    const routeKey = row.programme.routes.join("+");
-    const existing = fieldMap.get(routeKey);
+    const key = row.programme.isced;
+    const existing = fieldMap.get(key);
     if (existing) {
       existing.reachable += 1;
     } else {
-      fieldMap.set(routeKey, {
-        routeKey,
-        routes: row.programme.routes,
+      fieldMap.set(key, {
+        isced: key,
+        iscedTitle: row.programme.iscedTitle,
         core: row.core,
         congruence: row.congruence,
         quadrant: row.quadrant,

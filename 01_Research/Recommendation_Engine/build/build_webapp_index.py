@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 """Squeeze the programme index down to something a browser can carry.
 
-data/programmes.json is 7.5 MB of readable JSON — right for a research
-artefact, far too heavy for a page bundle. Nothing is dropped that the engine
-reads; the weight is all repetition and fields the browser can derive:
+data/programmes.json is readable JSON sized for a research artefact, far too
+heavy for a page bundle. Nothing the engine reads is dropped; the weight is
+repetition and fields the browser can derive:
 
-  · RIASEC vectors are recomputed at runtime from routes.json, which the app
-    already bundles — storing them twice is how the two drift apart
   · institution name, province and sector repeat across every programme at
     that institution, so they move into a table and rows hold an index
-  · programme titles repeat across institutions ("หลักสูตรบัญชีบัณฑิต" many
-    times over), so they get a table too
-  · the eight route ids become a bitmask
+  · programme titles repeat across institutions, so they get a table too
+  · the ISCED field code, its title and its RIASEC vector are per-field, not
+    per-programme, so they move into a field table
   · the null columns (tuition, TCAS round, required scores, scholarships) are
-    null for every single row, so they are stated once in meta rather than
-    5,658 times — the gap is still declared, just not repeated
+    null for every row, so they are stated once in meta rather than repeated
+    thousands of times — the gap is still declared, just not restated
 
-Output shape, all positional:
+Output, all positional:
 
-  institutions[i] = [id, name_th, province_iso, province_th, tuition_band]
+  fields[f]       = [iscedCode, title, [R,I,A,S,E,C], occupationsBehindIt]
+  institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand]
   titles[j]       = programme title
-  programmes[k]   = [titleIndex, institutionIndex, routeMask, seats|null]
+  programmes[k]   = [titleIndex, institutionIndex, fieldIndex, seats|null,
+                     productionCost|null]
 """
 import json
 import os
@@ -30,39 +30,43 @@ SRC = os.path.join(HERE, "..", "data", "programmes.json")
 OUT = os.path.join(HERE, "..", "..", "..", "03_WebApp", "Pre_Present", "data",
                    "programmes.json")
 
+DIMENSIONS = ["R", "I", "A", "S", "E", "C"]
+
 
 def main():
     with open(SRC, encoding="utf-8") as fh:
         payload = json.load(fh)
     rows = payload["programmes"]
 
-    route_ids = sorted({r for p in rows for r in p["routes"]})
-    route_bit = {r: 1 << i for i, r in enumerate(route_ids)}
-
+    fields, field_index = [], {}
     institutions, inst_index = [], {}
     titles, title_index = [], {}
     programmes = []
 
     for p in rows:
+        code = p["isced"]
+        if code not in field_index:
+            field_index[code] = len(fields)
+            fields.append([code, p["isced_title"],
+                           [round(p["riasec"][d], 4) for d in DIMENSIONS],
+                           p["isced_occupations"]])
+
         key = p["institution_id"]
         if key not in inst_index:
             inst_index[key] = len(institutions)
-            institutions.append([
-                p["institution_id"], p["institution_th"],
-                p["province_iso"], p["province_th"], p["tuition_band"],
-            ])
+            institutions.append([p["institution_id"], p["institution_th"],
+                                 p["province_iso"], p["province_th"],
+                                 p["tuition_band"]])
 
         title = p["name_th"]
         if title not in title_index:
             title_index[title] = len(titles)
             titles.append(title)
 
-        mask = 0
-        for r in p["routes"]:
-            mask |= route_bit[r]
-
-        programmes.append([title_index[title], inst_index[key], mask,
-                           p["seats_planned"]])
+        cost = p["cost_per_year_production"]
+        programmes.append([title_index[title], inst_index[key], field_index[code],
+                           p["seats_planned"],
+                           round(cost) if cost is not None else None])
 
     out = {
         "meta": {
@@ -70,10 +74,15 @@ def main():
             "source": payload["meta"]["sources"],
             "programmes": len(programmes),
             "institutions": len(institutions),
+            "fields": len(fields),
             "level": "ปริญญาตรี",
-            # Absent for every row, so declared once. The UI reads this list to
-            # tell the learner what nobody has checked, instead of the absence
-            # being invisible.
+            "riasecSource": "O*NET 29.1 Interests, Occupational Interest scale, "
+                            "US DOL/ETA, CC BY 4.0 — mapped to ISCED-F 2013 fields",
+            "riasecStatus": "ค่า RIASEC วัดมาจริง · การจับคู่สาย ISCED กับกลุ่มอาชีพ "
+                            "เป็นงานของทีมและยังไม่ผ่านการตรวจโดยผู้เชี่ยวชาญ",
+            "costNote": "productionCost คือต้นทุนที่สถาบันใช้ผลิตนักศึกษาหนึ่งคนต่อปี "
+                        "ไม่ใช่ค่าเทอมที่ผู้เรียนจ่าย",
+            # Absent for every row. Read by the UI so the gap is visible.
             "missing": [
                 "tuition_baht_per_year",
                 "tcas_rounds",
@@ -82,11 +91,11 @@ def main():
                 "scholarships",
             ],
             "coverageNote": (
-                "5,658 จาก 10,354 หลักสูตรปริญญาตรีในทะเบียน (54.6%) — "
-                "นิติ รัฐศาสตร์ ครุศาสตร์ และภาษา ยังไม่มีเวกเตอร์ RIASEC"
+                f"{len(programmes)} จาก 7,149 หลักสูตรปริญญาตรีที่ไม่ซ้ำในทะเบียน "
+                f"({len(programmes) / 7149 * 100:.1f}%)"
             ),
         },
-        "routeIds": route_ids,
+        "fields": fields,
         "institutions": institutions,
         "titles": titles,
         "programmes": programmes,
@@ -98,9 +107,10 @@ def main():
     before = os.path.getsize(SRC)
     after = os.path.getsize(OUT)
     print(f"programmes    {len(programmes)}")
-    print(f"institutions  {len(institutions)}  (was repeated per row)")
-    print(f"titles        {len(titles)}  unique of {len(programmes)}")
-    print(f"routes        {len(route_ids)} -> bitmask")
+    print(f"institutions  {len(institutions)}")
+    print(f"fields        {len(fields)}  (ISCED-F detailed, each with its own vector)")
+    print(f"titles        {len(titles)} unique of {len(programmes)}")
+    print(f"with cost     {sum(1 for r in programmes if r[4] is not None)}")
     print(f"size          {before/1e6:.1f} MB -> {after/1e6:.2f} MB "
           f"({after/before*100:.0f}%)")
 

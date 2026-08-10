@@ -8,7 +8,7 @@ import {
   CORE_GATE,
   DIFFERENTIATION_GATE,
   MAX_PER_INSTITUTION,
-  MAX_PER_ROUTE,
+  MAX_PER_FIELD,
   PARAMETERS,
   buildProfile,
   cosine,
@@ -153,12 +153,12 @@ describe("ranking", () => {
     const byRoute = new Map<string, number>();
     for (const row of result.top) {
       const i = row.programme.institutionId;
-      const r = row.programme.routes.join("+");
+      const r = row.programme.isced;
       byInstitution.set(i, (byInstitution.get(i) ?? 0) + 1);
       byRoute.set(r, (byRoute.get(r) ?? 0) + 1);
     }
     for (const n of byInstitution.values()) expect(n).toBeLessThanOrEqual(MAX_PER_INSTITUTION);
-    for (const n of byRoute.values()) expect(n).toBeLessThanOrEqual(MAX_PER_ROUTE);
+    for (const n of byRoute.values()) expect(n).toBeLessThanOrEqual(MAX_PER_FIELD);
   });
 
   it("drops everything out of reach when the learner says local only", () => {
@@ -235,7 +235,7 @@ describe("parity with the Python reference", () => {
     "EFFICACY_DIM_FLOOR",
     "MIN_ITEMS_PER_DIMENSION",
     "MAX_PER_INSTITUTION",
-    "MAX_PER_ROUTE",
+    "MAX_PER_FIELD",
   ])("%s matches engine.py", (name) => {
     expect(PARAMETERS[name].value).toBe(pythonValue(name));
   });

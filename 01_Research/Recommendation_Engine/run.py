@@ -81,7 +81,7 @@ def show(result) -> None:
     print("  (CoreFit แยกได้ที่ระดับ 'สาย' — ทุกหลักสูตรในสายเดียวกันใช้เวกเตอร์ RIASEC ตัวเดียวกัน)")
     for f in result["field_ranking"][:6]:
         print(f"    {f['core']:>5.1f}  cos {f['congruence']:.3f}  "
-              f"{f['route']:<38} {f['n']:>5} หลักสูตรที่ไปถึงได้  "
+              f"{(f['title'] or f['isced'])[:38]:<38} {f['n']:>5} หลักสูตรที่ไปถึงได้  "
               f"[{QUADRANT_TH[f['quadrant']]}]")
     print()
 
@@ -96,7 +96,7 @@ def show(result) -> None:
         ctx = row["context"]
         print(f"  {i}. {p['name_th']}")
         print(f"     {p['institution_th']} · {p['province_th']}")
-        print(f"     route {'+'.join(p['routes'])}  ·  "
+        print(f"     {p['isced']} {p['isced_title']}  ·  "
               f"เจตนารับ {p['seats_planned'] if p['seats_planned'] is not None else '—'} คน")
         print(f"     cos(profile, programme) = {row['congruence']:.3f}"
               + (f"   efficacy({''.join(row['efficacy_dims'])}) = {row['efficacy']:.2f}"

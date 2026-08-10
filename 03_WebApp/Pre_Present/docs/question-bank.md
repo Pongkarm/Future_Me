@@ -167,16 +167,17 @@ than counted as zero. See [Methodology §7](questionnaire-methodology.md#7-scori
 
 ## Context questions
 
-These are not psychometric items and are not scored as a construct. They are practical
-constraints used by the decision engine as eligibility filters and as feasibility inputs, and
-they are reported to the learner as their own answers rather than as a measured trait.
+These are not psychometric items and are not scored as a construct. Education tier currently
+limits the generic route catalogue. Cost, mobility, and time-to-earning are retained as the
+learner's own planning context, but are held out of route eligibility and scoring until verified
+programme-level data exists.
 
 | ID | English | ไทย | Used for |
 |---|---|---|---|
 | `tier` | Where are you right now? | ตอนนี้คุณอยู่ระดับชั้นไหน | Selects which routes are applicable to the learner's current education level. |
-| `cost` | How much does cost matter in your decision? | ค่าใช้จ่ายมีผลกับการตัดสินใจของคุณมากแค่ไหน | Feasibility scoring; a route the learner cannot afford is not offered as a recommendation. |
-| `mobility` | Could you study away from your home province? | คุณย้ายไปเรียนต่างจังหวัดได้ไหม | Feasibility scoring against routes that require relocation. |
-| `horizon` | How soon do you want to be earning? | คุณอยากเริ่มมีรายได้เร็วแค่ไหน | Matches the learner's time-to-earning preference against each route's. |
+| `cost` | How much does cost matter in your decision? | ค่าใช้จ่ายมีผลกับการตัดสินใจของคุณมากแค่ไหน | Retained for planning. It cannot score or remove a route while route costs are unsourced. |
+| `mobility` | Could you study away from your home province? | คุณย้ายไปเรียนต่างจังหวัดได้ไหม | Retained for planning. It cannot score or remove a route while relocation data is unsourced. |
+| `horizon` | How soon do you want to be earning? | คุณอยากเริ่มมีรายได้เร็วแค่ไหน | Retained for planning. It cannot score a route while time-to-earning data is unsourced. |
 | `proud` | Describe one thing you made, fixed, organised, or helped with that you were proud of. | เล่าสักเรื่องที่คุณเคยทำ ซ่อม จัดการ หรือช่วยเหลือแล้วรู้สึกภูมิใจ | Optional free text. Scanned for evidence keywords only, and screened by the safety rule. |
 
 ---

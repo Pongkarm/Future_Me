@@ -9,18 +9,16 @@ import {
 } from "./types";
 
 /**
- * Weights for the five-criterion decision matrix.
+ * Weights for the evidence-derived decision matrix.
  *
  * These are DESIGN JUDGEMENT, not values fitted to student outcome data — no
  * outcome data exists. They match the weights documented in
  * docs/04-ai-system.md so the documentation and the code cannot drift apart.
  */
 export const WEIGHTS = {
-  interests: 0.3,
-  feasibility: 0.25,
-  strengths: 0.2,
-  learningStyle: 0.15,
-  flexibility: 0.1,
+  interests: 0.5,
+  strengths: 0.3,
+  learningStyle: 0.2,
 } as const;
 
 /**

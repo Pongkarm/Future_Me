@@ -94,9 +94,10 @@ One construct, six dimensions, 30 interest items, 5 per dimension.
 Five further **context questions** are collected. These are *not* a psychometric construct and are
 not scored as one.
 
-Four are practical constraints — education tier, cost sensitivity, geographic mobility,
-time-to-earning — used as eligibility filters and feasibility inputs, and shown back to the learner
-as their own stated answers.
+Four are practical context prompts — education tier, cost sensitivity, geographic mobility, and
+time-to-earning. Education tier currently limits the generic route catalogue. The other three are
+shown back as the learner's own answers, but do not filter or score routes until the project holds
+verified programme-level practical data.
 
 The fifth, **`proud`**, is an optional free-text prompt asking the learner to describe something they
 made, fixed, organised or helped with. It is not inert: it is scanned by the safeguarding keyword

@@ -26,7 +26,7 @@ Used consistently across this repository, including in the README and the roadma
 | Component | Status | What exists | What remains |
 |---|:--:|---|---|
 | Runnable guest journey — interview → mission → routes → compare → plan | 🟢 | Complete end to end, no account, no API key | — |
-| Deterministic decision engine | 🟢 | Five weighted criteria, hard filters, 0–3 routes, tie handling | Weights are unfitted to outcomes |
+| Deterministic decision engine | 🟢 | Three evidence-derived criteria, tier eligibility, 0–3 routes, tie handling | Weights are unfitted to outcomes; practical route fields are held back until sourced |
 | Refusal gates | 🟢 | Three gates that return nothing rather than guess | — |
 | Mission selection | 🟢 | Rule over the interview profile, explained on screen, learner-overridable | Three missions is a thin catalogue |
 | Mission draft autosave | 🟢 | Debounced write; a refresh mid-mission loses nothing | — |
@@ -35,7 +35,7 @@ Used consistently across this repository, including in the README and the roadma
 | Optional LLM explanation layer | 🟢 | Connected, labelled, cannot affect ranking, degrades to deterministic text | Not evaluated for quality |
 | Safeguarding pause | 🟡 | Keyword rule, Thai and English, stops recommendations and offers support | Not a risk assessment. Nobody is alerted |
 | Interest instrument | 🟡 | 30 interleaved items, bilingual Thai/English, plus context | Fixed rather than adaptive; Thai is a first draft; instrument is not validated |
-| Route catalogue | 🟡 | Six routes with declared provenance | Cost, location, timing and flexibility carry no source |
+| Route catalogue | 🟡 | Twelve routes with declared provenance | Cost, location, timing and flexibility carry no source and do not affect decisions |
 | 30-day plan | 🟡 | 30-day/four-week template plus gap-specific tasks, progress persists | Linear, not the planned DAG |
 | Continuous integration | 🟢 | Typecheck, lint, unit, integration, build and end-to-end on every PR | — |
 | Accounts, sharing, server persistence | 📐 | Designed | Guest mode only today |
@@ -88,10 +88,10 @@ Every effectiveness statement in this project is a design intention. Nothing has
 with real students, so the decision-matrix weights remain design judgement rather than fitted
 parameters.
 
-**4 · The route catalogue has no authoritative source.**
-Cost, location, timing and flexibility drive the eligibility filters and none of them carries a
-citation. Replacing them with licensed data — per programme, per year — is the single change that
-would most improve the product's honesty.
+**4 · The route catalogue has no authoritative source for practical claims.**
+Cost, location, timing and flexibility have no citation. They are now held out of eligibility and
+scoring rather than treated as facts. Replacing them with licensed data — per programme, per year
+— is the next change that would make the product useful for practical decision support.
 
 **5 · External platform access.**
 AIS Open API credentials, and any NDLP or DEEP integration, need agreements that do not exist. The

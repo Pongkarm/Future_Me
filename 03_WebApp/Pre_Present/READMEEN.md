@@ -108,7 +108,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **1 · Reflect** | Answer 30 interest items and 5 context prompts, one at a time, then review the responses. | A provisional RIASEC-shaped interest profile and practical constraints |
 | **2 · Try** | Complete one of 3 scenario missions; keep or replace the suggested mission. | A separate mission vector that can support or contradict self-report |
 | **3 · Explore** | Inspect 0–3 route hypotheses with reasons, unknowns, provenance, and freshness. | Comparable, inspectable route evidence |
-| **4 · Compare** | Review routes against the same five criteria without a manufactured winner. | Trade-offs and missing information |
+| **4 · Compare** | Review routes against the same three evidence-derived criteria; practical estimates stay visible as prompts to verify. | Trade-offs and missing information |
 | **5 · Act** | Turn one route into a 30-day plan of small, reversible tasks. | New evidence from action |
 
 <p align="center">
@@ -166,7 +166,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **Context** | 4 required prompts for education tier, cost, mobility, and time horizon, plus 1 optional free-text prompt |
 | **Missions** | 3 four-step scenario missions; deterministic scoring and transparent selection; learner override |
 | **Catalogue** | 12 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
-| **Recommendations** | 0–3 routes, refusal gates, hard constraints, ties, contradiction signals, provenance, and unknowns |
+| **Recommendations** | 0–3 routes, refusal gates, a tier eligibility rule, ties, contradiction signals, provenance, and unknowns |
 | **Comparison and plan** | Consistent route comparison and a deterministic 30-day plan with gap-specific tasks |
 | **Optional AI** | Repo-grounded chat and explanation rewording, both with deterministic offline fallbacks and outside route selection |
 | **Pilot tooling** | Response-process capture, anonymous participant export, simulation, and analysis scripts |
@@ -187,8 +187,8 @@ flowchart LR
     B --> E{"Enough evidence?"}
     D --> E
     E -->|"No"| F["Explain why<br/>and stop"]
-    E -->|"Yes"| G["Hard filters<br/>tier · cost · location"]
-    G --> H["Five weighted criteria"]
+    E -->|"Yes"| G["Tier filter only<br/>practical fields held back"]
+    G --> H["Three weighted criteria"]
     H --> I["0–3 routes"]
     I --> J["Compare"]
     J --> K["30-day plan"]
@@ -200,11 +200,9 @@ TypeScript running in the browser.
 
 | Criterion | Weight | Signal |
 |---|---:|---|
-| Interests | 30% | Shape similarity between the learner's RIASEC profile and route profile |
-| Feasibility | 25% | Cost, location, and timing context |
-| Strengths | 20% | Evidence from the completed mission |
-| Learning style | 15% | Profile affinity with the route's learning environment |
-| Flexibility | 10% | Illustrative route flexibility value |
+| Interests | 50% | Shape similarity between the learner's RIASEC profile and route profile |
+| Strengths | 30% | Evidence from the completed mission |
+| Learning style | 20% | Profile affinity with the route's learning environment |
 
 These weights are **design judgement**, not values fitted to student outcomes.
 
@@ -215,7 +213,7 @@ These weights are **design judgement**, not values fitted to student outcomes.
 
 - It needs at least **23 of 30** interest answers.
 - A profile with a spread below **0.15** is treated as too flat to support a route.
-- Hard constraints for education tier, high cost, and required relocation run before scoring.
+- Education tier is the current route-level eligibility rule. Cost, relocation, timing, and flexibility stay outside decisions until they have verified programme-level sources.
 - If every surviving route still has insufficient evidence, it returns no route.
 - Route totals within **4 points** are shown as tied rather than given a false rank.
 
@@ -309,7 +307,7 @@ What is not supported:
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics, fixed weights, and recommendation thresholds have not been validated.
 - The 12-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
-  and limitations contain unsourced team estimates.
+  and limitations contain unsourced team estimates; practical estimates do not filter, score, or rank routes.
 - No ethics approval, real-student pilot, bias audit, or outcome evaluation has run.
 
 The analysis pipeline recovering a known answer from simulated respondents verifies the
@@ -381,7 +379,7 @@ authentication, rate limits, and verified host/provider retention terms.
 | **Decision system** | [AI and decision logic](docs/04-ai-system.md) · [System architecture](docs/05-system-architecture.md) |
 | **Instrument** | [Questionnaire methodology](docs/questionnaire-methodology.md) · [Question bank](docs/question-bank.md) · [Research summary](docs/research-summary.md) |
 | **Validation** | [Validation plan](docs/validation-plan.md) · [Pilot protocol](docs/pilot-protocol.md) |
-| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) |
+| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [Continuation audit](docs/continuation-audit-2026-08-11.md) |
 | **Delivery** | [Development plan](docs/06-development-plan.md) · [Roadmap](docs/07-roadmap.md) · [Contributing](CONTRIBUTING.md) |
 
 Found a problem in the product, code, or evidence?

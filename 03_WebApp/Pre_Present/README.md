@@ -74,7 +74,7 @@ FutureMe ไม่ได้ฟันธง **“อาชีพที่ใช�
 | **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English, one at a time, then review every answer. |
 | **2 · Try · ลอง** | Complete one of 3 short scenario missions; the suggested mission can be changed. |
 | **3 · Explore · สำรวจ** | Receive 0–3 route hypotheses with reasons, unknowns, provenance, and data-age warnings. |
-| **4 · Compare · เทียบ** | Compare routes using the same five criteria instead of treating the first result as a winner. |
+| **4 · Compare · เทียบ** | Compare routes using the same three evidence-based criteria; practical estimates stay visible as prompts to verify. |
 | **5 · Act · ลงมือ** | Turn one route into a reversible 30-day exploration plan with progress saved locally. |
 
 ```text
@@ -158,7 +158,7 @@ routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geograph
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics and fixed decision weights are team design judgement, not fitted parameters.
 - The route catalogue is illustrative; cost, relocation, time-to-earning, and flexibility contain
-  unsourced estimates.
+  unsourced estimates and are held out of filtering, scoring, and ranking.
 - No real-student pilot, ethics approval, bias audit, or effectiveness study has run.
 - The safety pause is a bilingual keyword rule, not a risk assessment, and it alerts nobody.
 - Retrieval, accounts, counsellor tools, school integrations, and cloud infrastructure are planned
@@ -181,8 +181,8 @@ flowchart LR
     B --> E{"Enough evidence?"}
     D --> E
     E -->|"No"| F["Explain why<br/>and stop"]
-    E -->|"Yes"| G["Hard filters<br/>tier · cost · location"]
-    G --> H["Five-criterion<br/>decision matrix"]
+    E -->|"Yes"| G["Tier filter only<br/>practical fields held back"]
+    G --> H["Three-criterion<br/>decision matrix"]
     H --> I["0–3 routes"]
     I --> J["Compare"]
     J --> K["30-day plan"]
@@ -196,9 +196,9 @@ after the route decision has already been made. `/api/chat` receives only the bo
 transcript and selected repository context, never the assessment session. It has no interface to
 the scorer or route engine.
 
-The five design-judgement weights are:
+The three evidence-derived, design-judgement weights are:
 
-`Interests 30% · Feasibility 25% · Mission-derived strengths 20% · Learning style 15% · Flexibility 10%`
+`Interests 50% · Mission-derived strengths 30% · Learning style 20%`
 
 The engine requires at least 23 of 30 interest answers, refuses a nearly flat profile, can return
 no route when all remaining evidence is insufficient, and marks totals within 4 points as tied.
@@ -272,7 +272,7 @@ system reduced-motion preference by default and includes an explicit **Always an
 | **Decision system** | [AI and decision logic](docs/04-ai-system.md) · [System architecture](docs/05-system-architecture.md) |
 | **Instrument** | [Methodology](docs/questionnaire-methodology.md) · [Question bank](docs/question-bank.md) · [Research summary](docs/research-summary.md) |
 | **Validation** | [Validation plan](docs/validation-plan.md) · [Pilot protocol](docs/pilot-protocol.md) |
-| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) |
+| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [Continuation audit](docs/continuation-audit-2026-08-11.md) |
 | **Delivery** | [Development plan](docs/06-development-plan.md) · [Roadmap](docs/07-roadmap.md) · [Contributing](CONTRIBUTING.md) |
 
 ---

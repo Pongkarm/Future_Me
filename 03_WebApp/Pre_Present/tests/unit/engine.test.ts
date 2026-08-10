@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import questions from "@/data/questions.json";
 import routesData from "@/data/routes.json";
 import { MAX_ROUTES, recommend } from "@/lib/decision-engine";
-import { evaluateEligibility, isStale } from "@/lib/decision-engine/eligibility";
+import { evaluateEligibility, heldBackDecisionFields, isStale } from "@/lib/decision-engine/eligibility";
 import { MIN_INTEREST_ANSWERS } from "@/lib/decision-engine/scoring";
 import type { InterviewInput, MissionInput } from "@/lib/decision-engine/types";
 
@@ -83,20 +83,29 @@ describe("evidence gates", () => {
   });
 });
 
-describe("hard constraints", () => {
-  it("filters out high-cost routes when cost is a hard constraint", () => {
+describe("eligibility boundary", () => {
+  it("holds every unsourced practical field out of decisions", () => {
+    expect(heldBackDecisionFields()).toEqual([
+      "costBand",
+      "requiresRelocation",
+      "timeToEarning",
+      "flexibility",
+    ]);
+  });
+
+  it("does not filter high-cost estimates before they have a verified source", () => {
     const r = recommend(build(["I"], { cost: "tight" }), handsOnMission, FIXED_NOW);
     const blocked = r.ineligible.filter((x) => x.reasons.includes("COST_CONSTRAINT"));
 
-    expect(blocked.length).toBeGreaterThan(0);
-    for (const route of r.routes) expect(route.costBand).not.toBe("high");
+    expect(blocked).toHaveLength(0);
+    expect(routesData.routes.some((route) => route.costBand === "high")).toBe(true);
   });
 
-  it("filters out routes requiring relocation when the learner cannot move", () => {
+  it("does not filter relocation estimates before they have a verified source", () => {
     const r = recommend(build(["I"], { mobility: "local_only" }), handsOnMission, FIXED_NOW);
 
-    expect(r.ineligible.some((x) => x.reasons.includes("LOCATION_CONSTRAINT"))).toBe(true);
-    for (const route of r.routes) expect(route.requiresRelocation).toBe(false);
+    expect(r.ineligible.some((x) => x.reasons.includes("LOCATION_CONSTRAINT"))).toBe(false);
+    expect(routesData.routes.some((route) => route.requiresRelocation)).toBe(true);
   });
 
   it("filters out routes not offered at the learner's stage", () => {
@@ -111,7 +120,7 @@ describe("hard constraints", () => {
    * wrong. What matters is the invariant and the reasons, so that is what they
    * assert now.
    */
-  it("narrows the catalogue and never offers more than the cap", () => {
+  it("uses the tier rule and never offers more than the cap", () => {
     const r = recommend(
       build(["I"], { tier: "UPPER_SECONDARY", cost: "tight", mobility: "can_move" }),
       handsOnMission,
@@ -120,11 +129,13 @@ describe("hard constraints", () => {
     expect(r.routes.length).toBeGreaterThan(0);
     expect(r.routes.length).toBeLessThanOrEqual(MAX_ROUTES);
     // Something was actually filtered — otherwise the constraints did nothing.
-    expect(r.ineligible.length).toBeGreaterThan(0);
+    expect(r.ineligible.some((x) => x.reasons.includes("TIER_MISMATCH"))).toBe(true);
+    expect(r.ineligible.some((x) => x.reasons.includes("COST_CONSTRAINT"))).toBe(false);
+    expect(r.ineligible.some((x) => x.reasons.includes("LOCATION_CONSTRAINT"))).toBe(false);
     expect(r.insufficientEvidence).toBe(false);
   });
 
-  it("says why each rejected route was rejected", () => {
+  it("says why each tier-rejected route was rejected", () => {
     const r = recommend(
       build(["E", "C"], { tier: "UPPER_SECONDARY", cost: "tight", mobility: "local_only" }),
       peopleMission,
@@ -134,29 +145,29 @@ describe("hard constraints", () => {
     expect(r.routes.length).toBeLessThanOrEqual(MAX_ROUTES);
     expect(r.insufficientEvidence).toBe(false);
 
-    // A tight budget and no ability to move are the constraints in play, so
-    // every exclusion should name one of the reasons the engine can give. A
-    // route dropped with an empty reason list would be the engine refusing
-    // without saying why, which is the thing this product is not allowed to do.
+    // Education tier is the only active filter. Every exclusion must name the
+    // reason the engine can give. A route dropped with an empty reason list
+    // would be the engine refusing without saying why, which this product is
+    // not allowed to do.
     expect(r.ineligible.length).toBeGreaterThan(0);
     for (const rejected of r.ineligible) {
       expect(rejected.reasons.length, `${rejected.routeId} rejected with no reason`)
         .toBeGreaterThan(0);
     }
-    // Both constraints have to be visible in the reasons, not just one of them.
+    // Unverified practical estimates must remain absent from the reasons.
     const reasons = new Set(r.ineligible.flatMap((x) => x.reasons));
-    expect(reasons).toContain("COST_CONSTRAINT");
-    expect(reasons).toContain("LOCATION_CONSTRAINT");
+    expect(reasons).toContain("TIER_MISMATCH");
+    expect(reasons).not.toContain("COST_CONSTRAINT");
+    expect(reasons).not.toContain("LOCATION_CONSTRAINT");
   });
 
   /**
    * Zero routes is reachable through the evidence gates (covered above) but NOT
-   * through the constraint filters with the current six-route demo catalogue:
-   * `business-admin` is offered at every tier, is moderate cost and needs no
-   * relocation, so it survives every constraint combination. This test pins
-   * that fact so the claim in the docs stays honest as data changes.
+   * through the tier filter with the current twelve-route demo catalogue:
+   * at least one route is available at every tier. This test pins that fact so
+   * the claim in the docs stays honest as data changes.
    */
-  it("documents that the demo catalogue always leaves at least one eligible route", () => {
+  it("holds cost and relocation estimates out of eligibility", () => {
     const combos = (["LOWER_SECONDARY", "UPPER_SECONDARY", "VOCATIONAL"] as const).flatMap((tier) =>
       (["tight", "moderate", "flexible"] as const).flatMap((cost) =>
         (["local_only", "can_move"] as const).map((mobility) => ({ tier, cost, mobility })),
@@ -168,14 +179,14 @@ describe("hard constraints", () => {
     }
   });
 
-  it("treats unknown answers as a notice, never as a blocker", () => {
+  it("does not raise missing practical-data notices when the fields are not used", () => {
     const r = recommend(
       build(["I"], { cost: "unknown", mobility: "unknown" }),
       handsOnMission,
       FIXED_NOW,
     );
-    expect(r.notices).toContain("MISSING_COST_DATA");
-    expect(r.notices).toContain("MISSING_LOCATION_DATA");
+    expect(r.notices).not.toContain("MISSING_COST_DATA");
+    expect(r.notices).not.toContain("MISSING_LOCATION_DATA");
     expect(r.ineligible.every((x) => !x.reasons.includes("COST_CONSTRAINT"))).toBe(true);
   });
 });
@@ -265,9 +276,9 @@ describe("staleness", () => {
 describe("eligibility unit behaviour", () => {
   const lowCostRoute = routesData.routes.find((r) => r.costBand === "low")!;
 
-  it("supports a low-cost route when money is tight", () => {
+  it("does not boost a low-cost estimate when money is tight", () => {
     const v = evaluateEligibility(lowCostRoute, build(["R"], { cost: "tight" }));
     expect(v.eligible).toBe(true);
-    expect(v.supporting).toContain("FEASIBLE_COST");
+    expect(v.supporting).not.toContain("FEASIBLE_COST");
   });
 });

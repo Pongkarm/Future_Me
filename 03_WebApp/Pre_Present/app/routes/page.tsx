@@ -476,9 +476,10 @@ function DataFreshness({ t }: { t: Dictionary }) {
           <dd className="text-muted">
             {format(t.routes.notSourcedBody, {
               fields: unsourced
-                .map((f) => t.routes.fieldNames[f as keyof typeof t.routes.fieldNames] ?? f)
+                .map((field) => t.routes.fieldNames[field as keyof typeof t.routes.fieldNames] ?? field)
                 .join(", "),
-            })}
+            })}{" "}
+            {t.routes.practicalDataNotUsed}
           </dd>
         </div>
       </dl>

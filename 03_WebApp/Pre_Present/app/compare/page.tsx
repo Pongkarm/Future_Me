@@ -111,10 +111,6 @@ export default function ComparePage() {
       render: (i) => <Meter value={routes[i].score.interests} t={t} />,
     },
     {
-      label: format(t.compare.rowFeasibility, { pct: Math.round(WEIGHTS.feasibility * 100) }),
-      render: (i) => <Meter value={routes[i].score.feasibility} t={t} />,
-    },
-    {
       label: format(t.compare.rowStrengths, { pct: Math.round(WEIGHTS.strengths * 100) }),
       render: (i) => <Meter value={routes[i].score.strengths} t={t} />,
     },
@@ -293,6 +289,9 @@ export default function ComparePage() {
             <summary className="cursor-pointer text-sm font-bold text-indigoText">
               {t.compare.fullMatrix}
             </summary>
+          <p className="mt-3 text-xs text-warning" data-testid="compare-practical-data-notice">
+            {t.routes.practicalDataNotUsed}
+          </p>
           <div
             aria-label={format(t.compare.caption, { n: routes.length })}
             className="max-w-full overflow-x-auto rounded-control border border-line bg-surface2/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-mint"
@@ -398,7 +397,13 @@ function FocusedComparison({
   };
 
   return (
-    <ul className="grid gap-3 lg:grid-cols-3" data-testid="compare-focus-cards">
+    <>
+      {focus === "practical" ? (
+        <p className="mb-4 text-xs text-warning" data-testid="compare-focus-practical-data-notice">
+          {t.routes.practicalDataNotUsed}
+        </p>
+      ) : null}
+      <ul className="grid gap-3 lg:grid-cols-3" data-testid="compare-focus-cards">
       {routes.map((route) => (
         <li
           key={route.routeId}
@@ -421,13 +426,6 @@ function FocusedComparison({
                 })}
               >
                 <Meter value={route.score.interests} t={t} />
-              </ComparisonMetric>
-              <ComparisonMetric
-                label={format(t.compare.rowFeasibility, {
-                  pct: Math.round(WEIGHTS.feasibility * 100),
-                })}
-              >
-                <Meter value={route.score.feasibility} t={t} />
               </ComparisonMetric>
               <ComparisonMetric
                 label={format(t.compare.rowStrengths, {
@@ -518,7 +516,8 @@ function FocusedComparison({
           </div>
         </li>
       ))}
-    </ul>
+      </ul>
+    </>
   );
 }
 

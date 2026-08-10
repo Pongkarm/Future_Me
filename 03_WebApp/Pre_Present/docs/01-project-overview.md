@@ -124,7 +124,7 @@ product. Specifically:
 
 - The interest instrument and mission rubrics **have not been validated** by qualified assessment experts.
 - The assessment is a **fixed bilingual Thai/English questionnaire**, not the adaptive conversation described above. The Thai translation is a first draft, not a completed cross-cultural adaptation.
-- The route catalogue is **illustrative**. Cost, location and timing carry no source, and they drive the eligibility filters.
+- The route catalogue is **illustrative**. Cost, location and timing carry no source, so they are held out of eligibility, scoring and ranking.
 - **No student pilot has run.** Every effectiveness claim in this repository is a design goal, not a measured result.
 - NDLP/DEEP integration is a **future possibility**, dependent on documentation and partnership approval that do not exist. The July 2026 source audit could not verify the technical claims previously made about either platform.
 - No cloud or platform partner is confirmed. AIS Cloud remains one exploratory deployment candidate described from public specifications; nothing is deployed there.

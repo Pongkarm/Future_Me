@@ -20,7 +20,7 @@
         "strengths",
         "limitations"
       ],
-      "reason": "No fee schedule, provision map or outcome dataset with a clear licence has been ingested. These are the team's estimates and drive the eligibility filters, so they are the first thing to replace before any pilot."
+        "reason": "No fee schedule, provision map or outcome dataset with a clear licence has been ingested. These are the team's estimates and are held out of eligibility, scoring and ranking until a verified source is added."
     }
   },
   "routes": [

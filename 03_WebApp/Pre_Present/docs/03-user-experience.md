@@ -124,7 +124,7 @@ evidence is too thin it returns none and explains why.
 
 > An earlier version of this document described three fixed archetypes — *Balanced Next Step*,
 > *Interest Growth* and *Practical Access*. **The implemented engine does not work that way.** It
-> scores every route in the catalogue on the same five criteria and returns the highest-scoring
+> scores every route in the catalogue on the same three evidence-derived criteria and returns the highest-scoring
 > survivors, marking any that are too close to separate as tied. The archetype names were removed
 > rather than reverse-engineered into the code, because a route's character should come from what
 > it is, not from a slot it was assigned to fill.

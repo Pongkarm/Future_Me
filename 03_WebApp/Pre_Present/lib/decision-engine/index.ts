@@ -1,5 +1,10 @@
 import routesData from "@/data/routes.json";
-import { evaluateEligibility, isStale, type RouteDef } from "./eligibility";
+import {
+  decisionFieldIsVerified,
+  evaluateEligibility,
+  isStale,
+  type RouteDef,
+} from "./eligibility";
 import { openQuestionsFor, REASON_TEXT } from "./explanations";
 import {
   FIT_LIMITED,
@@ -36,7 +41,14 @@ export const MAX_ROUTES = 3;
 
 export * from "./types";
 export { WEIGHTS, MIN_INTEREST_ANSWERS, MIN_INTEREST_RATIO, TIE_EPSILON } from "./scoring";
-export { routeDataAsOf, isStale, freshness, unverifiedFields } from "./eligibility";
+export {
+  decisionFieldIsVerified,
+  heldBackDecisionFields,
+  routeDataAsOf,
+  isStale,
+  freshness,
+  unverifiedFields,
+} from "./eligibility";
 export { REASON_TEXT, STRENGTH_LABELS, STRENGTH_HELP, DIMENSION_LABELS } from "./explanations";
 
 const LEARNING_STYLE_AFFINITY: Record<string, Partial<Record<Dimension, number>>> = {
@@ -77,8 +89,12 @@ export function recommend(
   };
 
   const notices: ReasonCode[] = [];
-  if (interview.context.cost === "unknown") notices.push("MISSING_COST_DATA");
-  if (interview.context.mobility === "unknown") notices.push("MISSING_LOCATION_DATA");
+  if (decisionFieldIsVerified("costBand") && interview.context.cost === "unknown") {
+    notices.push("MISSING_COST_DATA");
+  }
+  if (decisionFieldIsVerified("requiresRelocation") && interview.context.mobility === "unknown") {
+    notices.push("MISSING_LOCATION_DATA");
+  }
   if (isStale(now)) notices.push("STALE_ROUTE_DATA");
 
   // Gate 1 — not enough of the interview was answered to say anything.
@@ -121,7 +137,7 @@ export function recommend(
       continue;
     }
 
-    const score = scoreRoute(route, riasec, missionEvidence.vector, missionCompleted, verdict.supporting);
+    const score = scoreRoute(route, riasec, missionEvidence.vector, missionCompleted);
     const reasons: ReasonCode[] = [...verdict.supporting];
 
     if (score.interests >= FIT_MATCH) reasons.unshift("INTEREST_MATCH");
@@ -198,7 +214,6 @@ export function scoreRoute(
   riasec: Record<Dimension, number>,
   missionVector: Record<Dimension, number>,
   missionCompleted: boolean,
-  supporting: ReasonCode[],
 ): ScoreBreakdown {
   const interests = interestFit(riasec, route.interestWeights) * 100;
 
@@ -215,26 +230,15 @@ export function scoreRoute(
         100
       : 50;
 
-  const feasibilityHits = supporting.filter(
-    (r) => r === "FEASIBLE_COST" || r === "FEASIBLE_LOCATION" || r === "TIMING_MATCH",
-  ).length;
-  const feasibility = Math.min(100, 55 + feasibilityHits * 15);
-
-  const flexibility = route.flexibility * 100;
-
   const total =
     interests * WEIGHTS.interests +
-    feasibility * WEIGHTS.feasibility +
     strengths * WEIGHTS.strengths +
-    learningStyle * WEIGHTS.learningStyle +
-    flexibility * WEIGHTS.flexibility;
+    learningStyle * WEIGHTS.learningStyle;
 
   return {
     interests: round(interests),
     strengths: round(strengths),
     learningStyle: round(learningStyle),
-    feasibility: round(feasibility),
-    flexibility: round(flexibility),
     total: round(total),
   };
 }

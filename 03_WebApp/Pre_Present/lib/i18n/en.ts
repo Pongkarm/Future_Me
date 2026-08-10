@@ -579,8 +579,10 @@ export const en = {
       limitations: "the listed trade-offs",
     },
     notSourced: "Not sourced at all",
+    practicalDataNotUsed:
+      "Cost, relocation, time to earning, and flexibility are unverified team estimates. They are shown only as prompts to check; they do not score, rank, or remove a route.",
     notSourcedBody:
-      "{fields} — these are the team's estimates, and they drive the filters that ruled routes in or out.",
+      "{fields} are team estimates. They are shown as prompts to check, not as facts.",
     freshnessFooterStrong: "Explore",
     freshnessFooter:
       "Each route's own source is inside its {strong} panel. Entry criteria and fees change every academic year — check anything you would act on against the institution's own current page before you decide.",

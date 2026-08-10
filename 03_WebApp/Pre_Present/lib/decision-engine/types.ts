@@ -87,8 +87,6 @@ export interface ScoreBreakdown {
   interests: number;
   strengths: number;
   learningStyle: number;
-  feasibility: number;
-  flexibility: number;
   total: number;
 }
 

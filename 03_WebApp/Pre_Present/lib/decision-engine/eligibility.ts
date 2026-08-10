@@ -3,6 +3,30 @@ import type { InterviewInput, ReasonCode, Tier } from "./types";
 
 export type RouteDef = (typeof routesData.routes)[number];
 
+/**
+ * Catalogue fields that look practical but require a source before they can
+ * influence a learner's result. A future data refresh must explicitly declare
+ * a field verified before it can affect a route.
+ */
+const DECISION_FIELDS = [
+  "costBand",
+  "requiresRelocation",
+  "timeToEarning",
+  "flexibility",
+] as const;
+
+export type DecisionField = (typeof DECISION_FIELDS)[number];
+
+/** True only when the source registry explicitly permits the field's use. */
+export function decisionFieldIsVerified(field: DecisionField): boolean {
+  return (routesData.meta.fieldStatus.verified as readonly string[]).includes(field);
+}
+
+/** Fields held out of scoring and filters until a verified source is ingested. */
+export function heldBackDecisionFields(): DecisionField[] {
+  return DECISION_FIELDS.filter((field) => !decisionFieldIsVerified(field));
+}
+
 export interface EligibilityVerdict {
   eligible: boolean;
   blocking: ReasonCode[];
@@ -29,29 +53,44 @@ export function evaluateEligibility(route: RouteDef, input: InterviewInput): Eli
   if (tier && !route.tiers.includes(tier as Tier)) blocking.push("TIER_MISMATCH");
 
   // Cost.
-  if (cost === "tight") {
+  if (decisionFieldIsVerified("costBand") && cost === "tight") {
     if (route.costBand === "high") blocking.push("COST_CONSTRAINT");
     else if (route.costBand === "low") supporting.push("FEASIBLE_COST");
-  } else if (cost === "unknown") {
+  } else if (decisionFieldIsVerified("costBand") && cost === "unknown") {
     if (route.costBand === "high") notices.push("MISSING_COST_DATA");
-  } else if (cost === "moderate" && route.costBand === "low") {
+  } else if (
+    decisionFieldIsVerified("costBand") &&
+    cost === "moderate" &&
+    route.costBand === "low"
+  ) {
     supporting.push("FEASIBLE_COST");
   }
 
   // Location.
-  if (mobility === "local_only") {
+  if (decisionFieldIsVerified("requiresRelocation") && mobility === "local_only") {
     if (route.requiresRelocation) blocking.push("LOCATION_CONSTRAINT");
     else supporting.push("FEASIBLE_LOCATION");
-  } else if (mobility === "unknown" && route.requiresRelocation) {
+  } else if (
+    decisionFieldIsVerified("requiresRelocation") &&
+    mobility === "unknown" &&
+    route.requiresRelocation
+  ) {
     notices.push("MISSING_LOCATION_DATA");
   }
 
   // Timing is a preference, never a blocker.
-  if (horizon && horizon !== "unsure" && horizon === route.timeToEarning) {
+  if (
+    decisionFieldIsVerified("timeToEarning") &&
+    horizon &&
+    horizon !== "unsure" &&
+    horizon === route.timeToEarning
+  ) {
     supporting.push("TIMING_MATCH");
   }
 
-  if (route.flexibility >= 0.75) supporting.push("KEEPS_OPTIONS_OPEN");
+  if (decisionFieldIsVerified("flexibility") && route.flexibility >= 0.75) {
+    supporting.push("KEEPS_OPTIONS_OPEN");
+  }
   if (isStale()) notices.push("STALE_ROUTE_DATA");
 
   return { eligible: blocking.length === 0, blocking, supporting, notices };

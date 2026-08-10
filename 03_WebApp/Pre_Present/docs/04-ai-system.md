@@ -46,8 +46,8 @@ flowchart TD
     B --> E{"Enough evidence?"}
     D --> E
     E -->|No| F["Return nothing<br/>and say why"]
-    E -->|Yes| G["Hard filters<br/>tier · cost · location"]
-    G --> H["Five weighted criteria"]
+    E -->|Yes| G["Tier filter only<br/>practical fields held back"]
+    G --> H["Three weighted criteria"]
     H --> I["0–3 routes<br/>each with evidence and unknowns"]
 ```
 
@@ -101,15 +101,14 @@ rather than averaged away.
 
 | Criterion | Weight | Fed by |
 |---|--:|---|
-| Interests | 30% | RIASEC profile from the interview |
-| Feasibility | 25% | Cost, location and timing answers |
-| Strengths | 20% | Mission evidence — neutral 50 when no mission is complete |
-| Learning style | 15% | Route learning style against the profile |
-| Future flexibility | 10% | The route's own flexibility value |
+| Interests | 50% | RIASEC profile from the interview |
+| Strengths | 30% | Mission evidence — neutral 50 when no mission is complete |
+| Learning style | 20% | Route learning style against the profile |
 
-**Feasibility at 25% is a deliberate choice.** A route a student cannot afford or cannot reach is
-not a recommendation. Weighting it second-highest keeps the output honest about the constraints
-that guidance advice usually ignores.
+**Practical route fields are held back.** The catalogue currently has no verified programme-level
+source for cost, relocation, time-to-earning, or flexibility. These values remain visible as
+exploration prompts, but they cannot filter, score, rank, or remove a route until a verified source
+is recorded in `data/routes.json`.
 
 > These weights are **design judgement, not fitted to outcome data.** No student outcome data
 > exists. The constant lives in one place, `WEIGHTS` in `lib/decision-engine/scoring.ts`, so the
@@ -232,7 +231,7 @@ Stated plainly, because a working demo hides all of this.
 | No evaluation set exists | Recommendation quality cannot be measured, so no accuracy figure may be stated in any form |
 | No bias audit | Unknown whether the engine steers students by gender, region, school size or income |
 | No pilot | Every effectiveness statement in this repository is a design goal |
-| Route data is illustrative | Cost, location, timing and flexibility carry no source. See [02 · Research](02-research-and-evidence.md#source-registry) |
+| Route data is illustrative | Cost, location, timing and flexibility carry no source and are held out of decisions. See [02 · Research](02-research-and-evidence.md#source-registry) and the [continuation audit](continuation-audit-2026-08-11.md) |
 | The safeguarding rule is a keyword match | It will miss cases and produce false positives, and nobody is alerted |
 | The Thai translation is a first draft | The interface, the question bank, the mission and route copy are all bilingual, but the Thai has not been through a formal cross-cultural adaptation — no second forward translation, no back-translation, no expert committee, no cognitive debriefing. See [validation-plan.md §2](validation-plan.md) |
 | Chat is a bounded companion, not a validated counsellor | It can explain repository topics, but it does not conduct or score the assessment and must not present itself as choosing a learner's route |

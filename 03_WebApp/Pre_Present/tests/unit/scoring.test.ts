@@ -25,11 +25,9 @@ describe("weights", () => {
 
   it("match the weights documented in docs/04-ai-system.md", () => {
     expect(WEIGHTS).toEqual({
-      interests: 0.3,
-      feasibility: 0.25,
-      strengths: 0.2,
-      learningStyle: 0.15,
-      flexibility: 0.1,
+      interests: 0.5,
+      strengths: 0.3,
+      learningStyle: 0.2,
     });
   });
 });

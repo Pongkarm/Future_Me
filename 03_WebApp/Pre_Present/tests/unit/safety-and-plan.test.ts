@@ -9,7 +9,7 @@ function route(overrides: Partial<RouteResult> = {}): RouteResult {
     name: { en: "Vocational ปวช. — Digital and IT", th: "ปวช. สายดิจิทัลและไอที" },
     shortName: { en: "ปวช. Digital & IT", th: "ปวช. ดิจิทัล & ไอที" },
     summary: { en: "s", th: "ส" },
-    score: { interests: 70, strengths: 65, learningStyle: 60, feasibility: 70, flexibility: 60, total: 67 },
+    score: { interests: 70, strengths: 65, learningStyle: 60, total: 66.5 },
     evidenceStrength: "strong",
     reasons: [],
     supportingEvidence: [],

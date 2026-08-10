@@ -38,7 +38,7 @@
   &nbsp;·&nbsp;
   <strong><a href="#run">รันต้นแบบ</a></strong>
   &nbsp;·&nbsp;
-  <a href="READMEEN.md">English</a>
+  <a href="READMEEN.md">ฉบับภาษาอังกฤษ</a>
 </p>
 
 <p align="center">
@@ -390,5 +390,5 @@ npm run analyse -- /tmp/futureme-sim
   <br><br>
   <a href="#top">กลับขึ้นด้านบน</a>
   &nbsp;·&nbsp;
-  <a href="READMEEN.md">Read in English</a>
+  <a href="READMEEN.md">อ่านฉบับภาษาอังกฤษ</a>
 </p>

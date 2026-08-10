@@ -38,7 +38,7 @@
   &nbsp;·&nbsp;
   <strong><a href="#run-the-prototype">Run</a></strong>
   &nbsp;·&nbsp;
-  <a href="READMETH.md">ภาษาไทย</a>
+  <a href="READMETH.md">Thai version</a>
 </p>
 
 <p align="center">
@@ -387,5 +387,5 @@ Found a problem in the product, code, or evidence?
   <br><br>
   <a href="#top">Back to top</a>
   &nbsp;·&nbsp;
-  <a href="READMETH.md">อ่านภาษาไทย</a>
+  <a href="READMETH.md">Read in Thai</a>
 </p>

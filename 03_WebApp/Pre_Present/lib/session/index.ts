@@ -78,7 +78,21 @@ export interface LoadResult {
 // Allowed values, derived from the seed data so they cannot drift from the UI
 // ---------------------------------------------------------------------------
 
-const QUESTION_IDS = new Set(questionsData.interest.map((q) => q.id));
+/**
+ * Answer ids the session will keep. Anything else in stored JSON is dropped,
+ * because localStorage is writable by the learner.
+ *
+ * The efficacy items are included even though the interview does not yet ask
+ * them: they are legitimate answers on the same 1..5 scale, the programme
+ * recommender reads them by id, and a stored answer being silently discarded
+ * is much harder to diagnose than one that is never collected. Keeping them
+ * costs nothing while the questions are unasked, and means the second axis
+ * starts working the moment they are.
+ */
+const QUESTION_IDS = new Set([
+  ...questionsData.interest.map((q) => q.id),
+  ...((questionsData as { efficacy?: { id: string }[] }).efficacy ?? []).map((q) => q.id),
+]);
 const SCALE_VALUES = new Set(questionsData.scale.map((s) => s.value));
 const ROUTE_IDS = new Set(routesData.routes.map((r) => r.id));
 

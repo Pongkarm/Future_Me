@@ -14,6 +14,7 @@ import {
 import { joinLabels } from "@/lib/decision-engine/explanations";
 import type { Localised, SupportingEvidence } from "@/lib/decision-engine/types";
 import { loadOrCreate, saveSession, type GuestSession } from "@/lib/session";
+import { ProgrammeMatches } from "@/components/routes/ProgrammeMatches";
 import { usePreferences } from "@/components/PreferencesProvider";
 import { format, localised } from "@/lib/i18n";
 import type { Dictionary } from "@/lib/i18n";
@@ -218,6 +219,18 @@ export default function RoutesPage() {
               total: result.profile.totalInterest,
             })}
           </p>
+          {/*
+            The route engine has already declined. The programme engine gets
+            asked anyway, because it can say *which* property of the answers is
+            missing — too few informative answers, or six dimensions that came
+            out level — and "every dimension scored about the same" is a more
+            useful thing to tell a learner than "not enough evidence".
+          */}
+          <ProgrammeMatches
+            interview={session.interview}
+            provinceIso={provinceIso}
+            t={t}
+          />
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/interview">{t.routes.reviewAnswers}</Button>
             <Button href="/mission" variant="secondary">
@@ -310,6 +323,16 @@ export default function RoutesPage() {
           </li>
         ))}
       </ul>
+
+      {/*
+        Level 1b — the routes above answer "what kind of thing suits me". This
+        answers "so where do I actually apply", which is the question a route
+        cannot: nobody applies to a route. It sits after the cards rather than
+        replacing them because academic fit is only resolved at route level —
+        the programme list is where the context data earns its place, and the
+        component shows the two contributions apart so that is visible.
+      */}
+      <ProgrammeMatches interview={session.interview} provinceIso={provinceIso} t={t} />
 
       {/* Level 2 — comparison is the intended next step, so it is the one strong CTA. */}
       <JourneyMessage

@@ -9,7 +9,13 @@
     "methodology": "docs/questionnaire-methodology.md",
     "questionBank": "docs/question-bank.md",
     "itemOrder": "interleaved",
-    "itemOrderRationale": "The six dimensions are rotated rather than presented in blocks. O*NET reports that mixing RIASEC items reduced a general response bias found in interest inventories where items are grouped by construct."
+    "itemOrderRationale": "The six dimensions are rotated rather than presented in blocks. O*NET reports that mixing RIASEC items reduced a general response bias found in interest inventories where items are grouped by construct.",
+    "itemCounts": {
+      "interest": 30,
+      "reverseKeyed": 0,
+      "efficacy": 6
+    },
+    "efficacyNote": "ข้อ efficacy อยู่คนละอาร์เรย์โดยเจตนา — scoring ของมันคือ none จึงต้องไม่มีทางถูกนับเข้าคะแนนความสนใจได้เลย การแยกโครงสร้างบังคับข้อนี้ แทนที่จะอาศัยว่าโค้ดจะจำ"
   },
   "interest": [
     {
@@ -510,6 +516,68 @@
         "en": "Strongly like",
         "th": "ชอบอย่างยิ่ง"
       }
+    }
+  ],
+  "efficacy": [
+    {
+      "id": "SEF-R-01",
+      "dimension": "R",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะซ่อมหรือประกอบอุปกรณ์ให้ใช้งานได้ได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could repair or assemble equipment so it works?"
+      },
+      "scaleId": "scale5-confidence"
+    },
+    {
+      "id": "SEF-I-01",
+      "dimension": "I",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะหาสาเหตุของปัญหาด้วยข้อมูลและเหตุผลได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could find the cause of a problem from data and reasoning?"
+      },
+      "scaleId": "scale5-confidence"
+    },
+    {
+      "id": "SEF-A-01",
+      "dimension": "A",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะสร้างงานออกแบบหรืองานเล่าเรื่องของตัวเองได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could create your own design or piece of storytelling?"
+      },
+      "scaleId": "scale5-confidence"
+    },
+    {
+      "id": "SEF-S-01",
+      "dimension": "S",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะดูแลหรืออธิบายเรื่องต่าง ๆ ให้คนอื่นเข้าใจได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could care for people or explain things so they understand?"
+      },
+      "scaleId": "scale5-confidence"
+    },
+    {
+      "id": "SEF-E-01",
+      "dimension": "E",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะนำกลุ่มหรือโน้มน้าวให้คนเห็นด้วยได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could lead a group or bring people round to an idea?"
+      },
+      "scaleId": "scale5-confidence"
+    },
+    {
+      "id": "SEF-C-01",
+      "dimension": "C",
+      "sourceType": "researcher-written",
+      "text": {
+        "th": "ถ้ามีคนสอนให้ คุณคิดว่าตัวเองจะทำงานที่ต้องละเอียดและถูกต้องทุกจุดได้ดีแค่ไหน",
+        "en": "If someone taught you, how well do you think you could do work that has to be accurate in every detail?"
+      },
+      "scaleId": "scale5-confidence"
     }
   ]
 }

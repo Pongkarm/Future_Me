@@ -187,6 +187,8 @@ Open [http://localhost:3000](http://localhost:3000) and choose **Start as guest*
 
 ## Quick FAQ
 
+Short answers to the technical questions most likely to come up during a project review.
+
 <details>
 <summary><strong>Can I use the demo without AI or the backend?</strong></summary>
 
@@ -208,21 +210,57 @@ No. It uses the RIASEC structure for reflection, but this item set and its Thai 
 <details>
 <summary><strong>Where is learner data stored?</strong></summary>
 
-Assessment progress is stored in the current browser by default. Optional chat messages follow a
-separate network flow only when the learner sends them.
+Assessment, mission, and plan state stays in the current browser's `localStorage`; the prototype
+has no application database or server-side transcript store. Explanation requests send only a
+route id and fixed reason codes. Chat sends a bounded transcript only when the learner presses
+Send and may reach the configured provider. Deployment infrastructure may still keep request logs.
 </details>
 
 <details>
-<summary><strong>Which part should developers change first?</strong></summary>
+<summary><strong>Which architecture is implemented, and which parts are only proposed?</strong></summary>
 
-Use `03_WebApp/Pre_Present/` for current product work. Refresh and validate route data before a pilot.
+The implemented product is a Next.js/TypeScript guest app with a client-side decision engine and
+browser storage. FastAPI, PostgreSQL, Qdrant, BGE-M3, Kubernetes, AIS Cloud, identity, and school
+integrations are documented production designs, not running components. See the
+[architecture boundary](03_WebApp/Pre_Present/docs/05-system-architecture.md).
 </details>
 
 <details>
-<summary><strong>Where did the README screenshots come from?</strong></summary>
+<summary><strong>Can a recommendation be reproduced and audited?</strong></summary>
 
-They were captured directly from the production build in `03_WebApp/Pre_Present/` by completing a
-real guest journey in the running app.
+Yes. The same validated inputs and catalogue produce the same routes because scoring, filters,
+ties, and refusal gates are deterministic TypeScript. The UI exposes the engine version,
+catalogue date, reasons, unknowns, and provenance. The fixed weights are design judgement, not
+parameters fitted to outcome data; automated tests verify implementation behaviour, not real-world validity.
+</details>
+
+<details>
+<summary><strong>How are route-data lineage and freshness handled?</strong></summary>
+
+The seeded catalogue records a source status, source URL, and last-verified date per route, plus a
+catalogue-wide `dataAsOf` date and 180-day freshness threshold. The UI warns when data is stale and
+identifies unsourced fields. Cost, relocation, time-to-earning, flexibility, strengths, and
+limitations are currently team estimates and must be replaced before a pilot. See the
+[source review](03_WebApp/Pre_Present/docs/09-source-review.md).
+</details>
+
+<details>
+<summary><strong>What evidence is still required before a real-student pilot?</strong></summary>
+
+The project needs ethics approval, parental consent and student assent, formal Thai adaptation,
+cognitive interviews, a representative pilot, reliability and structural analysis, subgroup
+invariance checks, and licensed current route data. Recommendation weights then need calibration
+against observed exploration outcomes. See the
+[validation plan](03_WebApp/Pre_Present/docs/validation-plan.md).
+</details>
+
+<details>
+<summary><strong>How should product success be measured?</strong></summary>
+
+Use evidence of better decisions, not model confidence or click volume: completion of the 30-day
+experiments, follow-through on route research, changes in decision confidence, counsellor review,
+and whether learners can explain their next step and its trade-offs. Longer-term evaluation should
+track enrolment or persistence without treating one route as the universal correct answer.
 </details>
 
 <details>

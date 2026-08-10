@@ -176,43 +176,6 @@ npm run dev
 
 เปิด [http://localhost:3000](http://localhost:3000) แล้วเลือก **Start as guest**
 
-```bash
-npm run verify       # ตรวจ mascot, type, lint, tests และ production build
-npm run test:e2e     # ตรวจเส้นทางผู้ใช้จริงด้วย Playwright
-```
-
-การตั้งค่า AI แบบไม่บังคับ: [`.env.example`](03_WebApp/Pre_Present/.env.example)
-
-สามารถทดลองแบ็กเอนด์แยกจากเว็บได้ใน `02_Backend/` หลังติดตั้ง FastAPI, Pydantic, Uvicorn
-และ dependency สำหรับการทดสอบที่เข้ากันได้
-
-```bash
-uvicorn app.main:app --reload --port 8000
-pytest
-```
-
-เวอร์ชัน dependency ของแบ็กเอนด์ยังไม่ได้ล็อก และข้อมูลจะหายเมื่อหยุดโปรเซส
-
----
-
-## แผนผัง repository
-
-| ตำแหน่ง | เนื้อหา |
-|---|---|
-| [`01_Research/`](01_Research/) | งานวิจัย แหล่งอ้างอิง หลักสูตร ตลาดแรงงาน และข้อมูลระบบ AI |
-| [`02_Backend/`](02_Backend/) | ต้นแบบ FastAPI, schema, ระบบทดลองตัดสินใจ, โครง RAG และ tests |
-| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | ผลิตภัณฑ์ปัจจุบันที่รันได้ พร้อมเอกสารและ tests |
-| [`04_Design/`](04_Design/) | แนวคิดการออกแบบ ทิศทางภาพ และห้องทดลองมาสคอต |
-| [`05_Team_Repo/`](05_Team_Repo/) | สำเนางานทีมที่ต้องตรวจความใหม่ก่อนใช้ |
-| [`06_Assets/`](06_Assets/) | สื่อต้นฉบับ |
-| [`90_Archive/`](90_Archive/) | เอกสารย้อนหลัง ไม่ใช่ข้อมูลหลักปัจจุบัน |
-| [`99-Model/`](99-Model/) | ไฟล์โมเดล มาสคอต และบันทึกการสร้าง |
-| [`99_Process/`](99_Process/) | บันทึกการตรวจและ handoff ย้อนหลัง |
-| [`Presentation/`](Presentation/) | สไลด์ PDF ภาพเรนเดอร์ ตัวสร้าง และผลตรวจคุณภาพ |
-
-เมื่อข้อมูลขัดกัน ให้ยึดเว็บและ tests ที่รันได้ก่อน ตามด้วยงานวิจัยที่แก้ไขแล้วใน
-`01_Research/Data/` ส่วนสำเนางานทีมและ archive ใช้เป็นข้อมูลย้อนหลังเท่านั้น
-
 ---
 
 ## คำถามที่พบบ่อย

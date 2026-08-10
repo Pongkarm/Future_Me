@@ -181,43 +181,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) and choose **Start as guest**.
 
-```bash
-npm run verify       # mascot check + typecheck + lint + tests + production build
-npm run test:e2e     # complete browser journeys with Playwright
-```
-
-Optional AI configuration: [`.env.example`](03_WebApp/Pre_Present/.env.example)
-
-The backend can be explored separately from `02_Backend/` after installing compatible FastAPI,
-Pydantic, Uvicorn, and test dependencies:
-
-```bash
-uvicorn app.main:app --reload --port 8000
-pytest
-```
-
-Backend dependency versions are not yet pinned, and its storage resets when the process stops.
-
----
-
-## Repository map
-
-| Path | Contents |
-|---|---|
-| [`01_Research/`](01_Research/) | Audited research, sources, curricula, labour data, and AI-system references |
-| [`02_Backend/`](02_Backend/) | FastAPI prototype, schemas, decision experiments, RAG scaffolding, and tests |
-| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | Current runnable product, documentation, and tests |
-| [`04_Design/`](04_Design/) | Design concepts, selected visual direction, and mascot lab |
-| [`05_Team_Repo/`](05_Team_Repo/) | Team snapshots; check freshness before reuse |
-| [`06_Assets/`](06_Assets/) | Original media references |
-| [`90_Archive/`](90_Archive/) | Historical material, not current truth |
-| [`99-Model/`](99-Model/) | Mascot/model assets and generation notes |
-| [`99_Process/`](99_Process/) | Historical audits and implementation handoffs |
-| [`Presentation/`](Presentation/) | Editable deck, PDF, renders, generator, and QA |
-
-When files disagree, prefer the runnable web app and tests, followed by corrected research under
-`01_Research/Data/`. Treat team snapshots and archives as historical context.
-
 ---
 
 <a id="quick-faq"></a>

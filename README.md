@@ -165,6 +165,24 @@ current product name is **FutureMe AI**.
 - Live school, TCAS, NDLP/DEEP, or AIS API integration
 - Production RAG, cloud deployment, ethics approval, and a real-student pilot
 
+### Reference branch: Kong19565
+
+The [Kong19565 branch](https://github.com/Pongkarm/Future_Me/tree/Kong19565) contains additional
+work beyond this `Panussu` checkout:
+
+- **Adaptive interview flow:** a deterministic heuristic chooses the next item from the existing
+  30-item profile and exposes a confidence/early-stop signal. It is not validated CAT accuracy.
+- **Nearby institutions:** province-aware lookup covers 77 province records from the OVEC and MHESI
+  registers. It reports what exists and distance bands; it is not a recommendation or admissions check.
+- **Expanded research assets:** the branch has a 12-route catalogue and a 1,000-item question-bank
+  file with declared provenance metadata across 18REST, O*NET 28.2, ESCO v1.2, OVEC vocational
+  standards, and myTCAS70. The running interview still imports the 30-item `data/questions.json`,
+  so the 1,000-item file is not evidence of a validated 1,000-item production assessment. The
+  branch also contains Golden Fit, Growth Area, and Burnout Risk labels; these are design heuristics,
+  not validated skill-efficacy measurements.
+- **API protection:** optional chat and explanation endpoints use separate process-local request and
+  provider-spend limiters. These are budget guards, not authentication, and reset when the process restarts.
+
 ---
 
 <a id="run-locally"></a>

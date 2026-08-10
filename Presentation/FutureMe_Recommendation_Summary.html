@@ -347,7 +347,8 @@
     <thead><tr><th style="width:38%">สร้างใหม่</th><th>ผลลัพธ์</th></tr></thead>
     <tbody>
       <tr><td class="mono">build/build_programme_index.py</td>
-          <td>ต่อทะเบียน 4 ชุด — แผนการรับนักศึกษา · รหัส ISCED-F · ต้นทุนต่อหัว · สถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรีจริง 6,349 หลักสูตร ใน 153 สถาบัน (88.8% ของหลักสูตรที่ไม่ซ้ำ)</strong></td></tr>
+          <td>ต่อทะเบียน 4 ชุด — แผนการรับนักศึกษา · รหัส ISCED-F · ต้นทุนต่อหัว · สถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรี 6,349 หลักสูตร (88.8% ของที่ไม่ซ้ำ)</strong></td></tr>
+      <tr><td class="mono">build/build_vocational_index.py</td><td>ทะเบียนนักเรียนของ สอศ. ปี 2568 → <strong>ปวช./ปวส. 16,908 หลักสูตร ใน 840 วิทยาลัย</strong> · รวมทั้งระบบ <strong>23,257 หลักสูตร ใน 993 สถาบัน</strong></td></tr>
       <tr><td class="mono">build/build_isced_riasec.py</td><td>เวกเตอร์ RIASEC <strong>วัดจริงจาก 923 อาชีพใน O*NET</strong> ผ่านรหัส ISCED-F 2013 · พร้อม <span class="mono">crosswalk_audit.md</span> ที่ลิสต์ทุกการจับคู่ให้ตรวจ</td></tr>
       <tr><td class="mono">engine.py</td>
           <td>เอนจินอธิบายได้ 10 ขั้น · ไม่มี LLM · พารามิเตอร์ทุกตัวมีชื่อและเหตุผล</td></tr>
@@ -626,10 +627,11 @@
   <table>
     <thead><tr><th style="width:23%">ชุดข้อมูล</th><th class="num" style="width:11%">จำนวน</th><th style="width:32%">แหล่ง</th><th>สถานะ</th></tr></thead>
     <tbody>
+      <tr><td><strong>ปวช./ปวส.</strong></td><td class="num">16,908</td><td>สอศ. <span class="mono">current_student</span> 2568</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>หลักสูตรปริญญาตรี</td><td class="num">6,349</td><td>data.go.th <span class="mono">dqe_11_01</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>รหัสสาย ISCED-F 2013</td><td class="num">87</td><td>MHESI <span class="mono">univ_cur_11_01</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td><strong>ต้นทุนผลิต/คน/ปี</strong></td><td class="num">6,347</td><td>MHESI <span class="mono">dqe_11_03</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
-      <tr><td>สถาบันที่มีพิกัด</td><td class="num">153</td><td>อว. + สอศ. + Nominatim</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td>สถาบันที่มีพิกัด</td><td class="num">993</td><td>อว. + สอศ. + Nominatim</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>จำนวนรับตามแผน</td><td class="num">ทุกแถว</td><td>เดียวกัน</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>ระยะทางถนนจริง</td><td class="num">77 จว.</td><td>OSRM (ไม่ใช่ระยะเส้นตรง)</td><td><span class="pill ok">คำนวณจากถนนจริง</span></td></tr>
       <tr><td>สถานีขนส่งผู้โดยสาร</td><td class="num">891</td><td>Wikidata</td><td><span class="pill ok">CC0</span></td></tr>
@@ -741,7 +743,7 @@
 ⚠ ระบบไม่จัดอันดับให้
    · ความมั่นใจรวมต่ำกว่า 0.50
    · differentiation 0.12 &lt; 0.20 — โปรไฟล์แบนไม่ได้แปลว่าเข้าได้ทุกสาย แต่แปลว่ายังไม่รู้
-   · ถ้าปล่อยผ่าน จะมี 6,349 หลักสูตรผ่านเกณฑ์ ซึ่งดูน่าเชื่อถือทั้งที่ไม่มีหลักฐาน</div>
+   · ถ้าปล่อยผ่าน จะมี 23,257 หลักสูตรผ่านเกณฑ์ ซึ่งดูน่าเชื่อถือทั้งที่ไม่มีหลักฐาน</div>
   <p style="font-size:8.6pt;color:var(--ink-2)">
     <strong>นี่คือฟีเจอร์ ไม่ใช่ความล้มเหลว</strong> เครื่องมือแนะแนวที่ให้คำตอบกับทุกคนเสมอ
     คือเครื่องมือที่คำตอบไม่มีความหมาย ระบบบอกด้วยว่าควรถามอะไรต่อ: ข้อประสบการณ์และข้อบังคับเลือก
@@ -778,7 +780,7 @@
       <tr><td>6</td><td>Demo สด</td><td class="num">60 วิ</td><td>รัน <span class="mono">run.py</span> ให้เห็นการอนุมานทีละขั้น</td></tr>
       <tr><td>7</td><td>ผู้เรียน ก vs ข</td><td class="num">30 วิ</td><td>สองโปรไฟล์ ผลคนละชุด กลไกเดียวกัน</td></tr>
       <tr><td>8</td><td><strong>ผู้เรียน ค</strong></td><td class="num">30 วิ</td><td><strong>ระบบปฏิเสธที่จะตอบ</strong> — จุดที่ทำให้ต่างจากแบบทดสอบทั่วไปมากที่สุด</td></tr>
-      <tr><td>9</td><td>ข้อมูล</td><td class="num">20 วิ</td><td>6,349 หลักสูตรจริง · RIASEC วัดจาก 923 อาชีพ · ระยะถนนจริง 77 จังหวัด · และช่องที่ยังว่าง</td></tr>
+      <tr><td>9</td><td>ข้อมูล</td><td class="num">20 วิ</td><td>23,257 หลักสูตร ทั้งอาชีวะและปริญญาตรี · RIASEC วัดจาก 923 อาชีพ · ระยะถนนจริง 77 จังหวัด · และช่องที่ยังว่าง</td></tr>
       <tr><td>10</td><td>บทบาท AI</td><td class="num">20 วิ</td><td>ถอด LLM ออกแล้วยังทำงานได้ — AI อธิบาย ไม่ได้ตัดสิน</td></tr>
       <tr><td>11</td><td>Impact &amp; ธุรกิจ</td><td class="num">20 วิ</td><td>B2B2C กับโรงเรียน · ปลายทางฟรี · ไม่รับเงินจากมหาวิทยาลัย</td></tr>
       <tr><td>12</td><td>ปิด</td><td class="num">10 วิ</td><td>“เราไม่ได้บอกเด็กว่าต้องเรียนอะไร เราทำให้เขาตัดสินใจได้ดีขึ้น และตรวจสอบเราได้”</td></tr>
@@ -888,7 +890,8 @@
       <tr><td>6</td><td>ทะเบียนสถาบันเป็นข้อมูลปี 2564</td><td><span class="pill mid">กลาง</span></td><td>ดึงทะเบียนรอบล่าสุด</td></tr>
       <tr><td>7</td><td>ระยะทางวัดจาก<strong>ศูนย์กลางจังหวัด ไม่ใช่บ้านเด็ก</strong></td><td><span class="pill mid">กลาง</span></td><td>รับตำแหน่งจากผู้เรียนแล้วคำนวณใหม่ · เขียนเตือนไว้ในข้อมูลแล้ว</td></tr>
       <tr><td>8</td><td><s>เอนจินยังไม่ได้ต่อเข้าเว็บแอป</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>อยู่บนหน้า <span class="mono">/routes</span> แล้ว · เทสต์ 546 ข้อผ่าน · parity test อ่าน <span class="mono">engine.py</span> เทียบค่าพารามิเตอร์กันเพี้ยน</td></tr>
-      <tr><td>9</td><td>หน้าสัมภาษณ์ยังไม่ถามข้อ self-efficacy 6 ข้อ</td><td><span class="pill mid">กลาง</span></td><td>เอนจินอ่านได้แล้ว · ต้องเพิ่มสเกลความมั่นใจแยกในหน้า <span class="mono">/interview</span> ~1–2 ชม.</td></tr>
+      <tr><td>9</td><td><s>ระบบมีแต่ปริญญาตรี ไม่มีอาชีวะเลย</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>ปวช./ปวส. 16,908 หลักสูตร · 91.4% จับคู่ที่ระดับสาขาวิชา · ประตูระดับชั้นกันไม่ให้เสนอปริญญาตรีให้เด็ก ม.3</td></tr>
+      <tr><td>10</td><td>หน้าสัมภาษณ์ยังไม่ถามข้อ self-efficacy 6 ข้อ</td><td><span class="pill mid">กลาง</span></td><td>เอนจินอ่านได้แล้ว · ต้องเพิ่มสเกลความมั่นใจแยกในหน้า <span class="mono">/interview</span> ~1–2 ชม.</td></tr>
     </tbody>
   </table>
 
@@ -919,7 +922,7 @@
       <tr class="score-row"><td>ใช้ได้จริง</td><td class="num">40</td><td class="num">72</td><td><span class="bar" style="width:36pt"></span></td><td>ขาด TCAS/ค่าเทอม ซึ่งเป็นสิ่งที่เด็กต้องใช้จริง</td></tr>
       <tr class="score-row"><td>Business idea</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ยังไม่มี LOI จากโรงเรียน</td></tr>
       <tr class="score-row"><td>ความเหมาะสมของ AI</td><td class="num">50</td><td class="num">90</td><td><span class="bar" style="width:45pt"></span></td><td>ชั้น AI ยังไม่ได้เดโม</td></tr>
-      <tr class="score-row"><td>คุณภาพข้อมูล</td><td class="num">70</td><td class="num">90</td><td><span class="bar" style="width:42pt"></span></td><td>ทะเบียนปี 2564 · ครอบคลุม 88.8%</td></tr>
+      <tr class="score-row"><td>คุณภาพข้อมูล</td><td class="num">70</td><td class="num">90</td><td><span class="bar" style="width:42pt"></span></td><td>ทะเบียนปี 2564 · ตรี 88.8% · อาชีวะครบ 840 วิทยาลัย</td></tr>
       <tr class="score-row"><td>User journey</td><td class="num">60</td><td class="num">78</td><td><span class="bar" style="width:39pt"></span></td><td>สองขั้นท้ายยังว่างเพราะไม่มีข้อมูล</td></tr>
       <tr class="score-row"><td>นวัตกรรม</td><td class="num">55</td><td class="num">82</td><td><span class="bar" style="width:41pt"></span></td><td>“ระบบที่ยอมปฏิเสธ” คือจุดต่างที่แท้จริง ต้องเล่าให้ดัง</td></tr>
       <tr class="score-row"><td>พลังการพิทช์</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ขึ้นกับการซ้อม</td></tr>

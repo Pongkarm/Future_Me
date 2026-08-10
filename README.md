@@ -28,20 +28,23 @@
 ## Overview
 
 FutureMe is a decision-support prototype for Thai lower-secondary, upper-secondary, and vocational
-students. It combines interest reflection, a short scenario mission, explainable route comparison,
-and a reversible 30-day action plan. It does not choose one “perfect career.”
+students. It combines a 30-question interest reflection, a short scenario mission, explainable
+comparison of up to three study or career-route hypotheses, a province-aware nearby-institution
+lookup, and a reversible 30-day action plan. It does not choose one “perfect career,” guarantee
+admission, or claim that a listed institution offers a particular programme.
 
 | Question | Answer |
 |---|---|
 | **Who is it for?** | Thai students exploring their next study or career direction |
-| **What does it produce?** | Zero to three route hypotheses, reasons, limitations, comparisons, and a 30-day plan |
-| **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them |
+| **What does it produce?** | Zero to three route hypotheses with reasons, limitations, comparisons, nearby-institution information, and a 30-day plan |
+| **What runs in this demo?** | 30 live interest questions, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
+| **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them or answer bounded repository questions |
 | **Is it production-ready?** | No. It is a runnable, tested hackathon prototype that still needs validated data and a real-student pilot |
 
 ### Latest web app preview
 
-Current screenshots from the integrated web app. They are a visual preview;
-the source and test suite remain the authoritative implementation record.
+Captured from this repository's production build on 9 August 2026. They cover the
+integrated learner flow; source code and automated tests remain the authoritative implementation record.
 
 <table>
   <tr>
@@ -49,16 +52,16 @@ the source and test suite remain the authoritative implementation record.
     <th>Interview</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png" alt="FutureMe landing page" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png" alt="FutureMe mascot-led interview" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png" alt="Latest FutureMe landing page" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
   </tr>
   <tr>
     <th>Routes</th>
     <th>30-day plan</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png" alt="FutureMe route exploration results" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png" alt="FutureMe 30-day exploration plan" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
   </tr>
 </table>
 

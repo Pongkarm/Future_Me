@@ -347,7 +347,8 @@
     <thead><tr><th style="width:38%">สร้างใหม่</th><th>ผลลัพธ์</th></tr></thead>
     <tbody>
       <tr><td class="mono">build/build_programme_index.py</td>
-          <td>ต่อทะเบียนแผนการรับนักศึกษา (data.go.th) เข้ากับสถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรีจริง 5,658 หลักสูตร ใน 154 สถาบัน</strong></td></tr>
+          <td>ต่อทะเบียน 4 ชุด — แผนการรับนักศึกษา · รหัส ISCED-F · ต้นทุนต่อหัว · สถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรีจริง 6,349 หลักสูตร ใน 153 สถาบัน (88.8% ของหลักสูตรที่ไม่ซ้ำ)</strong></td></tr>
+      <tr><td class="mono">build/build_isced_riasec.py</td><td>เวกเตอร์ RIASEC <strong>วัดจริงจาก 923 อาชีพใน O*NET</strong> ผ่านรหัส ISCED-F 2013 · พร้อม <span class="mono">crosswalk_audit.md</span> ที่ลิสต์ทุกการจับคู่ให้ตรวจ</td></tr>
       <tr><td class="mono">engine.py</td>
           <td>เอนจินอธิบายได้ 10 ขั้น · ไม่มี LLM · พารามิเตอร์ทุกตัวมีชื่อและเหตุผล</td></tr>
       <tr><td class="mono">students.py</td>
@@ -455,6 +456,31 @@
           <td>conjoint analysis กับนักเรียนจริง</td></tr>
     </tbody>
   </table>
+
+  <div class="callout">
+    <h4>เวกเตอร์ของสายไม่ได้มาจากการเดาอีกแล้ว — และของเดิมผิดจริง</h4>
+    <p>
+      เดิมหลักสูตรได้เวกเตอร์ RIASEC จาก 1 ใน 12 สายที่ทีมเขียนน้ำหนักเอง ตอนนี้โซ่เป็น
+      <span class="mono">หลักสูตรไทย → รหัส ISCED-F 2013 → กลุ่มอาชีพ O*NET → ค่าเฉลี่ย RIASEC ที่วัดมา</span>
+      เหลือดุลพินิจจุดเดียวคือ “อาชีพไหนอยู่ในสายไหน” ซึ่งเขียนเป็น pattern ที่อ่านได้
+      พร้อมไฟล์ audit ที่ลิสต์ทุกการจับคู่
+    </p>
+    <p>
+      ของเดิมไม่ได้แค่คลาดเคลื่อน — <strong>4 ใน 9 สายที่เทียบได้ มิติหลักผิด</strong>
+    </p>
+    <table style="margin-top:2mm">
+      <thead><tr><th>สาย</th><th>ทีมเดา</th><th>วัดจริง</th><th>สาย</th><th>ทีมเดา</th><th>วัดจริง</th></tr></thead>
+      <tbody>
+        <tr><td>วิศวกรรม</td><td>I</td><td><strong>R</strong></td><td>ดิจิทัลอาชีวะ</td><td>R</td><td><strong>I</strong></td></tr>
+        <tr><td>ธุรกิจ</td><td>E</td><td><strong>C</strong></td><td>โลจิสติกส์</td><td>C</td><td><strong>R</strong></td></tr>
+      </tbody>
+    </table>
+    <p>
+      ผลข้างเคียงที่สำคัญกว่า: ความครอบคลุมขึ้นจาก <strong>79.1% เป็น 88.8%</strong> ของหลักสูตรที่ไม่ซ้ำ
+      และสายที่เมื่อก่อน<strong>ไม่มีอยู่ในระบบเลย</strong>มาครบ — ครุศาสตร์ 704 · ภาษา 411 ·
+      นิติ 109 · รัฐศาสตร์ 97 · จิตวิทยา 22 หลักสูตร
+    </p>
+  </div>
 
   <div class="callout warn">
     <h4>ความซื่อสัตย์ทางวิชาการ</h4>
@@ -588,7 +614,7 @@
       <tr><td><strong>รายได้</strong></td><td>B2B2C กับโรงเรียน/เขตพื้นที่ (ใบอนุญาตรายปี ต่อจำนวนนักเรียน) · แดชบอร์ดสรุปภาพรวมให้ครูแนะแนว · ผู้ใช้ปลายทางฟรีเสมอ</td></tr>
       <tr><td><strong>ทำไมไม่คิดเงินเด็ก</strong></td><td>กลุ่มที่ได้ประโยชน์มากที่สุดคือกลุ่มที่จ่ายไม่ได้ ถ้าคิดเงินปลายทาง เราจะให้บริการเฉพาะคนที่มีทางเลือกอยู่แล้ว</td></tr>
       <tr><td><strong>ทำไมไม่รับค่าโฆษณาจากมหาวิทยาลัย</strong></td><td>ขัดกับสิ่งเดียวที่เราขาย — ลำดับที่อธิบายได้ ถ้าเงินซื้ออันดับได้ คำอธิบายก็ไร้ค่า เขียนเป็นข้อห้ามในสถาปัตยกรรม ไม่ใช่แค่นโยบาย</td></tr>
-      <tr><td><strong>ขยายต่อ</strong></td><td>เอนจินไม่ผูกกับ 12 สาย · เพิ่มสายและหลักสูตรได้ด้วยข้อมูล ไม่ต้องแก้โค้ด · ต่อยอดไปอาชีวะ ปวส. และหลักสูตรระยะสั้นได้ด้วยโครงสร้างเดียวกัน</td></tr>
+      <tr><td><strong>ขยายต่อ</strong></td><td>เอนจินไม่ผูกกับสายชุดใดชุดหนึ่ง · เพิ่มสายและหลักสูตรได้ด้วยข้อมูล ไม่ต้องแก้โค้ด · ต่อยอดไปอาชีวะ ปวส. และหลักสูตรระยะสั้นได้ด้วยโครงสร้างเดียวกัน</td></tr>
     </tbody>
   </table>
 </section>
@@ -600,14 +626,17 @@
   <table>
     <thead><tr><th style="width:23%">ชุดข้อมูล</th><th class="num" style="width:11%">จำนวน</th><th style="width:32%">แหล่ง</th><th>สถานะ</th></tr></thead>
     <tbody>
-      <tr><td>หลักสูตรปริญญาตรี</td><td class="num">5,658</td><td>data.go.th <span class="mono">dqe_11_01</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
-      <tr><td>สถาบันที่มีพิกัด</td><td class="num">154</td><td>อว. + สอศ. + Nominatim</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td>หลักสูตรปริญญาตรี</td><td class="num">6,349</td><td>data.go.th <span class="mono">dqe_11_01</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td>รหัสสาย ISCED-F 2013</td><td class="num">87</td><td>MHESI <span class="mono">univ_cur_11_01</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td><strong>ต้นทุนผลิต/คน/ปี</strong></td><td class="num">6,347</td><td>MHESI <span class="mono">dqe_11_03</span></td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td>สถาบันที่มีพิกัด</td><td class="num">153</td><td>อว. + สอศ. + Nominatim</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>จำนวนรับตามแผน</td><td class="num">ทุกแถว</td><td>เดียวกัน</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>ระยะทางถนนจริง</td><td class="num">77 จว.</td><td>OSRM (ไม่ใช่ระยะเส้นตรง)</td><td><span class="pill ok">คำนวณจากถนนจริง</span></td></tr>
       <tr><td>สถานีขนส่งผู้โดยสาร</td><td class="num">891</td><td>Wikidata</td><td><span class="pill ok">CC0</span></td></tr>
       <tr><td>ผลผู้จบอาชีวะ</td><td class="num">1,014</td><td>สอศ.</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>ข้อคำถาม</td><td class="num">90</td><td>18REST + งานเขียนเอง</td><td><span class="pill mid">ยังไม่ validate</span></td></tr>
-      <tr><td>เวกเตอร์ RIASEC ของสาย</td><td class="num">12</td><td>ทีมกำหนด</td><td><span class="pill mid">ออกแบบเอง</span></td></tr>
+      <tr><td>เวกเตอร์ RIASEC ของสาย</td><td class="num">87</td><td>O*NET 29.1 · 923 อาชีพ (CC BY 4.0)</td><td><span class="pill ok">วัดมาจริง</span></td></tr>
+      <tr><td>การจับคู่ ISCED → อาชีพ</td><td class="num">91</td><td>ทีมกำหนด · มี audit ให้ตรวจ</td><td><span class="pill mid">ยังไม่ผ่านผู้เชี่ยวชาญ</span></td></tr>
       <tr><td><strong>ค่าเทอมเป็นบาท</strong></td><td class="num">—</td><td>—</td><td><span class="pill no">ไม่มีข้อมูล</span></td></tr>
       <tr><td><strong>รอบ TCAS · วิชา · คะแนน</strong></td><td class="num">—</td><td>mytcas ไม่มี open API</td><td><span class="pill no">ไม่มีข้อมูล</span></td></tr>
       <tr><td><strong>ทุนการศึกษา</strong></td><td class="num">—</td><td>—</td><td><span class="pill no">ไม่มีข้อมูล</span></td></tr>
@@ -671,34 +700,33 @@
   </p>
 
   <h3>ผู้เรียน ก · ม.5 · กรุงเทพฯ · ไปกลับเท่านั้น · งบจำกัด</h3>
-  <div class="formula">โปรไฟล์หลังหด   S 0.93  ·  E 0.73  ·  I 0.54  ·  C 0.54  ·  R 0.33  ·  A 0.33
-ความมั่นใจ 0.86   differentiation 0.60   ให้ข้อมูลจริง 60/60 ข้อ
-ตัดออกก่อนให้คะแนน 4,219 หลักสูตร (อยู่นอกระยะที่ผู้เรียนบอกว่าไปได้)
+  <div class="formula">ความมั่นใจ 0.97   differentiation 0.68
+ตัดออกก่อนให้คะแนน 4,993 หลักสูตร (อยู่นอกระยะที่ผู้เรียนบอกว่าไปได้)
 
-อันดับสาย   business-admin+health-care 88.5  →  business-admin 86.4  →  health-care 78.9</div>
+อันดับสาย   Education science 87.2 → Social work 86.4 → Law 85.9 → Political sciences 85.2</div>
   <table>
     <thead><tr><th style="width:4%">#</th><th style="width:34%">หลักสูตร</th><th style="width:20%">สถาบัน</th><th class="num">cos</th><th class="num">Core</th><th class="num">บริบท</th><th class="num">รวม</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>บริหารธุรกิจบัณฑิต การจัดการงานบริการสถานพยาบาล</td><td>ราชภัฏธนบุรี</td><td class="num">0.989</td><td class="num">88.5</td><td class="num">13.0</td><td class="num"><strong>101.5</strong></td></tr>
-      <tr><td>2</td><td>บัญชีบัณฑิต</td><td>รมงคลรัตนโกสินทร์</td><td class="num">0.958</td><td class="num">86.4</td><td class="num">15.0</td><td class="num"><strong>101.4</strong></td></tr>
-      <tr><td>3</td><td>บริหารธุรกิจบัณฑิต การจัดการ</td><td>รมงคลรัตนโกสินทร์</td><td class="num">0.958</td><td class="num">86.4</td><td class="num">14.9</td><td class="num"><strong>101.3</strong></td></tr>
+      <tr><td>1</td><td>ครุศาสตรบัณฑิต เทคโนโลยีการศึกษาและคอมพิวเตอร์ (5 ปี)</td><td>ราชภัฏสวนสุนันทา</td><td class="num">0.974</td><td class="num">87.2</td><td class="num">13.2</td><td class="num"><strong>100.3</strong></td></tr>
+      <tr><td>2</td><td>ครุศาสตรบัณฑิต เทคโนโลยีดิจิทัลเพื่อการศึกษา (4 ปี)</td><td>ราชภัฏสวนสุนันทา</td><td class="num">0.974</td><td class="num">87.2</td><td class="num">13.2</td><td class="num"><strong>100.3</strong></td></tr>
+      <tr><td>3</td><td>นิติศาสตรบัณฑิต</td><td>ราชภัฏบ้านสมเด็จเจ้าพระยา</td><td class="num">0.965</td><td class="num">85.9</td><td class="num">13.4</td><td class="num"><strong>99.3</strong></td></tr>
     </tbody>
   </table>
   <p style="font-size:8.6pt;color:var(--ink-2)">
-    อันดับ 1 ไม่ใช่ธุรกิจทั่วไป แต่เป็น<strong>การจัดการงานบริการสถานพยาบาล</strong> —
-    เพราะโปรไฟล์ S สูงมาก (0.93) และหลักสูตรนี้อยู่ระหว่างสาย business กับ health
-    ทำให้ cos สูงกว่าบัญชีล้วน นี่คือผลของการใช้ cosine แทนค่าเฉลี่ยถ่วงน้ำหนัก
+    <strong>ครุศาสตร์ · สังคมสงเคราะห์ · นิติ · รัฐศาสตร์</strong> — สี่สายนี้
+    <strong>ไม่มีอยู่ในระบบเลย</strong>ตอนที่ยังใช้เวกเตอร์ที่ทีมเดา ผู้เรียนโปรไฟล์ S–E คนนี้เคยได้
+    “บัญชี” เป็นอันดับสอง ตอนนี้ได้สายที่ตรงกับความชอบทำงานกับคนจริง ๆ
   </p>
 
   <h3>ผู้เรียน ข · ม.6 · เชียงใหม่ · ย้ายได้ · งบปานกลาง</h3>
-  <div class="formula">โปรไฟล์หลังหด   R 0.75  ·  I 0.75  ·  C 0.54  ·  A 0.33  ·  S 0.28  ·  E 0.28
-อันดับสาย   sci-math-engineering+vocational-digital 89.8  →  sci-math-engineering 88.1</div>
+  <div class="formula">โปรไฟล์หลังหด   R 0.75  ·  I 0.75  ·  C 0.75  ·  A 0.25  ·  S 0.25  ·  E 0.25
+อันดับสาย   Environmental protection 88.4 → Chemistry 88.0 → Engineering n.f.d. 87.6</div>
   <table>
     <thead><tr><th style="width:4%">#</th><th style="width:34%">หลักสูตร</th><th style="width:20%">สถาบัน</th><th class="num">cos</th><th class="num">Core</th><th class="num">บริบท</th><th class="num">รวม</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>วิทยาศาสตรบัณฑิต เทคโนโลยีสารสนเทศ</td><td>ราชภัฏเชียงใหม่</td><td class="num">0.983</td><td class="num">89.8</td><td class="num">13.3</td><td class="num"><strong>103.1</strong></td></tr>
-      <tr><td>2</td><td>วิทยาศาสตรบัณฑิต วิศวกรรมซอฟต์แวร์ (นานาชาติ)</td><td>ม.เชียงใหม่</td><td class="num">0.983</td><td class="num">89.8</td><td class="num">13.2</td><td class="num"><strong>103.0</strong></td></tr>
-      <tr><td>3</td><td>วิทยาศาสตรบัณฑิต เกษตรศาสตร์</td><td>ม.เชียงใหม่</td><td class="num">0.938</td><td class="num">88.1</td><td class="num">13.9</td><td class="num"><strong>102.0</strong></td></tr>
+      <tr><td>1</td><td>วิศวกรรมศาสตรบัณฑิต วิศวกรรมสิ่งแวดล้อม</td><td>ม.เชียงใหม่</td><td class="num">0.987</td><td class="num">88.4</td><td class="num">13.2</td><td class="num"><strong>101.7</strong></td></tr>
+      <tr><td>2</td><td>วิศวกรรมศาสตรบัณฑิต วิศวกรรมอุตสาหการ</td><td>ม.เชียงใหม่</td><td class="num">0.991</td><td class="num">87.6</td><td class="num">13.7</td><td class="num"><strong>101.3</strong></td></tr>
+      <tr><td>3</td><td>วิทยาศาสตรบัณฑิต เคมี</td><td>ราชภัฏเชียงใหม่</td><td class="num">0.943</td><td class="num">88.0</td><td class="num">13.3</td><td class="num"><strong>101.3</strong></td></tr>
     </tbody>
   </table>
   <p style="font-size:8.6pt;color:var(--ink-2)">
@@ -713,7 +741,7 @@
 ⚠ ระบบไม่จัดอันดับให้
    · ความมั่นใจรวมต่ำกว่า 0.50
    · differentiation 0.12 &lt; 0.20 — โปรไฟล์แบนไม่ได้แปลว่าเข้าได้ทุกสาย แต่แปลว่ายังไม่รู้
-   · ถ้าปล่อยผ่าน จะมี 5,658 หลักสูตรผ่านเกณฑ์ ซึ่งดูน่าเชื่อถือทั้งที่ไม่มีหลักฐาน</div>
+   · ถ้าปล่อยผ่าน จะมี 6,349 หลักสูตรผ่านเกณฑ์ ซึ่งดูน่าเชื่อถือทั้งที่ไม่มีหลักฐาน</div>
   <p style="font-size:8.6pt;color:var(--ink-2)">
     <strong>นี่คือฟีเจอร์ ไม่ใช่ความล้มเหลว</strong> เครื่องมือแนะแนวที่ให้คำตอบกับทุกคนเสมอ
     คือเครื่องมือที่คำตอบไม่มีความหมาย ระบบบอกด้วยว่าควรถามอะไรต่อ: ข้อประสบการณ์และข้อบังคับเลือก
@@ -750,7 +778,7 @@
       <tr><td>6</td><td>Demo สด</td><td class="num">60 วิ</td><td>รัน <span class="mono">run.py</span> ให้เห็นการอนุมานทีละขั้น</td></tr>
       <tr><td>7</td><td>ผู้เรียน ก vs ข</td><td class="num">30 วิ</td><td>สองโปรไฟล์ ผลคนละชุด กลไกเดียวกัน</td></tr>
       <tr><td>8</td><td><strong>ผู้เรียน ค</strong></td><td class="num">30 วิ</td><td><strong>ระบบปฏิเสธที่จะตอบ</strong> — จุดที่ทำให้ต่างจากแบบทดสอบทั่วไปมากที่สุด</td></tr>
-      <tr><td>9</td><td>ข้อมูล</td><td class="num">20 วิ</td><td>5,658 หลักสูตรจริง · ระยะถนนจริง 77 จังหวัด · และช่องที่ยังว่าง</td></tr>
+      <tr><td>9</td><td>ข้อมูล</td><td class="num">20 วิ</td><td>6,349 หลักสูตรจริง · RIASEC วัดจาก 923 อาชีพ · ระยะถนนจริง 77 จังหวัด · และช่องที่ยังว่าง</td></tr>
       <tr><td>10</td><td>บทบาท AI</td><td class="num">20 วิ</td><td>ถอด LLM ออกแล้วยังทำงานได้ — AI อธิบาย ไม่ได้ตัดสิน</td></tr>
       <tr><td>11</td><td>Impact &amp; ธุรกิจ</td><td class="num">20 วิ</td><td>B2B2C กับโรงเรียน · ปลายทางฟรี · ไม่รับเงินจากมหาวิทยาลัย</td></tr>
       <tr><td>12</td><td>ปิด</td><td class="num">10 วิ</td><td>“เราไม่ได้บอกเด็กว่าต้องเรียนอะไร เราทำให้เขาตัดสินใจได้ดีขึ้น และตรวจสอบเราได้”</td></tr>
@@ -779,6 +807,23 @@
     ถูกสร้างขึ้นบางส่วนจากความมั่นใจในตนเอง ให้ efficacy เต็มจึงเป็นการนับซ้ำ
     ค่านี้อยู่ที่เดียวในโค้ดพร้อมเหตุผล และเราเขียนไว้ชัดว่าจะตรวจสอบด้วยความพึงพอใจของนักศึกษาปี 1
     เราจะไม่อ้างว่ามันได้รับการพิสูจน์แล้ว
+  </div></div>
+
+  <div class="qa"><div class="q">เวกเตอร์ความสนใจของแต่ละสายมาจากไหน</div><div class="a">
+    <strong>วัดมาจริง ไม่ใช่กำหนดเอง</strong> — O*NET (กระทรวงแรงงานสหรัฐฯ, CC BY 4.0) เผยแพร่โปรไฟล์
+    RIASEC ที่วัดจาก 923 อาชีพ · ทะเบียนหลักสูตรของ อว. ให้รหัสสาย ISCED-F 2013 กับทุกหลักสูตร ·
+    เวกเตอร์ของหลักสูตรจึงเป็นค่าเฉลี่ยของอาชีพในสายนั้น
+    เหลือดุลพินิจจุดเดียวคือการจับคู่สายกับกลุ่มอาชีพ ซึ่งเปิดให้ตรวจทุกบรรทัดใน
+    <span class="mono">crosswalk_audit.md</span> และ<strong>ยังไม่ผ่านการตรวจโดยผู้เชี่ยวชาญ</strong> —
+    เราเขียนกำกับไว้ทุกชั้นของข้อมูล
+  </div></div>
+
+  <div class="qa"><div class="q">ทำไมไม่ใช้ข้อมูลให้เยอะกว่านี้</div><div class="a">
+    ลองแล้วและปฏิเสธ — O*NET มีชื่อพ้อง 55,120 รายการ ถ้าจับคู่กับชื่อพ้องด้วย
+    สายที่หลักฐานบางจะลดจาก 15 เหลือ 9 <strong>แต่ทำลายสายที่คมอยู่แล้ว</strong>:
+    “ศิลปะ” จะดูด Software Developers, Database Architects, Blockchain Engineers เข้ามา
+    แล้วพลิกจาก Artistic 0.83 เป็น Realistic 0.63 · Law พลิก E เป็น C
+    <strong>ข้อมูลมากขึ้นไม่ได้แปลว่าดีขึ้น</strong> เราเก็บ counter-example ไว้ในโค้ดกันคนทำซ้ำ
   </div></div>
 
   <div class="qa"><div class="q">ใครรับรองว่าคำแนะนำถูก</div><div class="a">
@@ -838,11 +883,12 @@
       <tr><td>1</td><td><strong>ไม่มีข้อมูล TCAS จริง</strong> — รอบ วิชา คะแนนขั้นต่ำ ค่าเทอม ทุน</td><td><span class="pill no">สูง</span></td><td>ตอบ “เรียนอะไร ที่ไหน” ได้ แต่ยังตอบ “สมัครยังไง” ไม่ได้ · ต้องขอข้อมูลหรือ scrape mytcas</td></tr>
       <tr><td>2</td><td>CoreFit แยกได้แค่ระดับ<strong>สาย</strong> ไม่ใช่ระดับหลักสูตร</td><td><span class="pill no">สูง</span></td><td>ดึง O*NET Interest Profiler แล้วทำ crosswalk หลักสูตรไทย → ISCO → O*NET</td></tr>
       <tr><td>3</td><td>ข้อคำถาม 90 ข้อยัง <span class="mono">validationStatus: none</span></td><td><span class="pill mid">กลาง</span></td><td>IOC จากผู้เชี่ยวชาญแนะแนว 3–5 คน แล้ว CFA กับตัวอย่างจริง</td></tr>
-      <tr><td>4</td><td>ครอบคลุมหลักสูตรแค่ <strong>54.6%</strong> — ขาดนิติ รัฐศาสตร์ ครุศาสตร์ ภาษา</td><td><span class="pill mid">กลาง</span></td><td>เพิ่มสายพร้อมเวกเตอร์จาก O*NET · <strong>จงใจไม่แต่งเวกเตอร์เองเพื่อให้ตัวเลขดูดี</strong></td></tr>
+      <tr><td>4</td><td><s>ครอบคลุมแค่ 54.6%</s> → <strong>88.8%</strong> · นิติ ครุศาสตร์ ภาษา รัฐศาสตร์ มาครบแล้ว</td><td><span class="pill ok">แก้แล้ว</span></td><td>ที่เหลือคือ 412 หลักสูตรที่สถาบันไม่มีพิกัด และ 214 ที่สาย ISCED ยังไม่ได้แมป</td></tr>
       <tr><td>5</td><td>พารามิเตอร์ทุกตัวเป็นการตัดสินใจออกแบบ</td><td><span class="pill mid">กลาง</span></td><td>pilot กับนักเรียนจริง 1 โรงเรียน แล้ว calibrate</td></tr>
       <tr><td>6</td><td>ทะเบียนสถาบันเป็นข้อมูลปี 2564</td><td><span class="pill mid">กลาง</span></td><td>ดึงทะเบียนรอบล่าสุด</td></tr>
       <tr><td>7</td><td>ระยะทางวัดจาก<strong>ศูนย์กลางจังหวัด ไม่ใช่บ้านเด็ก</strong></td><td><span class="pill mid">กลาง</span></td><td>รับตำแหน่งจากผู้เรียนแล้วคำนวณใหม่ · เขียนเตือนไว้ในข้อมูลแล้ว</td></tr>
-      <tr><td>8</td><td>เอนจินใหม่ยังไม่ได้ต่อเข้าเว็บแอป</td><td><span class="pill mid">กลาง</span></td><td>เว็บแอปยังใช้ตรรกะเดิมระดับสาย · port ได้ ตรรกะตรงกันอยู่แล้ว</td></tr>
+      <tr><td>8</td><td><s>เอนจินยังไม่ได้ต่อเข้าเว็บแอป</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>อยู่บนหน้า <span class="mono">/routes</span> แล้ว · เทสต์ 546 ข้อผ่าน · parity test อ่าน <span class="mono">engine.py</span> เทียบค่าพารามิเตอร์กันเพี้ยน</td></tr>
+      <tr><td>9</td><td>หน้าสัมภาษณ์ยังไม่ถามข้อ self-efficacy 6 ข้อ</td><td><span class="pill mid">กลาง</span></td><td>เอนจินอ่านได้แล้ว · ต้องเพิ่มสเกลความมั่นใจแยกในหน้า <span class="mono">/interview</span> ~1–2 ชม.</td></tr>
     </tbody>
   </table>
 
@@ -853,7 +899,7 @@
     <tbody>
       <tr><td>1</td><td>ซ้อมสไลด์ 5 (กลไก) และ 8 (ปฏิเสธ) ให้พูดได้โดยไม่ดูโน้ต</td><td>2 ชม.</td><td>เป็นสองสไลด์ที่อาจารย์บอกว่าคือคุณค่าแกนกลาง</td></tr>
       <tr><td>2</td><td>เตรียม demo <span class="mono">run.py</span> ให้รันสดได้บนเวที</td><td>1 ชม.</td><td>เห็นการอนุมานทีละขั้นดีกว่าอธิบายด้วยปาก</td></tr>
-      <tr><td>3</td><td>ต่อเอนจินใหม่เข้าหน้า <span class="mono">/routes</span> ของเว็บแอป</td><td>4–6 ชม.</td><td>ให้ demo กับเอกสารเป็นระบบเดียวกัน</td></tr>
+      <tr><td>3</td><td>ถามข้อ self-efficacy 6 ข้อในหน้า <span class="mono">/interview</span></td><td>1–2 ชม.</td><td>เปิดใช้แกนที่สองและช่อง “ชอบ/ถนัด” ซึ่งตอนนี้ยังไม่แสดง</td></tr>
       <tr><td>4</td><td>ส่งข้อ 90 ข้อให้ครูแนะแนว 3 คนทำ IOC</td><td>รอ 3–5 วัน</td><td>เปลี่ยน “ยังไม่ validate” เป็น “IOC ผ่านแล้ว” ได้ในรอบเดียว</td></tr>
       <tr><td>5</td><td>ดึงค่าเทอมจริงของ 20 สถาบันแรก ด้วยมือ</td><td>3 ชม.</td><td>ปิดช่องว่างที่ใหญ่ที่สุดบางส่วน ด้วยข้อมูลจริงไม่ใช่ค่าประมาณ</td></tr>
       <tr><td>6</td><td>คัดของจาก branch เพื่อน (CAT engine ของ Kong)</td><td>2 ชม.</td><td>โค้ด CAT ใช้ได้ · <strong>แต่ต้อง revert การเปลี่ยน provenance เป็น “verified” ที่ไม่ได้ตรวจจริง</strong></td></tr>
@@ -867,17 +913,17 @@
     <tbody>
       <tr class="score-row"><td>ความชัดของปัญหา</td><td class="num">55</td><td class="num">88</td><td><span class="bar" style="width:44pt"></span></td><td>ต้องพิสูจน์ด้วยการสัมภาษณ์นักเรียนจริง</td></tr>
       <tr class="score-row"><td>Value proposition</td><td class="num">50</td><td class="num">85</td><td><span class="bar" style="width:42pt"></span></td><td>ยังต้องซ้อมให้จบใน 10 วินาที</td></tr>
-      <tr class="score-row"><td><strong>ทฤษฎีการแนะนำ</strong></td><td class="num">60</td><td class="num"><strong>92</strong></td><td><span class="bar" style="width:46pt"></span></td><td>ความละเอียดยังอยู่ระดับสาย</td></tr>
-      <tr class="score-row"><td><strong>เหตุผลทางวิชาการ</strong></td><td class="num">55</td><td class="num"><strong>90</strong></td><td><span class="bar" style="width:45pt"></span></td><td>พารามิเตอร์ยังไม่ calibrate</td></tr>
+      <tr class="score-row"><td><strong>ทฤษฎีการแนะนำ</strong></td><td class="num">60</td><td class="num"><strong>92</strong></td><td><span class="bar" style="width:46pt"></span></td><td>ความละเอียดยังอยู่ระดับสาย (87 สาย ไม่ใช่ 12 แล้ว)</td></tr>
+      <tr class="score-row"><td><strong>เหตุผลทางวิชาการ</strong></td><td class="num">55</td><td class="num"><strong>94</strong></td><td><span class="bar" style="width:45pt"></span></td><td>พารามิเตอร์ 10 ตัวยังไม่ calibrate · แต่เวกเตอร์สายวัดมาแล้ว</td></tr>
       <tr class="score-row"><td><strong>อธิบายได้</strong></td><td class="num">45</td><td class="num"><strong>95</strong></td><td><span class="bar" style="width:47pt"></span></td><td>คำอธิบายยังเป็น output เทอร์มินัล ไม่ใช่ UI</td></tr>
       <tr class="score-row"><td>ใช้ได้จริง</td><td class="num">40</td><td class="num">72</td><td><span class="bar" style="width:36pt"></span></td><td>ขาด TCAS/ค่าเทอม ซึ่งเป็นสิ่งที่เด็กต้องใช้จริง</td></tr>
       <tr class="score-row"><td>Business idea</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ยังไม่มี LOI จากโรงเรียน</td></tr>
       <tr class="score-row"><td>ความเหมาะสมของ AI</td><td class="num">50</td><td class="num">90</td><td><span class="bar" style="width:45pt"></span></td><td>ชั้น AI ยังไม่ได้เดโม</td></tr>
-      <tr class="score-row"><td>คุณภาพข้อมูล</td><td class="num">70</td><td class="num">85</td><td><span class="bar" style="width:42pt"></span></td><td>ทะเบียนปี 2564 · ครอบคลุม 54.6%</td></tr>
+      <tr class="score-row"><td>คุณภาพข้อมูล</td><td class="num">70</td><td class="num">90</td><td><span class="bar" style="width:42pt"></span></td><td>ทะเบียนปี 2564 · ครอบคลุม 88.8%</td></tr>
       <tr class="score-row"><td>User journey</td><td class="num">60</td><td class="num">78</td><td><span class="bar" style="width:39pt"></span></td><td>สองขั้นท้ายยังว่างเพราะไม่มีข้อมูล</td></tr>
       <tr class="score-row"><td>นวัตกรรม</td><td class="num">55</td><td class="num">82</td><td><span class="bar" style="width:41pt"></span></td><td>“ระบบที่ยอมปฏิเสธ” คือจุดต่างที่แท้จริง ต้องเล่าให้ดัง</td></tr>
       <tr class="score-row"><td>พลังการพิทช์</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ขึ้นกับการซ้อม</td></tr>
-      <tr style="border-top:1.5px solid var(--ink)"><td><strong>เฉลี่ย</strong></td><td class="num"><strong>52.5</strong></td><td class="num"><strong>84.8</strong></td><td></td><td></td></tr>
+      <tr style="border-top:1.5px solid var(--ink)"><td><strong>เฉลี่ย</strong></td><td class="num"><strong>52.5</strong></td><td class="num"><strong>85.5</strong></td><td></td><td></td></tr>
     </tbody>
   </table>
 
@@ -888,6 +934,7 @@
       <li><strong>เวลาหมดก่อนถึงสไลด์กลไก</strong> — สไลด์ 5 คือหัวใจ ถ้าจำเป็นต้องตัด ให้ตัดสไลด์อื่น</li>
       <li><strong>ถูกมองว่าเป็นแบบทดสอบบุคลิกภาพอีกอัน</strong> — ต้องเปิดด้วยผู้เรียน ค ที่ระบบปฏิเสธ ไม่ใช่เปิดด้วยผลลัพธ์สวย ๆ</li>
       <li><strong>เดโมล่ม</strong> — เตรียม <span class="mono">traces/all.txt</span> เป็นภาพสำรอง</li>
+      <li><strong>ถูกถามว่าการจับคู่ ISCED→อาชีพ ใครตรวจ</strong> — ตอบตรงว่ายังไม่มีใครตรวจ มี audit ให้ดูทุกบรรทัด และค่า RIASEC เองวัดมาจริง · สายที่หนุนด้วยอาชีพน้อยกว่า 3 เหลือกระทบแค่ 13 หลักสูตร (0.2%)</li>
       <li><strong>ข้อมูลจาก branch เพื่อนที่ยังไม่ตรวจปนเข้ามา</strong> — มี commit ที่เปลี่ยน provenance จาก “illustrative” เป็น “verified” โดยไม่ได้ตรวจจริง ต้องกันไว้</li>
     </ol>
   </div>

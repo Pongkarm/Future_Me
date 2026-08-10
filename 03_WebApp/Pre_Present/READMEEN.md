@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <p align="center">
-  <img src="assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
+  <img src="assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
 
 # FutureMe AI
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="Continuous integration status"></a>
+  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml?branch=Panussu"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="Continuous integration status"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="MIT license"></a>
 </p>
@@ -38,7 +38,7 @@
   &nbsp;·&nbsp;
   <strong><a href="#run-the-prototype">Run</a></strong>
   &nbsp;·&nbsp;
-  <a href="READMETH.md">Thai version</a>
+  <a href="READMETH.md">ภาษาไทย</a>
 </p>
 
 <p align="center">
@@ -112,7 +112,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **5 · Act** | Turn one route into a 30-day plan of small, reversible tasks. | New evidence from action |
 
 <p align="center">
-  <a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="Implemented routes screen with several routes and visible evidence" width="92%"></a>
+  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="Implemented routes screen with several routes and visible evidence" width="92%"></a>
 </p>
 
 <p align="center">
@@ -122,22 +122,32 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/landing-2026-08-09.png"><img src="assets/screenshots/app/landing-2026-08-09.png" alt="Current FutureMe landing page with the mascot and guest start button"></a><br>
-<strong>Start</strong><br><sub>See what the prototype does and begin without creating an account.</sub>
+<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="Implemented FutureMe assessment screen showing one interest item on a five-point scale"></a><br>
+<strong>Reflect</strong><br><sub>Thirty interest items, one at a time, on a five-point like-to-dislike scale.</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="Current mascot-led FutureMe interview"></a><br>
-<strong>Reflect</strong><br><sub>Chat through interests and practical context with the FutureMe mascot.</sub>
+<a href="assets/screenshots/app/interview-th-light-desktop.png"><img src="assets/screenshots/app/interview-th-light-desktop.png" alt="The same FutureMe assessment screen in Thai on the light theme"></a><br>
+<strong>Reflect, in Thai</strong><br><sub>The same screen. Language and theme both persist across visits.</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="Current mascot-led route exploration results"></a><br>
-<strong>Explore</strong><br><sub>Review several directions with visible evidence and limitations.</sub>
+<a href="assets/screenshots/app/mission-desktop.png"><img src="assets/screenshots/app/mission-desktop.png" alt="Implemented FutureMe mission screen"></a><br>
+<strong>Try</strong><br><sub>A short scenario mission chosen by an explainable rule.</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="Current FutureMe 30-day exploration plan"></a><br>
-<strong>Act</strong><br><sub>Test one route through a reversible 30-day plan.</sub>
+<a href="assets/screenshots/app/compare-desktop.png"><img src="assets/screenshots/app/compare-desktop.png" alt="Implemented FutureMe route comparison screen"></a><br>
+<strong>Compare</strong><br><sub>The same criteria, limitations, and evidence across routes.</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/interview-review-desktop.png"><img src="assets/screenshots/app/interview-review-desktop.png" alt="Implemented FutureMe review step listing every answer"></a><br>
+<strong>Review</strong><br><sub>Every answer stays changeable before the assessment is submitted.</sub>
+</td>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/plan-desktop.png"><img src="assets/screenshots/app/plan-desktop.png" alt="Implemented FutureMe 30-day plan screen"></a><br>
+<strong>Act</strong><br><sub>A 30-day experiment whose progress stays in the browser.</sub>
 </td>
 </tr>
 </table>
@@ -155,7 +165,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **Assessment** | 30 interleaved activity-interest items, 5 per RIASEC dimension, using a 5-point like/dislike scale |
 | **Context** | 4 required prompts for education tier, cost, mobility, and time horizon, plus 1 optional free-text prompt |
 | **Missions** | 3 four-step scenario missions; deterministic scoring and transparent selection; learner override |
-| **Catalogue** | 6 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
+| **Catalogue** | 12 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
 | **Recommendations** | 0–3 routes, refusal gates, hard constraints, ties, contradiction signals, provenance, and unknowns |
 | **Comparison and plan** | Consistent route comparison and a deterministic 30-day plan with gap-specific tasks |
 | **Optional AI** | Repo-grounded chat and explanation rewording, both with deterministic offline fallbacks and outside route selection |
@@ -163,6 +173,12 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 
 The application can be used end to end without an account, database, environment variable, or
 model provider.
+
+### Combined data snapshot
+
+- The active catalogue contains 12 illustrative routes. Their source notes guide exploration; they are not admissions or programme guarantees.
+- The nearby-institution experience uses the refreshed `data/nearby.json`: 77 provinces and 1,961 options from the documented MHESI/OVEC pipeline.
+- The 1,000-item question bank and the 90-item adaptive-questionnaire design are retained as research material. The live interview still uses the existing 30-item `data/questions.json` instrument.
 
 ---
 
@@ -298,7 +314,7 @@ What is not supported:
 - Published reliability from 18REST does not transfer to adapted English items or the Thai translation.
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics, fixed weights, and recommendation thresholds have not been validated.
-- The 6-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
+- The 12-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
   and limitations contain unsourced team estimates.
 - No ethics approval, real-student pilot, bias audit, or outcome evaluation has run.
 
@@ -340,7 +356,7 @@ No school, platform, or cloud partnership is presented as confirmed until an agr
 Requires Node.js 20 or newer.
 
 ```bash
-git clone --branch Panussu https://github.com/Pongkarm/Future_Me.git
+git clone https://github.com/Pongkarm/Future_Me.git
 cd Future_Me/03_WebApp/Pre_Present
 npm ci
 npm run dev
@@ -387,5 +403,5 @@ Found a problem in the product, code, or evidence?
   <br><br>
   <a href="#top">Back to top</a>
   &nbsp;·&nbsp;
-  <a href="READMETH.md">Read in Thai</a>
+  <a href="READMETH.md">อ่านภาษาไทย</a>
 </p>

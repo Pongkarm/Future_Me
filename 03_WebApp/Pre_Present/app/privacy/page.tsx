@@ -81,6 +81,11 @@ export default function PrivacyPage() {
                 <td className="p-2">{t.privacy.untilCleared}</td>
               </tr>
               <tr className="border-b border-line/50">
+                <td className="p-2">{t.privacy.rowProvince}</td>
+                <td className="p-2">{t.privacy.thisBrowser}</td>
+                <td className="p-2">{t.privacy.untilCleared}</td>
+              </tr>
+              <tr className="border-b border-line/50">
                 <td className="p-2">{t.privacy.rowSession}</td>
                 <td className="p-2">{t.privacy.thisBrowserRandom}</td>
                 <td className="p-2">{t.privacy.untilCleared}</td>

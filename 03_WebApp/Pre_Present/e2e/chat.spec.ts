@@ -2,6 +2,11 @@ import { expect, test } from "@playwright/test";
 
 test("the repo-grounded chat works without an AI key and can be cleared", async ({ page }) => {
   await page.goto("/");
+  // The landing page leads with one action and keeps the other ways in behind
+  // a tab, so reaching chat from the front page now takes the tab first. Going
+  // through it rather than straight to /chat is the point of this line: it is
+  // the only test that proves a learner can still get there from the start.
+  await page.getByTestId("landing-tab-more").click();
   await page.getByTestId("open-chat").click();
 
   await expect(page).toHaveURL(/\/chat$/);

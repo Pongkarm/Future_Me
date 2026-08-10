@@ -19,6 +19,9 @@ import { format, localised } from "@/lib/i18n";
 import type { Dictionary } from "@/lib/i18n";
 import type { Language } from "@/lib/preferences";
 import SafetyPause from "@/components/SafetyPause";
+import provinces from "@/data/provinces.json";
+import { NearbyForRoute } from "@/components/routes/NearbyForRoute";
+import { isProvinceCode, type NearbyProvince } from "@/lib/geo/types";
 import {
   JourneyChatPanel,
   JourneyMascotTurn,
@@ -59,9 +62,45 @@ export default function RoutesPage() {
   const [session, setSession] = useState<GuestSession | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [llmAvailable, setLlmAvailable] = useState(false);
+  const [nearby, setNearby] = useState<NearbyProvince | null>(null);
 
   useEffect(() => {
     setSession(loadOrCreate());
+  }, []);
+
+  /*
+   * Places are fetched only once the learner has said where they are, and the
+   * failure is silent: the routes are the point of this screen and they are
+   * complete without this section. A network problem here should cost the
+   * addition, never the page.
+   */
+  const provinceIso = session?.provinceIso ?? null;
+  useEffect(() => {
+    if (!provinceIso) {
+      setNearby(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/nearby?province=${encodeURIComponent(provinceIso)}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: NearbyProvince | null) => {
+        if (!cancelled) setNearby(data);
+      })
+      .catch(() => {
+        if (!cancelled) setNearby(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [provinceIso]);
+
+  const chooseProvince = useCallback((iso: string) => {
+    setSession((current) => {
+      if (!current) return current;
+      const next = { ...current, provinceIso: isProvinceCode(iso) ? iso : null };
+      saveSession(next);
+      return next;
+    });
   }, []);
 
   // Ask once whether the optional rewording layer is configured. The control is
@@ -223,6 +262,33 @@ export default function RoutesPage() {
       </div>
       </JourneyMascotTurn>
 
+      {/*
+        Asked once, here, and remembered. Every route card below is then able to
+        name real places, which is the difference between a suggestion a learner
+        reads and one they can act on. It is a province, chosen from a list —
+        never the device's location, which for a thirteen-year-old would be a
+        home address we have no need for.
+      */}
+      <div className="mb-5 flex flex-wrap items-center gap-2">
+        <label htmlFor="routes-province" className="text-xs font-bold text-muted">
+          {provinceIso ? t.routes.nearbyChangeProvince : t.routes.nearbySetProvince}
+        </label>
+        <select
+          id="routes-province"
+          data-testid="routes-province"
+          value={provinceIso ?? ""}
+          onChange={(event) => chooseProvince(event.target.value)}
+          className="min-w-0 flex-1 rounded-control border border-line bg-surface px-3 py-1.5 text-sm sm:max-w-xs"
+        >
+          <option value="">{t.nearby.pickPlaceholder}</option>
+          {provinces.map((province) => (
+            <option key={province.iso} value={province.iso}>
+              {province.th} · {province.en}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Equal weight by construction: same grid cell, same card, same actions. */}
       <ul className="space-y-6" data-testid="route-options">
         {result.routes.map((route) => (
@@ -238,6 +304,7 @@ export default function RoutesPage() {
                 onSelect={() => select(route.routeId)}
                 t={t}
                 lang={lang}
+                nearby={nearby}
               />
             </JourneyMessage>
           </li>
@@ -327,9 +394,19 @@ function SignalSummary({ result, t }: { result: Recommendation; t: Dictionary })
       : t.routes.missionAgreed;
 
   return (
-    <section className="rounded-card border border-line bg-surface p-5" data-testid="signal-summary">
-      <h2 className="text-sm font-bold">{t.routes.summaryTitle}</h2>
-      <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+    /*
+     * A disclosure rather than a panel. This explains how the engine reached
+     * its answer, which matters — but on a 390px screen it was 400px of
+     * preamble in front of the answer itself, and a learner who has just
+     * answered thirty questions should meet the routes first.
+     */
+    <details className="rounded-card border border-line bg-surface" data-testid="signal-summary">
+      <summary className="cursor-pointer list-none p-4 text-sm font-bold marker:hidden">
+        {t.routes.summaryTitle}
+        <span className="ml-2 font-normal text-muted">▾</span>
+      </summary>
+      <div className="px-4 pb-4">
+      <dl className="mt-1 grid gap-3 sm:grid-cols-2">
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
             {t.routes.summaryInterview}
@@ -359,7 +436,8 @@ function SignalSummary({ result, t }: { result: Recommendation; t: Dictionary })
           </div>
         </details>
       ) : null}
-    </section>
+    </div>
+    </details>
   );
 }
 
@@ -418,12 +496,14 @@ function RouteCard({
   onSelect,
   t,
   lang,
+  nearby,
 }: {
   route: RouteResult;
   llmAvailable: boolean;
   onSelect: () => void;
   t: Dictionary;
   lang: Language;
+  nearby: NearbyProvince | null;
 }) {
   const [open, setOpen] = useState(false);
   const panelId = `route-detail-${route.routeId}`;
@@ -471,6 +551,13 @@ function RouteCard({
         <p className="text-xs font-bold uppercase tracking-wide text-muted">{t.routes.tryThisNext}</p>
         <p className="mt-1 text-sm">{localised(route.nextExperiment, lang)}</p>
       </div>
+
+      {/*
+        Shown above the fold on the card rather than inside the details panel:
+        for a learner weighing routes, whether a place exists within reach is
+        not extra detail, it is part of what the route would mean.
+      */}
+      <NearbyForRoute routeId={route.routeId} province={nearby} />
 
       <div className="flex-1" />
 

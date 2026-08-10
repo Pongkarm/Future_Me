@@ -40,7 +40,8 @@ and a reversible 30-day action plan. It does not choose one “perfect career.�
 
 ### Latest web app preview
 
-Captured from this repository's running production build on 9 August 2026.
+Current screenshots from the integrated web app. They are a visual preview;
+the source and test suite remain the authoritative implementation record.
 
 <table>
   <tr>
@@ -48,16 +49,16 @@ Captured from this repository's running production build on 9 August 2026.
     <th>Interview</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png" alt="Latest FutureMe landing page" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png" alt="FutureMe landing page" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png" alt="FutureMe mascot-led interview" width="100%"></a></td>
   </tr>
   <tr>
     <th>Routes</th>
     <th>30-day plan</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png" alt="FutureMe route exploration results" width="100%"></a></td>
+    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png" alt="FutureMe 30-day exploration plan" width="100%"></a></td>
   </tr>
 </table>
 
@@ -125,7 +126,7 @@ product rules, not validated psychometric findings.
 | Component | Role | Current state |
 |---|---|---|
 | **Next.js web app** | Student journey, local session, decision engine, comparison, plan, and chat UI | ✅ Runnable |
-| **Seed data** | 30 questions, 3 missions, and 6 illustrative routes | 🟡 Demo data |
+| **Demo inputs** | 30 live interest questions, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
 | **Research layer** | Source audit, curricula, labour data, claim status, and technical research | 🟡 First audit complete |
 | **FastAPI backend** | Mission and future-path API reference with in-memory storage | 🟡 Separate prototype |
 | **Optional AI** | Bounded chat and explanation rewording | 🟡 Optional |
@@ -148,13 +149,14 @@ current product name is **FutureMe AI**.
 - Deterministic scoring, refusal gates, ties, provenance, and freshness warnings
 - Local persistence, deletion controls, optional research export, and analysis scripts
 - Mascot UI with offline fallbacks for optional chat and explanations
-- Mascot sync, typecheck, lint, 400 unit/integration tests, production build, and 64 Playwright browser journeys all pass
+- Twelve illustrative routes and province-aware nearby-institution views that do not claim a specific programme is offered
+- Mascot sync, typecheck, lint, unit/integration tests, production build, and browser journeys are included in the repository checks
 
 ### 🟡 Needs validation
 
 - The question set and Thai adaptation have not been validated with real students.
 - Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates.
-- Route data is dated `2026-01-15` and has passed its 180-day review threshold.
+- Route and programme metadata need recurring source review; nearby-source dates and checksums are recorded in the geography provenance file.
 - Research has passed a first source audit, not a guarantee of permanent accuracy.
 - Automated integration checks pass, but source-data review and a real-student pilot are still required.
 
@@ -165,23 +167,22 @@ current product name is **FutureMe AI**.
 - Live school, TCAS, NDLP/DEEP, or AIS API integration
 - Production RAG, cloud deployment, ethics approval, and a real-student pilot
 
-### Reference branch: Kong19565
+### Combined data and web-app update
 
-The [Kong19565 branch](https://github.com/Pongkarm/Future_Me/tree/Kong19565) contains additional
-work beyond this `Panussu` checkout:
+This branch combines the verified data refresh from `Kong19565` with the current web-app work from
+`winxtxrgit`.
 
-- **Adaptive interview flow:** a deterministic heuristic chooses the next item from the existing
-  30-item profile and exposes a confidence/early-stop signal. It is not validated CAT accuracy.
-- **Nearby institutions:** province-aware lookup covers 77 province records from the OVEC and MHESI
-  registers. It reports what exists and distance bands; it is not a recommendation or admissions check.
-- **Expanded research assets:** the branch has a 12-route catalogue and a 1,000-item question-bank
-  file with declared provenance metadata across 18REST, O*NET 28.2, ESCO v1.2, OVEC vocational
-  standards, and myTCAS70. The running interview still imports the 30-item `data/questions.json`,
-  so the 1,000-item file is not evidence of a validated 1,000-item production assessment. The
-  branch also contains Golden Fit, Growth Area, and Burnout Risk labels; these are design heuristics,
-  not validated skill-efficacy measurements.
-- **API protection:** optional chat and explanation endpoints use separate process-local request and
-  provider-spend limiters. These are budget guards, not authentication, and reset when the process restarts.
+- **Web app:** the prototype has the 12-route catalogue, nearby-institution screens, provider spend
+  guards, mascot updates, and the supporting automated checks from the Win branch.
+- **Geography and access:** the app keeps the rebuilt 77-province `nearby.json` data set with 1,961
+  options. It is based on the documented MHESI 2566 institution register and OVEC data, and is not a
+  programme, admission, or recommendation claim.
+- **Research material:** the 1,000-item question bank and the 90-item adaptive-questionnaire design
+  are retained as research references. The running interview remains the 30-item `data/questions.json`
+  instrument and must not be described as a validated assessment.
+- **Traceability:** [research sync status](01_Research/SYNC_STATUS.md) and
+  [geography provenance](01_Research/Geography_and_Access/PROVENANCE.json) record source status,
+  limitations, and reproducibility details.
 
 ---
 

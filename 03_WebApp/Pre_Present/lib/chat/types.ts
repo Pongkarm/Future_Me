@@ -1,3 +1,4 @@
+import { isProvinceCode } from "@/lib/geo/types";
 export const CHAT_LIMITS = {
   // A valid alternating conversation starts and ends with user, so the
   // largest possible count is odd.
@@ -19,6 +20,16 @@ export interface ChatMessage {
 export interface ChatRequest {
   messages: ChatMessage[];
   language: ChatLanguage;
+  /**
+   * The province the learner picked, so a question about where to study can be
+   * grounded in places that exist near them.
+   *
+   * Optional and validated against the province-code shape like everything else
+   * from the browser. It is the coarsest location this product will ever accept
+   * — never a district, never a coordinate — and the chat privacy notice says it
+   * is sent, because it leaves the device along with the transcript.
+   */
+  provinceIso?: string;
 }
 
 export interface ChatSource {
@@ -66,11 +77,23 @@ export function validateChatRequest(value: unknown): ChatValidationResult {
     return { ok: false, code: "INVALID_BODY", error: "Request body must be a JSON object." };
   }
 
-  if (!hasOnlyKeys(value, new Set(["messages", "language"]))) {
+  if (!hasOnlyKeys(value, new Set(["messages", "language", "provinceIso"]))) {
     return {
       ok: false,
       code: "UNKNOWN_FIELD",
-      error: "Only messages and language are accepted.",
+      error: "Only messages, language and provinceIso are accepted.",
+    };
+  }
+
+  if (
+    value.provinceIso !== undefined &&
+    value.provinceIso !== null &&
+    !isProvinceCode(value.provinceIso)
+  ) {
+    return {
+      ok: false,
+      code: "INVALID_PROVINCE",
+      error: "provinceIso must be a province code such as TH-50.",
     };
   }
 
@@ -168,5 +191,12 @@ export function validateChatRequest(value: unknown): ChatValidationResult {
     }
   }
 
-  return { ok: true, value: { messages, language: value.language } };
+  return {
+    ok: true,
+    value: {
+      messages,
+      language: value.language,
+      ...(typeof value.provinceIso === "string" ? { provinceIso: value.provinceIso } : {}),
+    },
+  };
 }

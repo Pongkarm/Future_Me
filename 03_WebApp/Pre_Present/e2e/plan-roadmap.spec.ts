@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import routesData from "../data/routes.json";
 import {
   ITEMS,
   completeInterview,
@@ -27,9 +28,10 @@ async function reachPlan(page: Page) {
 /**
  * The same journey, but arranged so the engine actually has gaps to append
  * tasks for: "I don't know yet" on cost and location only becomes a notice on a
- * route that is expensive and needs relocation, which sci-math-engineering is
- * and the cheap local routes are not. Without this the marker never renders and
- * a test about it could only ever skip.
+ * route that is expensive and needs relocation. The interest profile is shaped
+ * to surface one; which route that is depends on the catalogue, so the test
+ * reads it off the page rather than naming it. Without this the marker never
+ * renders and a test about it could only ever skip.
  */
 async function reachPlanWithGaps(page: Page) {
   await page.goto("/");
@@ -37,7 +39,11 @@ async function reachPlanWithGaps(page: Page) {
   await expect(page).toHaveURL(/\/interview/);
 
   for (const item of ITEMS) {
-    await sendInterviewReply(page, String(["R", "I"].includes(item.dimension) ? 5 : 2));
+    // Investigative alone. R and I together now surface three vocational
+    // routes — the expanded catalogue gave a hands-on learner much better
+    // local, affordable options, which is the point of it, and leaves this
+    // test with no expensive relocation route to hang a gap notice on.
+    await sendInterviewReply(page, String(item.dimension === "I" ? 5 : 2));
   }
   await sendInterviewReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
   await sendInterviewReply(page, contextReplyNumber("cost", "unknown"));
@@ -49,11 +55,32 @@ async function reachPlanWithGaps(page: Page) {
   await completeMission(page);
   await expect(page).toHaveURL(/\/routes/);
 
-  const routeId = "sci-math-engineering";
-  await expect(
-    page.getByTestId(`select-${routeId}`),
-    "this profile is expected to surface the expensive, relocation-heavy route",
-  ).toBeVisible();
+  /*
+   * The route is found rather than named. This used to pin
+   * sci-math-engineering, which was the expensive relocation-heavy route the
+   * profile surfaced out of six — with twelve, another one outranks it and the
+   * test failed while nothing was wrong.
+   *
+   * What the test actually needs is any route carrying the unknown-cost and
+   * unknown-location gaps, so it takes whichever the engine put first.
+   */
+  await expect(page.getByTestId("route-options")).toBeVisible();
+
+  // Whichever surfaced route is both expensive and needs relocation — those are
+  // the two properties that turn "I don't know yet" into a gap notice. Read from
+  // the catalogue rather than named, so adding routes cannot silently turn this
+  // into a test that passes without ever rendering the thing it is about.
+  const gapRoutes = new Set(
+    routesData.routes
+      .filter((route) => route.costBand === "high" && route.requiresRelocation)
+      .map((route) => route.id),
+  );
+  const surfaced = await page.locator("[data-route-id]").evaluateAll((cards) =>
+    cards.map((card) => card.getAttribute("data-route-id")),
+  );
+  const routeId = surfaced.find((id) => id && gapRoutes.has(id));
+  expect(routeId, "no surfaced route is both expensive and relocation-heavy").toBeTruthy();
+
   await page.getByTestId(`select-${routeId}`).click();
   await page.getByTestId(`plan-${routeId}`).click();
   await expect(page).toHaveURL(/\/plan/);

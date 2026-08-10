@@ -71,7 +71,7 @@ const CLIENT = { "x-forwarded-for": "203.0.113.9" };
  * guard, and the reply comes back as `offline` — which would make every "was
  * the provider used?" assertion below silently meaningless.
  */
-function stubProvider() {
+function stubProvider(usage?: { inputTokens: number; outputTokens: number }) {
   const calls: string[] = [];
   vi.stubGlobal("fetch", async (_url: string, init: RequestInit) => {
     const sent = JSON.parse(String(init.body)) as { system: string };
@@ -82,6 +82,9 @@ function stubProvider() {
       JSON.stringify({
         stop_reason: "end_turn",
         content: [{ type: "text", text: `Here is a short answer. [${sourceId}]` }],
+        ...(usage
+          ? { usage: { input_tokens: usage.inputTokens, output_tokens: usage.outputTokens } }
+          : {}),
       }),
       { status: 200, headers: { "content-type": "application/json" } },
     );
@@ -254,5 +257,59 @@ describe("the request throttle guards the server, and does refuse", () => {
 
     const other = { "x-forwarded-for": "198.51.100.2" };
     expect((await post(ask(GROUNDED), other)).status).toBe(200);
+  });
+});
+
+describe("the cumulative cap is a different ceiling from the rate", () => {
+  it("stops calling the provider for the rest of the day, and still answers", async () => {
+    const { post } = await load({
+      ...BASE_ENV,
+      CHAT_DAILY_CALL_CAP: "1",
+      ANTHROPIC_API_KEY: "test-key",
+    });
+    const calls = stubProvider();
+
+    const first = await post(ask(GROUNDED), CLIENT);
+    expect(await first.json()).toMatchObject({ mode: "ai" });
+
+    // The per-window allowance is nowhere near exhausted; the day's total is.
+    const second = await post(ask(GROUNDED), CLIENT);
+    expect(second.status).toBe(200);
+    const body = (await second.json()) as { mode: string; sources?: unknown[] };
+    expect(body.mode).toBe("offline");
+    expect(body.sources?.length).toBeGreaterThan(0);
+    expect(calls).toHaveLength(1);
+  });
+
+  it("counts the tokens the provider reports, not just the calls", async () => {
+    const { post } = await load({
+      ...BASE_ENV,
+      CHAT_DAILY_TOKEN_CAP: "50",
+      ANTHROPIC_API_KEY: "test-key",
+    });
+    const calls = stubProvider({ inputTokens: 40, outputTokens: 20 });
+
+    expect(await (await post(ask(GROUNDED), CLIENT)).json()).toMatchObject({ mode: "ai" });
+    // 60 tokens against a cap of 50, so the next call does not go out.
+    expect(await (await post(ask(GROUNDED), CLIENT)).json()).toMatchObject({ mode: "offline" });
+    expect(calls).toHaveLength(1);
+  });
+
+  it("does not charge the day for a request that never reaches the provider", async () => {
+    const { post } = await load({
+      ...BASE_ENV,
+      CHAT_DAILY_CALL_CAP: "2",
+      ANTHROPIC_API_KEY: "test-key",
+    });
+    const calls = stubProvider();
+
+    await post(ask("sometimes I want to die"), CLIENT);   // safety gate
+    await post(ask("qqqq zzzz xxxx"), CLIENT);            // nothing to ground on
+    await post("{ not json", CLIENT);                     // malformed
+
+    // All three were free, so both of the day's calls are still there.
+    expect(await (await post(ask(GROUNDED), CLIENT)).json()).toMatchObject({ mode: "ai" });
+    expect(await (await post(ask(GROUNDED), CLIENT)).json()).toMatchObject({ mode: "ai" });
+    expect(calls).toHaveLength(2);
   });
 });

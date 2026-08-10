@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { provinceSourceFor } from "@/lib/chat/province-source";
 import {
   CHAT_LIMITS,
   ChatProviderError,
@@ -6,6 +7,7 @@ import {
   clientKeyFromHeaders,
   requestAnthropic,
   requestLimiter,
+  spendLedger,
   spendLimiter,
   validateChatRequest,
   type ChatResponse,
@@ -131,6 +133,26 @@ export async function POST(request: Request) {
           );
         }
 
+        /*
+         * The cumulative ceiling, which the per-window allowance above cannot
+         * see: staying inside 600 calls per five minutes still amounts to about
+         * 172,000 calls a day. Checked after the rate limiter and before the
+         * request, then reserved, because a call in flight has already been
+         * committed to whatever it returns.
+         */
+        const budget = spendLedger.check();
+        if (!budget.allowed) {
+          console.warn(
+            `[chat] ${budget.window} ${budget.measure} cap reached — answering from project data`,
+          );
+          throw new ChatProviderError(
+            "rate_limited",
+            `Cumulative ${budget.window} ${budget.measure} cap reached.`,
+            budget.retryAfterSeconds,
+          );
+        }
+        spendLedger.reserve();
+
         try {
           return await requestAnthropic({
             apiKey,
@@ -138,6 +160,7 @@ export async function POST(request: Request) {
             system,
             messages,
             timeoutMs: TIMEOUT_MS,
+            onUsage: (usage) => spendLedger.record(usage),
           });
         } catch (error) {
           /*
@@ -158,6 +181,23 @@ export async function POST(request: Request) {
       }
     : undefined;
 
-  const response: ChatResponse = await answerChat(parsed.value, { generate });
+  /*
+   * Built from the last two user turns, the same text retrieval uses, so a
+   * short follow-up like "แล้วใกล้บ้านผมมีไหม" still carries its topic.
+   */
+  const recentUserText = parsed.value.messages
+    .filter((message) => message.role === "user")
+    .map((message) => message.content)
+    .slice(-2)
+    .join("\n");
+
+  const response: ChatResponse = await answerChat(parsed.value, {
+    generate,
+    extraSource: provinceSourceFor(
+      recentUserText,
+      parsed.value.provinceIso,
+      parsed.value.language,
+    ),
+  });
   return json(response);
 }

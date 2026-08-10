@@ -11,6 +11,15 @@ export interface AnthropicRequest {
   messages: ChatMessage[];
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
+  /**
+   * Called with what the provider says the call cost, when it says so.
+   *
+   * A callback rather than a changed return type: every caller wants the text
+   * and none of them wants a tuple, and the spend ledger is the only thing that
+   * cares about tokens. It fires even when the body turns out to be unusable,
+   * because a refused or truncated reply was still paid for.
+   */
+  onUsage?: (usage: { inputTokens: number; outputTokens: number }) => void;
 }
 
 /**
@@ -96,6 +105,27 @@ export function extractAnthropicResult(value: unknown): ExtractResult {
   return { ok: true, text: text.slice(0, MAX_REPLY_CHARS) };
 }
 
+/**
+ * Token counts as reported by the provider.
+ *
+ * Defensive because a shape change upstream must not throw inside a finally-ish
+ * path: an unreadable usage block means the call is counted without tokens,
+ * never that the response is discarded.
+ */
+export function extractAnthropicUsage(
+  value: unknown,
+): { inputTokens: number; outputTokens: number } | null {
+  if (typeof value !== "object" || value === null) return null;
+  const usage = (value as { usage?: unknown }).usage;
+  if (typeof usage !== "object" || usage === null) return null;
+  const input = (usage as { input_tokens?: unknown }).input_tokens;
+  const output = (usage as { output_tokens?: unknown }).output_tokens;
+  const inputTokens = typeof input === "number" && Number.isFinite(input) ? input : 0;
+  const outputTokens = typeof output === "number" && Number.isFinite(output) ? output : 0;
+  if (inputTokens === 0 && outputTokens === 0) return null;
+  return { inputTokens, outputTokens };
+}
+
 /** Kept for callers that only need the text. */
 export function extractAnthropicText(value: unknown): string | null {
   const result = extractAnthropicResult(value);
@@ -151,6 +181,11 @@ export async function requestAnthropic(input: AnthropicRequest): Promise<string>
     } catch {
       throw new ChatProviderError("malformed", "Provider returned malformed JSON.");
     }
+
+    // Reported before the body is judged: a refusal or a truncated reply cost
+    // exactly as much as a usable one.
+    const usage = extractAnthropicUsage(data);
+    if (usage) input.onUsage?.(usage);
 
     const result = extractAnthropicResult(data);
     if (!result.ok) {

@@ -115,6 +115,13 @@ export const en = {
   },
 
   landing: {
+    heroNote: "Answer a few short questions, try one real task, then see up to three study routes — each with the evidence behind it.",
+    ctaHeading: "Start with what you already know about yourself",
+    tabHow: "How it works",
+    tabHonest: "Straight talk",
+    tabMore: "Other ways in",
+    tabMoreBody: "You do not have to start with the questions. Ask something directly, or just look at what exists near you — neither needs an account or tells us anything about you.",
+    nearbyButton: "What is near me",
     badge: "FUNCTIONAL PROTOTYPE · RUNNABLE END-TO-END DEMO",
     headlineLead: "A next step you can",
     headlineAccent: "actually explain.",
@@ -156,7 +163,7 @@ export const en = {
       "Talk through an idea, compare possible directions, or ask what you could try next. FutureMe answers from this prototype's project data and shows the sources it used when they are available.",
     privacyTitle: "Your message uses a separate network path",
     privacyBody:
-      "Chat is optional. When you press Send, the conversation shown here is sent to the application server and may be sent to its AI provider. It is not saved in your guest session, and refreshing or clearing this page removes the on-screen transcript.",
+      "Chat is optional. When you press Send, the conversation shown here is sent to the application server and may be sent to its AI provider. If you have chosen a province elsewhere in FutureMe, it is sent too, so the answer can name places near you — a province and never anything narrower. It is not saved in your guest session, and refreshing or clearing this page removes the on-screen transcript.",
     welcome:
       "Hi, I’m the FutureMe companion. Tell me what you are curious about, or ask me to explain one of the study routes in this prototype. I can help you explore, but I cannot choose your future or predict admission, employment, or income.",
     companionName: "FutureMe companion",
@@ -223,9 +230,11 @@ export const en = {
       FEASIBLE_LOCATION: "This is usually available without moving away from home.",
       TIMING_MATCH: "The time before you start earning matches what you said you wanted.",
       KEEPS_OPTIONS_OPEN: "This route keeps a relatively wide range of later options open.",
-      COST_CONSTRAINT: "Filtered out: you said cost matters a lot and this route is high-cost.",
-      LOCATION_CONSTRAINT: "Filtered out: you said you need to stay near home and this route usually requires moving.",
-      TIER_MISMATCH: "Filtered out: this route is not offered at your current stage.",
+      COST_CONSTRAINT:
+        "This route is high-cost and you said cost matters a lot, so it is not in the list above. That can change if the money changes — ask about scholarships and the student loan fund.",
+      LOCATION_CONSTRAINT:
+        "This route usually means moving away and you said you need to stay near home, so it is not in the list above. If that changes, so does this.",
+      TIER_MISMATCH: "This route does not admit at your stage yet. Nothing to do with your answers.",
       INSUFFICIENT_ANSWERS: "Not enough interview questions were answered.",
       INSUFFICIENT_EVIDENCE: "There is not enough evidence yet to separate the routes.",
       TIED_SCORES: "These routes scored close enough that the difference is not meaningful.",
@@ -308,6 +317,65 @@ export const en = {
     createAccount: "Create an account (not implemented)",
   },
 
+  nearby: {
+    stationAway: "{km} km",
+    modes: {
+      walk: "Walk",
+      bicycle: "Bicycle",
+      motorcycle: "Motorbike",
+      songthaew: "Songthaew",
+      bus: "Bus",
+      van: "Minivan",
+      coach: "Coach",
+      car: "Car",
+      metro: "BTS / MRT",
+      train: "Train",
+      plane: "Plane",
+    },
+    noticeTitle: "What this list is",
+    filterLabel: "Show",
+    filterAll: "Everything",
+    filterVocational: "Wor Chor / Wor Sor",
+    filterDegree: "Bachelor's degree",
+    filterEmpty: "Nothing in this province matches that filter.",
+    showMore: "Show {count} more",
+    showLess: "Show fewer",
+    title: "What is near you",
+    intro:
+      "Pick your province to see the schools, colleges and universities that continue after Mattayom 3, and how far each one is by road.",
+    notARecommendation:
+      "This is a list of what exists, ordered by distance. It does not say which one suits you — the assessment and its rule engine do that, and distance is never one of their inputs.",
+    pickLabel: "Your province",
+    pickPlaceholder: "Choose a province…",
+    loading: "Looking up your province…",
+    error: "Could not load that province just now. Try again in a moment.",
+    empty: "No options are recorded for this province yet.",
+    summaryTitle: "{province} at a glance",
+    summaryInside: "{count} in this province",
+    summaryWithin30: "{count} within 30 km",
+    summaryVocational: "{count} offer Wor Chor or Wor Sor",
+    summaryDegree: "{count} offer a bachelor's degree",
+    summaryUnknown: "{count} here with no distance yet",
+    originNote:
+      "Distances are measured from the provincial capital, not from your home. If you live in an outer district the real journey may be much longer — or much shorter if you live near a neighbouring province.",
+    driveNote:
+      "Times shown are driving times. On a songthaew, a bus or while waiting for one, expect longer.",
+    offersLabel: "Teaches",
+    stationLabel: "Nearest station",
+    unknownDistance: "In this province, distance not yet known",
+    outsideProvince: "In {province}",
+    kmAway: "{km} km by road",
+    minutesAway: "about {minutes} min by car",
+    bandWalkable: "Walking or cycling distance",
+    bandLocal: "An ordinary daily journey",
+    bandCommute: "Reachable daily, but it costs time and fare",
+    bandHardCommute: "A hard daily journey — worth thinking about lodging",
+    bandRelocate: "You would be moving there, not commuting",
+    bandUnknown: "Distance not yet known",
+    dataNote:
+      "Built from the OVEC college register, the MHESI institution register and OpenStreetMap road routing. Institution details change every year — check with the place itself before deciding anything.",
+    sourceLink: "How this list was built",
+  },
   privacy: {
     title: "Your data, precisely",
     intro:
@@ -323,6 +391,7 @@ export const en = {
     rowMission:
       "Mission answers, including free text — saved as you type, so a refresh does not lose unfinished writing",
     rowRoutes: "Generated routes and plan progress",
+    rowProvince: "The province you picked, so route suggestions can name real places",
     rowSession: "Guest session id",
     rowAnalytics: "Analytics, cookies, trackers",
     rowChat: "Messages you send in the optional chatbot",
@@ -455,6 +524,14 @@ export const en = {
   },
 
   routes: {
+    nearbyTitle: "Where you could do this, near {province}",
+    nearbyNone:
+      "No institution of the kind that teaches this route is recorded within reach of {province}. That is worth knowing before you choose it — it may mean living away from home.",
+    nearbyMore: "and {count} more",
+    nearbyCaveat:
+      "These are the kinds of institution that teach this direction, and how far they are. Our register records what each place is, not which programmes it runs — ask the college itself whether it opens this subject.",
+    nearbySetProvince: "Set your province to see where you could do these",
+    nearbyChangeProvince: "Change province",
     errorTitle: "Something went wrong generating routes",
     tryAgain: "Try again",
     insufficientTitle: "We do not have enough evidence to suggest a route yet.",
@@ -473,7 +550,7 @@ export const en = {
       "Put them side by side on cost, time to earning, flexibility and evidence before you decide anything.",
     compareN: "Compare the {n} routes →",
     compareOne: "See this route's details side by side →",
-    filteredSummary: "{n} routes were filtered out — see why",
+    filteredSummary: "{n} more routes are not in the list above — see why",
     generatedBy:
       "Generated in your browser by engine {version} from demo route data compiled {date}. No model chose these routes.",
     summaryTitle: "What your answers pointed to",

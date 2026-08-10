@@ -104,25 +104,49 @@ describe("hard constraints", () => {
     expect(r.ineligible.some((x) => x.reasons.includes("TIER_MISMATCH"))).toBe(true);
   });
 
-  it("returns exactly two routes when constraints leave two eligible", () => {
+  /*
+   * These used to pin the exact number of survivors, which made them a test of
+   * how many routes the catalogue happens to hold rather than of the filtering.
+   * Growing the catalogue from six to twelve broke them without anything being
+   * wrong. What matters is the invariant and the reasons, so that is what they
+   * assert now.
+   */
+  it("narrows the catalogue and never offers more than the cap", () => {
     const r = recommend(
       build(["I"], { tier: "UPPER_SECONDARY", cost: "tight", mobility: "can_move" }),
       handsOnMission,
       FIXED_NOW,
     );
-    expect(r.routes).toHaveLength(2);
+    expect(r.routes.length).toBeGreaterThan(0);
+    expect(r.routes.length).toBeLessThanOrEqual(MAX_ROUTES);
+    // Something was actually filtered — otherwise the constraints did nothing.
+    expect(r.ineligible.length).toBeGreaterThan(0);
     expect(r.insufficientEvidence).toBe(false);
   });
 
-  it("returns exactly one route when constraints leave one eligible", () => {
+  it("says why each rejected route was rejected", () => {
     const r = recommend(
       build(["E", "C"], { tier: "UPPER_SECONDARY", cost: "tight", mobility: "local_only" }),
       peopleMission,
       FIXED_NOW,
     );
-    expect(r.routes).toHaveLength(1);
-    expect(r.ineligible).toHaveLength(5);
+    expect(r.routes.length).toBeGreaterThan(0);
+    expect(r.routes.length).toBeLessThanOrEqual(MAX_ROUTES);
     expect(r.insufficientEvidence).toBe(false);
+
+    // A tight budget and no ability to move are the constraints in play, so
+    // every exclusion should name one of the reasons the engine can give. A
+    // route dropped with an empty reason list would be the engine refusing
+    // without saying why, which is the thing this product is not allowed to do.
+    expect(r.ineligible.length).toBeGreaterThan(0);
+    for (const rejected of r.ineligible) {
+      expect(rejected.reasons.length, `${rejected.routeId} rejected with no reason`)
+        .toBeGreaterThan(0);
+    }
+    // Both constraints have to be visible in the reasons, not just one of them.
+    const reasons = new Set(r.ineligible.flatMap((x) => x.reasons));
+    expect(reasons).toContain("COST_CONSTRAINT");
+    expect(reasons).toContain("LOCATION_CONSTRAINT");
   });
 
   /**

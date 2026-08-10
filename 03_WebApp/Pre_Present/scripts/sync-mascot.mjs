@@ -29,7 +29,6 @@ const FILES = [
 ];
 
 const check = process.argv.includes("--check");
-const normaliseLineEndings = (value) => value.replace(/\r\n?/g, "\n");
 
 if (!existsSync(lab)) {
   // A checkout of the app alone is a legitimate state — the vendored copies are
@@ -44,7 +43,7 @@ for (const { from, to } of FILES) {
   const source = readFileSync(from, "utf8");
   const current = existsSync(to) ? readFileSync(to, "utf8") : null;
 
-  if (current !== null && normaliseLineEndings(source) === normaliseLineEndings(current)) continue;
+  if (source === current) continue;
 
   if (check) {
     drifted += 1;

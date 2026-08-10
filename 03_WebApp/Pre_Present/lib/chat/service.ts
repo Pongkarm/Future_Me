@@ -9,6 +9,13 @@ export type GenerateChatReply = (input: {
 
 export interface ChatServiceOptions {
   generate?: GenerateChatReply;
+  /**
+   * An extra grounding record built outside the catalogue — currently the
+   * learner's own province. Passed in rather than imported so `service.ts`
+   * stays free of the near-megabyte dataset that would otherwise follow it
+   * anywhere the chat barrel is imported.
+   */
+  extraSource?: RetrievedKnowledge | null;
 }
 
 function safetyResponse(language: ChatLanguage): ChatResponse {
@@ -115,6 +122,7 @@ function systemPrompt(language: ChatLanguage, retrieved: RetrievedKnowledge[]): 
     "You are FutureMe, a warm career-exploration companion for Thai students.",
     `Write in ${responseLanguage}. Use plain, age-appropriate language and ask at most one focused Socratic follow-up question.`,
     "The deterministic FutureMe engine is the only route selector. Never select, rank, add, remove, or reorder a study route. Never say that one route is best, ideal, guaranteed, or the user's match.",
+    "The same applies to named institutions. You may say which ones exist near the learner and how far away they are. Never say one suits them, is best, is better than another, or should be chosen or applied to, and never tell them where to study.",
     "You may explain a route only as a demo exploration example. Never promise admission, employment, salary, or success.",
     "Use only the supplied source context for factual education, admission, programme, or labour-market claims. Conditional facts must retain their condition. Illustrative or unverified route records are not factual evidence.",
     "If the sources do not support a factual answer, say that clearly and suggest checking an official source or a qualified counsellor.",
@@ -298,6 +306,72 @@ export function containsRouteDecision(text: string): boolean {
   return clauses(text).some(sentenceDecides);
 }
 
+/**
+ * Naming a school is a different claim from naming a route, and the route guard
+ * did not cover it.
+ *
+ * Once the model is handed a list of real colleges it can say "วิทยาลัยเทคนิค
+ * เชียงใหม่เหมาะกับคุณ" without touching any route vocabulary at all, and every
+ * check above would pass it. That sentence is a placement recommendation about a
+ * named institution, made by a model, to a fifteen-year-old — the exact thing
+ * this product exists not to do.
+ *
+ * The nouns are institution words rather than route words, and the verdicts are
+ * the same family the route guard already refuses: suitability, superiority,
+ * and being told to go somewhere.
+ */
+const TH_INSTITUTION_NOUNS = [
+  "วิทยาลัย",
+  "มหาวิทยาลัย",
+  "มหาลัย",
+  "ราชภัฏ",
+  "ราชมงคล",
+  "สถาบัน",
+  "โรงเรียน",
+].join("|");
+
+const INSTITUTION_VERDICT_PATTERNS = [
+  // ควรเลือก / ควรสมัคร / ควรไปเรียนที่ <institution>
+  new RegExp(`(?:ควร|แนะนำให้|น่าจะ)[^.!?]{0,16}(?:เลือก|สมัคร|ไปเรียน|เข้า)[^.!?]{0,24}(?:${TH_INSTITUTION_NOUNS})`),
+  // <institution> ... เหมาะกับคุณ / ดีที่สุด / เหมาะที่สุด
+  new RegExp(`(?:${TH_INSTITUTION_NOUNS})[^.!?]{0,40}(?:เหมาะกับคุณ|เหมาะที่สุด|ดีที่สุด|ตอบโจทย์คุณ)`),
+  // เหมาะกับคุณ ... <institution>
+  new RegExp(`(?:เหมาะกับคุณ|ดีที่สุด|เหมาะที่สุด)[^.!?]{0,24}(?:${TH_INSTITUTION_NOUNS})`),
+  // comparative: <institution> ... ดีกว่า / เหมาะกว่า
+  new RegExp(`(?:${TH_INSTITUTION_NOUNS})[^.!?]{0,40}(?:ดีกว่า|เหมาะกว่า|น่าเรียนกว่า)`),
+  // "would recommend" and "'d recommend" are how it is actually written, and a
+  // pattern that only knew "I recommend" let both through.
+  /(?:you should|(?:i|we)\s+(?:would\s+|'d\s+)?recommend|best choice|best option|most suitable|go to|apply to)[^.!?]{0,40}(?:college|university|institute|school)/i,
+  /\b(?:college|university|institute|school)\b[^.!?]{0,40}\b(?:suits you|is best|is the best|would be best|is right for you)\b/i,
+];
+
+/**
+ * Declining to choose, which reads as choosing to a pattern matcher.
+ *
+ * "Which college suits you is not something I can tell you" contains the exact
+ * words a recommendation contains, and blocking it would punish the model for
+ * the one answer we most want it to give — pushing it toward saying nothing
+ * rather than toward saying it cannot say.
+ *
+ * Narrow on purpose: a refusal verb has to be near the negation, so an ordinary
+ * sentence that merely contains "not" is not exempted.
+ */
+const ENGLISH_REFUSAL = /(?:cannot|can't|can not|will not|won't|is not|isn't|not something)[^.!?]{0,40}(?:tell|say|choose|decide|recommend|pick)/i;
+
+export function containsInstitutionRecommendation(text: string): boolean {
+  return clauses(text).some((clause) => {
+    // Caveat spans are stripped the same way the route guard strips them, so a
+    // sentence that only quotes a warning is not read as making the claim.
+    const residue = ROUTE_CAVEAT_SPANS.reduce(
+      (text_, pattern) => text_.replace(pattern, " "),
+      clause,
+    );
+    if (TH_INTERROGATIVE.test(residue) || TH_NEGATED_CLAIM.test(residue)) return false;
+    if (ENGLISH_REFUSAL.test(residue)) return false;
+    return INSTITUTION_VERDICT_PATTERNS.some((pattern) => pattern.test(residue));
+  });
+}
+
 const BRACKETED_SOURCE_ID = /\[([A-Za-z0-9][A-Za-z0-9._:-]{0,119})\]/g;
 
 /** A provider may cite only records that the deterministic retriever supplied. */
@@ -338,7 +412,13 @@ export async function answerChat(
   // Include the nearest prior user turn so short follow-ups such as "How long
   // is it?" retain the topic without sending assessment/session state.
   const retrievalQuery = userMessages.slice(-2).join("\n");
-  const retrieved = retrieveKnowledge(retrievalQuery, request.language);
+  const catalogue = retrieveKnowledge(retrievalQuery, request.language);
+  /*
+   * Placed first so it is the record the model reaches for when the question was
+   * about where. It does not displace anything: the catalogue answers what and
+   * whether, and this answers where.
+   */
+  const retrieved = options.extraSource ? [options.extraSource, ...catalogue] : catalogue;
 
   if (retrieved.length === 0) {
     return offlineResponse(request.language, retrieved, "no_sources");
@@ -358,6 +438,7 @@ export async function answerChat(
   if (
     !message ||
     containsRouteDecision(message) ||
+    containsInstitutionRecommendation(message) ||
     containsInventedSourceId(message, retrieved) ||
     !hasAllowedSourceCitation(message, retrieved)
   ) {

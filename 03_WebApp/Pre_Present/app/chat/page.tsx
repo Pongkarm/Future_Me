@@ -10,6 +10,7 @@ import { usePreferences } from "@/components/PreferencesProvider";
 import SafetyPause, { type SafetyTriggerSource } from "@/components/SafetyPause";
 import { Button, Card, Notice, Shell } from "@/components/ui";
 import { buildClientChatContext, CLIENT_CHAT_LIMITS } from "@/lib/chat/client-context";
+import { loadSession } from "@/lib/session";
 import {
   CHAT_MASCOT_TIMING,
   getChatResponseMotionDuration,
@@ -220,7 +221,17 @@ export default function ChatPage() {
         method: "POST",
         signal: controller.signal,
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ language: lang, messages: requestMessages }),
+        /*
+         * The province is sent only if the learner has already chosen one
+         * elsewhere; the chat never asks for it. It is read at send time rather
+         * than held in state so that clearing data on the privacy page takes
+         * effect on the next message without this page having to know.
+         */
+        body: JSON.stringify({
+          language: lang,
+          messages: requestMessages,
+          ...(loadSession()?.provinceIso ? { provinceIso: loadSession()?.provinceIso } : {}),
+        }),
       });
       /*
        * Throttled, which is the one failure the learner can actually do

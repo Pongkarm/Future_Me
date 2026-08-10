@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <p align="center">
-  <img src="assets/banner/banner.png" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
+  <img src="assets/banner/banner-th.svg" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
 </p>
 
 # FutureMe AI
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="สถานะ Continuous Integration"></a>
+  <a href="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml?branch=Panussu"><img src="https://github.com/Pongkarm/Future_Me/actions/workflows/ci.yml/badge.svg?branch=Panussu" alt="สถานะ Continuous Integration"></a>
   <img src="https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js 20 ขึ้นไป">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6C63FF" alt="สัญญาอนุญาต MIT"></a>
 </p>
@@ -38,7 +38,7 @@
   &nbsp;·&nbsp;
   <strong><a href="#run">รันต้นแบบ</a></strong>
   &nbsp;·&nbsp;
-  <a href="READMEEN.md">ฉบับภาษาอังกฤษ</a>
+  <a href="READMEEN.md">English</a>
 </p>
 
 <p align="center">
@@ -114,7 +114,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 | **5 · ลงมือ** | เปลี่ยนหนึ่งเส้นทางเป็นแผน 30 วันที่ประกอบด้วยงานเล็ก ๆ และเปลี่ยนใจได้ | หลักฐานใหม่จากการลงมือ |
 
 <p align="center">
-  <a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="หน้าเส้นทางที่สร้างแล้ว พร้อมหลักฐานของหลายทางเลือก" width="92%"></a>
+  <a href="assets/screenshots/app/routes-desktop.png"><img src="assets/screenshots/app/routes-desktop.png" alt="หน้าเส้นทางที่สร้างแล้ว พร้อมหลักฐานของหลายทางเลือก" width="92%"></a>
 </p>
 
 <p align="center">
@@ -124,22 +124,32 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/landing-2026-08-09.png"><img src="assets/screenshots/app/landing-2026-08-09.png" alt="หน้าเริ่มต้นล่าสุดของ FutureMe พร้อมมาสคอตและปุ่มเริ่มแบบผู้เยี่ยมชม"></a><br>
-<strong>เริ่มต้น</strong><br><sub>เข้าใจสิ่งที่ต้นแบบทำและเริ่มได้โดยไม่ต้องสร้างบัญชี</sub>
+<a href="assets/screenshots/app/interview-th-light-desktop.png"><img src="assets/screenshots/app/interview-th-light-desktop.png" alt="หน้าตอบคำถามของ FutureMe ภาษาไทย ธีมสว่าง"></a><br>
+<strong>ตอบคำถาม</strong><br><sub>คำถามความสนใจ 30 ข้อ แสดงทีละข้อ บนสเกลชอบ–ไม่ชอบ 5 ระดับ</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/interview-2026-08-09.png"><img src="assets/screenshots/app/interview-2026-08-09.png" alt="หน้าสัมภาษณ์ล่าสุดที่มีมาสคอต FutureMe ช่วยสนทนา"></a><br>
-<strong>ทบทวน</strong><br><sub>สนทนาเรื่องความสนใจและบริบทจริงไปพร้อมกับมาสคอต FutureMe</sub>
+<a href="assets/screenshots/app/interview-desktop.png"><img src="assets/screenshots/app/interview-desktop.png" alt="หน้าเดียวกันในภาษาอังกฤษ ธีมมืด"></a><br>
+<strong>หน้าเดียวกัน อังกฤษ ธีมมืด</strong><br><sub>ทั้งภาษาและธีมถูกจำไว้ กลับมาใหม่ก็ยังเป็นค่าเดิม</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/routes-2026-08-09.png"><img src="assets/screenshots/app/routes-2026-08-09.png" alt="หน้าผลลัพธ์เส้นทางล่าสุดที่มีมาสคอต FutureMe ช่วยอธิบาย"></a><br>
-<strong>สำรวจ</strong><br><sub>ดูหลายเส้นทางพร้อมหลักฐานและข้อจำกัดที่มองเห็นได้</sub>
+<a href="assets/screenshots/app/mission-desktop.png"><img src="assets/screenshots/app/mission-desktop.png" alt="หน้าภารกิจของ FutureMe ที่สร้างแล้ว"></a><br>
+<strong>ลอง</strong><br><sub>ภารกิจสถานการณ์สั้น ๆ ที่เลือกด้วยกฎซึ่งอธิบายได้</sub>
 </td>
 <td width="50%" valign="top">
-<a href="assets/screenshots/app/plan-2026-08-09.png"><img src="assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผนทดลอง 30 วันล่าสุดของ FutureMe"></a><br>
-<strong>ลงมือ</strong><br><sub>ทดลองหนึ่งเส้นทางผ่านแผน 30 วันที่เปลี่ยนใจได้</sub>
+<a href="assets/screenshots/app/compare-desktop.png"><img src="assets/screenshots/app/compare-desktop.png" alt="หน้าเปรียบเทียบเส้นทางของ FutureMe ที่สร้างแล้ว"></a><br>
+<strong>เทียบ</strong><br><sub>ใช้เกณฑ์ ข้อจำกัด และหลักฐานชุดเดียวกันกับทุกเส้นทาง</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/interview-review-desktop.png"><img src="assets/screenshots/app/interview-review-desktop.png" alt="หน้าทบทวนคำตอบของ FutureMe"></a><br>
+<strong>ทบทวน</strong><br><sub>ทุกคำตอบยังแก้ได้ก่อนส่ง โดยแตะที่บรรทัดเพื่อย้อนกลับไปแก้</sub>
+</td>
+<td width="50%" valign="top">
+<a href="assets/screenshots/app/plan-desktop.png"><img src="assets/screenshots/app/plan-desktop.png" alt="หน้าแผน 30 วันของ FutureMe ที่สร้างแล้ว"></a><br>
+<strong>ลงมือ</strong><br><sub>ทดลองเส้นทาง 30 วัน โดยเก็บความคืบหน้าไว้ในเบราว์เซอร์</sub>
 </td>
 </tr>
 </table>
@@ -157,7 +167,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 | **แบบสำรวจ** | คำถามกิจกรรมความสนใจ 30 ข้อ สลับหกมิติ RIASEC มิติละ 5 ข้อ ใช้สเกลชอบ/ไม่ชอบ 5 ระดับ |
 | **บริบท** | คำถามบังคับ 4 ข้อเรื่องระดับการศึกษา ค่าใช้จ่าย การเดินทาง และช่วงเวลาที่อยากเริ่มมีรายได้ พร้อม free text ทางเลือก 1 ข้อ |
 | **ภารกิจ** | ภารกิจสถานการณ์ 3 ชิ้น ชิ้นละ 4 ขั้น ให้คะแนนและเลือกด้วยกฎที่ตรวจสอบได้ และผู้เรียนเปลี่ยนเองได้ |
-| **แคตตาล็อก** | เส้นทางเรียน/งานตัวอย่าง 6 ทาง พร้อมคำเตือนระดับฟิลด์และวันที่ของข้อมูล |
+| **แคตตาล็อก** | เส้นทางเรียน/งานตัวอย่าง 12 ทาง พร้อมคำเตือนระดับฟิลด์และวันที่ของข้อมูล |
 | **คำแนะนำ** | แสดง 0–3 เส้นทาง มี refusal gate, hard constraint, tie, contradiction, provenance และสิ่งที่ยังไม่รู้ |
 | **เปรียบเทียบและแผน** | เทียบทุกทางด้วยเกณฑ์เดียวกัน และสร้างแผน 30 วันพร้อมงานเพิ่มเติมตามช่องว่างของหลักฐาน |
 | **AI ทางเลือก** | แชตที่อ้างอิงข้อมูลใน repository และการเรียบเรียงคำอธิบาย ทั้งคู่มี offline fallback และไม่มีสิทธิ์เลือกหรือจัดลำดับเส้นทาง |
@@ -165,6 +175,12 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 
 แอปทำงานครบเส้นทางโดยไม่ต้องมีบัญชี ฐานข้อมูล environment variable
 หรือผู้ให้บริการโมเดล
+
+### สถานะข้อมูลที่รวมแล้ว
+
+- แคตตาล็อกที่แอปใช้มี 12 เส้นทางตัวอย่าง โดยมีหมายเหตุแหล่งข้อมูลเพื่อช่วยสำรวจ ไม่ใช่การยืนยันหลักสูตรหรือการรับเข้าเรียน
+- หน้าสถานศึกษาใกล้เคียงใช้ `data/nearby.json` ที่อัปเดตแล้ว: ครบ 77 จังหวัด และมี 1,961 ตัวเลือกจาก pipeline ของ MHESI/OVEC ที่บันทึกที่มาไว้
+- คลังคำถาม 1,000 ข้อและแบบออกแบบคำถามปรับตัว 90 ข้อเก็บเป็นเอกสารวิจัยเท่านั้น ส่วนแบบสัมภาษณ์ที่ใช้งานจริงยังใช้ `data/questions.json` จำนวน 30 ข้อ
 
 ---
 
@@ -300,7 +316,7 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 - ค่าความเที่ยงที่ตีพิมพ์ของ 18REST ไม่ได้ส่งต่อมายังข้อที่ดัดแปลงหรือคำแปลไทยโดยอัตโนมัติ
 - คำแปลไทยเป็นฉบับร่างแรก ยังไม่ผ่าน cross-cultural adaptation อย่างครบถ้วน
 - rubric ของภารกิจ น้ำหนักตายตัว และเกณฑ์คำแนะนำยังไม่ผ่าน validation
-- แคตตาล็อกหกเส้นทางเป็นข้อมูลตัวอย่าง ค่าใช้จ่าย การย้ายพื้นที่ ระยะเวลาก่อนมีรายได้
+- แคตตาล็อกสิบสองเส้นทางเป็นข้อมูลตัวอย่าง ค่าใช้จ่าย การย้ายพื้นที่ ระยะเวลาก่อนมีรายได้
   ความยืดหยุ่น จุดแข็ง และข้อจำกัดยังมีค่าประมาณของทีมที่ไม่มีแหล่งอ้างอิง
 - ยังไม่มี ethics approval, pilot กับนักเรียนจริง, bias audit หรือ outcome evaluation
 
@@ -343,7 +359,7 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 ต้องใช้ Node.js 20 ขึ้นไป
 
 ```bash
-git clone --branch Panussu https://github.com/Pongkarm/Future_Me.git
+git clone https://github.com/Pongkarm/Future_Me.git
 cd Future_Me/03_WebApp/Pre_Present
 npm ci
 npm run dev
@@ -390,5 +406,5 @@ npm run analyse -- /tmp/futureme-sim
   <br><br>
   <a href="#top">กลับขึ้นด้านบน</a>
   &nbsp;·&nbsp;
-  <a href="READMEEN.md">อ่านฉบับภาษาอังกฤษ</a>
+  <a href="READMEEN.md">Read in English</a>
 </p>

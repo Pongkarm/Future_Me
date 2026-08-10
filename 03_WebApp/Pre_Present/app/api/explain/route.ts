@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import routesData from "@/data/routes.json";
-import { clientKeyFromHeaders, requestLimiter, spendLimiter } from "@/lib/chat";
+import { extractAnthropicUsage } from "@/lib/chat/provider";
+import { clientKeyFromHeaders, requestLimiter, spendLedger, spendLimiter } from "@/lib/chat";
 import { REASON_TEXT } from "@/lib/decision-engine/explanations";
 import type { ReasonCode } from "@/lib/decision-engine/types";
 
@@ -150,6 +151,21 @@ export async function POST(request: Request) {
     );
   }
 
+  /*
+   * Shares the cumulative ceiling with /api/chat, as it shares the allowance
+   * and the key. Exhaustion here is the endpoint's ordinary fallback: the
+   * learner reads the engine's own sentence, which was always what it was.
+   */
+  const budget = spendLedger.check();
+  if (!budget.allowed) {
+    console.warn(`[explain] ${budget.window} ${budget.measure} cap reached`);
+    return NextResponse.json(
+      { source: "fallback", text: fallback, note: "Spending cap reached — deterministic explanation used." },
+      { status: 200 },
+    );
+  }
+  spendLedger.reserve();
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -191,6 +207,8 @@ export async function POST(request: Request) {
     }
 
     const data: unknown = await res.json();
+    const usage = extractAnthropicUsage(data);
+    if (usage) spendLedger.record(usage);
     const text = extractText(data);
 
     if (!text) {

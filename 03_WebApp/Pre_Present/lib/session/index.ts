@@ -11,6 +11,7 @@ import type {
   Mobility,
   Tier,
 } from "@/lib/decision-engine/types";
+import { isProvinceCode } from "@/lib/geo/types";
 
 export const SESSION_KEY = "futureme.guest.v1";
 export const SESSION_VERSION = 3;
@@ -42,6 +43,16 @@ export interface GuestSession {
    */
   mission: MissionInput | null;
   selectedRouteId: string | null;
+  /**
+   * The province the learner picked so route results can name real places.
+   *
+   * A province is not an address — there are 77 of them and millions of people
+   * in each — but it is still theirs, so it is stored under the same key as
+   * everything else, listed on the privacy page, and cleared by the same
+   * button. It survives a reset of the interview, because where they live did
+   * not change when they decided to answer the questions again.
+   */
+  provinceIso: string | null;
   planProgress: Record<string, boolean>;
   safetyTriggered: boolean;
 }
@@ -97,6 +108,7 @@ export function newSession(): GuestSession {
     interview: { interest: {}, context: {} },
     mission: null,
     selectedRouteId: null,
+    provinceIso: null,
     planProgress: {},
     safetyTriggered: false,
   };
@@ -164,6 +176,15 @@ export function parseSession(value: unknown): LoadResult {
   } else {
     session.selectedRouteId = null;
     discarded.push("selectedRouteId");
+  }
+
+  if (value.provinceIso === null || value.provinceIso === undefined) {
+    session.provinceIso = null;
+  } else if (isProvinceCode(value.provinceIso)) {
+    session.provinceIso = value.provinceIso;
+  } else {
+    session.provinceIso = null;
+    discarded.push("provinceIso");
   }
 
   session.planProgress = parsePlanProgress(value.planProgress, discarded);

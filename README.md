@@ -167,23 +167,6 @@ current product name is **FutureMe AI**.
 - Live school, TCAS, NDLP/DEEP, or AIS API integration
 - Production RAG, cloud deployment, ethics approval, and a real-student pilot
 
-### Combined data and web-app update
-
-This branch combines the verified data refresh from `Kong19565` with the current web-app work from
-`winxtxrgit`.
-
-- **Web app:** the prototype has the 12-route catalogue, nearby-institution screens, provider spend
-  guards, mascot updates, and the supporting automated checks from the Win branch.
-- **Geography and access:** the app keeps the rebuilt 77-province `nearby.json` data set with 1,961
-  options. It is based on the documented MHESI 2566 institution register and OVEC data, and is not a
-  programme, admission, or recommendation claim.
-- **Research material:** the 1,000-item question bank and the 90-item adaptive-questionnaire design
-  are retained as research references. The running interview remains the 30-item `data/questions.json`
-  instrument and must not be described as a validated assessment.
-- **Traceability:** [research sync status](01_Research/SYNC_STATUS.md) and
-  [geography provenance](01_Research/Geography_and_Access/PROVENANCE.json) record source status,
-  limitations, and reproducibility details.
-
 ---
 
 <a id="run-locally"></a>

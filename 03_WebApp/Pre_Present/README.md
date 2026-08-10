@@ -148,12 +148,6 @@ routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geograph
 | **Privacy** | Assessment and mission answers stay in browser storage by default and can be deleted immediately; submitted chat follows the separate network flow documented below |
 | **Research tooling** | Optional anonymous export at `/research`, plus a reproducible pilot-analysis pipeline |
 
-### Combined data snapshot · สถานะข้อมูลที่รวมแล้ว
-
-- The active catalogue contains 12 illustrative routes. Their source notes guide exploration; they are not admissions or programme guarantees.
-- The nearby-institution experience uses the refreshed `data/nearby.json`: 77 provinces and 1,961 options from the documented MHESI/OVEC pipeline.
-- The 1,000-item question bank and the 90-item adaptive-questionnaire design are retained as research material. The live interview still uses the existing 30-item `data/questions.json` instrument.
-
 <details>
 <summary><strong>What is not complete yet · สิ่งที่ยังไม่เสร็จ</strong></summary>
 

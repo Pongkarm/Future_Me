@@ -174,12 +174,6 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 The application can be used end to end without an account, database, environment variable, or
 model provider.
 
-### Combined data snapshot
-
-- The active catalogue contains 12 illustrative routes. Their source notes guide exploration; they are not admissions or programme guarantees.
-- The nearby-institution experience uses the refreshed `data/nearby.json`: 77 provinces and 1,961 options from the documented MHESI/OVEC pipeline.
-- The 1,000-item question bank and the 90-item adaptive-questionnaire design are retained as research material. The live interview still uses the existing 30-item `data/questions.json` instrument.
-
 ---
 
 <a id="decision"></a>

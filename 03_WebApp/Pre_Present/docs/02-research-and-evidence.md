@@ -110,6 +110,12 @@ flowchart TD
 Per-programme entry criteria, TPAT subject mappings and fees are **not modelled**. They change by
 programme and by admission year, and no dataset with a clear licence has been ingested.
 
+### Current prototype data boundaries
+
+- The active catalogue contains 12 illustrative routes. Its source notes support exploration, not a guarantee of admission or that a named institution offers a programme.
+- The nearby-institution screen reads the 77-province `data/nearby.json` dataset through `/api/nearby`. It has 1,961 options generated from the documented MHESI/OVEC pipeline. [Geography and Access](../../../01_Research/Geography_and_Access/README.md) records the source, distance method, and limitations.
+- The live interview remains the existing 30-item `data/questions.json` instrument. The 1,000-item bank and 90-item adaptive-questionnaire design are retained for research and have not been activated in the interview.
+
 ---
 
 ## 3 · Career, degree and skill mapping

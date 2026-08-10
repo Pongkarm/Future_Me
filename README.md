@@ -1,5 +1,7 @@
 <a id="top"></a>
 
+**README:** **[EN](README.md)** · [TH](READMETH.md)
+
 <p align="center">
   <img src="03_WebApp/Pre_Present/assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
@@ -12,10 +14,6 @@
 </p>
 
 <p align="center">
-  <a href="README.md"><strong>EN</strong></a>
-  &nbsp;·&nbsp;
-  <a href="READMETH.md">TH</a>
-  &nbsp;·&nbsp;
   <a href="#how-the-project-works">How it works</a>
   &nbsp;·&nbsp;
   <a href="#current-status">Current status</a>

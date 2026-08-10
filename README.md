@@ -1,12 +1,6 @@
 <a id="top"></a>
 
 <p align="center">
-  <sub><strong>SELECT README LANGUAGE</strong></sub><br>
-  <a href="README.md"><img src="https://img.shields.io/badge/README-EN-2DD4BF?style=for-the-badge&amp;labelColor=171725" alt="Read in English"></a>
-  <a href="READMETH.md"><img src="https://img.shields.io/badge/README-TH-D946EF?style=for-the-badge&amp;labelColor=171725" alt="Read in Thai"></a>
-</p>
-
-<p align="center">
   <img src="03_WebApp/Pre_Present/assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
 
@@ -18,6 +12,10 @@
 </p>
 
 <p align="center">
+  <a href="README.md"><strong>EN</strong></a>
+  &nbsp;·&nbsp;
+  <a href="READMETH.md">TH</a>
+  &nbsp;·&nbsp;
   <a href="#how-the-project-works">How it works</a>
   &nbsp;·&nbsp;
   <a href="#current-status">Current status</a>

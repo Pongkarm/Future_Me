@@ -82,11 +82,15 @@
   h2 {
     font-size: 13pt;
     letter-spacing: -.005em;
-    margin-top: 9mm;
+    margin-top: 8mm;
     padding-bottom: 2mm;
     border-bottom: 1.5px solid var(--ink);
     page-break-after: avoid;
+    page-break-before: auto;
   }
+  /* a heading must never be the last thing on a page, and no single line of a
+     paragraph may be stranded either side of a break */
+  p, li { orphans: 2; widows: 2; }
   h2 .tag {
     font-family: var(--mono);
     font-size: 8pt;
@@ -114,8 +118,12 @@
     border-collapse: collapse;
     margin: 3mm 0 4mm;
     font-size: 8.8pt;
-    page-break-inside: avoid;
+    /* Long tables split across pages rather than jumping whole — a 12-row
+       table that will not break leaves half a page blank behind it. */
+    page-break-inside: auto;
   }
+  thead { display: table-header-group; }   /* header repeats on each page */
+  tr { page-break-inside: avoid; }
   th, td {
     text-align: left;
     vertical-align: top;
@@ -226,13 +234,14 @@
   .nobreak { page-break-inside: avoid; }
 
   footer {
-    margin-top: 10mm;
-    padding-top: 3mm;
+    margin-top: 5mm;
+    padding-top: 2.5mm;
     border-top: .5px solid var(--rule);
     font-family: var(--mono);
-    font-size: 7.6pt;
+    font-size: 7.2pt;
     color: var(--ink-3);
-    line-height: 1.7;
+    line-height: 1.55;
+    page-break-inside: avoid;
   }
 </style>
 
@@ -458,7 +467,7 @@
 </section>
 
 <!-- ============================================================ E -->
-<section class="break">
+<section>
   <h2><span class="tag">E</span>ทฤษฎีที่ใช้ และใช้ตรงไหน</h2>
 
   <table>
@@ -519,7 +528,7 @@
 </section>
 
 <!-- ============================================================ G+H -->
-<section class="break">
+<section>
   <h2><span class="tag">G</span>Value proposition</h2>
 
   <div class="callout">
@@ -585,7 +594,7 @@
 </section>
 
 <!-- ============================================================ I+J -->
-<section class="break">
+<section>
   <h2><span class="tag">I</span>สถาปัตยกรรมข้อมูลบริบท</h2>
 
   <table>
@@ -653,7 +662,7 @@
 </section>
 
 <!-- ============================================================ K -->
-<section class="break">
+<section>
   <h2><span class="tag">K</span>ตัวอย่างการอนุมานเต็ม · ผู้เรียน 3 คน</h2>
 
   <p class="lede">
@@ -727,7 +736,7 @@
 </section>
 
 <!-- ============================================================ M+N -->
-<section class="break">
+<section>
   <h2><span class="tag">M</span>โครงสไลด์พิทช์</h2>
 
   <table>
@@ -820,7 +829,7 @@
 </section>
 
 <!-- ============================================================ O+P -->
-<section class="break">
+<section>
   <h2><span class="tag">O</span>จุดอ่อนที่ยังเหลือ — เขียนก่อนถูกถาม</h2>
 
   <table>
@@ -884,8 +893,6 @@
   </div>
 </section>
 
-<footer>
-  FutureMe · FuturePath Engine · JUMP Thailand Hackathon 2026 (AIS Academy × NIA)<br>
-  ตัวเลขทุกตัวในเอกสารนี้ผลิตซ้ำได้จาก 01_Research/Recommendation_Engine/ ด้วย python3 run.py<br>
-  11 สิงหาคม 2026
-</footer>
+<!-- No closing footer block: the running page footer already carries the
+     document name and page number on every page, and the cover states the
+     reproducibility line. A block footer here spilled onto a page of its own. -->

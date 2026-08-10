@@ -187,8 +187,6 @@ Open [http://localhost:3000](http://localhost:3000) and choose **Start as guest*
 
 ## Quick FAQ
 
-Short answers to the technical questions most likely to come up during a project review.
-
 <details>
 <summary><strong>Can I use the demo without AI or the backend?</strong></summary>
 

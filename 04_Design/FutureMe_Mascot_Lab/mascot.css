@@ -368,7 +368,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fm-mascot * {
+  /* Keep reduced motion as the default, but honour an explicit choice to turn
+   * motion on for the character. Decorative interview-scene effects remain
+   * governed by their own reduced-motion rules. */
+  .fm-mascot:not([data-fm-motion="on"]) * {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }

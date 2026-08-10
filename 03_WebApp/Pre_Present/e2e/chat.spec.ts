@@ -327,11 +327,11 @@ test("an explicit mascot motion choice overrides reduced motion and persists", a
   );
   await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS(
     "animation-duration",
-    "2.4s",
+    "1.8s",
   );
   await expect(svg.locator(".fm-arm--right .fm-arm-limb")).toHaveCSS(
     "transition-duration",
-    "0.6s",
+    "0.45s",
   );
 
   await page.reload();
@@ -349,7 +349,7 @@ test("an explicit mascot motion choice overrides reduced motion and persists", a
   expect(await svg.getAttribute("data-fm-motion")).toBe("on");
   await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS(
     "animation-duration",
-    "2.4s",
+    "1.8s",
   );
 });
 

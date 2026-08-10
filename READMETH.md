@@ -1,10 +1,9 @@
 <a id="top"></a>
 
 <p align="center">
-  <strong>เลือกภาษา:</strong>
-  <a href="README.md">🇬🇧 ภาษาอังกฤษ</a>
-  &nbsp;·&nbsp;
-  <a href="READMETH.md">🇹🇭 ภาษาไทย</a>
+  <sub><strong>เลือกภาษาของ README</strong></sub><br>
+  <a href="README.md"><img src="https://img.shields.io/badge/README-EN-2DD4BF?style=for-the-badge&amp;labelColor=171725" alt="อ่านฉบับภาษาอังกฤษ"></a>
+  <a href="READMETH.md"><img src="https://img.shields.io/badge/README-TH-D946EF?style=for-the-badge&amp;labelColor=171725" alt="อ่านฉบับภาษาไทย"></a>
 </p>
 
 <p align="center">

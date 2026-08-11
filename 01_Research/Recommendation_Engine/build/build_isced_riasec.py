@@ -309,7 +309,7 @@ def main():
 
     by_title = {title: soc for soc, title in occupations.items()}
 
-    vectors, counts, audit, unmapped = {}, {}, [], []
+    vectors, counts, examples, audit, unmapped = {}, {}, {}, [], []
     for code, pattern in sorted(ISCED_TO_ONET.items()):
         named = ISCED_TO_ONET_EXPLICIT.get(code)
         if named:
@@ -335,6 +335,9 @@ def main():
         # occupation is not wrong, but it is thin, and a reader ranking on it
         # deserves to see that rather than infer it.
         counts[code] = len(matched)
+        # A few example titles travel with the field so the app can show
+        # what the vector was averaged from, not only the number.
+        examples[code] = [t for _, t in matched[:4]]
         audit.append((code, ISCED_TITLES.get(code, "?"), matched, vectors[code]))
 
     # How much of the Thai bachelor register this now reaches
@@ -362,6 +365,7 @@ def main():
             },
             "titles": {c: ISCED_TITLES.get(c, "?") for c in vectors},
             "occupations": counts,
+            "examples": examples,
             "vectors": vectors,
         }, fh, ensure_ascii=False, indent=1)
 

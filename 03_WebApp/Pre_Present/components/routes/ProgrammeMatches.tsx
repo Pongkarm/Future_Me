@@ -148,6 +148,19 @@ function ProgrammeCard({
         )}
       </p>
 
+      {/*
+        The occupations the field's vector was averaged from, in Thai. This is
+        the crosswalk shown to the learner rather than only to a reviewer: it
+        is both the most concrete thing on the card and the evidence for the
+        number beside it.
+      */}
+      {p.occupations.length > 0 && (
+        <p className="mt-2 text-xs">
+          <span className="text-muted">{t.routes.programmesOccupations}</span>{" "}
+          {p.occupations.join(" · ")}
+        </p>
+      )}
+
       {p.outcome && (
         <div className="mt-2 rounded border border-subtle bg-subtle/40 px-2.5 py-1.5 text-xs">
           <p>

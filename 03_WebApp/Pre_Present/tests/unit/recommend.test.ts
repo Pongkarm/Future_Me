@@ -359,3 +359,21 @@ describe("travel modes", () => {
     expect(reachable.some((r) => r.travel.modes.length > 0)).toBe(true);
   });
 });
+
+describe("occupations shown to the learner", () => {
+  it("names them in Thai or not at all", () => {
+    // An untranslated English job title on a Thai card is worse than one
+    // fewer example, so the builder drops what it cannot name.
+    const a: Record<string, number> = {};
+    for (const q of questions.interest) a[q.id] = q.dimension === "R" ? 5 : 1;
+    const result = recommendProgrammes(a, { provinceIso: "TH-50" });
+    const named = result.top.filter((r) => r.programme.occupations.length > 0);
+    expect(named.length).toBeGreaterThan(0);
+    for (const row of named) {
+      expect(row.programme.occupations.length).toBeLessThanOrEqual(3);
+      for (const name of row.programme.occupations) {
+        expect(name, `${name} is not Thai`).toMatch(/[฀-๿]/);
+      }
+    }
+  });
+});

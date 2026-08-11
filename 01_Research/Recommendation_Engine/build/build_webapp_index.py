@@ -16,7 +16,8 @@ repetition and fields the browser can derive:
 
 Output, all positional:
 
-  fields[f]       = [iscedCode, title, [R,I,A,S,E,C], occupationsBehindIt]
+  fields[f]       = [iscedCode, title, [R,I,A,S,E,C], occupationsBehindIt,
+                     exampleOccupationsInThai]
   institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand, website|""]
   titles[j]       = programme title
   programmes[k]   = [titleIndex, institutionIndex, fieldIndex, seats|null,
@@ -31,6 +32,17 @@ OUT = os.path.join(HERE, "..", "..", "..", "03_WebApp", "Pre_Present", "data",
                    "programmes.json")
 
 DIMENSIONS = ["R", "I", "A", "S", "E", "C"]
+
+from occupation_th import OCCUPATION_TH  # noqa: E402
+
+
+def thai_examples(titles):
+    """Only the occupations that have a Thai name reach a Thai learner.
+
+    An untranslated English job title on the card is worse than one fewer
+    example, so untranslated ones are dropped rather than passed through.
+    """
+    return [OCCUPATION_TH[t] for t in (titles or []) if t in OCCUPATION_TH][:3]
 
 # index into this list is stored per programme
 LEVELS = ["ปริญญาตรี", "ปวช.", "ปวส."]
@@ -102,6 +114,11 @@ def main():
         payload = json.load(fh)
     rows = payload["programmes"]
 
+    with open(os.path.join(HERE, "..", "data", "isced_riasec.json"), encoding="utf-8") as fh:
+        isced_examples = json.load(fh)["examples"]
+    for r in rows:
+        r["occupation_examples"] = isced_examples.get(r["isced"], [])
+
     fields, field_index = [], {}
     institutions, inst_index = [], {}
     titles, title_index = [], {}
@@ -117,6 +134,7 @@ def main():
                 "isced": "VEC:" + v["field_subject"],
                 "isced_title": v["field_subject"],
                 "isced_occupations": 0,   # audited per subject, not per occupation count
+                "occupation_examples": v.get("occupation_examples"),
                 "name_th": v["name_th"],
                 "institution_id": v["institution_id"],
                 "institution_th": v["institution_th"],
@@ -140,7 +158,8 @@ def main():
             field_index[code] = len(fields)
             fields.append([code, p["isced_title"],
                            [round(p["riasec"][d], 4) for d in DIMENSIONS],
-                           p["isced_occupations"]])
+                           p["isced_occupations"],
+                           thai_examples(p.get("occupation_examples"))])
 
         key = p["institution_id"]
         if key not in inst_index:
@@ -213,6 +232,7 @@ def main():
     print(f"institutions  {len(institutions)}  "
           f"(มีเว็บไซต์ทางการ {sum(1 for i in institutions if i[5])})")
     print(f"fields        {len(fields)}  (ISCED-F detailed, each with its own vector)")
+    print(f"  มีชื่ออาชีพไทย {sum(1 for f in fields if f[4])} สาย")
     print(f"titles        {len(titles)} unique of {len(programmes)}")
     print(f"with cost     {sum(1 for r in programmes if r[4] is not None)}")
     print(f"with outcome  {sum(1 for r in programmes if r[6] >= 0)} (ตาราง {len(OUTCOMES)} แถว)")

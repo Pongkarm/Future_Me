@@ -24,8 +24,8 @@ interface Packed {
     coverageNote: string;
     source: string[];
   };
-  /** [iscedCode, title, [R,I,A,S,E,C], occupations behind the mean] */
-  fields: [string, string, number[], number][];
+  /** [iscedCode, title, [R,I,A,S,E,C], occupationsBehindTheMean, thaiExamples] */
+  fields: [string, string, number[], number, string[]][];
   /** [id, nameTh, provinceIso, provinceTh, tuitionBand, website] */
   institutions: [string, string, string, string, string, string][];
   titles: string[];
@@ -56,6 +56,12 @@ export interface Programme {
    * trace shows the number rather than leaving a reader to assume it is many.
    */
   iscedOccupations: number;
+  /**
+   * A few of those occupations, named in Thai. The most concrete thing the
+   * system can say about a programme — and the crosswalk made visible to the
+   * learner, not only to a reviewer reading the audit.
+   */
+  occupations: string[];
   riasec: Record<Dimension, number>;
   seatsPlanned: number | null;
   /**
@@ -110,7 +116,7 @@ export function allProgrammes(): Programme[] {
 
   cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost, levelIndex, outcomeIndex]) => {
     const [id, nameTh, provinceIso, provinceTh, tuitionBand, website] = data.institutions[instIndex];
-    const [isced, iscedTitle, , iscedOccupations] = data.fields[fieldIndex];
+    const [isced, iscedTitle, , iscedOccupations, occupations] = data.fields[fieldIndex];
     return {
       title: data.titles[titleIndex],
       institutionId: id,
@@ -122,6 +128,7 @@ export function allProgrammes(): Programme[] {
       isced,
       iscedTitle,
       iscedOccupations,
+      occupations,
       riasec: vectors[fieldIndex],
       seatsPlanned: seats,
       productionCost: cost,

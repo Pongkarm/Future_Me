@@ -196,6 +196,530 @@
   "1032": 11,
   "1041": 19
  },
+ "examples": {
+  "0110": [
+   "Business Teachers, Postsecondary",
+   "Computer Science Teachers, Postsecondary",
+   "Mathematical Science Teachers, Postsecondary",
+   "Architecture Teachers, Postsecondary"
+  ],
+  "0111": [
+   "Education and Childcare Administrators, Preschool and Daycare",
+   "Education Administrators, Kindergarten through Secondary",
+   "Education Administrators, Postsecondary",
+   "Instructional Coordinators"
+  ],
+  "0112": [
+   "Preschool Teachers, Except Special Education",
+   "Kindergarten Teachers, Except Special Education",
+   "Childcare Workers"
+  ],
+  "0113": [
+   "Elementary School Teachers, Except Special Education",
+   "Teaching Assistants, Preschool, Elementary, Middle, and Secondary School, Except Special Education",
+   "Teaching Assistants, Special Education",
+   "Teaching Assistants, Postsecondary"
+  ],
+  "0114": [
+   "Career/Technical Education Teachers, Postsecondary",
+   "Middle School Teachers, Except Special and Career/Technical Education",
+   "Career/Technical Education Teachers, Middle School",
+   "Secondary School Teachers, Except Special and Career/Technical Education"
+  ],
+  "0119": [
+   "Business Teachers, Postsecondary",
+   "Computer Science Teachers, Postsecondary",
+   "Mathematical Science Teachers, Postsecondary",
+   "Architecture Teachers, Postsecondary"
+  ],
+  "0210": [
+   "Agents and Business Managers of Artists, Performers, and Athletes",
+   "Web and Digital Interface Designers",
+   "Video Game Designers",
+   "Craft Artists"
+  ],
+  "0211": [
+   "Producers and Directors",
+   "Media Programming Directors",
+   "Audio and Video Technicians",
+   "Broadcast Technicians"
+  ],
+  "0212": [
+   "Commercial and Industrial Designers",
+   "Fashion Designers",
+   "Graphic Designers",
+   "Interior Designers"
+  ],
+  "0213": [
+   "Art Directors",
+   "Craft Artists",
+   "Fine Artists, Including Painters, Sculptors, and Illustrators"
+  ],
+  "0214": [
+   "Craft Artists",
+   "Jewelers and Precious Stone and Metal Workers",
+   "Potters, Manufacturing"
+  ],
+  "0215": [
+   "Actors",
+   "Dancers",
+   "Choreographers",
+   "Music Directors and Composers"
+  ],
+  "0219": [
+   "Agents and Business Managers of Artists, Performers, and Athletes",
+   "Web and Digital Interface Designers",
+   "Video Game Designers",
+   "Craft Artists"
+  ],
+  "0221": [
+   "Clergy",
+   "Directors, Religious Activities and Education",
+   "Philosophy and Religion Teachers, Postsecondary"
+  ],
+  "0222": [
+   "Anthropologists and Archeologists",
+   "Historians",
+   "Anthropology and Archeology Teachers, Postsecondary",
+   "Archivists"
+  ],
+  "0223": [
+   "Philosophy and Religion Teachers, Postsecondary",
+   "Sociologists"
+  ],
+  "0231": [
+   "Interpreters and Translators",
+   "Foreign Language and Literature Teachers, Postsecondary",
+   "English Language and Literature Teachers, Postsecondary",
+   "Adult Basic Education, Adult Secondary Education, and English as a Second Language Instructors"
+  ],
+  "0232": [
+   "English Language and Literature Teachers, Postsecondary",
+   "Editors",
+   "Technical Writers",
+   "Writers and Authors"
+  ],
+  "0310": [
+   "Sociologists",
+   "Political Scientists",
+   "Anthropologists and Archeologists",
+   "Survey Researchers"
+  ],
+  "0311": [
+   "Economists",
+   "Environmental Economists",
+   "Economics Teachers, Postsecondary"
+  ],
+  "0312": [
+   "Legislators",
+   "Urban and Regional Planners",
+   "Political Scientists",
+   "Political Science Teachers, Postsecondary"
+  ],
+  "0313": [
+   "Industrial-Organizational Psychologists",
+   "Clinical and Counseling Psychologists",
+   "School Psychologists",
+   "Psychology Teachers, Postsecondary"
+  ],
+  "0314": [
+   "Sociologists",
+   "Anthropologists and Archeologists",
+   "Social Science Research Assistants",
+   "Anthropology and Archeology Teachers, Postsecondary"
+  ],
+  "0321": [
+   "Broadcast Announcers and Radio Disc Jockeys",
+   "News Analysts, Reporters, and Journalists",
+   "Public Relations Specialists",
+   "Editors"
+  ],
+  "0322": [
+   "Archivists",
+   "Librarians and Media Collections Specialists",
+   "Library Technicians"
+  ],
+  "0410": [
+   "General and Operations Managers",
+   "Management Analysts",
+   "Administrative Services Managers",
+   "Business Teachers, Postsecondary"
+  ],
+  "0411": [
+   "Accountants and Auditors",
+   "Tax Examiners and Collectors, and Revenue Agents",
+   "Tax Preparers",
+   "Bookkeeping, Accounting, and Auditing Clerks"
+  ],
+  "0412": [
+   "Financial Managers",
+   "Credit Analysts",
+   "Insurance Underwriters",
+   "Financial Risk Specialists"
+  ],
+  "0413": [
+   "General and Operations Managers",
+   "Administrative Services Managers",
+   "Human Resources Managers",
+   "Human Resources Specialists"
+  ],
+  "0414": [
+   "Advertising and Promotions Managers",
+   "Marketing Managers",
+   "Sales Managers",
+   "Public Relations Managers"
+  ],
+  "0415": [
+   "Executive Secretaries and Executive Administrative Assistants",
+   "Legal Secretaries and Administrative Assistants",
+   "Medical Secretaries and Administrative Assistants",
+   "Secretaries and Administrative Assistants, Except Legal, Medical, and Executive"
+  ],
+  "0416": [
+   "Wholesale and Retail Buyers, Except Farm Products",
+   "Purchasing Agents, Except Wholesale, Retail, and Farm Products",
+   "First-Line Supervisors of Retail Sales Workers",
+   "Retail Salespersons"
+  ],
+  "0417": [
+   "Training and Development Managers",
+   "Training and Development Specialists"
+  ],
+  "0421": [
+   "Lawyers",
+   "Judicial Law Clerks",
+   "Administrative Law Judges, Adjudicators, and Hearing Officers",
+   "Arbitrators, Mediators, and Conciliators"
+  ],
+  "0511": [
+   "Microbiologists",
+   "Zoologists and Wildlife Biologists",
+   "Molecular and Cellular Biologists",
+   "Geneticists"
+  ],
+  "0512": [
+   "Biochemists and Biophysicists",
+   "Medical Scientists, Except Epidemiologists",
+   "Microbiologists",
+   "Chemists"
+  ],
+  "0521": [
+   "Environmental Engineers",
+   "Environmental Engineering Technologists and Technicians",
+   "Conservation Scientists",
+   "Environmental Scientists and Specialists, Including Health"
+  ],
+  "0522": [
+   "Zoologists and Wildlife Biologists",
+   "Conservation Scientists",
+   "Park Naturalists",
+   "Forest and Conservation Technicians"
+  ],
+  "0531": [
+   "Chemists",
+   "Materials Scientists",
+   "Chemistry Teachers, Postsecondary"
+  ],
+  "0532": [
+   "Mining and Geological Engineers, Including Mining Safety Engineers",
+   "Atmospheric and Space Scientists",
+   "Geoscientists, Except Hydrologists and Geographers",
+   "Hydrologists"
+  ],
+  "0533": [
+   "Astronomers",
+   "Physicists",
+   "Physics Teachers, Postsecondary"
+  ],
+  "0541": [
+   "Mathematicians",
+   "Mathematical Science Teachers, Postsecondary",
+   "Statisticians",
+   "Actuaries"
+  ],
+  "0542": [
+   "Statisticians",
+   "Data Scientists",
+   "Statistical Assistants"
+  ],
+  "0610": [
+   "Computer Systems Analysts",
+   "Computer Programmers",
+   "Computer User Support Specialists",
+   "Computer Network Support Specialists"
+  ],
+  "0611": [
+   "Computer User Support Specialists",
+   "Computer Network Support Specialists",
+   "Data Entry Keyers",
+   "Desktop Publishers"
+  ],
+  "0612": [
+   "Information Security Analysts",
+   "Computer Network Support Specialists",
+   "Computer Network Architects",
+   "Database Administrators"
+  ],
+  "0613": [
+   "Computer Systems Analysts",
+   "Computer and Information Research Scientists",
+   "Computer Programmers",
+   "Software Developers"
+  ],
+  "0710": [
+   "Architectural and Engineering Managers",
+   "Logistics Engineers",
+   "Telecommunications Engineering Specialists",
+   "Information Security Engineers"
+  ],
+  "0711": [
+   "Chemical Engineers",
+   "Chemical Technicians",
+   "Chemical Plant and System Operators"
+  ],
+  "0712": [
+   "Water/Wastewater Engineers",
+   "Environmental Engineers",
+   "Environmental Engineering Technologists and Technicians",
+   "Environmental Science and Protection Technicians, Including Health"
+  ],
+  "0713": [
+   "Electrical Engineers",
+   "Energy Engineers, Except Wind and Solar",
+   "Wind Energy Engineers",
+   "Electricians"
+  ],
+  "0714": [
+   "Electronics Engineers, Except Computer",
+   "Robotics Engineers",
+   "Electrical and Electronics Drafters",
+   "Electrical and Electronic Engineering Technologists and Technicians"
+  ],
+  "0715": [
+   "Mechanical Engineers",
+   "Mechanical Engineering Technologists and Technicians",
+   "Sheet Metal Workers",
+   "Industrial Machinery Mechanics"
+  ],
+  "0716": [
+   "Aerospace Engineers",
+   "Marine Engineers and Naval Architects",
+   "Automotive Engineers",
+   "Aerospace Engineering and Operations Technologists and Technicians"
+  ],
+  "0719": [
+   "Architectural and Engineering Managers",
+   "Logistics Engineers",
+   "Telecommunications Engineering Specialists",
+   "Information Security Engineers"
+  ],
+  "0720": [
+   "Industrial Engineers",
+   "Manufacturing Engineers",
+   "Industrial Engineering Technologists and Technicians",
+   "Sales Representatives, Wholesale and Manufacturing, Technical and Scientific Products"
+  ],
+  "0721": [
+   "Food Scientists and Technologists",
+   "Food Science Technicians",
+   "Agricultural Inspectors",
+   "Bakers"
+  ],
+  "0722": [
+   "Materials Engineers",
+   "Automotive Glass Installers and Repairers",
+   "Extruding and Drawing Machine Setters, Operators, and Tenders, Metal and Plastic",
+   "Forging Machine Setters, Operators, and Tenders, Metal and Plastic"
+  ],
+  "0723": [
+   "Pressers, Textile, Garment, and Related Materials",
+   "Sewing Machine Operators",
+   "Shoe and Leather Workers and Repairers",
+   "Shoe Machine Operators and Tenders"
+  ],
+  "0724": [
+   "Health and Safety Engineers, Except Mining Safety Engineers and Inspectors",
+   "Mining and Geological Engineers, Including Mining Safety Engineers",
+   "Petroleum Engineers",
+   "First-Line Supervisors of Construction Trades and Extraction Workers"
+  ],
+  "0731": [
+   "Architectural and Engineering Managers",
+   "Computer Network Architects",
+   "Database Architects",
+   "Computer Systems Engineers/Architects"
+  ],
+  "0732": [
+   "Construction Managers",
+   "Surveyors",
+   "Geodetic Surveyors",
+   "Civil Engineers"
+  ],
+  "0810": [
+   "Farmers, Ranchers, and Other Agricultural Managers",
+   "Agricultural Engineers",
+   "Agricultural Technicians",
+   "Agricultural Sciences Teachers, Postsecondary"
+  ],
+  "0811": [
+   "Farmers, Ranchers, and Other Agricultural Managers",
+   "Agricultural Engineers",
+   "Animal Scientists",
+   "Soil and Plant Scientists"
+  ],
+  "0812": [
+   "Floral Designers",
+   "First-Line Supervisors of Landscaping, Lawn Service, and Groundskeeping Workers",
+   "Landscaping and Groundskeeping Workers",
+   "Tree Trimmers and Pruners"
+  ],
+  "0821": [
+   "Conservation Scientists",
+   "Foresters",
+   "Forest and Conservation Technicians",
+   "Forestry and Conservation Science Teachers, Postsecondary"
+  ],
+  "0831": [
+   "Fish and Game Wardens",
+   "First-Line Supervisors of Farming, Fishing, and Forestry Workers",
+   "Farmworkers, Farm, Ranch, and Aquacultural Animals",
+   "Fishing and Hunting Workers"
+  ],
+  "0841": [
+   "Veterinarians",
+   "Veterinary Technologists and Technicians",
+   "Veterinary Assistants and Laboratory Animal Caretakers"
+  ],
+  "0910": [
+   "Medical and Health Services Managers",
+   "Medical Scientists, Except Epidemiologists",
+   "Healthcare Social Workers",
+   "Health Specialties Teachers, Postsecondary"
+  ],
+  "0911": [
+   "Dentists, General",
+   "Oral and Maxillofacial Surgeons",
+   "Dental Hygienists",
+   "Dental Assistants"
+  ],
+  "0912": [
+   "Oral and Maxillofacial Surgeons",
+   "Physician Assistants",
+   "Anesthesiologist Assistants",
+   "Anesthesiologists"
+  ],
+  "0913": [
+   "Registered Nurses",
+   "Nurse Midwives",
+   "Nurse Practitioners",
+   "Licensed Practical and Licensed Vocational Nurses"
+  ],
+  "0914": [
+   "Medical and Clinical Laboratory Technologists",
+   "Medical and Clinical Laboratory Technicians",
+   "Cardiovascular Technologists and Technicians",
+   "Diagnostic Medical Sonographers"
+  ],
+  "0915": [
+   "Occupational Therapists",
+   "Physical Therapists",
+   "Recreational Therapists",
+   "Respiratory Therapists"
+  ],
+  "0916": [
+   "Pharmacists",
+   "Pharmacy Technicians",
+   "Pharmacy Aides"
+  ],
+  "0917": [
+   "Acupuncturists",
+   "Naturopathic Physicians",
+   "Massage Therapists"
+  ],
+  "0919": [
+   "Health Education Specialists",
+   "Community Health Workers",
+   "Health Specialties Teachers, Postsecondary",
+   "Healthcare Social Workers"
+  ],
+  "0921": [
+   "Home Health Aides",
+   "Personal Care Aides",
+   "Nursing Assistants"
+  ],
+  "0922": [
+   "Social and Human Service Assistants",
+   "Preschool Teachers, Except Special Education",
+   "First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services",
+   "Childcare Workers"
+  ],
+  "0923": [
+   "Credit Counselors",
+   "Substance Abuse and Behavioral Disorder Counselors",
+   "Educational, Guidance, and Career Counselors and Advisors",
+   "Mental Health Counselors"
+  ],
+  "1010": [
+   "Personal Care Aides",
+   "First-Line Supervisors of Personal Service Workers"
+  ],
+  "1011": [
+   "First-Line Supervisors of Housekeeping and Janitorial Workers",
+   "Janitors and Cleaners, Except Maids and Housekeeping Cleaners",
+   "Maids and Housekeeping Cleaners"
+  ],
+  "1012": [
+   "Barbers",
+   "Hairdressers, Hairstylists, and Cosmetologists",
+   "Manicurists and Pedicurists",
+   "Skincare Specialists"
+  ],
+  "1013": [
+   "Food Service Managers",
+   "Lodging Managers",
+   "Chefs and Head Cooks",
+   "Cooks, Fast Food"
+  ],
+  "1014": [
+   "Agents and Business Managers of Artists, Performers, and Athletes",
+   "Athletes and Sports Competitors",
+   "Coaches and Scouts",
+   "Umpires, Referees, and Other Sports Officials"
+  ],
+  "1015": [
+   "Lodging Managers",
+   "Meeting, Convention, and Event Planners",
+   "Concierges",
+   "Tour Guides and Escorts"
+  ],
+  "1021": [
+   "Hazardous Materials Removal Workers",
+   "Septic Tank Servicers and Sewer Pipe Cleaners",
+   "Refuse and Recyclable Material Collectors"
+  ],
+  "1022": [
+   "Health and Safety Engineers, Except Mining Safety Engineers and Inspectors",
+   "Mining and Geological Engineers, Including Mining Safety Engineers",
+   "Occupational Health and Safety Specialists",
+   "Occupational Health and Safety Technicians"
+  ],
+  "1031": [
+   "First-Line Supervisors of Police and Detectives",
+   "Emergency Management Directors"
+  ],
+  "1032": [
+   "First-Line Supervisors of Correctional Officers",
+   "First-Line Supervisors of Police and Detectives",
+   "Firefighters",
+   "Correctional Officers and Jailers"
+  ],
+  "1041": [
+   "Logisticians",
+   "Transit and Railroad Police",
+   "Cargo and Freight Agents",
+   "Dispatchers, Except Police, Fire, and Ambulance"
+  ]
+ },
  "vectors": {
   "0110": {
    "R": 0.3187,

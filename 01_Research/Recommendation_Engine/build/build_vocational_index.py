@@ -131,12 +131,12 @@ def main():
     for name, pat in BROAD.items():
         v, m = vector_for(pat)
         if v:
-            broad_vec[name] = v
+            broad_vec[name] = (v, [t for _, t in m[:4]])
             audit.append(("ประเภทวิชา", name, v, m))
     for pat, onet in SUBJECT.items():
         v, m = vector_for(onet)
         if v:
-            subject_vec[pat] = (re.compile(pat), v)
+            subject_vec[pat] = (re.compile(pat), v, [t for _, t in m[:4]])
             audit.append(("สาขาวิชา", pat, v, m))
 
     raw = open(SRC, "rb").read().decode("utf-8-sig", errors="replace")
@@ -161,13 +161,15 @@ def main():
             dropped["no_located_college"] += 1
             continue
 
-        vec, how = None, None
-        for pat, (rx, v) in subject_vec.items():
+        vec, how, examples = None, None, []
+        for pat, (rx, v, ex) in subject_vec.items():
             if rx.search(subject):
-                vec, how = v, f"สาขาวิชา:{pat}"
+                vec, how, examples = v, f"สาขาวิชา:{pat}", ex
                 break
         if vec is None:
-            vec = broad_vec.get(broad)
+            pair = broad_vec.get(broad)
+            if pair:
+                vec, examples = pair
             how = f"ประเภทวิชา:{broad}"
         if vec is None:
             dropped["no_vector"] += 1
@@ -187,6 +189,7 @@ def main():
             "field_subject": subject,
             "riasec": vec,
             "match_level": how,
+            "occupation_examples": examples,
             "students_enrolled": students,
             "tuition_band": "public" if sector == "รัฐ" else "private",
             "tuition_baht_per_year": None,

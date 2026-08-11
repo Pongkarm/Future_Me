@@ -8,6 +8,8 @@ const repoRoot = resolve(appRoot, "..");
 const geoRoot = join(repoRoot, "01_Research", "Geography_and_Access");
 const dataRoot = join(geoRoot, "data");
 const errors = [];
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const SEMVER = /^\d+\.\d+\.\d+$/;
 
 function check(condition, message) {
   if (!condition) errors.push(message);
@@ -34,6 +36,54 @@ function sameMembers(left, right, label) {
 }
 
 const provenance = readJson(join(geoRoot, "PROVENANCE.json"));
+const release = readJson(join(appRoot, "data", "release.json"));
+const educationRegistry = readJson(join(appRoot, "data", "education-data-registry.json"));
+const packageManifest = readJson(join(appRoot, "package.json"));
+const packageLock = readJson(join(appRoot, "package-lock.json"));
+const rootVersion = readFileSync(join(repoRoot, "VERSION"), "utf8").trim();
+
+check(SEMVER.test(rootVersion), "VERSION must contain a semantic version");
+check(release.version === rootVersion, "release.json version must match VERSION");
+check(packageManifest.version === rootVersion, "package.json version must match VERSION");
+check(packageLock.version === rootVersion, "package-lock.json version must match VERSION");
+check(packageLock.packages?.[""]?.version === rootVersion, "package-lock root package version must match VERSION");
+check(release.components?.webApp?.version === rootVersion, "release web-app version must match VERSION");
+check(release.components?.backend?.version === rootVersion, "release backend version must match VERSION");
+check(
+  release.components?.decisionEngine?.version === `${rootVersion}-prototype`,
+  "release decision-engine version must be VERSION-prototype",
+);
+check(educationRegistry.releaseVersion === rootVersion, "education registry release must match VERSION");
+check(ISO_DATE.test(release.releasedAt ?? ""), "release date must be an ISO date");
+check(ISO_DATE.test(educationRegistry.checkedAt ?? ""), "education registry check date must be an ISO date");
+
+const backendVersionSource = readFileSync(join(repoRoot, "02_Backend", "app", "version.py"), "utf8");
+check(
+  backendVersionSource.includes(`APP_VERSION = "${rootVersion}"`),
+  "backend scaffold version must match VERSION",
+);
+
+const registryStatuses = new Set(Object.keys(educationRegistry.statusDefinitions ?? {}));
+check(registryStatuses.has("verified"), "education registry must define verified");
+check(registryStatuses.has("partially-verified"), "education registry must define partially-verified");
+check(registryStatuses.has("unavailable"), "education registry must define unavailable");
+for (const [domainId, domain] of Object.entries(educationRegistry.domains ?? {})) {
+  check(registryStatuses.has(domain.status), `${domainId} has unsupported registry status ${domain.status}`);
+  check(typeof domain.decisionUse === "string" && domain.decisionUse.length > 0, `${domainId} has no decision-use rule`);
+  check(Array.isArray(domain.availableFields), `${domainId} availableFields must be an array`);
+  check(Array.isArray(domain.knownGaps), `${domainId} knownGaps must be an array`);
+  check(Array.isArray(domain.sources), `${domainId} sources must be an array`);
+  if (domain.status === "unavailable") {
+    check(domain.coverage?.localRecords === 0, `${domainId} is unavailable but does not declare zero local records`);
+    check(domain.decisionUse === "none", `${domainId} is unavailable but can affect a decision`);
+  } else {
+    check(domain.sources.length > 0, `${domainId} claims source-backed data without a source`);
+  }
+  for (const source of domain.sources ?? []) {
+    check(/^https:\/\//.test(source.url ?? ""), `${domainId} has a non-HTTPS source URL`);
+    check(ISO_DATE.test(source.checkedAt ?? ""), `${domainId} source has no ISO check date`);
+  }
+}
 check(provenance.integrity?.algorithm === "SHA-256", "PROVENANCE integrity algorithm must be SHA-256");
 check(
   provenance.integrity?.scope === "UTF-8 bytes with CRLF normalized to LF",
@@ -157,6 +207,8 @@ check(accessMeta?.rows === accessOptions, `province_access has ${accessOptions} 
 
 const nearby = readJson(join(appRoot, "data", "nearby.json"));
 const routeCatalogue = readJson(join(appRoot, "data", "routes.json"));
+const questions = readJson(join(appRoot, "data", "questions.json"));
+const programmeRoutes = readJson(join(dataRoot, "programme_routes.json"));
 const routeIds = new Set(routeCatalogue.routes.map((row) => row.id));
 sameMembers(Object.keys(nearby), provinceIds, "web nearby data and province registry");
 let webOptions = 0;
@@ -197,6 +249,57 @@ for (const [iso, value] of Object.entries(nearby)) {
 const missingCoordinates = institutions.filter((row) => !Number.isFinite(row.lat) || !Number.isFinite(row.lon)).length;
 const missingWebsites = institutions.filter((row) => !row.website).length;
 const missingThaiStationNames = stations.filter((row) => !row.th).length;
+const uniqueWebInstitutions = new Map();
+let mappedDisplayRows = 0;
+for (const province of Object.values(nearby)) {
+  for (const option of province.options) {
+    uniqueWebInstitutions.set(option.id, option);
+    if (Array.isArray(option.runs) && option.runs.length > 0) mappedDisplayRows += 1;
+  }
+}
+const mappedUniqueInstitutions = [...uniqueWebInstitutions.values()].filter(
+  (option) => Array.isArray(option.runs) && option.runs.length > 0,
+).length;
+const sourceMappedInstitutions = Object.keys(programmeRoutes.institutions ?? {}).length;
+
+check(release.questionnaire?.liveInstrumentId === questions.meta?.id, "release questionnaire id is wrong");
+check(release.questionnaire?.interestItems === questions.interest?.length, "release interest-item count is wrong");
+check(release.questionnaire?.contextPrompts === questions.context?.length, "release context-prompt count is wrong");
+check(release.catalogues?.routes?.records === routeCatalogue.routes.length, "release route count is wrong");
+check(release.catalogues?.routes?.dataAsOf === routeCatalogue.meta?.dataAsOf, "release route data date is wrong");
+check(release.catalogues?.educationAccess?.provinces === provinces.length, "release province count is wrong");
+check(release.catalogues?.educationAccess?.sourceInstitutions === institutions.length, "release institution count is wrong");
+check(
+  release.catalogues?.educationAccess?.displayedUniqueInstitutions === uniqueWebInstitutions.size,
+  "release unique displayed-institution count is wrong",
+);
+check(release.catalogues?.educationAccess?.displayRows === webOptions, "release education display-row count is wrong");
+
+const institutionCoverage = educationRegistry.domains?.institution?.coverage ?? {};
+check(institutionCoverage.sourceRecords === institutions.length, "registry source institution count is wrong");
+check(
+  institutionCoverage.displayedUniqueInstitutions === uniqueWebInstitutions.size,
+  "registry unique displayed-institution count is wrong",
+);
+check(institutionCoverage.displayRows === webOptions, "registry institution display-row count is wrong");
+const programmeCoverage = educationRegistry.domains?.program?.coverage ?? {};
+check(programmeCoverage.sourceMappedInstitutions === sourceMappedInstitutions, "registry source programme-mapping count is wrong");
+check(programmeCoverage.displayedMappedInstitutions === mappedUniqueInstitutions, "registry displayed programme-mapping count is wrong");
+check(programmeCoverage.mappedDisplayRows === mappedDisplayRows, "registry mapped display-row count is wrong");
+check(
+  programmeCoverage.displayedInstitutionsWithoutProgramMapping === uniqueWebInstitutions.size - mappedUniqueInstitutions,
+  "registry unmapped displayed-institution count is wrong",
+);
+const locationCoverage = educationRegistry.domains?.location?.coverage ?? {};
+check(locationCoverage.provinces === provinces.length, "registry location province count is wrong");
+check(locationCoverage.displayRows === webOptions, "registry location display-row count is wrong");
+check(locationCoverage.sourceAccessRows === accessOptions, "registry source access-row count is wrong");
+check(locationCoverage.recordsWithUnknownCoordinates === missingCoordinates, "registry missing-coordinate count is wrong");
+
+const heldOut = new Set(educationRegistry.recommendationBoundary?.heldOutUntilVerified ?? []);
+for (const field of routeCatalogue.meta?.fieldStatus?.unverified ?? []) {
+  check(heldOut.has(field), `registry does not hold out unverified route field ${field}`);
+}
 
 if (errors.length > 0) {
   console.error(`Research-data validation failed with ${errors.length} error(s):`);

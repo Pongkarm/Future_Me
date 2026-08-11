@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "1.0.0",
+  "releaseVersion": "0.2.0",
+  "checkedAt": "2026-08-11",
+  "purpose": "Machine-readable coverage, provenance and decision-use limits for education data exposed by the prototype.",
+  "statusDefinitions": {
+    "verified": "Checked against an authoritative source and complete for the stated scope.",
+    "partially-verified": "Some records or fields are source-backed, but coverage, freshness or licensing limits remain.",
+    "unavailable": "No validated local records are available. The application must show unknown rather than infer a value."
+  },
+  "domains": {
+    "institution": {
+      "status": "partially-verified",
+      "decisionUse": "directory-only",
+      "coverage": {
+        "sourceRecords": 1417,
+        "displayedUniqueInstitutions": 1375,
+        "displayRows": 1961
+      },
+      "availableFields": [
+        "institution id",
+        "name",
+        "institution kind",
+        "sector",
+        "province",
+        "district where supplied",
+        "education levels inferred from the official institution name"
+      ],
+      "knownGaps": [
+        {
+          "field": "coordinates",
+          "recordsUnknown": 207
+        },
+        {
+          "field": "website",
+          "recordsUnknown": 987
+        }
+      ],
+      "sources": [
+        {
+          "publisher": "Office of the Vocational Education Commission",
+          "title": "Public vocational institution locations",
+          "url": "https://ckan.vec.go.th/en/dataset/publicschool",
+          "checkedAt": "2026-08-11",
+          "license": "not specified"
+        },
+        {
+          "publisher": "Office of the Vocational Education Commission",
+          "title": "Private vocational institution locations",
+          "url": "https://ckan.vec.go.th/en/dataset/privateschool",
+          "checkedAt": "2026-08-11",
+          "license": "not specified"
+        },
+        {
+          "publisher": "Ministry of Higher Education, Science, Research and Innovation",
+          "title": "Higher-education institution register, academic year 2566",
+          "url": "https://data.mhesi.go.th/dataset/5d5c4958-9e36-41ae-a637-1b31148a1143/resource/a80acd99-86bf-4a58-81ea-58167b2679e3/download/univ_uni_11_01_2566.xlsx",
+          "checkedAt": "2026-08-11",
+          "license": "not re-confirmed during this release"
+        }
+      ]
+    },
+    "program": {
+      "status": "partially-verified",
+      "decisionUse": "narrows-degree-directory-results-only",
+      "coverage": {
+        "sourceMappedInstitutions": 178,
+        "displayedMappedInstitutions": 140,
+        "mappedDisplayRows": 194,
+        "displayedInstitutionsWithoutProgramMapping": 1235
+      },
+      "availableFields": [
+        "institution-to-route subject mapping for matched entry-level degree programmes"
+      ],
+      "knownGaps": [
+        {
+          "field": "programme-level detail",
+          "value": "not displayed or stored in the web dataset"
+        },
+        {
+          "field": "vocational programmes by campus",
+          "value": "not available in the ingested source"
+        }
+      ],
+      "sources": [
+        {
+          "publisher": "Ministry of Higher Education, Science, Research and Innovation",
+          "title": "Admission plan for each programme (dqe_11_01)",
+          "url": "https://data.mhesi.go.th/dataset/dqe_11_01",
+          "retrievedAt": "2026-08-06",
+          "checkedAt": "2026-08-11",
+          "sourceUpdatedAt": "2025-07-23",
+          "license": "not specified"
+        }
+      ]
+    },
+    "admission": {
+      "status": "unavailable",
+      "decisionUse": "none",
+      "dynamic": true,
+      "coverage": {
+        "localRecords": 0
+      },
+      "availableFields": [],
+      "knownGaps": [
+        {
+          "field": "TCAS rounds, deadlines, qualifications and required scores by programme and year",
+          "value": "not ingested"
+        }
+      ],
+      "sources": [
+        {
+          "publisher": "Council of University Presidents of Thailand",
+          "title": "Official TCAS70 portal",
+          "url": "https://www.mytcas.com/",
+          "checkedAt": "2026-08-11",
+          "sourceUpdatedAt": "2026-07-16",
+          "use": "verification link only; no admission record is copied into the prototype"
+        }
+      ]
+    },
+    "financial": {
+      "status": "unavailable",
+      "decisionUse": "none",
+      "dynamic": true,
+      "coverage": {
+        "localRecords": 0
+      },
+      "availableFields": [],
+      "knownGaps": [
+        {
+          "field": "tuition by programme and year",
+          "value": "not ingested"
+        },
+        {
+          "field": "scholarships and eligibility",
+          "value": "not ingested"
+        },
+        {
+          "field": "accommodation and cost of living",
+          "value": "not ingested"
+        }
+      ],
+      "sources": []
+    },
+    "location": {
+      "status": "partially-verified",
+      "decisionUse": "directory-ordering-only",
+      "dynamic": true,
+      "coverage": {
+        "provinces": 77,
+        "displayRows": 1961,
+        "sourceAccessRows": 5916,
+        "recordsWithUnknownCoordinates": 207
+      },
+      "availableFields": [
+        "institution province",
+        "road distance from province centre",
+        "estimated driving time",
+        "travel band",
+        "nearby public-transport mode where available"
+      ],
+      "knownGaps": [
+        {
+          "field": "student home location",
+          "value": "not collected"
+        },
+        {
+          "field": "public-transport journey time and fare",
+          "value": "not available"
+        },
+        {
+          "field": "dormitory and accommodation information",
+          "value": "not available"
+        }
+      ],
+      "sources": [
+        {
+          "publisher": "OpenStreetMap contributors via the public OSRM service",
+          "title": "Driving-route estimates from province centres",
+          "url": "https://router.project-osrm.org/",
+          "retrievedAt": "2026-08-10",
+          "checkedAt": "2026-08-10",
+          "license": "ODbL 1.0 for OpenStreetMap road data"
+        }
+      ]
+    }
+  },
+  "recommendationBoundary": {
+    "activeRouteSelectionInputs": [
+      "interest profile",
+      "mission evidence",
+      "learning-environment affinity",
+      "education tier eligibility"
+    ],
+    "heldOutUntilVerified": [
+      "costBand",
+      "requiresRelocation",
+      "timeToEarning",
+      "flexibility",
+      "strengths",
+      "limitations",
+      "tuition",
+      "scholarships",
+      "accommodation",
+      "cost of living",
+      "admission requirements",
+      "TCAS deadlines",
+      "distance"
+    ],
+    "rule": "Education-directory data may help a learner investigate a route, but it cannot select, score, rank or remove a route in release 0.2.0."
+  }
+}

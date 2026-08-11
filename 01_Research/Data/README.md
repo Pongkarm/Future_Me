@@ -3,7 +3,11 @@
 > ตรวจล่าสุด: 24 กรกฎาคม 2026  
 > สถานะ: ผ่านการตรวจแหล่งอ้างอิงรอบแรกแล้ว แต่ยังไม่ใช่ชุดข้อมูลที่ “ถูกต้อง 100%”  
 > ก่อนนำไปใช้กับ RAG ให้ทำตามกติกาใน [`RAG_DATA_SPEC.md`](RAG_DATA_SPEC.md) และดูข้อจำกัดใน [`SOURCE_AUDIT.md`](SOURCE_AUDIT.md)
-> ตรวจขอบเขตการเชื่อมโครงการล่าสุด: 11 สิงหาคม 2026 — ข้อมูลชุดนี้ยังไม่ถูก ingest เข้า production RAG ของเว็บแอป
+> สถานะใน FutureMe 0.2.0 · ตรวจขอบเขตล่าสุด 11 สิงหาคม 2026 — ข้อมูลชุดนี้ยังไม่ถูก ingest เข้า production RAG ของเว็บแอป
+
+ข้อมูลที่ถูกใช้จริง ข้อมูลที่ยังขาด และข้อห้ามในการใช้ตัดสินใจถูกสรุปแบบ machine-readable ใน
+[`education-data-registry.json`](../../03_WebApp/data/education-data-registry.json) และอธิบายใน
+[`data-coverage-and-governance.md`](../../03_WebApp/docs/data-coverage-and-governance.md)
 
 คลังนี้รวมข้อมูล 6 หมวดสำหรับสร้างระบบแนะแนวเส้นทางเรียน–อาชีพ:
 
@@ -34,5 +38,6 @@
 - `conditional`: ถูกต้องภายใต้ปี หลักสูตร พื้นที่ หรือเงื่อนไขที่ระบุ ต้องแสดงเงื่อนไขทุกครั้ง
 - `design_assumption`: แนวคิดออกแบบระบบ ยังไม่ใช่ข้อเท็จจริงภายนอก
 - `unverified`: ยังตรวจไม่ได้ ห้ามส่งเข้า production RAG
+- `07_System_Blueprints_and_Flowcharts/`: พิมพ์เขียวอนาคต ไม่ใช่สถาปัตยกรรมที่เชื่อมใช้งานแล้ว; ให้ดูสถาปัตยกรรมปัจจุบันที่ [`03_WebApp/docs/05-system-architecture.md`](../../03_WebApp/docs/05-system-architecture.md)
 
 ไฟล์ในหมวด 3 เป็น “ตัวอย่าง mapping” ไม่ใช่ฐานข้อมูลอาชีพครบถ้วน ควรสร้างข้อมูลจริงจาก O*NET/ESCO/TPQI และเกณฑ์รายหลักสูตรตามแบบใน `RAG_DATA_SPEC.md`.

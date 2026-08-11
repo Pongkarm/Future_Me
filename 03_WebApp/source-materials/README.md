@@ -8,8 +8,10 @@ This repository publishes **rewritten English summaries** and a curated subset o
 research base. It does not contain every raw team source. This document records what is retained,
 what was summarized, and what was excluded.
 
-Integration boundary reviewed 11 August 2026. The live app, current screenshots, restored future
-question bank, and research-only RAG materials remain labelled separately.
+Release 0.2.0 integration boundary reviewed 11 August 2026. The live app, current screenshots,
+restored future question bank, and research-only RAG materials remain labelled separately. Current
+education-data coverage and decision-use limits are recorded in
+[`education-data-registry.json`](../data/education-data-registry.json).
 
 ## What the research base contains
 

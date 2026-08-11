@@ -1,12 +1,11 @@
-"""
-Route Generator & Multi-Tier Decision Engine Pipeline Runner.
+"""Legacy route-generation experiment, retained for traceability only.
 
-Generates 3 returned route alternatives:
-- Route 1: Balanced Next Step (สมดุลวิชาการและการเติบโต)
-- Route 2: Interest Growth Route (มุ่งเน้นการเจริญเติบโตตามความสนใจเฉพาะทาง)
-- Route 3: Practical Access Route (เน้นการปฏิบัติงานจริงและโอกาสเข้าถึงอาชีพทันที)
+Release 0.2.0 disables this pipeline by default because it depends on unvalidated
+weights and practical-route assumptions. The runnable web app uses a separate,
+deterministic evidence pipeline.
 """
 
+import os
 from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 
@@ -15,6 +14,9 @@ from app.decision_engine.riasec import RIASECScoreResult, score_riasec
 from app.decision_engine.star_eval import STAREvaluationResult, evaluate_star_responses
 from app.decision_engine.multi_tier import TierRoutingResult, route_tier_pathways
 from app.decision_engine.matrix import MatrixScoreBreakdown, calculate_decision_matrix
+
+
+LEGACY_UNVALIDATED = True
 
 
 class RouteAlternative(BaseModel):
@@ -100,11 +102,11 @@ class RouteGenerator:
         route_3 = RouteOption(
             route_id="route_practical_03",
             name="Practical Access Route",
-            description="เส้นทางเน้นการเข้าถึงง่าย การปฏิบัติงานจริง และโอกาสการทำงานทันทีหลังสำเร็จการศึกษา (ความเสี่ยงต่ำ-ผลตอบแทนมั่นคง)",
+            description="เส้นทางทดลองเพื่อสำรวจการเรียนแบบลงมือปฏิบัติ โดยต้องตรวจสอบข้อมูลหลักสูตรและโอกาสจริงจากแหล่งทางการ",
             suitability_score=round(min(comp - 0.03, 0.90), 2),
             subject_tags=["ทวิภาคี (DVE)", "ฝึกทักษะอาชีพ", "ใบรับรองสมรรถนะ"],
             action_items=[
-                "เลือกเรียนหลักสูตรทวิภาคีร่วมกับสถานประกอบการเพื่อรับทุนและเบี้ยเลี้ยง",
+                "ตรวจสอบหลักสูตรทวิภาคี ทุน และเบี้ยเลี้ยงจากสถานศึกษาและสถานประกอบการโดยตรง",
                 "สอบวัดระดับมาตรฐานฝีมือแรงงานหรือประกาศนียบัตรวิชาชีพ",
                 "เตรียมพร้อมเข้าสู่ตลาดแรงงานหรือต่อยอดระดับสูง"
             ],
@@ -134,6 +136,12 @@ def run_decision_engine(
     """
     Runs the complete Multi-Tier Decision Engine pipeline from raw inputs to 3 generated routes.
     """
+    if os.getenv("FUTUREME_ENABLE_LEGACY_BACKEND", "").strip() != "1":
+        raise RuntimeError(
+            "Legacy backend decision generation is disabled because its weights and "
+            "education assumptions are not validated for release 0.2.0."
+        )
+
     # 1. RIASEC Scorer
     riasec_res: RIASECScoreResult = score_riasec(riasec_responses)
     

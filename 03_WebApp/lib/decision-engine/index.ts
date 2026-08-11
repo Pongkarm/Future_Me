@@ -1,4 +1,5 @@
 import routesData from "@/data/routes.json";
+import releaseData from "@/data/release.json";
 import {
   decisionFieldIsVerified,
   evaluateEligibility,
@@ -36,7 +37,7 @@ import type {
   ScoreBreakdown,
 } from "./types";
 
-export const ENGINE_VERSION = "0.1.0-prototype";
+export const ENGINE_VERSION = releaseData.components.decisionEngine.version;
 export const MAX_ROUTES = 3;
 
 export * from "./types";

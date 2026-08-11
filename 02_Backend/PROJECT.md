@@ -1,34 +1,51 @@
-# FuturePath AI Project Plan
+# FutureMe backend plan
 
-## Architecture & System Overview
-FuturePath AI is a multi-tier career & educational pathway recommendation platform supporting upper primary (ป.4-ป.6), lower secondary (ม.1-ม.3), upper secondary (ม.4-ม.6), and vocational students (ปวช./ปวส.), built with FastAPI, Next.js, Qdrant, PostgreSQL, BGE-M3, and a fine-tuned Qwen3-4B model.
+> **Release 0.2.0 · architecture reference, not the running product.** Historical versions of this
+> file marked a FastAPI/Qdrant/PostgreSQL system and several unsupported content checks as complete.
+> Those claims are withdrawn. The current implementation boundary is recorded below.
 
-## Milestones
-| # | Name | Scope | Dependencies | Status |
-|---|------|-------|-------------|--------|
-| M1 | Data & Claim Refactor (R1) | Refactor all 13 items across Data/, blueprints, summaries, flowcharts, links | None | DONE |
-| M2 | Product Design & Decision Engine (R2) | Multi-tier decision engine (ป.4-ป.6, ม.1-ม.3 specialization & safety routes, ม.4-ม.6/ปวช.-ปวส., 30-item RIASEC, 5-8 STAR questions, 5-weighted decision matrix, 3 route alternatives) | M1 | DONE |
-| M3 | Data Schemas, APIs & RAG Pipeline (R3) | Pydantic data schemas, FastAPI endpoints, Qdrant hybrid search with BGE-M3, Qwen3-4B QLoRA dataset | M2 | DONE |
-| M4 | Verification Agent & Audit Suite (R4) | Programmatic audit script validating statistical claims, 12 ปวช. areas, TPAT mappings, API contracts, RAG metrics | M1, M2, M3 | DONE |
+## Current state
 
-## Interface Contracts & Schemas
-- `POST /v1/missions/recommend`: Accepts user education level & interests, returns recommended exploration missions.
-- `POST /v1/missions/{id}/submissions`: Accepts student mission answers, returns evaluation & adaptive next questions.
-- `POST /v1/future-paths`: Accepts full student profile, returns 3 route alternatives (Balanced Next Step, Interest Growth Route, Practical Access Route).
-- `GET /v1/future-paths/{id}`: Retrieves stored decision matrix evaluation & route details.
+| Area | What exists | Status |
+|---|---|---|
+| FastAPI entrypoint | App metadata, permissive non-credentialed local CORS, router registration | Scaffold |
+| Mission endpoints | Fixed mission examples and heuristic response evaluation | Experimental, unvalidated |
+| Future-path endpoint | Historical three-route generator | Disabled by default |
+| Storage | Process-local Python dictionary | Temporary only |
+| Decision engine | Separate Python prototypes with historical five-factor rules | Not aligned with the live 0.2.0 engine |
+| RAG | Client and pipeline examples | No connected Qdrant service or evaluated retrieval set |
+| Schemas | Pydantic models for the proposed API | Reference only |
+| Dependencies and tests | Pinned runtime/dev requirements; 18 contract tests | Verified for release 0.2.0 |
 
-## Code Layout
-- `Data/`: Reference datasets, curricula, blueprints, research, system flowcharts.
-- `app/` or `backend/`: FastAPI backend implementation, routers, decision engine, Qdrant vector search client.
-- `schemas/`: Pydantic schemas and JSON schemas for all models.
-- `scripts/`: Verification agent script, benchmark runners, datasets generator.
+## Current interface
 
-## Acceptance Criteria Checklist
-- [x] No unverified 52% mismatch, 65% blanket experience, 85% dual job, or WEF 44% claims.
-- [x] All 12 ปวช. 2567 vocational subject areas correctly represented.
-- [x] TPAT2-5 test mappings match official MyTCAS blueprint.
-- [x] Zero broken `file:///d:/...` links across all documentation and data files.
-- [x] Recommendation engine outputs 3 distinct routes (Balanced, Interest Growth, Practical Access).
-- [x] Supports ม.3 transition choices alongside ป.4-ป.6 exploration and ม.ปลาย/ปวช. TCAS/career context.
-- [x] API endpoints for mission recommendation, submission, and future-paths fully functional with valid JSON schemas.
-- [x] Verification Agent script passes all programmatic content and contract checks.
+| Method | Path | Current behavior |
+|---|---|---|
+| `GET` | `/` | Returns scaffold status and release version |
+| `POST` | `/v1/missions/recommend` | Returns fixed experimental mission examples |
+| `POST` | `/v1/missions/{id}/submissions` | Runs an unvalidated heuristic evaluator |
+| `POST` | `/v1/future-paths` | Returns HTTP 501 unless `FUTUREME_ENABLE_LEGACY_BACKEND=1` |
+| `GET` | `/v1/future-paths/{id}` | Reads only records created in the current process |
+
+## Why the recommendation endpoint is off
+
+The historical Python matrix gives default scores to academic readiness, affordability,
+geographical access and future flexibility. The repository does not contain validated data that
+supports those defaults. Enabling the endpoint would therefore produce precision without evidence.
+
+The current product instead uses the TypeScript engine in `03_WebApp`, which exposes reasons,
+refusal gates, ties and provenance and keeps unsourced practical fields outside decisions.
+
+## Production integration gate
+
+Before this service can replace the browser engine, it needs:
+
+1. one shared and tested recommendation contract with the TypeScript implementation;
+2. licensed programme-by-campus and academic-year data with source URLs and validity windows;
+3. explicit missing-data behavior for TCAS, fees, scholarships, accommodation and travel;
+4. authentication, consent, retention, deletion and audit controls suitable for minors;
+5. a persistent database and deployment configuration;
+6. independent instrument, explanation, fairness, safety and outcome evaluation.
+
+See [`README.md`](README.md) for the folder boundary and the
+[0.2.0 continuation audit](../03_WebApp/docs/continuation-audit-2026-08-11.md) for the repository-wide decision.

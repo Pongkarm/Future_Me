@@ -1,13 +1,11 @@
-"""
-Multi-Tier Decision Engine Package (R2 Decision Engine).
+"""Historical Python decision-engine scaffold.
 
-Exposes:
-- RIASEC: assessment parser & scorer (`riasec.py`)
-- STAR Eval: qualitative Socratic/STAR evaluator (`star_eval.py`)
-- Multi-Tier: 4-tier education router (`multi_tier.py`)
-- Matrix: 5-weighted recommendation decision matrix calculator (`matrix.py`)
-- Route Generator: 3 route alternatives generator (`route_generator.py`)
+RIASEC and STAR utilities remain inspectable. Multi-tier routing, weighted scoring,
+and route generation are legacy, unvalidated experiments and are disabled at the API
+boundary unless a developer deliberately opts in for local research.
 """
+
+LEGACY_ENGINE_STATUS = "research-only-unvalidated-not-connected"
 
 from app.decision_engine.riasec import (
     RIASECItem,
@@ -64,6 +62,7 @@ from app.decision_engine.route_generator import (
 )
 
 __all__ = [
+    "LEGACY_ENGINE_STATUS",
     # RIASEC
     "RIASECItem",
     "RIASECResponse",

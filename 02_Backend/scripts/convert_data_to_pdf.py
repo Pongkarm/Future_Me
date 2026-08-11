@@ -9,7 +9,7 @@ from pathlib import Path
 # Paths (resolved relative to this script so it runs on any machine / OS)
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "Data"
-TEMP_DIR = Path(tempfile.gettempdir()) / "futurepath_pdf_gen"
+TEMP_DIR = Path(tempfile.gettempdir()) / "futureme_scaffold_pdf_gen"
 
 
 def _resolve_chrome() -> str:
@@ -181,13 +181,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header>
   <h1>{title}</h1>
-  <div class="meta">FuturePath AI System Documentation — JUMP THAILAND Hackathon 2026</div>
+  <div class="meta">FutureMe AI backend scaffold documentation — release 0.2.0</div>
 </header>
 <main>
 {content}
 </main>
 <footer class="footer">
-  จัดทำโดย FuturePath AI Team · อ้างอิงจากคลังข้อมูลวิจัย 2026
+  FutureMe AI · เอกสารโครงสร้างทดลองที่ต้องตรวจสอบแหล่งข้อมูลก่อนนำไปใช้
 </footer>
 </body>
 </html>

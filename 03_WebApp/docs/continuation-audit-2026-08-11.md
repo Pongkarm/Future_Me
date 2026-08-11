@@ -1,84 +1,139 @@
-# Continuation audit — 11 August 2026
+# Release 0.2.0 continuation audit — 11 August 2026
 
-This is an implementation audit, not a claim that the prototype has been validated with
-students. It records what is running, what the data can support, and which information is
-intentionally held outside the recommendation engine.
+This audit answers the continuation brief before and after implementation. FutureMe already had a
+strong explainable exploration flow, but it did not have one machine-readable contract connecting
+release versions, education-data coverage, provenance, and decision-use limits. Release 0.2.0 adds
+that contract without pretending the prototype is a validated university recommender.
 
-## Current system
+## 1 · Current architecture
 
 The runnable product is a local, guest-only Next.js application:
 
 ```text
-30 interest responses → provisional RIASEC-shaped profile
-one scenario mission → independent behavioural signal
-enough evidence? → 0–3 route hypotheses → comparison → 30-day exploration plan
+30 interest responses + 5 context prompts
+→ provisional RIASEC-shaped profile
+→ one scenario mission
+→ deterministic evidence gates and scoring
+→ 0–3 unranked route hypotheses
+→ comparison
+→ reversible 30-day exploration plan
 ```
 
-The route selector is deterministic TypeScript. Optional AI can only reword an existing
-explanation or answer bounded, source-backed repository questions; it cannot add, choose, rank,
-or remove routes or institutions.
+The live decision engine is TypeScript in `lib/decision-engine/` and runs in the browser. The
+FastAPI code in `02_Backend/` is an architecture scaffold and is not connected to this path.
+Optional AI can reword an existing explanation or answer bounded repository questions; it cannot
+add, choose, rank, or remove a route or institution.
 
-## Data and evidence status
+## 2 · Recommendation methodology
 
-| Area | What exists | Status and limit |
+| Stage | Implemented rule | Validation boundary |
 |---|---|---|
-| Interest instrument | 30 bilingual activity statements, five per RIASEC dimension | Research-informed only. The Thai item set, translation, reliability, validity, and score norms have not been tested. |
-| Mission evidence | Three four-step scenario missions with transparent rules | Team-designed rubric; not validated against student outcomes. |
-| Route catalogue | 12 study/work exploration routes with per-route provenance | Illustrative. Route weights are design judgement, not trained or outcome-validated. |
-| Nearby institutions | 77 provinces and 1,961 displayed options, generated 10 August 2026 | Uses documented MHESI/OVEC institution registers and OSRM travel estimates from a province centre. It is a directory, not a programme or admission recommendation. |
-| Programme matching | 140 of 1,375 unique institutions shown in the web directory have programme-derived `runs` mappings | It is not a full national programme register. The remaining institutions use type-based discovery fallbacks and every programme must be confirmed with the institution. |
-| TCAS, tuition, scholarships | Current official portals can be linked | No programme-by-campus-by-year TCAS, fee, scholarship, or regulated-profession dataset is stored locally, so the prototype must not claim or rank them. |
+| Theory | Holland RIASEC-shaped vocational-interest reflection | Framework is established; this item set and Thai adaptation are not validated |
+| Questions | 30 bilingual interest items; the first answer reorders two reviewed follow-ups | Stable rule, not CAT or IRT; all learners still answer all 30 items |
+| Answers | Five-point responses plus five context prompts | Stored locally; four context fields are required and one is optional |
+| Profile | Reverse-keying, per-dimension normalisation, completeness and spread checks | Deterministic implementation, not a norm-referenced assessment |
+| Mission | One of three scenarios produces an independent rule-based evidence vector | Team-designed rubric; no outcome validation |
+| Route score | Interests 50% + mission evidence 30% + learning-environment affinity 20% | Product weights; not fitted to student outcomes |
+| Result | Refuse, or show up to three hypotheses; expose ties, contradictions, reasons and unknowns | No winner and no claim of admission or career prediction |
 
-The official [TCAS70 portal](https://www.mytcas.com/) was reachable during this audit. The official
-OVEC pages for [public](https://ckan.vec.go.th/en/dataset/publicschool) and
-[private](https://ckan.vec.go.th/en/dataset/privateschool) vocational institutions remain the
-registry sources, but both pages state `License not specified`. The official
-[employment dataset](https://ckan.vec.go.th/en/dataset/employment) states `Open Data Common` and
-contains the 2566 graduate-outcome resource used here. The live MHESI resource could not be
-refreshed during this check; the stored 2566 copy and source checksum remain traceable, but they
-must not be described as newly verified. Source availability does not turn generic route fields
-into current programme-level facts.
+Education tier is the only active route-level eligibility field. Cost, relocation, time to earning,
+flexibility, strengths, limitations, tuition, scholarships, admission criteria, deadlines and
+distance cannot score, rank, filter or remove a route in 0.2.0.
 
-## Corrections and controls applied in this revision
+## 3 · Existing datasets and current coverage
 
-`data/routes.json` explicitly marks `costBand`, `requiresRelocation`, `timeToEarning`, and
-`flexibility` as unsourced. Before this revision, those estimates could still affect feasibility
-scores or exclude a route. That contradicted the catalogue's own provenance statement.
+| Domain | What exists | Status and allowed use |
+|---|---|---|
+| Live questionnaire | 30 interest items + 5 context prompts | Research-informed, unvalidated; live reflection input |
+| Research banks | 90-item design and 1,000 bilingual items | Research-only; not imported by the live interview |
+| Missions | 3 four-step scenarios | Prototype evidence; rubric unvalidated |
+| Route catalogue | 12 route hypotheses, dated 15 January 2026 | Illustrative / partially verified; source status shown per route |
+| Institution register | 1,417 source records; 1,375 unique institutions shown | Partially verified directory only |
+| Programme mapping | 178 institutions matched in the source; 140 displayed institutions mapped | Narrows degree-directory results only; not programme detail or admission advice |
+| Geography | 77 provinces, 5,916 source access rows and 1,961 displayed rows | Directory ordering from province centres; never route selection |
+| Admission | 0 validated local records | Unavailable; official TCAS portal is a verification link only |
+| Financial | 0 validated local records | Tuition, scholarships, accommodation and living costs remain unknown |
 
-The engine now accepts these fields only after they are listed in `meta.fieldStatus.verified`.
-Until then, they remain visible as labelled prompts for a learner to verify, but they do not score,
-rank, or remove a route. The education-tier rule remains the only active route-level eligibility
-filter.
+The authoritative machine-readable statement is
+[`data/education-data-registry.json`](../data/education-data-registry.json). Its human-readable
+explanation is [Data coverage and governance](data-coverage-and-governance.md).
 
-The geography registry now stores full SHA-256 values and exact byte counts. `npm run check:data`
-checks those values plus province keys, institution and station identifiers, coordinate ranges,
-outcome arithmetic and suppression, province-access summaries, and the web dataset's links back to
-the source registry. The check also reports known incompleteness rather than filling it: 207
-institution coordinates, 987 institution websites, and 30 Thai station names are currently
-unknown.
+## 4 · Source review
 
-## What must happen before practical constraints can decide anything
+The 11 August check confirmed that:
 
-1. Ingest a licensed, official source at programme and academic-year level.
-2. Store a source URL, retrieval date, validity window, institution/campus, programme, and the
-   exact field being asserted.
-3. Keep tuition, living cost, scholarship, admission criteria, and travel data separate rather
-   than collapsing them into a single `costBand` or relocation flag.
-4. Add data validation and a regression test before adding the field to
-   `meta.fieldStatus.verified`.
-5. Show the source, update date, caveats, and an official verification link next to every learner-
-   visible fact.
+- the official MHESI programme-admission-plan dataset exists, is updated annually, was last marked
+  updated on 23 July 2025, and states `License not specified`;
+- the official OVEC public and private institution registers remain reachable and also state
+  `License not specified`;
+- the official myTCAS portal is on TCAS70, but no programme-by-campus admission records are copied
+  into this repository;
+- the stored MHESI 2566 institution copy remains traceable by checksum, but the live resource was
+  not refreshed during the prior audit and must not be described as newly downloaded.
 
-Until that pipeline exists, FutureMe is a structured exploration aid. It is not a programme,
-institution, admission, affordability, or scholarship recommender.
+Source availability does not make the route catalogue's practical estimates current facts.
 
-## Validation checklist for this revision
+## 5 · What is validated and what is not
 
-- `npm run typecheck`
-- `npm run lint`
-- `npm run check:data`
-- `npm test`
-- `npm run build`
-- `npm run test:e2e`
+**Programmatically checked:** release-version consistency, JSON structure, unique identifiers,
+province coverage, source-to-web referential integrity, coordinate ranges, outcome arithmetic,
+small-sample suppression, full SHA-256 values, programme-route identifiers, source URLs/check
+dates, explicit missing-data states, deterministic scoring behavior, and documentation links.
 
-Run these from `03_WebApp` after any change to the engine, dataset, or UI.
+**Not validated with people or outcomes:** Thai item wording, reliability, construct validity,
+fairness, route weights, mission rubrics, explanation usefulness, student outcomes, admission
+suitability, affordability, or institution quality.
+
+Known incompleteness is preserved as missing: 207 institution coordinates, 987 institution
+websites, and 30 Thai station names.
+
+## 6 · Changes made in release 0.2.0
+
+1. Added a root `VERSION` and release manifest, and aligned web, engine and backend-scaffold labels.
+2. Added a machine-readable Institution / Program / Admission / Financial / Location registry.
+3. Extended `npm run check:data` to fail on version drift, unsupported status claims, unsafe source
+   URLs, wrong counts, unavailable data used in decisions, or unsourced route fields omitted from
+   the hold-out list.
+4. Added automated release-metadata tests.
+5. Added a learner-visible data-coverage panel to the nearby-institution screen.
+6. Corrected documentation that still described old test counts, route counts, or a fixed-only
+   questionnaire.
+7. Relabelled the disconnected FastAPI service as an architecture scaffold instead of a finished
+   `1.0.0` backend.
+8. Added pinned backend runtime/development dependencies, 18 contract tests, a CI job, and a release
+   verifier for version alignment, missing-data boundaries, and legacy-code quarantine.
+
+## 7 · Remaining work and risks
+
+The next defensible step is not to emit “Top 5 universities.” It is to ingest licensed,
+programme-by-campus, academic-year data with a source URL, retrieval date, validity window and
+field-level status. TCAS, tuition, scholarship, accommodation and public-transport data need
+separate tables because they change on different schedules.
+
+Before a student pilot, the project still needs ethics approval, parent consent and student assent,
+independent Thai adaptation, cognitive interviews, instrument and mission validation, an evaluation
+set, group fairness checks, a human safeguarding route, and a defined appeal process.
+
+The largest regression risk is false confidence: a new source or UI field could accidentally become
+a score. The registry and tests now block the known fields, but human review is still required when
+new decision inputs are introduced.
+
+## 8 · Release verification
+
+Run from `03_WebApp/`:
+
+```bash
+npm run verify
+npm run test:e2e
+```
+
+Run from `02_Backend/` in an isolated environment:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+python scripts/verify_system.py
+```
+
+Verified release results: 27 Vitest files / 533 tests, 95 Playwright journeys, 18 backend contract
+tests, and all data, build, release-boundary, slide-overflow, and presentation-fidelity checks pass.

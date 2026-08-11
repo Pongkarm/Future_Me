@@ -4,7 +4,9 @@
 
 ---
 
-> **Last source audit: 26 July 2026.** Every external link below was opened and followed, and
+> **Last source audit: 11 August 2026.** Problem-context sources were audited on 26 July; the
+> education-directory, programme and TCAS sources were checked again on 11 August. Every
+> load-bearing external link below was opened and followed, and
 > every figure was compared against the page it comes from. What changed in that audit, and what
 > this repository got wrong before it, is recorded in [09 · Source Review](09-source-review.md).
 
@@ -114,6 +116,8 @@ programme and by admission year, and no dataset with a clear licence has been in
 
 - The active catalogue contains 12 illustrative routes. Its source notes support exploration, not a guarantee of admission or that a named institution offers a programme.
 - The nearby-institution screen reads the 77-province `data/nearby.json` dataset through `/api/nearby`. It has 1,961 options generated from the documented MHESI/OVEC pipeline. [Geography and Access](../../01_Research/Geography_and_Access/README.md) records the source, distance method, and limitations.
+- Of 1,375 unique institutions shown, 140 have route mappings derived from the MHESI entry-level programme admission-plan dataset. Uncovered institutions use a documented institution-type fallback; absence never means “teaches nothing.”
+- The machine-readable [education data registry](../data/education-data-registry.json) records exact coverage, source checks and decision-use limits. [Data coverage and governance](data-coverage-and-governance.md) explains the contract.
 - The live interview remains the existing 30-item `data/questions.json` instrument. A deterministic first-answer rule only changes which two reviewed items appear next; all 30 are still asked and scoring is unchanged.
 - The restored bilingual 1,000-item bank and the separate 90-item adaptive-questionnaire design remain research inputs. The 1,000-item file passes structural checks, but neither larger bank is imported by the live interview or validated for learner use.
 
@@ -248,6 +252,9 @@ Every load-bearing claim with its status. **Nothing marked `unverified` may be u
 | Field mismatch alone has little or no wage penalty in most countries; negative effects are concentrated when it is associated with qualification mismatch | OECD / Montt 2015 | [oecd.org](https://www.oecd.org/en/publications/the-causes-and-consequences-of-field-of-study-mismatch_5jrxm4dhv9r2-en.html) | ✅ verified |
 | ปวช. 2567 curriculum structure (ประเภทวิชา / สาขาวิชา / สาขางาน) | VEC Data Catalog | [ckan.vec.go.th](https://ckan.vec.go.th/th/dataset/voc_curriculum) | ⚠️ conditional — read the current revision; do not hard-code counts |
 | TCAS structure and calendar | myTCAS | [school.mytcas.com](https://school.mytcas.com/) | ⚠️ conditional — TCAS70 / academic year 2570; changes annually |
+| Higher-education programme admission plan | MHESI Open Data | [dqe_11_01](https://data.mhesi.go.th/dataset/dqe_11_01) | ⚠️ partial — used only for institution-to-route mapping; source says licence not specified |
+| Public vocational institution register | OVEC | [publicschool](https://ckan.vec.go.th/en/dataset/publicschool) | ⚠️ partial — official register; source says licence not specified |
+| Private vocational institution register | OVEC | [privateschool](https://ckan.vec.go.th/en/dataset/privateschool) | ⚠️ partial — official register; source says licence not specified |
 | GED pass mark: 145 per subject across 4 subjects | GED Testing Service | [ged.com](https://www.ged.com/about-test/scores.html) | ⚠️ conditional — admission still depends on the institution |
 | Occupation → task → skill structure | O\*NET Database 30.3 | [onetcenter.org](https://www.onetcenter.org/database.html) | ✅ verified — CC BY 4.0 |
 | Occupation URIs and occupation–skill relations | ESCO v1.2.1 | [esco.ec.europa.eu](https://esco.ec.europa.eu/en/about-esco/what-esco) | ✅ verified — 10 Dec 2025 |

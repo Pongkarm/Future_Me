@@ -6,8 +6,9 @@
 
 ## What this document is
 
-The team's research folder and the repository's public claims were re-audited through **26 July
-2026**: every external URL was
+The team's research folder and the repository's public claims were re-audited through **11 August
+2026**. Problem-context sources were checked on 26 July; the education-directory, programme and
+TCAS sources were checked again on 11 August. Every load-bearing external URL was
 opened and followed, every load-bearing number was compared against the page it was supposed to
 come from, and organisation home pages were replaced with links to the actual report, dataset or
 product page.
@@ -16,6 +17,17 @@ That audit contradicted several things this repository said. This document recor
 and why, so a reviewer can see the reasoning rather than a silently edited number.
 
 The full corrected registry is in [02 · Research and Evidence](02-research-and-evidence.md#source-registry).
+The release-specific Institution / Program / Admission / Financial / Location contract is in
+[Data coverage and governance](data-coverage-and-governance.md).
+
+### August education-data continuation check
+
+| Source | Check result | Product consequence |
+|---|---|---|
+| MHESI programme admission plan (`dqe_11_01`) | Official dataset reachable; annual update frequency; metadata last updated 23 July 2568; licence not specified | Retain only the existing partial institution-to-route mapping; do not publish programme detail or admission suitability |
+| OVEC public and private institution registers | Official pages reachable; both say licence not specified | Keep the source-backed directory with the licence caveat; do not claim unrestricted redistribution |
+| myTCAS | Official TCAS70 portal reachable | Link for verification only; local admission-record count remains zero |
+| Tuition, scholarships, accommodation and living costs | No authoritative programme-level source ingested | Keep all values unavailable and outside decisions |
 
 ---
 

@@ -44,7 +44,7 @@
 </p>
 
 <p align="center">
-  <sub>Runnable guest prototype · complete Thai/English interface · light, dark, and system themes · no API key required</sub>
+  <sub>FutureMe 0.2.0 · runnable guest prototype · complete Thai/English interface · light, dark, and system themes · no API key required</sub>
 </p>
 
 ---
@@ -169,6 +169,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **Context** | 4 required prompts for education tier, cost, mobility, and time horizon, plus 1 optional free-text prompt |
 | **Missions** | 3 four-step scenario missions; deterministic scoring and transparent selection; learner override |
 | **Catalogue** | 12 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
+| **Education data contract** | Versioned Institution / Program / Admission / Financial / Location coverage, checked sources, known gaps, and decision-use limits |
 | **Recommendations** | 0–3 routes, refusal gates, a tier eligibility rule, ties, contradiction signals, provenance, and unknowns |
 | **Comparison and plan** | Consistent route comparison and a deterministic 30-day plan with gap-specific tasks |
 | **Optional AI** | Repo-grounded chat and explanation rewording, both with deterministic offline fallbacks and outside route selection |
@@ -178,7 +179,7 @@ The application can be used end to end without an account, database, environment
 model provider.
 
 Verification snapshot (11 August 2026): mascot and data-integrity checks, typecheck, lint,
-26 Vitest files / 529 tests, production build, and all 94 Playwright browser journeys passed.
+27 Vitest files / 533 tests, production build, and all 95 Playwright browser journeys passed.
 
 ---
 
@@ -319,6 +320,9 @@ What is not supported:
 - The restored bilingual 1,000-item bank passes structural checks but remains a research-only input; it is not imported by the live interview.
 - The 12-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
   and limitations contain unsourced team estimates; practical estimates do not filter, score, or rank routes.
+- The education directory contains 1,375 unique displayed institutions; only 140 have partial
+  programme-derived route mappings. TCAS, tuition, scholarships, accommodation, and living-cost
+  domains contain zero validated local records and cannot affect a decision.
 - No ethics approval, real-student pilot, bias audit, or outcome evaluation has run.
 
 The analysis pipeline recovering a known answer from simulated respondents verifies the
@@ -390,7 +394,7 @@ authentication, rate limits, and verified host/provider retention terms.
 | **Decision system** | [AI and decision logic](docs/04-ai-system.md) · [System architecture](docs/05-system-architecture.md) |
 | **Instrument** | [Questionnaire methodology](docs/questionnaire-methodology.md) · [Question bank](docs/question-bank.md) · [Research summary](docs/research-summary.md) |
 | **Validation** | [Validation plan](docs/validation-plan.md) · [Pilot protocol](docs/pilot-protocol.md) |
-| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [Continuation audit](docs/continuation-audit-2026-08-11.md) |
+| **Trust and evidence** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [Data coverage](docs/data-coverage-and-governance.md) · [Continuation audit](docs/continuation-audit-2026-08-11.md) |
 | **Delivery** | [Development plan](docs/06-development-plan.md) · [Roadmap](docs/07-roadmap.md) · [Contributing](CONTRIBUTING.md) |
 
 Found a problem in the product, code, or evidence?

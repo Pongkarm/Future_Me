@@ -1,8 +1,11 @@
 # 📚 ฐานข้อมูลอนุกรมวิธานอาชีพแบบสมบูรณ์ 10 กลุ่มใหญ่ 110 อาชีพ (Comprehensive 110-Occupation Research Taxonomy)
 
 > **โครงการ:** FutureMe AI — Career & Educational Guidance System (Hackathon 2026)  
-> **มาตรฐานอนุกรมวิธาน:** อ้างอิงการเชื่อมโยง ISCO-08, ESCO Taxonomy, O*NET SOC 2020, หลักสูตรอาชีวศึกษา สอศ. 2567 และ myTCAS70  
-> **มาตรฐานระเบียบวิธีวิจัย:** [`/ai-research-methodology`](file:///C:/Users/kong/.gemini/config/skills/ai-research-methodology/SKILL.md)
+> **สถานะใน release 0.2.0:** เอกสารวิจัยเดิมสำหรับสร้าง taxonomy ในอนาคต ไม่ใช่ข้อมูลที่เว็บหรือเอนจินใช้จริง รายการอาชีพ รหัส และการเชื่อมกับหลักสูตร/TCAS ยังต้องตรวจทีละรายการก่อนนำไปใช้
+>
+> **กรอบอ้างอิงที่ผู้เขียนเดิมระบุ:** ISCO-08, ESCO Taxonomy, O*NET SOC 2020 และข้อมูลการศึกษาไทย ซึ่งยังไม่ถือว่าตรวจสอบล่าสุดจากข้อความในไฟล์นี้เพียงอย่างเดียว
+>
+> **ระเบียบวิธีตรวจปัจจุบัน:** ดู [`Data/SOURCE_AUDIT.md`](Data/SOURCE_AUDIT.md)
 
 ---
 

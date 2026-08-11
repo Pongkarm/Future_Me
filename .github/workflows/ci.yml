@@ -20,9 +20,11 @@ on:
   push:
     paths:
       - '03_WebApp/**'
+      - '02_Backend/**'
       - '01_Research/Geography_and_Access/PROVENANCE.json'
       - '01_Research/Geography_and_Access/data/**'
       - '04_Design/FutureMe_Mascot_Lab/**'
+      - 'VERSION'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
 
@@ -102,3 +104,32 @@ jobs:
           path: 03_WebApp/playwright-report/
           name: playwright-report
           retention-days: 7
+
+  backend-scaffold:
+    name: Backend scaffold contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: 02_Backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: |
+            02_Backend/requirements.txt
+            02_Backend/requirements-dev.txt
+
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Contract tests
+        run: python -m pytest -q
+
+      - name: Release and safety-boundary verifier
+        run: python scripts/verify_system.py

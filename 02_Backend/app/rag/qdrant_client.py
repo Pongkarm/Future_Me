@@ -1,6 +1,7 @@
-"""
-Qdrant Hybrid Search Client for FutureMe AI Platform.
-Provides vector storage, dense retrieval, payload filtering, and sparse/keyword hybrid search re-ranking.
+"""Research-only Qdrant client for the disconnected FutureMe backend scaffold.
+
+It supports structural retrieval tests over repository metadata. It is not a
+production education knowledge base and is not imported by the web application.
 """
 
 import uuid
@@ -15,7 +16,7 @@ class QdrantHybridClient:
     def __init__(self, location: str = ":memory:"):
         """Initialize Qdrant client in memory or local disk."""
         self.client = QdrantClient(location=location)
-        self.default_collection = "future_path_rag"
+        self.default_collection = "future_me_scaffold_rag"
         self._ensure_collection(self.default_collection, vector_size=1024)
 
     def _ensure_collection(self, collection_name: str, vector_size: int = 1024):

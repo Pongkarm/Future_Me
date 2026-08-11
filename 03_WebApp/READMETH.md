@@ -44,7 +44,7 @@
 </p>
 
 <p align="center">
-  <sub>ต้นแบบ guest ที่ใช้งานได้ · อินเทอร์เฟซไทย/อังกฤษครบทั้ง flow · ธีมสว่าง มืด และตามระบบ · ไม่ต้องใช้ API key</sub>
+  <sub>FutureMe 0.2.0 · ต้นแบบ guest ที่ใช้งานได้ · อินเทอร์เฟซไทย/อังกฤษครบทั้ง flow · ธีมสว่าง มืด และตามระบบ · ไม่ต้องใช้ API key</sub>
 </p>
 
 ---
@@ -171,6 +171,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 | **บริบท** | คำถามบังคับ 4 ข้อเรื่องระดับการศึกษา ค่าใช้จ่าย การเดินทาง และช่วงเวลาที่อยากเริ่มมีรายได้ พร้อม free text ทางเลือก 1 ข้อ |
 | **ภารกิจ** | ภารกิจสถานการณ์ 3 ชิ้น ชิ้นละ 4 ขั้น ให้คะแนนและเลือกด้วยกฎที่ตรวจสอบได้ และผู้เรียนเปลี่ยนเองได้ |
 | **แคตตาล็อก** | เส้นทางเรียน/งานตัวอย่าง 12 ทาง พร้อมคำเตือนระดับฟิลด์และวันที่ของข้อมูล |
+| **สัญญาขอบเขตข้อมูลการศึกษา** | รุ่น ขอบเขต Institution / Program / Admission / Financial / Location แหล่งที่ตรวจ ช่องว่าง และข้อจำกัดการใช้ตัดสินใจ |
 | **คำแนะนำ** | แสดง 0–3 เส้นทาง มี refusal gate, เกณฑ์ระดับการศึกษา, tie, contradiction, provenance และสิ่งที่ยังไม่รู้ |
 | **เปรียบเทียบและแผน** | เทียบทุกทางด้วยเกณฑ์เดียวกัน และสร้างแผน 30 วันพร้อมงานเพิ่มเติมตามช่องว่างของหลักฐาน |
 | **AI ทางเลือก** | แชตที่อ้างอิงข้อมูลใน repository และการเรียบเรียงคำอธิบาย ทั้งคู่มี offline fallback และไม่มีสิทธิ์เลือกหรือจัดลำดับเส้นทาง |
@@ -180,7 +181,7 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 หรือผู้ให้บริการโมเดล
 
 ผลตรวจล่าสุด 11 สิงหาคม 2026: mascot sync, ความสมบูรณ์ของข้อมูล, typecheck, lint,
-Vitest 26 ไฟล์ รวม 529 tests, production build และ Playwright ผ่านครบทั้ง 94 เส้นทาง
+Vitest 27 ไฟล์ รวม 533 tests, production build และ Playwright ผ่านครบทั้ง 95 เส้นทาง
 
 ---
 
@@ -320,6 +321,9 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 - คลังคำถามสองภาษา 1,000 ข้อที่กู้คืนผ่านการตรวจโครงสร้างแล้ว แต่ยังเป็นข้อมูลวิจัยและไม่ได้ถูก import เข้าแบบสัมภาษณ์ปัจจุบัน
 - แคตตาล็อกสิบสองเส้นทางเป็นข้อมูลตัวอย่าง ค่าใช้จ่าย การย้ายพื้นที่ ระยะเวลาก่อนมีรายได้
   ความยืดหยุ่น จุดแข็ง และข้อจำกัดยังมีค่าประมาณของทีมที่ไม่มีแหล่งอ้างอิง ค่าประมาณเชิงปฏิบัติจึงไม่ใช้ให้คะแนน จัดลำดับ หรือตัดเส้นทางออก
+- directory แสดงสถานศึกษาที่ไม่ซ้ำ 1,375 แห่ง แต่มีเพียง 140 แห่งที่มีการจับคู่เส้นทางจากข้อมูล
+  หลักสูตรบางส่วน ส่วนข้อมูล TCAS ค่าเล่าเรียน ทุน ที่พัก และค่าครองชีพยังไม่มีระเบียนที่ตรวจสอบแล้ว
+  ในระบบและไม่มีสิทธิ์กระทบผลลัพธ์
 - ยังไม่มี ethics approval, pilot กับนักเรียนจริง, bias audit หรือ outcome evaluation
 
 การที่ pipeline กู้คืนคำตอบที่ทราบอยู่แล้วจากผู้ตอบจำลองได้
@@ -392,7 +396,7 @@ npm run analyse -- /tmp/futureme-sim
 | **ระบบตัดสินใจ** | [AI and decision logic](docs/04-ai-system.md) · [System architecture](docs/05-system-architecture.md) |
 | **เครื่องมือวัด** | [ระเบียบวิธี](docs/questionnaire-methodology.md) · [คลังข้อคำถาม](docs/question-bank.md) · [สรุปงานวิจัย](docs/research-summary.md) |
 | **การตรวจสอบ** | [Validation plan](docs/validation-plan.md) · [Pilot protocol](docs/pilot-protocol.md) |
-| **ความน่าเชื่อถือและหลักฐาน** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [รายงานตรวจสอบต่อเนื่อง](docs/continuation-audit-2026-08-11.md) |
+| **ความน่าเชื่อถือและหลักฐาน** | [Privacy and data flow](docs/08-privacy-and-data.md) · [Research and evidence](docs/02-research-and-evidence.md) · [Source review](docs/09-source-review.md) · [ขอบเขตข้อมูล](docs/data-coverage-and-governance.md) · [รายงานตรวจสอบต่อเนื่อง](docs/continuation-audit-2026-08-11.md) |
 | **การพัฒนา** | [Development plan](docs/06-development-plan.md) · [Roadmap](docs/07-roadmap.md) · [Contributing](CONTRIBUTING.md) |
 
 พบปัญหาในผลิตภัณฑ์ โค้ด หรือหลักฐาน?

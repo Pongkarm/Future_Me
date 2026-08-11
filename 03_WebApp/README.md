@@ -37,7 +37,7 @@
 </p>
 
 <p align="center">
-  <sub>Runnable guest prototype · Thai and English · light, dark, and system themes · no API key required</sub>
+  <sub>FutureMe 0.2.0 · runnable guest prototype · Thai and English · light, dark, and system themes · no API key required</sub>
 </p>
 
 ---
@@ -150,8 +150,8 @@ routing — see [`01_Research/Geography_and_Access/`](../01_Research/Geography_a
 | **Privacy** | Assessment and mission answers stay in browser storage by default and can be deleted immediately; submitted chat follows the separate network flow documented below |
 | **Research tooling** | Optional anonymous export at `/research`, plus a reproducible pilot-analysis pipeline |
 
-Verified on 11 August 2026: data and mascot checks, typecheck, lint, 26 Vitest files / 529 tests,
-production build, and all 94 Playwright browser journeys.
+Verified on 11 August 2026: data and mascot checks, typecheck, lint, 27 Vitest files / 533 tests,
+production build, and all 95 Playwright browser journeys.
 
 <details>
 <summary><strong>What is not complete yet · สิ่งที่ยังไม่เสร็จ</strong></summary>

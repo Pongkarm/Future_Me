@@ -4,7 +4,7 @@
 
 ---
 
-> **Status as of 26 July 2026.** Statuses below describe *this repository*, not the team's private
+> **Status as of 11 August 2026 · release 0.2.0.** Statuses below describe *this repository*, not the team's private
 > workspace. Where something exists only as a design, it says so.
 
 ## Status vocabulary
@@ -32,6 +32,7 @@ Used consistently across this repository, including in the README and the roadma
 | Mission draft autosave | 🟢 | Debounced write; a refresh mid-mission loses nothing | — |
 | Guest session validation | 🟢 | Field-by-field rebuild against the seed data, with v1 migration | — |
 | Route data provenance and freshness | 🟢 | Per-route source, status and last-checked date; catalogue age on screen | The catalogue itself is still illustrative |
+| Education data coverage contract | 🟢 | Machine-readable Institution / Program / Admission / Financial / Location status, exact counts, sources, check dates and decision-use limits | Admission and financial domains correctly remain empty |
 | Optional LLM explanation layer | 🟢 | Connected, labelled, cannot affect ranking, degrades to deterministic text | Not evaluated for quality |
 | Safeguarding pause | 🟡 | Keyword rule, Thai and English, stops recommendations and offers support | Not a risk assessment. Nobody is alerted |
 | Interest instrument | 🟡 | 30 bilingual Thai/English items plus context; the first answer reorders two reviewed follow-ups | Rule-based ordering only, not CAT/IRT; Thai is a first draft; instrument is not validated |
@@ -40,7 +41,7 @@ Used consistently across this repository, including in the README and the roadma
 | Continuous integration | 🟢 | Typecheck, lint, unit, integration, build and end-to-end on every PR | — |
 | Accounts, sharing, server persistence | 📐 | Designed | Guest mode only today |
 | RAG pipeline — Qdrant + BGE-M3 | 📐 | Designed | Prototype reads a seeded JSON catalogue |
-| Adaptive Thai Socratic interview | 📐 | Designed | Fixed bilingual questionnaire today |
+| Adaptive Thai Socratic interview | 📐 | First-answer rule reorders two reviewed follow-ups | Later answers do not adapt the interview; no CAT/IRT calibration |
 | STAR extraction from free text | 📐 | Designed | Keyword spotting today |
 | Interactive DAG roadmap | 📐 | Algorithm designed | Linear plan today |
 | Counsellor and parent views | 📐 | Designed | Not implemented |
@@ -63,9 +64,9 @@ Every claim of 🟢 above corresponds to something executable.
 |---|---|---|
 | Types | `npm run typecheck` | 0 errors, strict mode |
 | Lint | `npm run lint` | 0 warnings |
-| Unit and integration | `npm test` | 136 passing |
-| End-to-end | `npm run test:e2e` | 20 passing, against the production build |
-| Production build | `npm run build` | 9 routes |
+| Unit and integration | `npm test` | 27 files / 533 tests passing |
+| End-to-end | `npm run test:e2e` | 95 browser journeys passing against the production build |
+| Production build | `npm run build` | Passed |
 | All of the above | `npm run verify` | Also runs on every pull request |
 
 ---

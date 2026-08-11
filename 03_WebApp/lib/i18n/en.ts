@@ -346,6 +346,16 @@ export const en = {
       "Pick your province to see the schools, colleges and universities that continue after Mattayom 3, and how far each one is by road.",
     notARecommendation:
       "This is a list of what exists, ordered by distance. It does not say which one suits you — the assessment and its rule engine do that, and distance is never one of their inputs.",
+    coverageTitle: "Data coverage",
+    coverageIntro:
+      "This directory can help you find places to investigate. Coverage is not the same as a recommendation.",
+    coverageInstitutions:
+      "{source} source records produce {shown} unique institutions in this directory.",
+    coveragePrograms:
+      "Programme-derived route mappings cover {mapped} of those {shown} institutions. Uncovered places use an institution-type fallback and must be checked directly.",
+    coverageMissing:
+      "Not stored here: programme-level TCAS criteria, tuition, scholarships, accommodation, or cost of living.",
+    coverageChecked: "Coverage registry checked {date} · FutureMe release {version}",
     pickLabel: "Your province",
     pickPlaceholder: "Choose a province…",
     loading: "Looking up your province…",

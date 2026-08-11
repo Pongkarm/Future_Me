@@ -2,7 +2,7 @@
 
 [← Development Plan](06-development-plan.md) · [Back to README](../READMEEN.md) · [Next: Privacy →](08-privacy-and-data.md)
 
-> **Status as of 26 July 2026.** Phase 2 closed when the guest journey became runnable end to
+> **Status as of 11 August 2026 · release 0.2.0.** Phase 2 closed when the guest journey became runnable end to
 > end. What is still missing from it moved into Phase 3, rather than being left marked
 > "in progress" against a phase that is finished.
 
@@ -54,6 +54,7 @@ One complete path, working end to end, in preference to many partial ones.
 | Safeguarding pause | 🟢 | Keyword rule; stops recommendations and offers support |
 | Optional LLM explanation | 🟢 | Connected, labelled, cannot affect ranking |
 | Data provenance and freshness | 🟢 | Per-route source and status; catalogue age on screen |
+| Education-data coverage contract | 🟢 | Versioned registry for Institution, Program, Admission, Financial and Location domains; unavailable fields stay unavailable |
 | Continuous integration | 🟢 | Typecheck, lint, tests, build and e2e on every PR |
 | Interactive roadmap renderer | 📐 | Moved to Phase 3 — the plan is linear today |
 | Consented counsellor summary | 📐 | Moved to Phase 3 — needs accounts first |
@@ -80,7 +81,7 @@ of children.
 | Safety escalation path | High | Distress signals in an interview need a defined route to a human |
 | Formal Thai adaptation | High | The interface is bilingual, but the Thai item set is a first draft without independent translation, expert review or cognitive debriefing |
 | Fix the QLoRA dataset | Medium | Train and test sets are identical, ten examples each — unusable. Only matters once §Phase 3 conversation work starts |
-| Adaptive interview and STAR extraction | Medium | The static questionnaire is the largest gap between the prototype and the product |
+| Multi-answer adaptive interview and STAR extraction | Medium | The current first-answer rule only reorders two reviewed items; it is not CAT/IRT and later answers do not change the path |
 | Interactive DAG roadmap | Medium | The linear plan understates how partial prerequisites really are |
 | Accounts, consent and counsellor summary | Medium | Guest mode covers the demo, not the product |
 | Qualitative field research | Medium | Students, parents, counsellors across varied school contexts |

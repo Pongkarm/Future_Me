@@ -39,9 +39,33 @@ flowchart LR
 | Chat companion | Stateless `POST /api/chat`; deterministic repository retrieval plus an optional Anthropic response, with an offline fallback. It cannot read or change the recommendation state. |
 | Chat transcript | React component state in the current tab only. Clear or refresh resets it; pressing Send transmits the bounded messages to the app server and, only when configured, Anthropic. |
 | Data provenance | Every route carries its source, status and last-checked date; the page reports the catalogue's age and names the unsourced fields. |
+| Release and data contract | `VERSION`, `data/release.json` and `data/education-data-registry.json` align component versions, dataset coverage, source checks, known gaps and decision-use limits. `npm run check:data` fails when they drift. |
 | Storage | No application database or server-side transcript store. Assessment state remains in `localStorage`; chat bodies are processed in memory per request. Deployment hosts may still log request metadata or bodies depending on their configuration. |
 
 Source: `app/`, `components/`, `lib/`, `data/`. Tests: `tests/`, `e2e/`.
+
+---
+
+## Implemented: education-data boundary
+
+```mermaid
+flowchart LR
+    A["Official source snapshots"] --> B["Integrity and provenance checks"]
+    B --> C["Institution directory<br/>77 provinces"]
+    B --> D["Partial degree programme mapping"]
+    C --> E["Nearby investigation view"]
+    D --> E
+    E -. "never selects a route" .-> F["Learner checks a route hypothesis"]
+    G["TCAS · fees · scholarships<br/>not ingested"] -. "unknown" .-> F
+```
+
+The directory is downstream of route selection. It may order institutions by a journey from a
+province centre and, where the official degree source has coverage, narrow obviously wrong subject
+matches. It cannot change the 0–3 routes. Admission and financial domains contain zero validated
+local records in 0.2.0.
+
+See [Data coverage and governance](data-coverage-and-governance.md) and the machine-readable
+[`education-data-registry.json`](../data/education-data-registry.json).
 
 ---
 
@@ -259,6 +283,7 @@ class at once. Container auto-scaling suits that pattern better than fixed provi
 | `POST` | `/api/explain` | Optional LLM rewording of an explanation the engine already produced. Accepts a catalogue route id and reason codes, then resolves both against server-owned data. Returns `{ source: "fallback" }` with server-generated deterministic text when no API key is set, on timeout, on a provider error, or on a malformed response — always HTTP 200, so the caller never breaks. |
 | `GET` | `/api/chat` | Capability probe returning `{ available, mode, limits }` without exposing a key or other secret. |
 | `POST` | `/api/chat` | Stateless companion request. Accepts `{ language, messages }`, where `language` is `en` or `th`; 1–11 `user`/`assistant` messages must alternate, starting and ending with `user`; each message is at most 2,000 characters, the total at most 8,000, and the raw body at most 64,000 bytes. Returns `{ message, mode, sources, note?, safety? }`, where `mode` is `ai`, `offline` or `safety`. |
+| `GET` | `/api/nearby?province=TH-xx` | Returns one validated province-directory slice from the generated local dataset. It is rate-limited, contains no learner address, and is ordered by road distance rather than suitability. |
 
 Each chat source contains `id`, `title` and optional `excerpt`, `url` and `status`. A safety-mode
 response contains a support heading, action, hotline and disclaimer; it is returned before any

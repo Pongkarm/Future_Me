@@ -101,6 +101,15 @@ test("the page says it is not a recommendation", async ({ page }) => {
     .toBeVisible();
 });
 
+test("the page exposes programme coverage and missing decision data", async ({ page }) => {
+  await page.goto("/nearby");
+  const coverage = page.getByTestId("nearby-data-coverage");
+  await expect(coverage).toBeVisible();
+  await expect(coverage).toContainText("140");
+  await expect(coverage).toContainText(/TCAS|ทีแคส/);
+  await expect(coverage).toContainText(/tuition|ค่าเล่าเรียน/);
+});
+
 test("it reads in English when the learner reads English", async ({ page }) => {
   await page.goto("/nearby?province=TH-50");
   await page.getByRole("radio", { name: "EN" }).click();

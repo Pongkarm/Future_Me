@@ -1,14 +1,7 @@
-"""
-5-Weighted Recommendation Decision Matrix Calculator.
+"""Legacy five-weight recommendation-matrix experiment.
 
-Weight Distribution:
-- Interests: 30% (weight = 0.30)
-- Strengths: 20% (weight = 0.20)
-- Learning style: 15% (weight = 0.15)
-- Feasibility: 25% (weight = 0.25)
-- Future flexibility: 10% (weight = 0.10)
-
-Calculates individual component scores (0.0 to 100.0) and composite weighted total.
+The weights and default feasibility/flexibility values are unvalidated and excluded
+from the release 0.2.0 product decision path. The module remains for inspection only.
 """
 
 from typing import Any, Dict, List, Optional, Union
@@ -17,6 +10,9 @@ from pydantic import BaseModel, Field, field_validator
 from app.decision_engine.riasec import RIASECScoreResult
 from app.decision_engine.star_eval import STAREvaluationResult
 from app.decision_engine.multi_tier import CandidatePathway
+
+
+LEGACY_UNVALIDATED = True
 
 
 # Weight Constants
@@ -41,7 +37,7 @@ class FlexibilityContext(BaseModel):
 
 
 class MatrixScoreBreakdown(BaseModel):
-    """5-weighted score breakdown for a single candidate pathway option."""
+    """Legacy, unvalidated score breakdown for a candidate pathway option."""
     pathway_id: str
     pathway_title_th: str
     
@@ -76,7 +72,7 @@ def calculate_decision_matrix(
     flexibility_context: Optional[FlexibilityContext] = None
 ) -> MatrixScoreBreakdown:
     """
-    Calculates the 5-weighted decision matrix score for a candidate pathway.
+    Calculates the retained legacy matrix for research inspection only.
 
     Formula:
     Composite = (Interests * 0.30) + (Strengths * 0.20) + (Learning Style * 0.15) + (Feasibility * 0.25) + (Future Flexibility * 0.10)
@@ -166,7 +162,7 @@ def calculate_decision_matrix(
 
 class DecisionMatrixCalculator:
     """
-    5-Weighted Recommendation Decision Matrix Calculator Class.
+    Legacy recommendation matrix calculator retained for inspection.
     
     Weights:
     - Interests: 30% (0.30)
@@ -194,7 +190,7 @@ class DecisionMatrixCalculator:
         flexibility_context: Optional[FlexibilityContext] = None
     ) -> Dict[str, Any]:
         """
-        Calculates 5-weighted component scores and composite recommendation score.
+        Calculates the unvalidated legacy component and composite scores.
         """
         p_dict = profile if isinstance(profile, dict) else (getattr(profile, "model_dump", lambda: profile.__dict__)())
         e_dict = evidence if isinstance(evidence, dict) else (getattr(evidence, "model_dump", lambda: evidence.__dict__)())

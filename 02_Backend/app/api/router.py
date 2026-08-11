@@ -1,4 +1,5 @@
 import uuid
+import os
 from typing import Dict, List
 from fastapi import APIRouter, HTTPException, status
 
@@ -22,7 +23,12 @@ from app.decision_engine import (
     RouteGenerator,
 )
 
-router = APIRouter(prefix="/v1", tags=["FuturePath API"])
+router = APIRouter(prefix="/v1", tags=["FutureMe backend scaffold"])
+
+# The historical Python matrix assigns default feasibility and flexibility
+# values that have no validated source. Keep the code inspectable, but never
+# expose its recommendation output accidentally.
+LEGACY_FUTURE_PATHS_ENABLED = os.getenv("FUTUREME_ENABLE_LEGACY_BACKEND", "").strip() == "1"
 
 # In-memory storage for future path nodes
 future_paths_db: Dict[str, FuturePathNode] = {}
@@ -30,9 +36,9 @@ future_paths_db: Dict[str, FuturePathNode] = {}
 # Services initialization
 riasec_scorer = RIASECScorer()
 star_evaluator = STAREvaluator()
-multi_tier_router = MultiTierRouter()
-matrix_calculator = DecisionMatrixCalculator()
-route_generator = RouteGenerator()
+multi_tier_router = MultiTierRouter() if LEGACY_FUTURE_PATHS_ENABLED else None
+matrix_calculator = DecisionMatrixCalculator() if LEGACY_FUTURE_PATHS_ENABLED else None
+route_generator = RouteGenerator() if LEGACY_FUTURE_PATHS_ENABLED else None
 
 
 @router.post("/missions/recommend", response_model=MissionRecommendResponse)
@@ -54,23 +60,23 @@ def recommend_missions(payload: MissionRecommendRequest):
         ),
         ExplorationMission(
             mission_id="mission_02_vocational",
-            title="สำรวจ 12 กลุ่มสาขาอาชีวศึกษา (ปวช. 2567) และทวิภาคี",
+            title="สำรวจเส้นทางอาชีวศึกษาและทวิภาคี",
             description="ทำความเข้าใจเส้นทางเรียนสายอาชีพ โอกาสทำงานจริง และการเรียนระบบทวิภาคี (DVE)",
             target_grade_level=payload.education_level,
             difficulty="Easy",
             questions=[
-                {"id": 1, "question": "ใน 12 กลุ่มสาขา ปวช. คุณสนใจกลุ่มสาขาใดมากที่สุดเพราะเหตุใด?"},
+                {"id": 1, "question": "คุณสนใจสาขาอาชีวศึกษาใดมากที่สุด และจะตรวจข้อมูลหลักสูตรปัจจุบันจากที่ใด?"},
                 {"id": 2, "question": "คุณคิดว่าการเรียนระบบทวิภาคี (เรียนคู่ฝึกงาน) เหมาะกับคุณอย่างไร?"}
             ]
         ),
         ExplorationMission(
             mission_id="mission_03_tcas",
-            title="วางแผนเส้นทาง TCAS และเตรียมสอบ TPAT1-5",
-            description="ค้นหาคณะอุดมศึกษาที่ใช่ และเตรียมความพร้อมสำหรับการสอบ TPAT / A-Level",
+            title="วางแผนสำรวจเส้นทาง TCAS",
+            description="ค้นหาคณะที่สนใจและตรวจเกณฑ์รับสมัครปัจจุบันจากแหล่งทางการ",
             target_grade_level=payload.education_level,
             difficulty="Hard",
             questions=[
-                {"id": 1, "question": "คณะในฝันของคุณอยู่ในกลุ่มสาขาใด และต้องใช้คะแนน TPAT ใดบ้าง?"},
+                {"id": 1, "question": "คณะที่คุณสนใจต้องตรวจสอบคะแนนหรือคุณสมบัติใดจากประกาศทางการ?"},
                 {"id": 2, "question": "คุณมีแผน 30 วันอย่างไรในการเตรียม Portfolio หรือคะแนนสอบ?"}
             ]
         )
@@ -95,7 +101,10 @@ def submit_mission(id: str, payload: MissionSubmissionRequest):
         mission_id=id,
         score=eval_res["score"],
         feedback=eval_res["feedback"],
-        recommended_next_step="ต่อยอดด้วยการประเมิน FuturePath Decision Engine เพื่อวางเส้นทาง 3 รูปแบบ"
+        recommended_next_step=(
+            "ใช้เว็บแอป 03_WebApp สำหรับกระบวนการปัจจุบัน "
+            "และตรวจสอบข้อมูลทางการก่อนตัดสินใจ"
+        )
     )
     
     return MissionSubmissionResponse(
@@ -107,8 +116,23 @@ def submit_mission(id: str, payload: MissionSubmissionRequest):
 @router.post("/future-paths", response_model=FuturePathResponse)
 def create_future_path(payload: FuturePathRequest):
     """
-    Accepts full student profile, returns 3 route alternatives (Balanced Next Step, Interest Growth Route, Practical Access Route).
+    Legacy endpoint. It refuses by default; an explicit local research opt-in exposes
+    three unvalidated historical alternatives.
     """
+    if not LEGACY_FUTURE_PATHS_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail=(
+                "Legacy backend recommendations are disabled: their feasibility and "
+                "flexibility defaults are not backed by validated programme-level data. "
+                "Use the 03_WebApp deterministic prototype for the current product."
+            ),
+        )
+
+    assert multi_tier_router is not None
+    assert matrix_calculator is not None
+    assert route_generator is not None
+
     # 1. RIASEC Scorer
     top_codes = riasec_scorer.get_top_codes(payload.interest_profile.riasec_scores)
     
@@ -154,8 +178,13 @@ def create_future_path(payload: FuturePathRequest):
 @router.get("/future-paths/{id}", response_model=FuturePathNode)
 def get_future_path(id: str):
     """
-    Retrieves stored decision matrix evaluation & route details.
+    Reads an opted-in legacy result from the current in-memory process only.
     """
+    if not LEGACY_FUTURE_PATHS_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Legacy backend recommendations are disabled in release 0.2.0.",
+        )
     if id not in future_paths_db:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

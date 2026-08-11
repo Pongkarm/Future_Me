@@ -1,6 +1,6 @@
 # FutureMe design source
 
-> Integration reviewed: 11 August 2026
+> FutureMe 0.2.0 integration reviewed: 11 August 2026
 
 This folder contains the design assets that still feed the runnable product.
 

@@ -1,8 +1,17 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
+from app.version import APP_VERSION
 
 client = TestClient(app)
+
+
+def test_root_labels_the_service_as_a_scaffold():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json()["version"] == APP_VERSION
+    assert response.json()["status"] == "architecture-scaffold"
+    assert response.json()["connected_to_web_app"] is False
 
 
 def test_api_recommend_missions():
@@ -33,7 +42,7 @@ def test_api_submit_mission():
     assert data["result"]["score"] > 0.0
 
 
-def test_api_create_and_get_future_path():
+def test_legacy_future_path_is_disabled_by_default():
     payload = {
         "education_level": "LOWER_SECONDARY",
         "interest_profile": {
@@ -50,17 +59,6 @@ def test_api_create_and_get_future_path():
         }
     }
 
-    # 1. Create Future Path
     create_res = client.post("/v1/future-paths", json=payload)
-    assert create_res.status_code == 200
-    create_data = create_res.json()
-    assert "path_node" in create_data
-    node = create_data["path_node"]
-    path_id = node["path_id"]
-    assert len(node["route_options"]) == 3
-
-    # 2. Get Future Path
-    get_res = client.get(f"/v1/future-paths/{path_id}")
-    assert get_res.status_code == 200
-    get_data = get_res.json()
-    assert get_data["path_id"] == path_id
+    assert create_res.status_code == 501
+    assert "not backed by validated" in create_res.json()["detail"]

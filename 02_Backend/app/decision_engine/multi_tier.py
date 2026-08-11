@@ -1,20 +1,16 @@
-"""
-Multi-Tier Pathway Router & Educational Level Specialist.
+"""Legacy multi-tier routing experiment.
 
-Supports 4 Educational Tiers:
-1. Primary (ป.4 - ป.6): Play-based discovery & interest exploration.
-2. Lower Secondary (ม.1 - ม.3): Transition choices to ม.4 flexible learning plans,
-   12 ปวช. 2567 vocational subject areas, ปวช. dual-education (DVE) routes,
-   and counselor-supported safety routes.
-3. Upper Secondary (ม.4 - ม.6): University faculty matching (TCAS context & TPAT2-5),
-   certifications, 30-day action plans, and portfolio building.
-4. Vocational (ปวช. - ปวส.): Continuous higher vocational (ปวส. to Bachelor's / DVE),
-   certifications, 30-day action plans, and portfolio building.
+This module is retained for research traceability. Its education mappings have not
+been validated for release 0.2.0 and are not connected to the runnable web app.
+Do not present its generated pathways as current admission guidance.
 """
 
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
+
+
+LEGACY_UNVALIDATED = True
 
 
 class EducationTier(str, Enum):
@@ -26,7 +22,7 @@ class EducationTier(str, Enum):
 
 # --- Domain Reference Data ---
 
-# 12 ปวช. 2567 Vocational Subject Areas (สอศ. กระทรวงศึกษาธิการ)
+# Historical vocational-area snapshot; not validated for release 0.2.0.
 VOCATIONAL_AREAS_2567: List[Dict[str, str]] = [
     {"area_id": "V01", "name_th": "อุตสาหกรรม", "name_en": "Industry", "description_th": "ช่างยนต์, ช่างไฟฟ้ากำลัง, ช่างอิเล็กทรอนิกส์, ช่างกลโรงงาน, เมคคาทรอนิกส์"},
     {"area_id": "V02", "name_th": "บริหารธุรกิจ", "name_en": "Business", "description_th": "การบัญชี, การตลาด, เลขานุการ, คอมพิวเตอร์ธุรกิจ"},
@@ -42,7 +38,7 @@ VOCATIONAL_AREAS_2567: List[Dict[str, str]] = [
     {"area_id": "V12", "name_th": "เอ็นเตอร์เทนเมนต์", "name_en": "Entertainment", "description_th": "การสร้างสื่อดิจิทัล, มัลติมีเดีย, การแสดงและโปรดักชัน"}
 ]
 
-# Official MyTCAS TPAT Mappings (TPAT1 - TPAT5)
+# Historical admission-exam snapshot; never treat as current MyTCAS rules.
 TPAT_MAPPINGS: Dict[str, Dict[str, str]] = {
     "TPAT1": {
         "name_th": "ความถนัดวิชาชีพแพทย์ (กสพท)",
@@ -429,7 +425,7 @@ class MultiTierRouter:
         interests: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
-        Routes student profile to candidate pathways, 12 ปวช. vocational areas, safety routes, and TPAT mappings.
+        Runs the retained legacy routing snapshot for local research only.
         """
         grade_str = str(level.value if isinstance(level, EducationTier) else level)
         primary_riasec = riasec_top[0] if riasec_top else "I"

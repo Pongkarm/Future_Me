@@ -1,8 +1,11 @@
 # 📊 ฐานข้อมูลสถิติทักษะและเปอร์เซ็นต์ความสำคัญครบ 110 อาชีพ (Comprehensive 110-Occupation Skill Percentage Matrix)
 
 > **โครงการ:** FutureMe AI — Career & Educational Guidance System (Hackathon 2026)  
-> **มาตรวัดอ้างอิง:** O*NET Standardized Normalized Importance Score (0–100%), ESCO Skill Taxonomy, และสถิติตลาดแรงงาน TDRI 2026  
-> **ระเบียบวิธีวิจัย:** [`/ai-research-methodology`](file:///C:/Users/kong/.gemini/config/skills/ai-research-methodology/SKILL.md)
+> **สถานะใน release 0.2.0:** เอกสารวิจัยเดิม ไม่ใช่ scoring matrix ของระบบปัจจุบัน ตัวเลขร้อยละในตารางยังไม่มี provenance ระดับแถวที่เพียงพอและห้ามใช้จัดอันดับผู้เรียนหรือเส้นทาง
+>
+> **แหล่งที่ผู้เขียนเดิมระบุ:** O*NET, ESCO และ TDRI ซึ่งยังไม่ถือว่ารองรับค่าร้อยละแต่ละช่องจนกว่าจะตรวจกลับถึงระเบียนต้นทาง
+>
+> **ระเบียบวิธีตรวจปัจจุบัน:** ดู [`Data/SOURCE_AUDIT.md`](Data/SOURCE_AUDIT.md)
 
 ---
 

@@ -2,13 +2,15 @@
 
 > **เวทีการแข่งขัน:** JUMP THAILAND Hackathon 2026 (AIS Academy x NIA)
 > **หัวข้อ:** AI เพื่ออนาคตการศึกษาไทย (AI for the Future of Thai Education)
-> **สถานะเอกสาร:** ผ่านการสังเคราะห์ฐานข้อมูล [Data/](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/README.md), ถอดรหัสคำแนะนำอาจารย์ ([Advice_from_the_teacher.m4a](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Advice_from_the_teacher.m4a)), ศึกษาระดับลึก [AIS Cloud & CAMARA Open APIs](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), สร้างคลังผังกระบวนการ [Detailed Flowcharts](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/07_System_Blueprints_and_Flowcharts/detailed_system_flowcharts.md) และหลักสูตรทางเลือก [GED / สกร. / Homeschool](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) ครบถ้วนแล้ว
+> **สถานะใน release 0.2.0:** แผนสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่เชื่อมใช้งานแล้ว ส่วน AIS, RAG, Qdrant, PostgreSQL, multi-role dashboard และ cloud ยังเป็น research/planned
+>
+> **แหล่งใน repository:** [ภาพรวมข้อมูล](../README.md), [AIS Cloud & CAMARA research](../06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), [Detailed Flowcharts](detailed_system_flowcharts.md) และ [GED / สกร. / Homeschool](../02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) ส่วนไฟล์เสียงคำแนะนำอาจารย์ไม่ได้เก็บใน branch นี้ จึงยังตรวจย้อนกลับไม่ได้
 
 ---
 
 ## 1. การสังเคราะห์คำแนะนำจากอาจารย์ (Advisor's Audio Insights Analysis)
 
-จากการวิเคราะห์ไฟล์เสียง [Advice_from_the_teacher.m4a](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Advice_from_the_teacher.m4a) ร่วมกับเอกสาร [FutureMe_AI_Brief.pdf](file:///d:/My_server/University/3rd%20year/Hackathon_ais/hackathon_th/FutureMe_AI_Brief.pdf) สามารถสรุปหมัดเด็ดเชิงสถาปัตยกรรมได้ดังนี้:
+เอกสารเดิมระบุว่าได้วิเคราะห์ไฟล์เสียงคำแนะนำอาจารย์ ซึ่งไม่ได้เก็บใน branch นี้ ร่วมกับ [FutureMe_AI_Brief.pdf](../../Source_Documents/FutureMe_AI_Brief.pdf) ข้อสรุปด้านล่างจึงเป็นสมมติฐานการออกแบบเดิมที่ต้องตรวจสอบก่อนนำไปพัฒนา:
 
 1. **ไม่จำเป็นต้องใช้ LLM ตัวใหญ่ (Small LLM + RAG + LoRA):**
    * โมเดลใหญ่เปลืองงบและช้าเกินไป ให้ใช้ **Small Language Model (SLM)** ที่เก่งภาษาไทย (เช่น Typhoon-2 8B / Qwen2.5)
@@ -19,7 +21,7 @@
      * **Rule-based Engine:** ตัดสินใจในส่วนที่เป็นกฎเกณฑ์ตายตัว เช่น การคำนวณคะแนน RIASEC Matrix, การคัดกรองตามเงื่อนไขสายการเรียน/วุฒิ GED-สกร., และการจับคู่กลุ่มอาชีพหลัก
      * **LLM Engine:** ทำหน้าที่โต้ตอบสัมภาษณ์เชิงสนทนาแบบ Socratic, สกัดโปรไฟล์พฤติกรรม, และเรียบเรียงคำอธิบายแบบมีหลักฐาน (Explainable AI)
 3. **การเข้าเติมเต็มระบบของประเทศ (Ecosystem Fit):**
-   * เชื่อมต่อและเสริมจุดแข็งของแพลตฟอร์มกระทรวงศึกษาธิการ ([NDLP](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/05_NDLP_Ministry_of_Education/01_NDLP_Platform_Architecture.md) และ [DEEP SSO](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/05_NDLP_Ministry_of_Education/02_DEEP_and_Ecosystem_Integration.md)) เพื่อเพิ่มความแม่นยำในการแนะแนว (Precision Recommendation)
+   * ศึกษาความเป็นไปได้ในการเชื่อมแพลตฟอร์มกระทรวงศึกษาธิการ ([NDLP](../05_NDLP_Ministry_of_Education/01_NDLP_Platform_Architecture.md) และ [DEEP SSO](../05_NDLP_Ministry_of_Education/02_DEEP_and_Ecosystem_Integration.md)) โดยยังไม่มี integration จริงหรือหลักฐานว่าจะเพิ่มความแม่นยำ
 
 ---
 
@@ -50,7 +52,7 @@
 
 ## 3. สรุปคลังผังการทำงาน (Master & Sub-system Flowcharts Catalog)
 
-แผนผังการทำงานทั้งหมดถูกบันทึกไว้อย่างละเอียดที่สุดใน [detailed_system_flowcharts.md](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/07_System_Blueprints_and_Flowcharts/detailed_system_flowcharts.md) ซึ่งประกอบด้วย:
+แผนผังสถาปัตยกรรมอนาคตถูกบันทึกไว้ใน [detailed_system_flowcharts.md](detailed_system_flowcharts.md) ซึ่งประกอบด้วย:
 
 1. **Master System Operations Flowchart:** แสดงกระบวนการทำงานภาพรวมตั้งแต่การยืนยันตัวตน AIS OTP / Number Verify ➔ Socratic AI Chat ➔ Scenario Mission Sandbox ➔ Qdrant Hybrid RAG ➔ Dynamic Roadmap Generator ➔ Multi-Role RBAC & PDPA Data View ➔ AIS Cloud Deployment
 2. **Sub-system 1 Flowchart:** IAM & AIS Open API Authentication (CAMARA Standard Number Verify / OTP, SIM Swap API, OAuth2)
@@ -83,8 +85,11 @@
 
 ---
 
-## 5. การอัปเดตไฟล์ใน Artifacts
+## 5. ไฟล์ที่เก็บใน repository
 
-นอกจากบันทึกใน `Data/07_System_Blueprints_and_Flowcharts/` แล้ว ระบบได้อัปเดตไฟล์ฉบับเต็มลงใน Artifact Directory ดังนี้:
-* Artifact: [detailed_system_flowcharts.md](file:///C:/Users/kong/.gemini/antigravity/brain/978f8e32-9ca8-435f-9802-21dfcead7571/detailed_system_flowcharts.md)
-* Artifact: [implementation_plan.md](file:///C:/Users/kong/.gemini/antigravity/brain/978f8e32-9ca8-435f-9802-21dfcead7571/implementation_plan.md)
+- [detailed_system_flowcharts.md](detailed_system_flowcharts.md)
+- [implementation_plan.md](implementation_plan.md)
+
+ลิงก์ artifact ส่วนตัวจากเครื่องผู้เขียนเดิมถูกนำออกใน release 0.2.0 เพราะผู้ใช้อื่นเปิดไม่ได้
+ให้ใช้ไฟล์ใน repository และ [สถาปัตยกรรมปัจจุบัน](../../../03_WebApp/docs/05-system-architecture.md)
+เป็นแหล่งอ้างอิงแทน

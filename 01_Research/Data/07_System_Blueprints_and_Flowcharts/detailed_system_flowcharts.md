@@ -1,7 +1,10 @@
 # คลังผังกระบวนการทำงานระบบ FutureMe AI (Detailed System Flowcharts Master Catalog)
 
 > **เวทีการแข่งขัน:** JUMP THAILAND Hackathon 2026 (AIS Academy x NIA)
-> **สถานะเอกสาร:** บูรณาการข้อมูลวิจัย 6 หมวด ([Data/](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/README.md)), คำแนะนำอาจารย์ ([Advice_from_the_teacher.m4a](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Advice_from_the_teacher.m4a)), สเปก [AIS Cloud & CAMARA Open APIs](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), หลักสูตร [ปวช. 2567 / GED / สกร. / TCAS](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) และอัลกอริทึม [Roadmap DAG](file:///d:/My_server/University/3rd%20year/Hackathon_ais/Data/06_AIS_Cloud_and_Infrastructure/02_Interactive_Roadmap_DAG_Algorithm.md) ครบถ้วนแล้ว
+>
+> **สถานะใน release 0.2.0:** พิมพ์เขียวสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่ deploy หรือเชื่อมกับเว็บปัจจุบัน AIS authentication, Qdrant/RAG, PostgreSQL, RBAC, SMS และ cloud ในแผนภาพยังไม่ได้ใช้งานจริง
+>
+> **แหล่งใน repository:** [ภาพรวมข้อมูล](../README.md), [AIS Cloud & CAMARA research](../06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), [หลักสูตรทางเลือก](../02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) และ [Roadmap DAG research](../06_AIS_Cloud_and_Infrastructure/02_Interactive_Roadmap_DAG_Algorithm.md) ส่วนไฟล์เสียงคำแนะนำอาจารย์ไม่ได้เก็บใน branch นี้ จึงยังตรวจย้อนกลับไม่ได้
 
 ---
 

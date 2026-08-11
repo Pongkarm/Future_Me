@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import educationRegistry from "@/data/education-data-registry.json";
+import release from "@/data/release.json";
 import provinces from "@/data/provinces.json";
 import { Button, Card, Notice, Shell } from "@/components/ui";
 import { usePreferences, useT } from "@/components/PreferencesProvider";
@@ -40,6 +42,9 @@ const MATCHES: Record<LevelFilter, (option: NearbyOption) => boolean> = {
 
 /** How many to show in a group before the rest is behind a control. */
 const GROUP_PREVIEW = 6;
+
+const INSTITUTION_COVERAGE = educationRegistry.domains.institution.coverage;
+const PROGRAM_COVERAGE = educationRegistry.domains.program.coverage;
 
 type Loading = { state: "idle" } | { state: "loading" } | { state: "error" } | {
   state: "ready";
@@ -198,6 +203,32 @@ export default function NearbyPage() {
         <div className="mt-5">
           <Notice title={t.nearby.noticeTitle}>{t.nearby.notARecommendation}</Notice>
         </div>
+
+        <Card className="mt-5" testId="nearby-data-coverage">
+          <h2 className="text-base font-bold">{t.nearby.coverageTitle}</h2>
+          <p className="mt-2 text-sm text-muted">{t.nearby.coverageIntro}</p>
+          <ul className="mt-3 space-y-1.5 text-sm text-muted">
+            <li>
+              • {format(t.nearby.coverageInstitutions, {
+                source: INSTITUTION_COVERAGE.sourceRecords,
+                shown: INSTITUTION_COVERAGE.displayedUniqueInstitutions,
+              })}
+            </li>
+            <li>
+              • {format(t.nearby.coveragePrograms, {
+                mapped: PROGRAM_COVERAGE.displayedMappedInstitutions,
+                shown: INSTITUTION_COVERAGE.displayedUniqueInstitutions,
+              })}
+            </li>
+            <li>• {t.nearby.coverageMissing}</li>
+          </ul>
+          <p className="mt-3 text-xs text-muted">
+            {format(t.nearby.coverageChecked, {
+              date: educationRegistry.checkedAt,
+              version: release.version,
+            })}
+          </p>
+        </Card>
 
         <Card className="mt-5">
           <label htmlFor="nearby-province" className="text-sm font-bold">

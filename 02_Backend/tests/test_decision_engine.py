@@ -22,6 +22,10 @@ from app.decision_engine import (
     WEIGHT_FUTURE_FLEXIBILITY,
 )
 from schemas.models import EducationLevel, CareerInterestProfile, LearnerEvidence
+from app.decision_engine import LEGACY_ENGINE_STATUS
+from app.decision_engine.matrix import LEGACY_UNVALIDATED as MATRIX_IS_LEGACY
+from app.decision_engine.multi_tier import LEGACY_UNVALIDATED as MULTI_TIER_IS_LEGACY
+from app.decision_engine.route_generator import LEGACY_UNVALIDATED as ROUTES_ARE_LEGACY
 
 
 def test_riasec_scoring():
@@ -78,24 +82,13 @@ def test_star_adaptive_question_selection():
     assert len(eval_res.top_strengths) <= 3
 
 
-def test_multi_tier_router_12_areas_and_tpats():
+def test_legacy_multi_tier_router_is_explicitly_quarantined():
     router = MultiTierRouter()
-    
-    # Verify 12 areas
-    assert len(router.VOCATIONAL_12_AREAS) == 12
-    assert "อุตสาหกรรม" in router.VOCATIONAL_12_AREAS
-    assert "เอ็นเตอร์เทนเมนต์" in router.VOCATIONAL_12_AREAS
-
-    # Verify TPAT Mappings
-    assert "TPAT2" in router.TPAT_MAPPINGS
-    assert "ศิลปกรรม" in router.TPAT_MAPPINGS["TPAT2"]["name"]
-    assert "TPAT3" in router.TPAT_MAPPINGS
-    assert "TPAT4" in router.TPAT_MAPPINGS
-    assert "TPAT5" in router.TPAT_MAPPINGS
-
-    res = router.route(EducationLevel.LOWER_SECONDARY, ["R", "I"], ["ดิจิทัล"])
-    assert "vocational_areas_12" in res
-    assert "counselor_safety_route" in res
+    assert router is not None
+    assert MULTI_TIER_IS_LEGACY is True
+    assert MATRIX_IS_LEGACY is True
+    assert ROUTES_ARE_LEGACY is True
+    assert LEGACY_ENGINE_STATUS == "research-only-unvalidated-not-connected"
 
 
 def test_multi_tier_all_4_tiers():
@@ -173,19 +166,16 @@ def test_route_generator_3_routes():
     assert "Practical Access Route" in route_names
 
 
-def test_end_to_end_decision_engine_pipeline():
+def test_legacy_end_to_end_decision_engine_is_disabled_by_default(monkeypatch):
     riasec_responses = [{"item_id": i, "score": 4.0} for i in range(1, 31)]
     star_responses = [
         {"question_id": 101, "response_text": "ลงมือทำโปรเจกต์เขียนระบบจัดการข้อมูลร่วมกับเพื่อนในโรงเรียน"}
     ]
     
-    response = run_decision_engine(
-        grade_level="ม.3",
-        riasec_responses=riasec_responses,
-        star_responses=star_responses
-    )
-
-    assert response.education_tier == "LOWER_SECONDARY"
-    assert response.primary_riasec_code in ["R", "I", "A", "S", "E", "C"]
-    assert len(response.routes) == 3
-    assert response.composite_matrix_score > 0.0
+    monkeypatch.delenv("FUTUREME_ENABLE_LEGACY_BACKEND", raising=False)
+    with pytest.raises(RuntimeError, match="not validated for release 0.2.0"):
+        run_decision_engine(
+            grade_level="ม.3",
+            riasec_responses=riasec_responses,
+            star_responses=star_responses,
+        )

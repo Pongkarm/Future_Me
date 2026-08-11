@@ -12,7 +12,7 @@ class SourceRecord(BaseModel):
     title: str = Field(..., description="Document or curriculum section title")
     source_type: str = Field(
         ...,
-        description="Source type: 'curriculum', 'vocational', 'research', 'tcas_blueprint'"
+        description="Source category; release 0.2.0 indexes repository metadata only"
     )
     chunk_content: str = Field(..., description="Text content of the retrieved chunk")
     metadata: Dict[str, Any] = Field(

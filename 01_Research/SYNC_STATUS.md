@@ -2,6 +2,13 @@
 
 Synced from `Kong19565` into `Panussu` on 2026-08-10.
 
+## Release 0.2.0 validation record
+
+- Rechecked on 2026-08-11 and registered in [`03_WebApp/data/education-data-registry.json`](../03_WebApp/data/education-data-registry.json).
+- Institution and location coverage are partial; programme mapping covers 140 of 1,375 displayed institutions.
+- Admission, current TCAS, tuition, scholarship, accommodation and cost-of-living data remain unavailable and are excluded from route selection, scoring and ranking.
+- `npm run check:data` now checks the registry, release metadata, source counts and held-out decision fields together.
+
 ## Verified and rebuilt
 
 - `Geography_and_Access/` is source-backed and reproducible. Its institution registry now uses the official MHESI academic-year 2566 register, while vocational outcomes remain the latest published OVEC 2566 release.

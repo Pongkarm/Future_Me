@@ -27,7 +27,7 @@
   <a href="#quick-faq">FAQ</a>
 </p>
 
-<p align="center"><sub>Repository documentation and presentation reviewed 11 August 2026.</sub></p>
+<p align="center"><sub><strong>Release 0.2.0</strong> · repository documentation, data contract, and presentation reviewed 11 August 2026.</sub></p>
 
 ---
 
@@ -43,6 +43,7 @@ admission, or claim that a listed institution offers a particular programme.
 | Question | Answer |
 |---|---|
 | **Who is it for?** | Thai students exploring their next study or career direction |
+| **What version is this?** | FutureMe 0.2.0; deterministic engine 0.2.0-prototype |
 | **What does it produce?** | Zero to three route hypotheses with reasons, limitations, comparisons, nearby-institution information, and a 30-day plan |
 | **What runs in this demo?** | 30 live interest questions with rule-based follow-up ordering, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
 | **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them or answer bounded repository questions |
@@ -144,13 +145,14 @@ visible for discussion but do not score, rank, or remove a route.
 | **Next.js web app** | Student journey, local session, decision engine, comparison, plan, and chat UI | ✅ Runnable |
 | **Demo inputs** | 30 live interest questions, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
 | **Research layer** | Source audit, curricula, labour data, claim status, and technical research | 🟡 First audit complete |
+| **Release + data registry** | Version, Institution / Program / Admission / Financial / Location coverage, sources, dates, gaps, and decision-use limits | ✅ Machine-checked |
 | **FastAPI backend** | Mission and future-path API reference with in-memory storage | 🟡 Separate prototype |
 | **Optional AI** | Bounded chat and explanation rewording | 🟡 Optional |
 | **Production services** | Accounts, permanent database, RAG, school tools, and cloud deployment | 🔴 Planned |
 
 The current web app is the product source of truth. The FastAPI backend is not required by or wired
-into the main demo journey. Some backend files still use the older name **FuturePath AI**; the
-current product name is **FutureMe AI**.
+into the main demo journey. A few backend schema and class identifiers retain the historical
+`FuturePath` name for import compatibility; the product name is **FutureMe AI**.
 
 ---
 
@@ -167,8 +169,11 @@ current product name is **FutureMe AI**.
 - Local persistence, deletion controls, optional research export, and analysis scripts
 - Mascot animation enabled by default across the journey, with a persisted system-motion opt-out
 - Twelve illustrative routes and province-aware nearby-institution views that do not claim a specific programme is offered
+- Versioned education-data coverage: 1,417 source institutions, 1,375 unique institutions shown, 140 with programme-derived route mappings, and zero locally validated admission or financial records
 - Mascot sync, typecheck, lint, unit/integration tests, production build, and browser journeys are included in the repository checks
-- Verification snapshot (11 August 2026): 26 Vitest files / 529 tests and all 94 Playwright browser journeys pass; data-integrity and production-build checks pass
+- Verification snapshot (11 August 2026): 27 Vitest files / 533 tests and all 95 Playwright browser
+  journeys pass; data-integrity and production-build checks pass; the disconnected backend scaffold
+  also passes 18 contract tests and its release verifier
 
 ### 🟡 Needs validation
 
@@ -178,6 +183,7 @@ current product name is **FutureMe AI**.
 - Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates; the first four are held out of route decisions.
 - The institution register keeps 207 missing or quarantined coordinates and 987 missing websites as unknown instead of inventing values.
 - Route and programme metadata need recurring source review; source dates, full checksums, and automated integrity checks are recorded with the geography data.
+- Programme-level TCAS criteria, tuition, scholarships, accommodation, and living costs have no validated local records and remain unavailable rather than estimated.
 - Research has passed a first source audit, not a guarantee of permanent accuracy.
 - Automated integration checks pass, but source-data review and a real-student pilot are still required.
 
@@ -199,7 +205,7 @@ Only the active product, evidence, and reproducible deliverables remain:
 | Path | Purpose |
 |---|---|
 | [`01_Research/`](01_Research/) | Audited evidence, questionnaire research, and geography/data pipelines |
-| [`02_Backend/`](02_Backend/) | Separate FastAPI prototype and tests |
+| [`02_Backend/`](02_Backend/) | Disconnected FastAPI architecture scaffold and tests |
 | [`03_WebApp/`](03_WebApp/) | Current runnable FutureMe product and its automated tests |
 | [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | Canonical mascot assets synchronized into the web app |
 | [`Presentation/`](Presentation/) | Current editable deck, matching PDF, evidence notes, and QA record |
@@ -240,6 +246,16 @@ Yes. The complete student journey runs locally in the browser without either one
 <summary><strong>Does FutureMe guarantee admission or employment?</strong></summary>
 
 No. Routes are hypotheses to explore, not predictions or guarantees.
+</details>
+
+<details>
+<summary><strong>Does it recommend a university using TCAS, tuition, scholarship, or distance data?</strong></summary>
+
+No. The route engine does not select institutions. The nearby screen is a directory ordered by
+distance from a province centre. Only 140 of 1,375 displayed institutions have partial
+programme-derived route mappings; programme-level TCAS, tuition, scholarships, accommodation,
+and living costs have zero validated local records. See the
+[data coverage contract](03_WebApp/docs/data-coverage-and-governance.md).
 </details>
 
 <details>
@@ -291,7 +307,8 @@ catalogue-wide `dataAsOf` date and 180-day freshness threshold. The UI warns whe
 identifies unsourced fields. Cost, relocation, time-to-earning, and flexibility are held out of
 decisions; strengths and limitations remain illustrative copy. The geography registry records full
 checksums and `npm run check:data` verifies its cross-file integrity. See the
-[source review](03_WebApp/docs/09-source-review.md).
+[source review](03_WebApp/docs/09-source-review.md) and
+[data coverage contract](03_WebApp/docs/data-coverage-and-governance.md).
 </details>
 
 <details>

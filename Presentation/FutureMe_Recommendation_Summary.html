@@ -350,7 +350,7 @@
     <tbody>
       <tr><td class="mono">build/build_programme_index.py</td>
           <td>ต่อทะเบียน 4 ชุด — แผนการรับนักศึกษา · รหัส ISCED-F · ต้นทุนต่อหัว · สถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรี 6,349 หลักสูตร (88.8% ของที่ไม่ซ้ำ)</strong></td></tr>
-      <tr><td class="mono">components/routes/ProgrammeMatches.tsx</td><td>การ์ดแสดง <strong>ระยะทางถนนจริง · ผลการมีงานทำของผู้จบสาขานั้น · ต้นทุนที่รัฐลงทุน · ลิงก์ประกาศของสถาบัน</strong> และมี<strong>ตัวกรอง</strong>ระดับ/ประเภทสถาบัน/จังหวัด ที่กรองก่อนจัดอันดับ ไม่ใช่กรองห้าอันดับที่คัดเสร็จแล้ว</td></tr>
+      <tr><td class="mono">components/routes/ProgrammeMatches.tsx</td><td>การ์ดแสดง <strong>อำเภอและระยะทางถนนจริง · วิธีเดินทางที่ไปได้ · อาชีพที่สายนั้นเชื่อมถึง (ชื่อไทย) · ผลการมีงานทำของผู้จบ · ต้นทุนที่รัฐลงทุน · ลิงก์ประกาศของสถาบัน</strong> และมี<strong>ตัวกรอง</strong>ที่กรองก่อนจัดอันดับ ไม่ใช่กรองห้าอันดับที่คัดเสร็จแล้ว</td></tr>
       <tr><td class="mono">build/build_vocational_index.py</td><td>ทะเบียนนักเรียนของ สอศ. ปี 2568 → <strong>ปวช./ปวส. 16,908 หลักสูตร ใน 840 วิทยาลัย</strong> · รวมทั้งระบบ <strong>23,257 หลักสูตร ใน 993 สถาบัน</strong></td></tr>
       <tr><td class="mono">build/build_isced_riasec.py</td><td>เวกเตอร์ RIASEC <strong>วัดจริงจาก 923 อาชีพใน O*NET</strong> ผ่านรหัส ISCED-F 2013 · พร้อม <span class="mono">crosswalk_audit.md</span> ที่ลิสต์ทุกการจับคู่ให้ตรวจ</td></tr>
       <tr><td class="mono">engine.py</td>
@@ -704,6 +704,26 @@
     ผู้เรียนทั้งสามตอบคลังข้อ 90 ข้อจริง เอนจินอ่านคำตอบเหมือนที่จะอ่านของคนจริง
   </p>
 
+  <h3>สิ่งที่การ์ดหนึ่งใบบอก — ผู้เรียน ม.3 เชียงใหม่ โปรไฟล์ R</h3>
+  <div class="formula">ปวช. ช่างเชื่อมโลหะ                                        [ ชอบ + ถนัด ]
+วิทยาลัยเทคนิคเชียงใหม่ · เชียงใหม่
+อ.เมืองเชียงใหม่ · 0.6 กม. ตามถนน · เดินหรือปั่นจักรยานไปได้
+ไปได้ด้วย  เดิน · จักรยาน · มอเตอร์ไซค์
+เว็บไซต์สถาบัน — ดูค่าเทอมและเกณฑ์รับเข้าจากประกาศจริง
+สายนี้ใช้โปรไฟล์ความสนใจของอาชีพ  ช่างโลหะแผ่น · ช่างเชื่อมและตัดโลหะ
+┌───────────────────────────────────────────────────────────┐
+│ ผู้จบสาขานี้ในเชียงใหม่ ปวช.:  ทำงาน 24% · เรียนต่อ 70%          │
+│ จากผู้ที่ติดตามได้ 1,420 คน (ผู้จบทั้งหมด 1,785 คน) ปี 2566        │
+└───────────────────────────────────────────────────────────┘
+ความเข้ากันเชิงวิชาการ 86.8   บริบท +14.3   เจตนารับ 62 คน
+▸ ที่มาของคะแนนนี้</div>
+  <p style="font-size:8.6pt;color:var(--ink-2)">
+    ทุกบรรทัดมาจากทะเบียนราชการ ไม่มีบรรทัดไหนเป็นค่าประมาณ · ช่องที่ไม่มีข้อมูล
+    (ค่าเทอม · รอบรับสมัคร · ทุน) ไม่ถูกเดาให้ แต่ถูกแทนด้วยลิงก์ไปหาผู้ที่ประกาศจริง ·
+    เปอร์เซ็นต์การมีงานทำมาพร้อมฐานที่คำนวณเสมอ เพราะ 24% จากคน 1,420 คน
+    กับ 24% จากคน 15 คน ไม่ใช่ข้อมูลชนิดเดียวกัน
+  </p>
+
   <h3>ผู้เรียน ก · ม.5 · กรุงเทพฯ · ไปกลับเท่านั้น · งบจำกัด</h3>
   <div class="formula">ความมั่นใจ 0.97   differentiation 0.68
 ตัดออกก่อนให้คะแนน 4,993 หลักสูตร (อยู่นอกระยะที่ผู้เรียนบอกว่าไปได้)
@@ -924,7 +944,7 @@
       <tr class="score-row"><td>Value proposition</td><td class="num">50</td><td class="num">85</td><td><span class="bar" style="width:42pt"></span></td><td>ยังต้องซ้อมให้จบใน 10 วินาที</td></tr>
       <tr class="score-row"><td><strong>ทฤษฎีการแนะนำ</strong></td><td class="num">60</td><td class="num"><strong>92</strong></td><td><span class="bar" style="width:46pt"></span></td><td>ความละเอียดยังอยู่ระดับสาย (87 สาย ไม่ใช่ 12 แล้ว)</td></tr>
       <tr class="score-row"><td><strong>เหตุผลทางวิชาการ</strong></td><td class="num">55</td><td class="num"><strong>94</strong></td><td><span class="bar" style="width:45pt"></span></td><td>พารามิเตอร์ 10 ตัวยังไม่ calibrate · แต่เวกเตอร์สายวัดมาแล้ว</td></tr>
-      <tr class="score-row"><td><strong>อธิบายได้</strong></td><td class="num">45</td><td class="num"><strong>95</strong></td><td><span class="bar" style="width:47pt"></span></td><td>คำอธิบายยังเป็น output เทอร์มินัล ไม่ใช่ UI</td></tr>
+      <tr class="score-row"><td><strong>อธิบายได้</strong></td><td class="num">45</td><td class="num"><strong>95</strong></td><td><span class="bar" style="width:47pt"></span></td><td>คำอธิบายอยู่บน UI แล้ว — เหลือให้ผู้เชี่ยวชาญตรวจ crosswalk</td></tr>
       <tr class="score-row"><td>ใช้ได้จริง</td><td class="num">40</td><td class="num">82</td><td><span class="bar" style="width:41pt"></span></td><td>ยังขาด TCAS/ค่าเทอม · แต่ตอบ “จบแล้วได้งานไหม” และ “ไปกลับไหวไหม” ได้แล้ว</td></tr>
       <tr class="score-row"><td>Business idea</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ยังไม่มี LOI จากโรงเรียน</td></tr>
       <tr class="score-row"><td>ความเหมาะสมของ AI</td><td class="num">50</td><td class="num">90</td><td><span class="bar" style="width:45pt"></span></td><td>ชั้น AI ยังไม่ได้เดโม</td></tr>

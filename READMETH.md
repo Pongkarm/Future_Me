@@ -22,8 +22,12 @@
   &nbsp;·&nbsp;
   <a href="#การรันในเครื่อง">การรันในเครื่อง</a>
   &nbsp;·&nbsp;
+  <a href="Presentation/FutureMe_Project_Presentation.pdf">ไฟล์นำเสนอ</a>
+  &nbsp;·&nbsp;
   <a href="#คำถามที่พบบ่อย">คำถามที่พบบ่อย</a>
 </p>
+
+<p align="center"><sub>ตรวจทานเอกสารใน repository และไฟล์นำเสนอล่าสุดเมื่อ 11 สิงหาคม 2026</sub></p>
 
 ---
 
@@ -155,6 +159,7 @@ flowchart LR
 - การบันทึกในเครื่อง การลบข้อมูล การส่งออกเพื่อวิจัย และสคริปต์วิเคราะห์
 - มาสคอตเปิดแอนิเมชันเป็นค่าเริ่มต้นตลอดเส้นทาง พร้อมตัวเลือกให้กลับไปใช้การตั้งค่าการเคลื่อนไหวของระบบ
 - มีการตรวจ mascot sync, typecheck, lint, unit/integration tests, production build และ browser journeys ใน repository
+- ผลตรวจล่าสุด 11 สิงหาคม 2026: Vitest 26 ไฟล์ รวม 529 tests และ Playwright ผ่านครบทั้ง 94 เส้นทาง พร้อมผ่านการตรวจข้อมูลและ production build
 
 ### 🟡 ต้องตรวจสอบต่อ
 
@@ -188,7 +193,7 @@ flowchart LR
 | [`02_Backend/`](02_Backend/) | ต้นแบบ FastAPI แยกส่วนและชุดทดสอบ |
 | [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | ผลิตภัณฑ์ FutureMe ปัจจุบันและชุดทดสอบอัตโนมัติ |
 | [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | ต้นทางมาสคอตที่ซิงก์เข้าเว็บแอป |
-| [`Presentation/`](Presentation/) | สไลด์แก้ไขได้ PDF ตัวสร้างสไลด์ และบันทึก QA |
+| [`Presentation/`](Presentation/) | สไลด์ฉบับปัจจุบัน PDF ที่ตรงกัน บันทึกแหล่งข้อมูล และผลตรวจ QA |
 
 branch นี้ไม่นำ snapshot เก่า แนวทางออกแบบที่เลิกใช้ ไฟล์ render ที่สร้างใหม่ได้ สื่อส่วนตัว
 และบันทึกการทำงานของ agent มาปะปน ไฟล์ที่ลบยังเรียกคืนได้จากประวัติ Git

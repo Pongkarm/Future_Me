@@ -1,5 +1,7 @@
 <a id="top"></a>
 
+**Choose a full README:** [English](READMEEN.md) · [ภาษาไทย](READMETH.md)
+
 <p align="center">
   <img src="assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
@@ -148,6 +150,9 @@ routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geograph
 | **Privacy** | Assessment and mission answers stay in browser storage by default and can be deleted immediately; submitted chat follows the separate network flow documented below |
 | **Research tooling** | Optional anonymous export at `/research`, plus a reproducible pilot-analysis pipeline |
 
+Verified on 11 August 2026: data and mascot checks, typecheck, lint, 26 Vitest files / 529 tests,
+production build, and all 94 Playwright browser journeys.
+
 <details>
 <summary><strong>What is not complete yet · สิ่งที่ยังไม่เสร็จ</strong></summary>
 
@@ -248,7 +253,7 @@ Open [http://localhost:3000](http://localhost:3000) and choose **Start as guest*
 The complete journey works without an account, database, or API key.
 
 ```bash
-npm run verify       # typecheck + lint + unit/integration tests + production build
+npm run verify       # mascot + data integrity + typecheck + lint + tests + production build
 npm run test:e2e     # full browser journeys against the production build
 
 # Optional: self-test the research pipeline with simulated data

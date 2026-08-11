@@ -1,8 +1,11 @@
 # FutureMe Mascot Lab
 
-Prototype workspace for the FutureMe / FuturePath mascot. It exists so the team
+Prototype workspace and canonical source for the FutureMe mascot. It exists so the team
 can agree on how the character behaves inside the product **before** anyone
 commits to final 2D or 3D production.
+
+> Live-app integration reviewed: 11 August 2026. `mascot.js` and `mascot.css` are synchronized into
+> the current web app and checked by `npm run check:mascot`.
 
 Open `index.html` in a browser. No build step, no server.
 
@@ -49,7 +52,9 @@ it off without touching the character:
       data-fm-heart="on" data-fm-compass="on" data-fm-reduced="off">
 ```
 
-`prefers-reduced-motion` is always respected regardless of these.
+Inside the standalone lab, `prefers-reduced-motion` is respected. The live app intentionally starts
+mascot motion on, then offers a visible persisted control that returns motion to the operating-system
+preference. Keep this product-level override in the React wrapper, not in the canonical SVG geometry.
 
 ## Two rules that are easy to break
 

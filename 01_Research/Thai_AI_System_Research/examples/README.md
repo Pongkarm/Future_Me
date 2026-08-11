@@ -1,6 +1,8 @@
 # examples/ — โค้ดตัวอย่าง RAG ภาษาไทย
 
 > วันที่ตรวจสอบ: 21 กรกฎาคม 2026 · อ่านคู่กับ `../15_Prototype_Guide.md`
+>
+> ตรวจขอบเขตโครงการเมื่อ 11 สิงหาคม 2026: โค้ดในโฟลเดอร์นี้ไม่ถูกเรียกจากเว็บแอปปัจจุบัน และห้ามใช้เป็นหลักฐานว่า production RAG พร้อมใช้งานแล้ว
 
 โค้ดเน้นให้เข้าใจ **workflow** ไม่ใช่ระบบ production เขียนแบบ Python ตรง ๆ (sentence-transformers + Chroma + เรียก LLM ผ่าน HTTP) เพื่อลดการผูกกับ framework ที่ API เปลี่ยนบ่อย
 
@@ -16,9 +18,9 @@
 
 ## ติดตั้งและรัน
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv && source .venv/bin/activate   # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-cp .env.example .env        # แก้ค่าตามต้องการ
+cp .env.example .env        # PowerShell: Copy-Item .env.example .env
 
 # (ทางเลือก) LLM local ด้วย Ollama:
 #   ติดตั้งจาก https://ollama.com แล้ว: ollama pull qwen2.5:7b-instruct

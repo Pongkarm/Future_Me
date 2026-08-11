@@ -22,8 +22,12 @@
   &nbsp;·&nbsp;
   <a href="#run-locally">Run locally</a>
   &nbsp;·&nbsp;
+  <a href="Presentation/FutureMe_Project_Presentation.pdf">Presentation</a>
+  &nbsp;·&nbsp;
   <a href="#quick-faq">FAQ</a>
 </p>
+
+<p align="center"><sub>Repository documentation and presentation reviewed 11 August 2026.</sub></p>
 
 ---
 
@@ -164,6 +168,7 @@ current product name is **FutureMe AI**.
 - Mascot animation enabled by default across the journey, with a persisted system-motion opt-out
 - Twelve illustrative routes and province-aware nearby-institution views that do not claim a specific programme is offered
 - Mascot sync, typecheck, lint, unit/integration tests, production build, and browser journeys are included in the repository checks
+- Verification snapshot (11 August 2026): 26 Vitest files / 529 tests and all 94 Playwright browser journeys pass; data-integrity and production-build checks pass
 
 ### 🟡 Needs validation
 
@@ -197,7 +202,7 @@ Only the active product, evidence, and reproducible deliverables remain:
 | [`02_Backend/`](02_Backend/) | Separate FastAPI prototype and tests |
 | [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | Current runnable FutureMe product and its automated tests |
 | [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | Canonical mascot assets synchronized into the web app |
-| [`Presentation/`](Presentation/) | Editable deck, PDF, generator, and QA notes |
+| [`Presentation/`](Presentation/) | Current editable deck, matching PDF, evidence notes, and QA record |
 
 Historical snapshots, superseded design concepts, generated renders, private source media, and
 agent working logs are intentionally excluded from this branch. Deleted tracked files remain

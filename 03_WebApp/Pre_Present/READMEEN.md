@@ -1,5 +1,7 @@
 <a id="top"></a>
 
+**README:** **[English](READMEEN.md)** · [ภาษาไทย](READMETH.md)
+
 <p align="center">
   <img src="assets/banner/banner.svg" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
@@ -174,6 +176,9 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 
 The application can be used end to end without an account, database, environment variable, or
 model provider.
+
+Verification snapshot (11 August 2026): mascot and data-integrity checks, typecheck, lint,
+26 Vitest files / 529 tests, production build, and all 94 Playwright browser journeys passed.
 
 ---
 

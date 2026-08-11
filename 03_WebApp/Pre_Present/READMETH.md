@@ -1,5 +1,7 @@
 <a id="top"></a>
 
+**README:** [English](READMEEN.md) · **[ภาษาไทย](READMETH.md)**
+
 <p align="center">
   <img src="assets/banner/banner-th.svg" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
 </p>
@@ -176,6 +178,9 @@ FutureMe ช่วยเปลี่ยนความรู้สึกว่�
 
 แอปทำงานครบเส้นทางโดยไม่ต้องมีบัญชี ฐานข้อมูล environment variable
 หรือผู้ให้บริการโมเดล
+
+ผลตรวจล่าสุด 11 สิงหาคม 2026: mascot sync, ความสมบูรณ์ของข้อมูล, typecheck, lint,
+Vitest 26 ไฟล์ รวม 529 tests, production build และ Playwright ผ่านครบทั้ง 94 เส้นทาง
 
 ---
 

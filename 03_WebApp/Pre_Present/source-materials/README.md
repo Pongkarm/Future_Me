@@ -8,6 +8,9 @@ This repository publishes **rewritten English summaries** and a curated subset o
 research base. It does not contain every raw team source. This document records what is retained,
 what was summarized, and what was excluded.
 
+Integration boundary reviewed 11 August 2026. The live app, current screenshots, restored future
+question bank, and research-only RAG materials remain labelled separately.
+
 ## What the research base contains
 
 Seven categories of Thai-language research documents, assembled before design work began:
@@ -30,7 +33,10 @@ journey. Qdrant and PostgreSQL remain planned production components, not impleme
 ## What was published
 
 - **Rewritten English summaries** of all seven categories, in [`docs/`](../docs/)
-- **Four curated Aurora mockups**, resized and optimised, in [`assets/screenshots/`](../assets/screenshots/)
+- **Four curated Aurora mockups** in [`assets/screenshots/`](../assets/screenshots/) plus current
+  production-build captures in [`assets/screenshots/app/`](../assets/screenshots/app/)
+- **A restored 1,000-item bilingual future question bank**, structurally checked but not imported
+  by the live interview and not content-validated
 - **Purpose-built SVG assets** — a bilingual banner pair and the current decision-matrix diagram
 
 ## What stayed private, and why
@@ -54,7 +60,7 @@ are listed in [02 · Research §7](../docs/02-research-and-evidence.md), and the
 produced most of them is documented in [09 · Source Review](../docs/09-source-review.md).
 
 If you need access to the underlying research for review, evaluation, or academic purposes,
-please [open an issue](https://github.com/winxtxrgit/futureme-ai/issues).
+please [open an issue](https://github.com/Pongkarm/Future_Me/issues).
 
 ---
 

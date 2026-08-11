@@ -20,6 +20,8 @@ on:
   push:
     paths:
       - '03_WebApp/Pre_Present/**'
+      - '01_Research/Geography_and_Access/PROVENANCE.json'
+      - '01_Research/Geography_and_Access/data/**'
       - '04_Design/FutureMe_Mascot_Lab/**'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
@@ -58,6 +60,9 @@ jobs:
 
       - name: Mascot is in sync with the design lab
         run: node scripts/sync-mascot.mjs --check
+
+      - name: Research data integrity and cross-file consistency
+        run: npm run check:data
 
       - name: Typecheck
         run: npm run typecheck

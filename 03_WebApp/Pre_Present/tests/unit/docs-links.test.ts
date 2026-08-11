@@ -12,6 +12,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const ROOT = path.resolve(__dirname, "../..");
+const REPO_ROOT = path.resolve(ROOT, "../..");
 const SKIP_DIRS = new Set(["node_modules", ".next", ".git", "test-results", "playwright-report"]);
 
 function markdownFiles(dir: string, found: string[] = []): string[] {
@@ -196,6 +197,30 @@ describe("bilingual documentation stays in step", () => {
     };
     expect(navLinks(en)).toBe(10);
     expect(navLinks(th)).toBe(10);
+  });
+});
+
+describe("public recommendation explanation stays aligned with the engine", () => {
+  const rootEn = readFileSync(path.join(REPO_ROOT, "README.md"), "utf8");
+  const rootTh = readFileSync(path.join(REPO_ROOT, "READMETH.md"), "utf8");
+  const diagram = readFileSync(path.join(ROOT, "assets/diagrams/decision-matrix.svg"), "utf8");
+
+  it("publishes the current three scored criteria in both root READMEs", () => {
+    expect(rootEn).toContain(
+      "Interests 50% · Mission evidence 30% · Learning-environment affinity 20%",
+    );
+    expect(rootTh).toContain(
+      "ความสนใจ 50% · หลักฐานจากภารกิจ 30% · ความสอดคล้องกับสภาพแวดล้อมการเรียนรู้ 20%",
+    );
+    expect(rootEn).not.toContain("Feasibility 25%");
+    expect(rootTh).not.toContain("ความเป็นไปได้ 25%");
+  });
+
+  it("keeps the public diagram on the same 50/30/20 model", () => {
+    expect(diagram).toContain(
+      "interests 50 percent, mission evidence 30 percent, learning-environment affinity 20 percent",
+    );
+    expect(diagram).not.toContain("feasibility 25 percent");
   });
 });
 

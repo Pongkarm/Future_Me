@@ -907,7 +907,7 @@ def slide_06(prs: Presentation):
         ("INCLUDED", "RIASEC interest vector", "A starting hypothesis for exploration", COLORS["mint"]),
         ("DESIGN INPUT", "Socratic prompts + STAR", "Conversation scaffolds—not psychometrics", COLORS["indigo"]),
         ("DEFERRED", "Work values", "Route catalogue lacks value profiles", COLORS["warning"]),
-        ("REJECTED", "MBTI-type matching · learning styles", "Unstable types / weak evidence", COLORS["coral"]),
+        ("REJECTED", "MBTI-type matching · VARK labels", "Unstable types / weak evidence", COLORS["coral"]),
     ]
     y = 1.94
     for cap, title, reason, color in rows:
@@ -1021,7 +1021,7 @@ def slide_09(prs: Presentation):
     questions = [
         ("1", "What activities\ndraw me?", "Provisional\nRIASEC vector", COLORS["indigo"]),
         ("2", "Does action\nagree?", "Mission can\ncorroborate or contradict", COLORS["magenta"]),
-        ("3", "What is\nfeasible now?", "Cost · location ·\ntiming filters", COLORS["warning"]),
+        ("3", "What can I\nexplore now?", "Tier gate · evidence ·\n0–3 routes", COLORS["warning"]),
         ("4", "Why these\noptions?", "Reasons · evidence ·\nunknowns · sources", COLORS["mint"]),
         ("5", "What can I\ntest next?", "30-day reversible\nexperiment", COLORS["coral"]),
     ]
@@ -1071,7 +1071,7 @@ def slide_10(prs: Presentation):
         if i < 2:
             add_text(slide, "↓", 2.48, y + 0.76, 0.52, 0.32, size=20, color=COLORS["muted2"], bold=True, align=PP_ALIGN.CENTER)
     add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, 1.2, 5.72, 3.08, 0.72, fill=COLORS["surface"], line=COLORS["magenta"])
-    add_text(slide, "Optional LLM: reword reasons only\nOff by default · no learner answers", 1.34, 5.88, 2.8, 0.4, size=11, color=COLORS["muted"], align=PP_ALIGN.CENTER)
+    add_text(slide, "Optional LLM: bounded chat + rewording\nOff by default · no assessment answers", 1.34, 5.88, 2.8, 0.4, size=11, color=COLORS["muted"], align=PP_ALIGN.CENTER)
 
     # Divider.
     add_line(slide, 5.03, 1.68, 5.03, 6.55, color=COLORS["stroke"], width=1.3, dash=True)
@@ -1124,8 +1124,8 @@ def slide_11(prs: Presentation):
         ("30 items\n+ context", COLORS["surface2"]),
         ("RIASEC\nvector", COLORS["indigo"]),
         ("Mission\nvector", COLORS["magenta"]),
-        ("Hard\nfilters", COLORS["warning"]),
-        ("5-criterion\nmatrix", COLORS["mint"]),
+        ("Tier\ngate", COLORS["warning"]),
+        ("3-criterion\nmatrix", COLORS["mint"]),
         ("0–3\nroutes", COLORS["coral"]),
     ]
     xs = [0.66, 2.78, 4.9, 7.02, 9.14, 11.26]
@@ -1135,13 +1135,13 @@ def slide_11(prs: Presentation):
         if i < 5:
             add_arrow_text(slide, x + 1.52, 2.1, COLORS["muted2"], 16)
 
-    add_section_label(slide, "DESIGN-JUDGEMENT WEIGHTS · NOT FITTED TO OUTCOMES", 0.75, 3.17, 5.9, COLORS["warning"])
+    add_section_label(slide, "SCORED SIGNALS + UNVERIFIED PROMPTS · BLOCKS NOT TO SCALE", 0.75, 3.17, 5.9, COLORS["warning"])
     segments = [
-        ("Interests 30%", 0.30, COLORS["indigo"]),
-        ("Feasibility 25%", 0.25, COLORS["warning"]),
-        ("Strengths 20%", 0.20, COLORS["magenta"]),
-        ("Work style 15%", 0.15, COLORS["mint"]),
-        ("Flexibility 10%", 0.10, COLORS["coral"]),
+        ("Interests 50%", 0.30, COLORS["indigo"]),
+        ("Mission evidence 30%", 0.25, COLORS["magenta"]),
+        ("Learning env. 20%", 0.20, COLORS["mint"]),
+        ("Practical prompts", 0.15, COLORS["warning"]),
+        ("Not scored", 0.10, COLORS["surface2"]),
     ]
     x = 0.76
     total_w = 11.82
@@ -1150,6 +1150,18 @@ def slide_11(prs: Presentation):
         add_shape(slide, MSO_SHAPE.RECTANGLE, x, 3.6, width, 0.54, fill=color)
         add_text(slide, label, x + 0.03, 3.77, width - 0.06, 0.2, size=8.7 if width < 1.7 else 10, color=COLORS["black"] if color in (COLORS["mint"], COLORS["warning"]) else COLORS["white"], bold=True, align=PP_ALIGN.CENTER)
         x += width
+
+    add_text(
+        slide,
+        "Unverified cost, relocation, timing, and flexibility stay visible as prompts but do not affect the score.",
+        0.9,
+        4.22,
+        11.54,
+        0.26,
+        size=10.5,
+        color=COLORS["warning"],
+        align=PP_ALIGN.CENTER,
+    )
 
     guardrails = [
         ("23 / 30", "minimum items answered"),
@@ -1164,7 +1176,7 @@ def slide_11(prs: Presentation):
         add_text(slide, body, x + 0.16, 5.36, 2.36, 0.34, size=10.5, color=COLORS["muted"], align=PP_ALIGN.CENTER)
     add_text(
         slide,
-        "Interest fit compares the shape of all six dimensions; mission evidence remains independent so disagreement is visible.",
+        "Interest fit and learning-environment affinity both derive from the interview profile; mission evidence is the independent signal.",
         1.05,
         6.36,
         11.2,
@@ -1185,9 +1197,9 @@ def slide_12(prs: Presentation):
         "These are screenshots from the implemented app—not concept mockups.",
     )
     frames = [
-        (SCREEN_DIR / "interview-desktop.png", 0.72, "1 · ASSESS", "One item at a time"),
-        (SCREEN_DIR / "routes-desktop.png", 4.57, "3 · EXPLORE", "Several hypotheses"),
-        (SCREEN_DIR / "plan-desktop.png", 8.42, "5 · ACT", "30-day experiment"),
+        (SCREEN_DIR / "interview-2026-08-09.png", 0.72, "1 · REFLECT", "One item at a time"),
+        (SCREEN_DIR / "routes-2026-08-09.png", 4.57, "3 · EXPLORE", "Several hypotheses"),
+        (SCREEN_DIR / "plan-2026-08-09.png", 8.42, "5 · ACT", "30-day experiment"),
     ]
     for path, x, label, caption in frames:
         add_screenshot_frame(slide, path, x, 1.77, 3.52, 3.56, focus_y=0.0, label=label)
@@ -1195,10 +1207,10 @@ def slide_12(prs: Presentation):
     pills = [
         ("TH / EN + THEMES", 0.78, 1.85),
         ("3 MISSIONS", 2.78, 1.4),
-        ("6 ILLUSTRATIVE ROUTES", 4.38, 2.35),
+        ("12 ILLUSTRATIVE ROUTES", 4.38, 2.35),
         ("BROWSER-LOCAL", 6.93, 1.65),
-        ("234 TESTS", 8.78, 1.25),
-        ("20 E2E", 10.23, 1.05),
+        ("522 TESTS", 8.78, 1.25),
+        ("94 E2E", 10.23, 1.05),
     ]
     x = 0.78
     for text, _, width in pills:
@@ -1206,7 +1218,7 @@ def slide_12(prs: Presentation):
         x += width + 0.18
     add_text(
         slide,
-        "Route constraints and mission rubrics remain illustrative and unvalidated.",
+        "Route profiles and mission rubrics remain illustrative and unvalidated.",
         3.2,
         6.64,
         6.95,
@@ -1216,7 +1228,7 @@ def slide_12(prs: Presentation):
         bold=True,
         align=PP_ALIGN.CENTER,
     )
-    add_source(slide, "Verification rerun 30 Jul 2026: npm run verify + 20 Playwright journeys passed")
+    add_source(slide, "Verification rerun 11 Aug 2026: 522 Vitest tests + 94 Playwright journeys passed")
 
 
 def slide_13(prs: Presentation):
@@ -1241,8 +1253,8 @@ def slide_13(prs: Presentation):
     future = [
         ("Reflect", "provisional signal", COLORS["indigo"]),
         ("Try", "independent evidence", COLORS["magenta"]),
-        ("Explain", "reasons + unknowns", COLORS["mint"]),
-        ("Compare", "constraints + trade-offs", COLORS["warning"]),
+        ("Explore", "reasons + unknowns", COLORS["mint"]),
+        ("Compare", "evidence + trade-offs", COLORS["warning"]),
         ("Act", "30-day experiment", COLORS["coral"]),
     ]
     x_positions = [5.35, 6.85, 8.35, 9.85, 11.35]

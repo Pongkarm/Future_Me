@@ -208,7 +208,7 @@ export function recommend(
   };
 }
 
-/** Five weighted criteria, each 0..100, combined into one composite. */
+/** Three weighted criteria, each 0..100, combined into one composite. */
 export function scoreRoute(
   route: RouteDef,
   riasec: Record<Dimension, number>,

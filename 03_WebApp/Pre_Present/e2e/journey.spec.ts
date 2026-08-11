@@ -321,13 +321,13 @@ test("every route says where its information came from, and how old it is", asyn
 
   // Provenance now lives inside each route's Explore panel, so it is consolidated
   // rather than repeated in every collapsed card. Open the panels to reach it.
-  const cards = page.locator('li:has([data-testid^="select-"])');
-  const n = await cards.count();
   const toggles = page.locator('[data-testid^="select-"]');
+  await expect(toggles.first()).toBeVisible();
+  const n = await toggles.count();
   for (let i = 0; i < n; i++) await toggles.nth(i).click();
 
   const disclosures = page.locator('[data-testid^="provenance-"]');
-  expect(await disclosures.count()).toBe(n);
+  await expect(disclosures).toHaveCount(n);
 
   await disclosures.first().click();
   await expect(page.getByText(/Source:/).first()).toBeVisible();
@@ -336,6 +336,9 @@ test("every route says where its information came from, and how old it is", asyn
   // The unsourced fields are named in words rather than as JSON keys — a learner
   // cannot be expected to know what "costBand" means.
   const freshnessPanel = page.getByTestId("data-freshness");
+  await expect(page.getByTestId("routes-practical-data-notice")).toContainText(
+    /do not score, rank, or remove a route/i,
+  );
   await expect(freshnessPanel).toBeVisible();
   await expect(freshnessPanel).toContainText(/review point/);
   await expect(freshnessPanel).toContainText("relative cost");

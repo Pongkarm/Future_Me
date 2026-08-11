@@ -103,17 +103,23 @@ accounts, permanent storage, and deployment remain planned (red).
 | **1. Reflect** | Answer 30 RIASEC-shaped interest items, four required context questions, and one optional prompt |
 | **2. Try** | Complete one of three short scenario missions |
 | **3. Explore** | The rule engine checks the evidence and returns zero to three routes |
-| **4. Compare** | Compare every route using the same five criteria |
+| **4. Compare** | Compare every route using the same three scored criteria, with practical estimates labelled separately |
 | **5. Act** | Choose one route to explore through a reversible 30-day plan |
 
 ### Recommendation logic
 
 The current design weights are:
 
-`Interests 30% · Feasibility 25% · Mission evidence 20% · Learning style 15% · Flexibility 10%`
+`Interests 50% · Mission evidence 30% · Learning-environment affinity 20%`
+
+The last component is a team-defined projection of the same interview profile onto a route's
+learning environment. It is not a learning-styles test and is not independent evidence.
 
 The engine can refuse to recommend, show ties, and identify contradictions. These weights are
 product rules, not validated psychometric findings.
+
+Cost, relocation, time-to-earning, and flexibility are unverified planning prompts. They remain
+visible for discussion but do not score, rank, or remove a route.
 
 ### AI, privacy, and data flow
 
@@ -158,8 +164,9 @@ current product name is **FutureMe AI**.
 ### 🟡 Needs validation
 
 - The question set and Thai adaptation have not been validated with real students.
-- Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates.
-- Route and programme metadata need recurring source review; nearby-source dates and checksums are recorded in the geography provenance file.
+- Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates; the first four are held out of route decisions.
+- The institution register keeps 207 missing or quarantined coordinates and 987 missing websites as unknown instead of inventing values.
+- Route and programme metadata need recurring source review; source dates, full checksums, and automated integrity checks are recorded with the geography data.
 - Research has passed a first source audit, not a guarantee of permanent accuracy.
 - Automated integration checks pass, but source-data review and a real-student pilot are still required.
 
@@ -242,8 +249,9 @@ parameters fitted to outcome data; automated tests verify implementation behavio
 
 The seeded catalogue records a source status, source URL, and last-verified date per route, plus a
 catalogue-wide `dataAsOf` date and 180-day freshness threshold. The UI warns when data is stale and
-identifies unsourced fields. Cost, relocation, time-to-earning, flexibility, strengths, and
-limitations are currently team estimates and must be replaced before a pilot. See the
+identifies unsourced fields. Cost, relocation, time-to-earning, and flexibility are held out of
+decisions; strengths and limitations remain illustrative copy. The geography registry records full
+checksums and `npm run check:data` verifies its cross-file integrity. See the
 [source review](03_WebApp/Pre_Present/docs/09-source-review.md).
 </details>
 

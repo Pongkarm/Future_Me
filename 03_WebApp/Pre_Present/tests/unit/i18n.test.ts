@@ -21,6 +21,15 @@ import { format, localised } from "@/lib/i18n";
 
 const THAI = /[฀-๿]/;
 
+describe("practical-data warnings", () => {
+  it("never claims that unsourced estimates decide routes", () => {
+    expect(en.compare.caveat).toContain("does not use them to score, rank, remove, or prefer a route");
+    expect(th.compare.caveat).toContain("ไม่ใช้ข้อมูลเหล่านี้ให้คะแนน จัดลำดับ ตัดออก");
+    expect(en.compare.caveat).not.toMatch(/used to rule routes in or out/i);
+    expect(th.compare.caveat).not.toContain("ใช้คัดเส้นทางเข้าออก");
+  });
+});
+
 /** Collects every `{en, th}` pair in a tree, with a path for the failure message. */
 function collectLocalised(node: unknown, path = "", out: [string, { en: string; th: string }][] = []) {
   if (node === null || typeof node !== "object") return out;

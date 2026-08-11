@@ -1,13 +1,20 @@
 {
  "generated": "2026-08-10",
  "generated_by": "01_Research/Geography_and_Access/build/*.py",
+ "reviewed": "2026-08-11",
+ "integrity": {
+  "algorithm": "SHA-256",
+  "scope": "exact repository bytes",
+  "checked": "2026-08-11",
+  "validator": "03_WebApp/Pre_Present/scripts/validate-research-data.mjs"
+ },
  "policy": "ทุกชุดเป็น conditional ตาม 00_Governance/SOURCE_POLICY.md — ตัวเลขเป็นของปีที่ระบุ ไม่ใช่ค่าถาวร",
  "datasets": [
   {
    "file": "data/provinces.json",
-   "bytes": 17779,
+   "bytes": 28607,
    "rows": 77,
-   "sha256": "4e73e2a43c11d435",
+   "sha256": "489114440109eb62bbfe178652b741aed9a506a25edffe66e604471fcdcdf52d",
    "source": "Wikidata SPARQL (P300 ISO 3166-2:TH)",
    "endpoint": "https://query.wikidata.org/sparql",
    "retrieved": "2026-08-06",
@@ -18,36 +25,43 @@
    "file": "data/institutions.json",
    "bytes": 918383,
    "rows": 1417,
-   "sha256": "1c7fcec8a8c32fb8",
+   "sha256": "1c7fcec8a8c32fb84cb8ceef3bc413e60a7ac19a5f5d8bcf418d513f8f263da9",
    "source": [
     "ckan.vec.go.th publicschool (ข้อมูลที่ตั้งสถานศึกษาอาชีวศึกษาภาครัฐ)",
     "ckan.vec.go.th privateschool (ข้อมูลที่ตั้งสถานศึกษาอาชีวศึกษาภาคเอกชน)",
     "data.mhesi.go.th univ_uni_11_01 (รายชื่อสถาบันอุดมศึกษา ปีการศึกษา 2566 จำแนกตามกลุ่ม ประเภทวิทยาเขต จังหวัด และพิกัด)"
    ],
-   "source_url": "https://data.mhesi.go.th/dataset/5d5c4958-9e36-41ae-a637-1b31148a1143/resource/a80acd99-86bf-4a58-81ea-58167b2679e3/download/univ_uni_11_01_2566.xlsx",
+   "source_pages": [
+    "https://ckan.vec.go.th/en/dataset/publicschool",
+    "https://ckan.vec.go.th/en/dataset/privateschool",
+    "https://data.mhesi.go.th/dataset/5d5c4958-9e36-41ae-a637-1b31148a1143/resource/a80acd99-86bf-4a58-81ea-58167b2679e3/download/univ_uni_11_01_2566.xlsx"
+   ],
    "source_sha256": "5d18193cf2c26cc1653a8ed135d18e4b5ad8c0ecbac4932582959e1c1f4d4582",
    "retrieved": "2026-08-10",
-   "license": "ทะเบียนภาครัฐไทยเผยแพร่เป็น open data",
-   "note": "อว. ปีการศึกษา 2566 ให้จังหวัดและพิกัดของวิทยาเขตในทะเบียนโดยตรง; พิกัดยังผ่านการตรวจและกักกันด้วย repair_coords.py"
+   "source_checked": "2026-08-11",
+   "license": "หน้า VEC ระบุว่า License not specified; สัญญาอนุญาตของทรัพยากร อว. ยังไม่ได้ตรวจยืนยันซ้ำในรอบนี้",
+   "note": "อว. ปีการศึกษา 2566 ให้จังหวัดและพิกัดของวิทยาเขตในทะเบียนโดยตรง; พิกัดยังผ่านการตรวจและกักกันด้วย repair_coords.py; ก่อนนำข้อมูลไปเผยแพร่ซ้ำต้องตรวจเงื่อนไขของแต่ละแหล่งอีกครั้ง"
   },
   {
    "file": "data/stations.json",
-   "bytes": 285912,
+   "bytes": 297763,
    "rows": 891,
-   "sha256": "cbe114a862c22320",
+   "sha256": "23fc077271c840a53edc2d26f0a0c3836f81207d4b1a15508dc3da72c06e78e3",
    "source": "Wikidata SPARQL (P31/P279* station, P17 Thailand)",
    "retrieved": "2026-08-06",
    "license": "CC0-1.0",
-   "note": "ตัดสนามบิน ท่าเรือสินค้า ฐานทัพ คลังก๊าซ และสถานีสินค้า 46 จุดออก เหลือเฉพาะขนส่งผู้โดยสาร"
+   "note": "เก็บจุดขนส่งผู้โดยสารรวมถึงสนามบิน 64 จุด; ตัดฐานทัพอากาศ ท่าเรือสินค้า คลังเชื้อเพลิง สถานีสินค้า และชนิดที่ระบุไม่ได้ 46 จุดออก"
   },
   {
    "file": "data/vocational_outcomes.json",
-   "bytes": 1492699,
+   "bytes": 1549766,
    "rows": 1014,
-   "sha256": "52c6a5dc650f21fc",
+   "sha256": "1948abd602b829eb3377af62c0c52e71525ade44a5974ec639e15ebc14bebf62",
    "source": "ckan.vec.go.th employment (ภาวะการมีงานทำของผู้สำเร็จการศึกษาอาชีวศึกษา ปีการศึกษา 2566)",
+   "source_url": "https://ckan.vec.go.th/en/dataset/employment",
    "retrieved": "2026-08-06",
-   "license": "open data ของ สอศ.",
+   "source_checked": "2026-08-11",
+   "license": "Open Data Common (ตามหน้า dataset ของ สอศ.)",
    "note": "เปอร์เซ็นต์คิดจากผู้ที่ติดตามได้ ไม่ใช่ผู้สำเร็จการศึกษาทั้งหมด; ระงับเปอร์เซ็นต์เมื่อ tracked<10; ติดธงและใส่ช่วงเชื่อมั่นเมื่อ tracked<30",
    "prohibited_use": "ห้ามใช้จัดอันดับสาขาวิชาหรือจังหวัด"
   },
@@ -65,7 +79,7 @@
    "file": "data/quarantine_coordinates.json",
    "bytes": 3186,
    "rows": 10,
-   "sha256": "c2777b092f619314",
+   "sha256": "c2777b092f619314726622d0da5681ccf4cf5b64bfb4ce4b85ecf2fe38b24ece",
    "source": "ผลการตรวจสอบใน build/repair_coords.py",
    "retrieved": "2026-08-10",
    "license": "n/a",

@@ -473,7 +473,7 @@ function DataFreshness({ t }: { t: Dictionary }) {
         </div>
         <div className="flex flex-wrap gap-x-2">
           <dt className="font-semibold">{t.routes.notSourced}</dt>
-          <dd className="text-muted">
+          <dd className="text-muted" data-testid="routes-practical-data-notice">
             {format(t.routes.notSourcedBody, {
               fields: unsourced
                 .map((field) => t.routes.fieldNames[field as keyof typeof t.routes.fieldNames] ?? field)

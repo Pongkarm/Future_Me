@@ -16,7 +16,8 @@
     "test:e2e:install": "playwright install --with-deps chromium",
     "sync:mascot": "node scripts/sync-mascot.mjs",
     "check:mascot": "node scripts/sync-mascot.mjs --check",
-    "verify": "npm run check:mascot && npm run typecheck && npm run lint && npm test && npm run build",
+    "check:data": "node scripts/validate-research-data.mjs",
+    "verify": "npm run check:mascot && npm run check:data && npm run typecheck && npm run lint && npm test && npm run build",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "analyse": "node scripts/analyse.ts",
     "simulate": "node scripts/simulate-pilot.ts"

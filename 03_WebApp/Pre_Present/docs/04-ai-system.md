@@ -103,7 +103,11 @@ rather than averaged away.
 |---|--:|---|
 | Interests | 50% | RIASEC profile from the interview |
 | Strengths | 30% | Mission evidence — neutral 50 when no mission is complete |
-| Learning style | 20% | Route learning style against the profile |
+| Learning-environment affinity | 20% | The interview profile projected onto the route's learning environment |
+
+The affinity component is **not a learning-styles assessment and not independent evidence**. It
+is a team-defined second projection of the same interview profile onto a route's learning
+environment. Mission evidence is the separate behavioural signal.
 
 **Practical route fields are held back.** The catalogue currently has no verified programme-level
 source for cost, relocation, time-to-earning, or flexibility. These values remain visible as

@@ -260,3 +260,34 @@ describe("parity with the Python reference", () => {
     }
   });
 });
+
+describe("travel distance on the result", () => {
+  const practical = (() => {
+    const answers: Record<string, number> = {};
+    for (const item of questions.interest) {
+      answers[item.id] = ["R", "I"].includes(item.dimension) ? 5 : 1;
+    }
+    return answers;
+  })();
+
+  it("carries the road distance the score was computed from", () => {
+    // The card shows this number, so the engine has to return it rather than
+    // consume it privately — a reader cannot check a figure they cannot see.
+    const result = recommendProgrammes(practical, {
+      provinceIso: "TH-50",
+      mobility: "local_only",
+    });
+    expect(result.top.length).toBeGreaterThan(0);
+    const withDistance = result.top.filter((r) => r.travel.km !== null);
+    expect(withDistance.length).toBeGreaterThan(0);
+    for (const row of withDistance) {
+      expect(row.travel.km).toBeGreaterThanOrEqual(0);
+      expect(row.travel.band).toBeTruthy();
+    }
+  });
+
+  it("leaves distance null rather than guessing when the province is unknown", () => {
+    const result = recommendProgrammes(practical, {});
+    for (const row of result.top) expect(row.travel.km).toBeNull();
+  });
+});

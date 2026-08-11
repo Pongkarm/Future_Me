@@ -11,6 +11,7 @@ import {
   type ScoredProgramme,
 } from "@/lib/recommend";
 import type { InterviewInput } from "@/lib/decision-engine/types";
+import { BAND_KEY } from "@/lib/geo/types";
 import { format, type Dictionary } from "@/lib/i18n";
 
 /**
@@ -77,6 +78,20 @@ function ProgrammeCard({
           <p className="mt-0.5 text-sm text-muted">
             {p.institutionTh} · {p.provinceTh}
           </p>
+          {/*
+            The distance in kilometres, next to what that distance means for a
+            learner who cannot drive. The score already used this number; a
+            reader could not see it. "12 กม. · เดินหรือปั่นจักรยานไปได้" decides
+            more than "บริบท +13.2" does.
+          */}
+          {row.travel.km !== null && (
+            <p className="mt-0.5 text-xs text-muted">
+              {format(t.nearby.kmAway, { km: row.travel.km.toFixed(1) })}
+              {row.travel.band && row.travel.band in BAND_KEY
+                ? ` · ${t.nearby[BAND_KEY[row.travel.band as keyof typeof BAND_KEY]]}`
+                : ""}
+            </p>
+          )}
         </div>
         {/*
           The interest x efficacy quadrant is shown only when efficacy was
@@ -254,6 +269,10 @@ export function ProgrammeMatches({
         })}{" "}
         {t.routes.programmesUnknownNote}
       </p>
+
+      {/* Said once at the foot rather than on every card: it is a property
+          of how the whole list was measured, not of any one programme. */}
+      <p className="mt-1 text-xs text-muted">{t.routes.programmesDistanceCaveat}</p>
     </section>
   );
 }

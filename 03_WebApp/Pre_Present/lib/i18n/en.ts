@@ -524,6 +524,7 @@ export const en = {
   },
 
   routes: {
+    programmesDistanceCaveat: "Distances are measured from your provincial centre, not your home — a border district could be far further. Good for comparing options, not for planning a journey.",
     programmesSite: "Institution website — check fees and entry requirements at the source",
     programmesSearch: "Search for the fee announcement of this institution (no official URL in the register)",
     programmesTitle: "The programmes that fit you best",

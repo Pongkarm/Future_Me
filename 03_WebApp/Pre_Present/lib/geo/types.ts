@@ -87,3 +87,18 @@ const PROVINCE_CODE = /^TH-\d{2}$/;
 export function isProvinceCode(value: unknown): value is string {
   return typeof value === "string" && PROVINCE_CODE.test(value);
 }
+
+/**
+ * Travel band to its dictionary key. Lives here rather than in a component
+ * because two screens now describe the same distance — the nearby list and the
+ * programme cards — and they must word it identically or the reader will think
+ * they are being told two different things.
+ */
+export const BAND_KEY = {
+  walkable: "bandWalkable",
+  local: "bandLocal",
+  commute: "bandCommute",
+  hard_commute: "bandHardCommute",
+  relocate: "bandRelocate",
+  unknown_distance: "bandUnknown",
+} as const;

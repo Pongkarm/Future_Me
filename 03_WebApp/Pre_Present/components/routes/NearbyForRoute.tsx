@@ -4,6 +4,7 @@ import { usePreferences } from "@/components/PreferencesProvider";
 import { format } from "@/lib/i18n";
 import { nearbyForRoute } from "@/lib/geo/route-institutions";
 import type { NearbyProvince } from "@/lib/geo/types";
+import { BAND_KEY } from "@/lib/geo/types";
 
 /**
  * Where a learner could actually do this route, shown under the route itself.
@@ -74,11 +75,4 @@ export function NearbyForRoute({
   );
 }
 
-const BAND_KEY = {
-  walkable: "bandWalkable",
-  local: "bandLocal",
-  commute: "bandCommute",
-  hard_commute: "bandHardCommute",
-  relocate: "bandRelocate",
-  unknown_distance: "bandUnknown",
-} as const;
+

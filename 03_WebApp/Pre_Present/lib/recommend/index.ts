@@ -49,8 +49,15 @@ export interface ContextResult {
   unknown: string[];
 }
 
+export interface Travel {
+  /** Road distance from the learner's provincial centre, not from their home. */
+  km: number | null;
+  band: string | null;
+}
+
 export interface ScoredProgramme {
   programme: Programme;
+  travel: Travel;
   congruence: number;
   efficacy: number | null;
   efficacyDimensions: Dimension[];
@@ -100,13 +107,21 @@ export interface LearnerContext {
 interface NearbyOption {
   id: string;
   km: number | null;
+  band?: string;
 }
 
-function accessIndex(provinceIso: string | undefined): Map<string, number | null> {
-  const map = new Map<string, number | null>();
+/**
+ * How far each institution is from the learner's province, by road.
+ *
+ * The band travels alongside the kilometres because the two say different
+ * things: 40 km is a number, "ไปกลับได้ แต่กินเวลาและค่าเดินทางทุกวัน" is the
+ * decision. Both go on the card.
+ */
+function accessIndex(provinceIso: string | undefined): Map<string, NearbyOption> {
+  const map = new Map<string, NearbyOption>();
   if (!provinceIso) return map;
   const entry = (nearbyData as Record<string, { options?: NearbyOption[] }>)[provinceIso];
-  for (const option of entry?.options ?? []) map.set(option.id, option.km);
+  for (const option of entry?.options ?? []) map.set(option.id, option);
   return map;
 }
 
@@ -171,13 +186,13 @@ export function quadrantOf(congruence: number, efficacy: number | null): Quadran
 function contextFit(
   programme: Programme,
   learner: LearnerContext,
-  access: Map<string, number | null>,
+  access: Map<string, NearbyOption>,
 ): ContextResult {
   const known: Partial<Record<ContextKey, number>> = {};
   const unknown: string[] = [];
 
-  const km = access.get(programme.institutionId);
-  if (km !== undefined && km !== null) {
+  const km = access.get(programme.institutionId)?.km ?? null;
+  if (km !== null) {
     // Bands from Geography_and_Access/build/build_access.py — daily return
     // travel by someone who cannot drive a car.
     if (km <= 3) known.access = 1;
@@ -300,11 +315,13 @@ export function recommendProgrammes(
       continue;
     }
 
+    const nearby = access.get(programme.institutionId);
     const context = contextFit(programme, learner, access);
     const contextComponent = CONTEXT_MAX * (context.score ?? 0);
 
     scored.push({
       programme,
+      travel: { km: nearby?.km ?? null, band: nearby?.band ?? null },
       congruence,
       efficacy,
       efficacyDimensions: dimensions,

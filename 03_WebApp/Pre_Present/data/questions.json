@@ -15,7 +15,8 @@
       "reverseKeyed": 0,
       "efficacy": 6
     },
-    "efficacyNote": "ข้อ efficacy อยู่คนละอาร์เรย์โดยเจตนา — scoring ของมันคือ none จึงต้องไม่มีทางถูกนับเข้าคะแนนความสนใจได้เลย การแยกโครงสร้างบังคับข้อนี้ แทนที่จะอาศัยว่าโค้ดจะจำ"
+    "efficacyNote": "ข้อ efficacy อยู่คนละอาร์เรย์โดยเจตนา — scoring ของมันคือ none จึงต้องไม่มีทางถูกนับเข้าคะแนนความสนใจได้เลย การแยกโครงสร้างบังคับข้อนี้ แทนที่จะอาศัยว่าโค้ดจะจำ",
+    "scaleConfidenceNote": "ข้อ efficacy ถามว่า 'ทำได้ดีแค่ไหน' จึงต้องใช้ป้ายคำตอบคนละชุดกับ 'ชอบ/ไม่ชอบ' การใช้สเกลเดียวกันจะเป็นบั๊กเชิงถ้อยคำ ไม่ใช่แค่เรื่องสวยงาม"
   },
   "interest": [
     {
@@ -578,6 +579,43 @@
         "en": "If someone taught you, how well do you think you could do work that has to be accurate in every detail?"
       },
       "scaleId": "scale5-confidence"
+    }
+  ],
+  "scaleConfidence": [
+    {
+      "value": 1,
+      "label": {
+        "en": "Not at all",
+        "th": "ทำไม่ได้เลย"
+      }
+    },
+    {
+      "value": 2,
+      "label": {
+        "en": "A little",
+        "th": "ทำได้นิดหน่อย"
+      }
+    },
+    {
+      "value": 3,
+      "label": {
+        "en": "Not sure",
+        "th": "ไม่แน่ใจ"
+      }
+    },
+    {
+      "value": 4,
+      "label": {
+        "en": "Fairly well",
+        "th": "ทำได้ค่อนข้างดี"
+      }
+    },
+    {
+      "value": 5,
+      "label": {
+        "en": "Very well",
+        "th": "ทำได้ดีมาก"
+      }
     }
   ]
 }

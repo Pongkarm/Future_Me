@@ -63,11 +63,31 @@ interface InterestQuestion {
   id: string;
   dimension: string;
   text: Localised;
+  /** Present on the self-efficacy items, which answer "how well", not "how much do you like". */
+  scaleId?: string;
 }
 
 const CONTEXT_QUESTIONS = questions.context as ContextQuestion[];
-const INTEREST_QUESTIONS = questions.interest as InterestQuestion[];
+/*
+ * Interest items and self-efficacy items share one list because they share
+ * everything that matters to this screen: a 1..5 answer, stored under the same
+ * key, resumed and reviewed the same way. They differ only in what the five
+ * points are called — "how much would you like this" against "how well could
+ * you do this" — so only the label lookup branches. Putting efficacy in a
+ * second list would have meant every index calculation on this page learning
+ * about it.
+ */
+const INTEREST_QUESTIONS = [
+  ...(questions.interest as InterestQuestion[]),
+  ...((questions as { efficacy?: InterestQuestion[] }).efficacy ?? []),
+];
 const SCALE = questions.scale as { value: LikertValue; label: Localised }[];
+const SCALE_CONFIDENCE = (questions as { scaleConfidence?: typeof SCALE }).scaleConfidence ?? SCALE;
+
+/** The five points as this item words them. */
+function scaleFor(q: InterestQuestion) {
+  return q.scaleId === "scale5-confidence" ? SCALE_CONFIDENCE : SCALE;
+}
 
 type Step =
   | { kind: "interest"; q: InterestQuestion }
@@ -732,7 +752,7 @@ function clearTimer(ref: React.MutableRefObject<ReturnType<typeof setTimeout> | 
 }
 
 function optionsForStep(step: Step, lang: Language): string[] | undefined {
-  if (step.kind === "interest") return SCALE.map((point) => localised(point.label, lang));
+  if (step.kind === "interest") return scaleFor(step.q).map((point) => localised(point.label, lang));
   if (step.kind === "context" && step.q.type !== "text") {
     return (step.q.options ?? []).map((option) => localised(option.label, lang));
   }
@@ -742,7 +762,7 @@ function optionsForStep(step: Step, lang: Language): string[] | undefined {
 function replyForStep(session: GuestSession, step: Step, lang: Language): string {
   if (step.kind === "interest") {
     const value = session.interview.interest[step.q.id];
-    const point = SCALE.find((candidate) => candidate.value === value);
+    const point = scaleFor(step.q).find((candidate) => candidate.value === value);
     return point ? localised(point.label, lang) : "";
   }
   if (step.kind === "context") {
@@ -823,7 +843,7 @@ function reviewSections(
 ): ReviewSection[] {
   const interest = INTEREST_QUESTIONS.map((q, i) => {
     const value = session.interview.interest[q.id];
-    const point = SCALE.find((s) => s.value === value);
+    const point = scaleFor(q).find((s) => s.value === value);
     return {
       id: q.id,
       question: localised(q.text, lang),

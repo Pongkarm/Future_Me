@@ -53,6 +53,17 @@ export interface Travel {
   /** Road distance from the learner's provincial centre, not from their home. */
   km: number | null;
   band: string | null;
+  /**
+   * How the trip could actually be made. This matters more than the distance
+   * to someone who cannot drive, which is everyone this product is for.
+   *
+   * `drive_minutes` is deliberately left out. Geography_and_Access is explicit
+   * that it is car time and "ไม่ใช่เวลาที่เด็กใช้จริง" — most learners wait for
+   * a สองแถว — so printing it would be a precise number about the wrong
+   * journey.
+   */
+  modes: string[];
+  district: string | null;
 }
 
 export interface ScoredProgramme {
@@ -119,6 +130,8 @@ interface NearbyOption {
   id: string;
   km: number | null;
   band?: string;
+  modes?: string[];
+  district?: string | null;
 }
 
 /**
@@ -342,7 +355,12 @@ export function recommendProgrammes(
 
     scored.push({
       programme,
-      travel: { km: nearby?.km ?? null, band: nearby?.band ?? null },
+      travel: {
+        km: nearby?.km ?? null,
+        band: nearby?.band ?? null,
+        modes: nearby?.modes ?? [],
+        district: nearby?.district ?? null,
+      },
       congruence,
       efficacy,
       efficacyDimensions: dimensions,

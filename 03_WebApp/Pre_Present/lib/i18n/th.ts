@@ -522,6 +522,7 @@ export const th: Dictionary = {
   },
 
   routes: {
+    programmesModes: "ไปได้ด้วย",
     programmesNoneAfterFilter: "ไม่มีหลักสูตรที่ผ่านเกณฑ์ตามตัวกรองนี้ ลองเอาตัวกรองออกสักอัน",
     programmesCost: "รัฐลงทุนกับหลักสูตรนี้ {baht} บาท/คน/ปี — เป็นต้นทุนการผลิต ไม่ใช่ค่าเทอมที่คุณจ่าย",
     programmesOutcome: "ผู้จบสาขานี้ใน{province} ระดับ{level}: ทำงาน {working}% · เรียนต่อ {studying}%",

@@ -524,6 +524,7 @@ export const en = {
   },
 
   routes: {
+    programmesModes: "Get there by",
     programmesNoneAfterFilter: "No programme clears the bar with these filters. Try removing one.",
     programmesCost: "The state spends {baht} baht per student per year on this programme — production cost, not the tuition you pay",
     programmesOutcome: "Graduates of this field in {province}, {level}: working {working}% · studying on {studying}%",

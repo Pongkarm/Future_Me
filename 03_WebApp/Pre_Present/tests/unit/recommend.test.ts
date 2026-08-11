@@ -340,3 +340,22 @@ describe("employment outcomes", () => {
     }
   });
 });
+
+describe("travel modes", () => {
+  it("carries how the trip could be made, and never the driving time", () => {
+    // drive_minutes is car time. Geography_and_Access says plainly it is not
+    // the time a learner spends — most wait for a สองแถว — so the engine does
+    // not pass it on. A precise number about the wrong journey is worse than
+    // no number.
+    const a: Record<string, number> = {};
+    for (const q of questions.interest) a[q.id] = q.dimension === "R" ? 5 : 1;
+    const result = recommendProgrammes(a, { provinceIso: "TH-50", tier: "LOWER_SECONDARY" });
+    const reachable = result.top.filter((r) => r.travel.km !== null);
+    expect(reachable.length).toBeGreaterThan(0);
+    for (const row of reachable) {
+      expect(Array.isArray(row.travel.modes)).toBe(true);
+      expect(row.travel).not.toHaveProperty("minutes");
+    }
+    expect(reachable.some((r) => r.travel.modes.length > 0)).toBe(true);
+  });
+});

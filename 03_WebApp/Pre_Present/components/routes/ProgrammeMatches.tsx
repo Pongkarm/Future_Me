@@ -94,10 +94,21 @@ function ProgrammeCard({
           */}
           {row.travel.km !== null && (
             <p className="mt-0.5 text-xs text-muted">
+              {row.travel.district ? `อ.${row.travel.district} · ` : ""}
               {format(t.nearby.kmAway, { km: row.travel.km.toFixed(1) })}
               {row.travel.band && row.travel.band in BAND_KEY
                 ? ` · ${t.nearby[BAND_KEY[row.travel.band as keyof typeof BAND_KEY]]}`
                 : ""}
+            </p>
+          )}
+          {/* How the trip is actually made. Already collected and already
+              translated; it had simply never reached a screen. */}
+          {row.travel.modes.length > 0 && (
+            <p className="mt-0.5 text-xs text-muted">
+              {t.routes.programmesModes}{" "}
+              {row.travel.modes
+                .map((m) => (t.nearby.modes as Record<string, string>)[m] ?? m)
+                .join(" · ")}
             </p>
           )}
         </div>

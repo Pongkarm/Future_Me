@@ -22,21 +22,20 @@
 
 .claude/
 
-# The live clone of the teammate repository, kept locally so its branches and
-# open PR still work. Its history lives at github.com/Pongkarm/Future_Me and its
-# webapp is the same one published here under 03_WebApp/Pre_Present — two copies
-# in one repository is how the stale one ends up being the one that gets run.
-#
-# Only the clone is ignored. Everything that existed nowhere else — the
-# governance, evidence and business material in FutureMe_Consolidated/, and
-# reports/futureme-ai-infrastructure/ — has been lifted up beside it and is
-# tracked here.
-05_Team_Repo/Future_Me_Pongkarm/
+# Local clones, experiments, and historical workspaces are not product source.
+/05_Team_Repo/
+/FutureMe_Web_Design_Concepts/
+/work/
+/90_Archive/
+/99-Model/
+/99_Process/
 
-# A recording of a real teacher's voice. It stays in the working folder, but a
-# public repository is not something they agreed to, and once it is pushed the
-# caches and forks are not ours to clear.
-06_Assets/Advice_from_the_teacher.m4a
+# Generated deliverables that can be rebuilt from tracked source files.
+/Presentation/rendered/
+/02_Backend/USER_MANUAL.pdf
+
+# Recordings of identifiable people must not enter public history without consent.
+/06_Assets/Advice_from_the_teacher.m4a
 
 # Office lock files
 ~$*

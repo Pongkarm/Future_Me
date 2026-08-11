@@ -18,6 +18,8 @@
   &nbsp;·&nbsp;
   <a href="#current-status">Current status</a>
   &nbsp;·&nbsp;
+  <a href="#repository-guide">Repository</a>
+  &nbsp;·&nbsp;
   <a href="#run-locally">Run locally</a>
   &nbsp;·&nbsp;
   <a href="#quick-faq">FAQ</a>
@@ -176,6 +178,26 @@ current product name is **FutureMe AI**.
 - Parent and counsellor dashboards
 - Live school, TCAS, NDLP/DEEP, or AIS API integration
 - Production RAG, cloud deployment, ethics approval, and a real-student pilot
+
+---
+
+<a id="repository-guide"></a>
+
+## Repository guide
+
+Only the active product, evidence, and reproducible deliverables remain:
+
+| Path | Purpose |
+|---|---|
+| [`01_Research/`](01_Research/) | Audited evidence, questionnaire research, and geography/data pipelines |
+| [`02_Backend/`](02_Backend/) | Separate FastAPI prototype and tests |
+| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | Current runnable FutureMe product and its automated tests |
+| [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | Canonical mascot assets synchronized into the web app |
+| [`Presentation/`](Presentation/) | Editable deck, PDF, generator, and QA notes |
+
+Historical snapshots, superseded design concepts, generated renders, private source media, and
+agent working logs are intentionally excluded from this branch. Deleted tracked files remain
+recoverable from Git history.
 
 ---
 

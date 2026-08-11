@@ -4,9 +4,9 @@
 
 ---
 
-This repository publishes **rewritten English summaries** of the project's research base. The
-original source materials are not included here. This document records what exists, what was
-published, and why the rest stayed private.
+This repository publishes **rewritten English summaries** and a curated subset of the project's
+research base. It does not contain every raw team source. This document records what is retained,
+what was summarized, and what was excluded.
 
 ## What the research base contains
 
@@ -22,9 +22,10 @@ Seven categories of Thai-language research documents, assembled before design wo
 | **06** AIS Cloud and infrastructure | Cloud architecture, CAMARA Open APIs, roadmap DAG algorithm | [02 · Research §6](../docs/02-research-and-evidence.md), [05 · Architecture](../docs/05-system-architecture.md) |
 | **07** System blueprints and flowcharts | Master operations flowchart, six sub-system flowcharts, implementation plan | [05 · Architecture](../docs/05-system-architecture.md) |
 
-Alongside these are a design library of eleven web concepts with wireframes, mockups and
-prototypes, plus internal backend and retrieval blueprints. The FastAPI, Qdrant and PostgreSQL
-designs are not code in this repository.
+The design process compared eleven web concepts before selecting Aurora; the superseded galleries
+are available in Git history rather than the active tree. A separate
+[FastAPI prototype](../../../02_Backend/) is retained but is not connected to the runnable web
+journey. Qdrant and PostgreSQL remain planned production components, not implemented services.
 
 ## What was published
 
@@ -39,7 +40,6 @@ designs are not code in this repository.
 | Raw Thai research documents and their PDF exports | Unpublished team research; summarised rather than reproduced |
 | Advisor audio recording | A private recording of an identifiable person, shared for team use only |
 | Internal agent and workflow notes | Working process artefacts with no value to a reader |
-| Pitch deck and brief PDFs | Competition materials, not yet public |
 | QLoRA training and test datasets | Known to be defective — identical files, ten examples each. Publishing them would invite misuse. The defect is documented in [04 · AI System](../docs/04-ai-system.md). |
 | Remaining ten design concepts | Superseded by the Aurora direction; the comparison is summarised in [03 · User Experience](../docs/03-user-experience.md) |
 

@@ -1,6 +1,6 @@
 # Presentation QA
 
-Reviewed: 30 July 2026
+Reviewed: 11 August 2026
 
 ## Content
 

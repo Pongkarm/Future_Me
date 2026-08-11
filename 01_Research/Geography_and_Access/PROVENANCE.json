@@ -4,7 +4,7 @@
  "reviewed": "2026-08-11",
  "integrity": {
   "algorithm": "SHA-256",
-  "scope": "exact repository bytes",
+  "scope": "UTF-8 bytes with CRLF normalized to LF",
   "checked": "2026-08-11",
   "validator": "03_WebApp/Pre_Present/scripts/validate-research-data.mjs"
  },
@@ -12,9 +12,9 @@
  "datasets": [
   {
    "file": "data/provinces.json",
-   "bytes": 28607,
+   "bytes": 27528,
    "rows": 77,
-   "sha256": "489114440109eb62bbfe178652b741aed9a506a25edffe66e604471fcdcdf52d",
+   "sha256": "1d398380425c00fefdb7e49c386b850ca28af6e99c36ebc2b7140c351885e64e",
    "source": "Wikidata SPARQL (P300 ISO 3166-2:TH)",
    "endpoint": "https://query.wikidata.org/sparql",
    "retrieved": "2026-08-06",
@@ -23,9 +23,9 @@
   },
   {
    "file": "data/institutions.json",
-   "bytes": 918383,
+   "bytes": 888582,
    "rows": 1417,
-   "sha256": "1c7fcec8a8c32fb84cb8ceef3bc413e60a7ac19a5f5d8bcf418d513f8f263da9",
+   "sha256": "c6c98827175a747e95b762a5e0915851f4109838aaff8d93cb5e40ac08515cb0",
    "source": [
     "ckan.vec.go.th publicschool (ข้อมูลที่ตั้งสถานศึกษาอาชีวศึกษาภาครัฐ)",
     "ckan.vec.go.th privateschool (ข้อมูลที่ตั้งสถานศึกษาอาชีวศึกษาภาคเอกชน)",
@@ -44,9 +44,9 @@
   },
   {
    "file": "data/stations.json",
-   "bytes": 297763,
+   "bytes": 285912,
    "rows": 891,
-   "sha256": "23fc077271c840a53edc2d26f0a0c3836f81207d4b1a15508dc3da72c06e78e3",
+   "sha256": "cbe114a862c223203a910866f42a756c5d5bb2935c910ee2ad7bb628b24fb642",
    "source": "Wikidata SPARQL (P31/P279* station, P17 Thailand)",
    "retrieved": "2026-08-06",
    "license": "CC0-1.0",
@@ -54,9 +54,9 @@
   },
   {
    "file": "data/vocational_outcomes.json",
-   "bytes": 1549766,
+   "bytes": 1492699,
    "rows": 1014,
-   "sha256": "1948abd602b829eb3377af62c0c52e71525ade44a5974ec639e15ebc14bebf62",
+   "sha256": "52c6a5dc650f21fcc71bb5a8ee55d65e485fb5b6ab13c703c8015a0ed44e6564",
    "source": "ckan.vec.go.th employment (ภาวะการมีงานทำของผู้สำเร็จการศึกษาอาชีวศึกษา ปีการศึกษา 2566)",
    "source_url": "https://ckan.vec.go.th/en/dataset/employment",
    "retrieved": "2026-08-06",
@@ -77,9 +77,9 @@
   },
   {
    "file": "data/quarantine_coordinates.json",
-   "bytes": 3186,
+   "bytes": 3085,
    "rows": 10,
-   "sha256": "c2777b092f619314726622d0da5681ccf4cf5b64bfb4ce4b85ecf2fe38b24ece",
+   "sha256": "7dcaac6d5e4066477372f785790a4e031597e367dbbac96c270275482947c358",
    "source": "ผลการตรวจสอบใน build/repair_coords.py",
    "retrieved": "2026-08-10",
    "license": "n/a",

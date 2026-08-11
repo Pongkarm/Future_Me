@@ -36,8 +36,8 @@ function sameMembers(left, right, label) {
 const provenance = readJson(join(geoRoot, "PROVENANCE.json"));
 check(provenance.integrity?.algorithm === "SHA-256", "PROVENANCE integrity algorithm must be SHA-256");
 check(
-  provenance.integrity?.scope === "exact repository bytes",
-  "PROVENANCE must define checksums over exact repository bytes",
+  provenance.integrity?.scope === "UTF-8 bytes with CRLF normalized to LF",
+  "PROVENANCE must define cross-platform normalized checksums",
 );
 
 const datasets = new Map(provenance.datasets.map((entry) => [entry.file, entry]));
@@ -46,7 +46,8 @@ function checkedDataset(relativeFile) {
   const entry = datasets.get(`data/${relativeFile}`);
   check(Boolean(entry), `PROVENANCE is missing data/${relativeFile}`);
   const path = join(dataRoot, relativeFile);
-  const bytes = readFileSync(path);
+  const rawBytes = readFileSync(path);
+  const bytes = Buffer.from(rawBytes.toString("utf8").replace(/\r\n/g, "\n"), "utf8");
   const hash = createHash("sha256").update(bytes).digest("hex");
   check(Number.isInteger(entry?.bytes), `data/${relativeFile} has no byte count`);
   check(entry?.bytes === bytes.length, `data/${relativeFile} byte count is ${bytes.length}, not ${entry?.bytes}`);

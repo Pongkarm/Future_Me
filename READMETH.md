@@ -3,7 +3,7 @@
 **README:** [EN](README.md) · **[TH](READMETH.md)**
 
 <p align="center">
-  <img src="03_WebApp/Pre_Present/assets/banner/banner.png" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
+  <img src="03_WebApp/assets/banner/banner.png" alt="FutureMe AI — สำรวจก้าวต่อไป ไม่ใช่ฟันธงคำตอบเดียว" width="100%">
 </p>
 
 # FutureMe AI
@@ -55,16 +55,16 @@ FutureMe เป็นต้นแบบเครื่องมือช่ว�
     <th>สัมภาษณ์ความสนใจ</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png" alt="หน้าเริ่มต้นล่าสุดของ FutureMe" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png" alt="หน้าสัมภาษณ์ล่าสุดที่มีมาสคอต FutureMe" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/landing-2026-08-09.png" alt="หน้าเริ่มต้นล่าสุดของ FutureMe" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/interview-2026-08-09.png" alt="หน้าสัมภาษณ์ล่าสุดที่มีมาสคอต FutureMe" width="100%"></a></td>
   </tr>
   <tr>
     <th>เส้นทางที่แนะนำ</th>
     <th>แผนทดลอง 30 วัน</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png" alt="หน้าผลลัพธ์เส้นทางล่าสุด" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผนทดลอง 30 วันล่าสุด" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/routes-2026-08-09.png" alt="หน้าผลลัพธ์เส้นทางล่าสุด" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/plan-2026-08-09.png" alt="หน้าแผนทดลอง 30 วันล่าสุด" width="100%"></a></td>
   </tr>
 </table>
 
@@ -191,7 +191,7 @@ flowchart LR
 |---|---|
 | [`01_Research/`](01_Research/) | หลักฐานที่ตรวจสอบแล้ว งานวิจัยแบบสอบถาม และ pipeline ข้อมูลภูมิศาสตร์ |
 | [`02_Backend/`](02_Backend/) | ต้นแบบ FastAPI แยกส่วนและชุดทดสอบ |
-| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | ผลิตภัณฑ์ FutureMe ปัจจุบันและชุดทดสอบอัตโนมัติ |
+| [`03_WebApp/`](03_WebApp/) | ผลิตภัณฑ์ FutureMe ปัจจุบันและชุดทดสอบอัตโนมัติ |
 | [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | ต้นทางมาสคอตที่ซิงก์เข้าเว็บแอป |
 | [`Presentation/`](Presentation/) | สไลด์ฉบับปัจจุบัน PDF ที่ตรงกัน บันทึกแหล่งข้อมูล และผลตรวจ QA |
 
@@ -205,7 +205,7 @@ branch นี้ไม่นำ snapshot เก่า แนวทางออ�
 ต้องใช้ Node.js 20 ขึ้นไป
 
 ```bash
-cd 03_WebApp/Pre_Present
+cd 03_WebApp
 npm ci
 npm run dev
 ```
@@ -257,7 +257,7 @@ npm run dev
 ระบบที่ทำงานแล้วคือเว็บสำหรับผู้เยี่ยมชมที่พัฒนาด้วย Next.js และ TypeScript ใช้เอนจินตัดสินใจ
 ฝั่งเบราว์เซอร์และเก็บข้อมูลในเบราว์เซอร์ ส่วน FastAPI, PostgreSQL, Qdrant, BGE-M3, Kubernetes,
 AIS Cloud, ระบบยืนยันตัวตน และการเชื่อมต่อโรงเรียนยังเป็นแบบออกแบบสำหรับระบบจริง ไม่ใช่ส่วนที่
-กำลังทำงาน ดูรายละเอียดใน [ขอบเขตสถาปัตยกรรม](03_WebApp/Pre_Present/docs/05-system-architecture.md)
+กำลังทำงาน ดูรายละเอียดใน [ขอบเขตสถาปัตยกรรม](03_WebApp/docs/05-system-architecture.md)
 </details>
 
 <details>
@@ -278,7 +278,7 @@ AIS Cloud, ระบบยืนยันตัวตน และการเ�
 แหล่งอ้างอิง ค่าใช้จ่าย การย้ายที่อยู่ ระยะเวลาก่อนมีรายได้ และความยืดหยุ่นไม่ถูกใช้ตัดสินเส้นทาง
 ส่วนจุดแข็งและข้อจำกัดยังเป็นข้อความประกอบตัวอย่าง ทะเบียนภูมิศาสตร์เก็บ checksum แบบเต็ม และ
 `npm run check:data` ใช้ตรวจความสอดคล้องข้ามไฟล์ ดูรายละเอียดใน
-[การตรวจแหล่งข้อมูล](03_WebApp/Pre_Present/docs/09-source-review.md)
+[การตรวจแหล่งข้อมูล](03_WebApp/docs/09-source-review.md)
 </details>
 
 <details>
@@ -288,7 +288,7 @@ AIS Cloud, ระบบยืนยันตัวตน และการเ�
 ภาษาไทยอย่างเป็นระบบ สัมภาษณ์ความเข้าใจ ทดลองกับกลุ่มตัวอย่างที่เหมาะสม วิเคราะห์ความเที่ยงและ
 โครงสร้าง ตรวจความเท่าเทียมระหว่างกลุ่ม และใช้ข้อมูลเส้นทางปัจจุบันที่มีสิทธิ์ใช้งาน จากนั้นจึง
 ปรับค่าน้ำหนักด้วยผลการสำรวจเส้นทางที่สังเกตได้ ดูรายละเอียดใน
-[แผนการตรวจสอบ](03_WebApp/Pre_Present/docs/validation-plan.md)
+[แผนการตรวจสอบ](03_WebApp/docs/validation-plan.md)
 </details>
 
 <details>
@@ -303,9 +303,9 @@ AIS Cloud, ระบบยืนยันตัวตน และการเ�
 <details>
 <summary><strong>เอกสารหลักอยู่ที่ไหน?</strong></summary>
 
-[README เว็บภาษาไทย](03_WebApp/Pre_Present/READMETH.md) ·
-[สถาปัตยกรรม](03_WebApp/Pre_Present/docs/05-system-architecture.md) ·
-[การตรวจแหล่งข้อมูล](03_WebApp/Pre_Present/docs/09-source-review.md) ·
+[README เว็บภาษาไทย](03_WebApp/READMETH.md) ·
+[สถาปัตยกรรม](03_WebApp/docs/05-system-architecture.md) ·
+[การตรวจแหล่งข้อมูล](03_WebApp/docs/09-source-review.md) ·
 [คู่มืองานวิจัย](01_Research/Data/README.md) ·
 [ไฟล์นำเสนอ PDF](Presentation/FutureMe_Project_Presentation.pdf)
 </details>

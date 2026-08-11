@@ -10,7 +10,7 @@ This folder contains the design assets that still feed the runnable product.
 - In the live app, mascot motion starts on across the journey. A persisted control lets the learner
   return to the operating-system motion preference.
 - The implemented interface and current screenshots live in
-  [`03_WebApp/Pre_Present/`](../03_WebApp/Pre_Present/).
+  [`03_WebApp/`](../03_WebApp/).
 
 Superseded concept galleries and generated comparison prototypes were removed from the active
 branch. Their history remains available through Git when design archaeology is needed.

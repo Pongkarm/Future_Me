@@ -21,7 +21,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const lab = resolve(appRoot, "../../04_Design/FutureMe_Mascot_Lab");
+const lab = resolve(appRoot, "../04_Design/FutureMe_Mascot_Lab");
 
 const FILES = [
   { from: join(lab, "mascot.js"), to: join(appRoot, "lib/mascot/mascot.js") },

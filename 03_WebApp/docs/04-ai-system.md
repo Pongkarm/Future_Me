@@ -218,7 +218,7 @@ The mascot on `/chat` communicates listening, thinking, answer-ready, project-da
 states; the interview mascot similarly changes for asking, listening, clarification and saved-answer
 states. These are interface assets, not LLM weights or executable inference assets. The canonical
 live SVG implementation comes from
-[`04_Design/FutureMe_Mascot_Lab`](../../../04_Design/FutureMe_Mascot_Lab/) and is synchronized into
+[`04_Design/FutureMe_Mascot_Lab`](../../04_Design/FutureMe_Mascot_Lab/) and is synchronized into
 the app by `scripts/sync-mascot.mjs`; `npm run verify` fails if those source-owned files drift.
 Stable React ids prevent duplicated SVG gradient ids during hydration. Visible, live status text
 carries the meaning for assistive technology. Mascot motion is enabled by default throughout the

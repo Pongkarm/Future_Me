@@ -107,7 +107,7 @@ direction would mean living away from home is a fact about the learner's life,
 not a reason to steer them elsewhere.
 
 Built from 1,358 institutions in the OVEC and MHESI registers with OSRM road
-routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geography_and_Access/).
+routing — see [`01_Research/Geography_and_Access/`](../01_Research/Geography_and_Access/).
 
 <table width="100%">
 <tr>
@@ -244,7 +244,7 @@ Requires Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/Pongkarm/Future_Me.git
-cd Future_Me/03_WebApp/Pre_Present
+cd Future_Me/03_WebApp
 npm ci
 npm run dev
 ```
@@ -267,7 +267,7 @@ path. Do not enable a funded provider key on a public deployment without authent
 limiting, provider spend caps, and verified host/provider retention terms.
 
 The live chatbot mascot is synchronized from
-[`04_Design/FutureMe_Mascot_Lab`](../../04_Design/FutureMe_Mascot_Lab/). Run
+[`04_Design/FutureMe_Mascot_Lab`](../04_Design/FutureMe_Mascot_Lab/). Run
 `npm run sync:mascot` after changing the design source; `npm run verify` checks for drift. On
 `/chat`, the mascot animates its listening, thinking, presenting, and error actions. Animation is on
 by default across the journey; the visible control can return it to the system motion preference.

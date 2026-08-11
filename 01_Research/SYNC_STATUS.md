@@ -12,7 +12,7 @@ Synced from `Kong19565` into `Panussu` on 2026-08-10.
 
 - `Comprehensive_Occupation_Skill_Matrix.md`, `Comprehensive_Occupation_Taxonomy.md`, `Global_Platforms_Benchmark.md`, and `theory_draft/` are useful research references, not active scoring inputs.
 - `Adaptive_Questionnaire/` keeps the smaller, documented 90-item research bank and simulations. It is not active in the live interview and must be validated before any future integration.
-- `03_WebApp/Pre_Present/data/question_bank_1000.json` is restored as a bilingual future bank. Automated checks cover structure and branch targets, not content validity; the live interview does not import it.
+- `03_WebApp/data/question_bank_1000.json` is restored as a bilingual future bank. Automated checks cover structure and branch targets, not content validity; the live interview does not import it.
 
 ## Web-app integration record
 

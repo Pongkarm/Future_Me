@@ -362,7 +362,7 @@ safety pause เป็นกฎจับคำภาษาไทย/อังก
 
 ```bash
 git clone https://github.com/Pongkarm/Future_Me.git
-cd Future_Me/03_WebApp/Pre_Present
+cd Future_Me/03_WebApp
 npm ci
 npm run dev
 ```

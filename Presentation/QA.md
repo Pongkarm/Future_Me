@@ -9,7 +9,7 @@ Reviewed: 11 August 2026
   rules → solution → architecture → validation → roadmap
 - Claims were reconciled against `01_Research/Data/SOURCE_AUDIT.md`
 - Current prototype capabilities were checked against
-  `03_WebApp/Pre_Present/`
+  `03_WebApp/`
 - Live, research-only and future inputs are separated: 30 live items, a
   90-item adaptive research design and a restored 1,000-item bilingual bank
 - The implemented first-answer follow-up ordering and deterministic decision

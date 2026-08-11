@@ -27,7 +27,7 @@ Seven categories of Thai-language research documents, assembled before design wo
 
 The design process compared eleven web concepts before selecting Aurora; the superseded galleries
 are available in Git history rather than the active tree. A separate
-[FastAPI prototype](../../../02_Backend/) is retained but is not connected to the runnable web
+[FastAPI prototype](../../02_Backend/) is retained but is not connected to the runnable web
 journey. Qdrant and PostgreSQL remain planned production components, not implemented services.
 
 ## What was published

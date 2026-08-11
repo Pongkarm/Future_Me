@@ -12,7 +12,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const ROOT = path.resolve(__dirname, "../..");
-const REPO_ROOT = path.resolve(ROOT, "../..");
+const REPO_ROOT = path.resolve(ROOT, "..");
 const SKIP_DIRS = new Set(["node_modules", ".next", ".git", "test-results", "playwright-report"]);
 
 function markdownFiles(dir: string, found: string[] = []): string[] {

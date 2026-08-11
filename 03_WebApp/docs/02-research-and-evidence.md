@@ -113,7 +113,7 @@ programme and by admission year, and no dataset with a clear licence has been in
 ### Current prototype data boundaries
 
 - The active catalogue contains 12 illustrative routes. Its source notes support exploration, not a guarantee of admission or that a named institution offers a programme.
-- The nearby-institution screen reads the 77-province `data/nearby.json` dataset through `/api/nearby`. It has 1,961 options generated from the documented MHESI/OVEC pipeline. [Geography and Access](../../../01_Research/Geography_and_Access/README.md) records the source, distance method, and limitations.
+- The nearby-institution screen reads the 77-province `data/nearby.json` dataset through `/api/nearby`. It has 1,961 options generated from the documented MHESI/OVEC pipeline. [Geography and Access](../../01_Research/Geography_and_Access/README.md) records the source, distance method, and limitations.
 - The live interview remains the existing 30-item `data/questions.json` instrument. A deterministic first-answer rule only changes which two reviewed items appear next; all 30 are still asked and scoring is unchanged.
 - The restored bilingual 1,000-item bank and the separate 90-item adaptive-questionnaire design remain research inputs. The 1,000-item file passes structural checks, but neither larger bank is imported by the live interview or validated for learner use.
 

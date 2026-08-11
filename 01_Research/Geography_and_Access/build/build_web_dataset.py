@@ -20,7 +20,7 @@ import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 ACCESS = os.path.join(HERE, "..", "data", "province_access")
 PROVINCES = os.path.join(HERE, "..", "data", "provinces.json")
-OUT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "03_WebApp", "Pre_Present", "data", "nearby.json"))
+OUT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "03_WebApp", "data", "nearby.json"))
 
 OUTSIDE_LIMIT = 12          # how many out-of-province options are worth listing
 

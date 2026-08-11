@@ -64,7 +64,7 @@ ALL_TIERS = ["LOWER_SECONDARY", "UPPER_SECONDARY", "VOCATIONAL"]
 # --------------------------------------------------------------------------
 
 SCALES = {
-    # Identical in values and wording to 03_WebApp/Pre_Present/data/questions.json
+    # Identical in values and wording to 03_WebApp/data/questions.json
     # so items move into the app without a scale conversion.
     "scale5-preference": {
         "kind": "preference",

@@ -1,7 +1,7 @@
 name: CI
 
 # This file has to live at the repository root: GitHub only reads
-# .github/workflows/ from there. It sat under 03_WebApp/Pre_Present/ and so had
+# .github/workflows/ from there. It originally sat under the web-app tree and so had
 # never run — everything below was already written, just never reachable.
 
 # Most of this repository is research, design and slides. Scoping to the app's
@@ -19,7 +19,7 @@ name: CI
 on:
   push:
     paths:
-      - '03_WebApp/Pre_Present/**'
+      - '03_WebApp/**'
       - '01_Research/Geography_and_Access/PROVENANCE.json'
       - '01_Research/Geography_and_Access/data/**'
       - '04_Design/FutureMe_Mascot_Lab/**'
@@ -41,7 +41,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: 03_WebApp/Pre_Present
+        working-directory: 03_WebApp
 
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
           node-version: 20
           cache: npm
           # `defaults.run` does not reach action inputs, only `run:` steps.
-          cache-dependency-path: 03_WebApp/Pre_Present/package-lock.json
+          cache-dependency-path: 03_WebApp/package-lock.json
 
       # `npm ci` fails the job if package.json and the lockfile disagree,
       # which is the check we want on every PR.
@@ -83,7 +83,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('03_WebApp/Pre_Present/package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('03_WebApp/package-lock.json') }}
 
       - name: Install Playwright browser
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -99,6 +99,6 @@ jobs:
         with:
           # An action input, so this one is repo-relative rather than
           # relative to the working directory above.
-          path: 03_WebApp/Pre_Present/playwright-report/
+          path: 03_WebApp/playwright-report/
           name: playwright-report
           retention-days: 7

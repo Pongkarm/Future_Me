@@ -81,4 +81,4 @@ institution, admission, affordability, or scholarship recommender.
 - `npm run build`
 - `npm run test:e2e`
 
-Run these from `03_WebApp/Pre_Present` after any change to the engine, dataset, or UI.
+Run these from `03_WebApp` after any change to the engine, dataset, or UI.

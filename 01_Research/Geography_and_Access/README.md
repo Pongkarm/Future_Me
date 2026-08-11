@@ -29,7 +29,7 @@
 ## การใช้ในเว็บแอป
 
 `build/build_web_dataset.py` สร้างไฟล์
-[`03_WebApp/Pre_Present/data/nearby.json`](../../03_WebApp/Pre_Present/data/nearby.json)
+[`03_WebApp/data/nearby.json`](../../03_WebApp/data/nearby.json)
 ให้เว็บแอปอ่านผ่าน `/api/nearby` โดยไม่ขอพิกัด GPS ของผู้เรียน
 
 - มีข้อมูลครบ 77 จังหวัด และ 1,961 ตัวเลือกสถานศึกษา
@@ -64,7 +64,7 @@
 
 ### ห้ามใช้จัดอันดับ
 
-ข้อมูลผลลัพธ์นี้ **ห้ามใช้เรียงลำดับว่าสาขาไหนหรือจังหวัดไหนดีกว่ากัน** กลไกตัดสินเส้นทางของ FutureMe เป็นกฎที่กำหนดไว้ล่วงหน้า และไม่รับส่วนแบ่งตลาดแรงงานเป็นอินพุต — ดู [ขอบเขตระบบตัดสินใจและ AI](../../03_WebApp/Pre_Present/docs/04-ai-system.md)
+ข้อมูลผลลัพธ์นี้ **ห้ามใช้เรียงลำดับว่าสาขาไหนหรือจังหวัดไหนดีกว่ากัน** กลไกตัดสินเส้นทางของ FutureMe เป็นกฎที่กำหนดไว้ล่วงหน้า และไม่รับส่วนแบ่งตลาดแรงงานเป็นอินพุต — ดู [ขอบเขตระบบตัดสินใจและ AI](../../03_WebApp/docs/04-ai-system.md)
 
 ---
 
@@ -122,9 +122,9 @@ python3 repair_coords.py          # ตรวจ กู้ และกักพ
 python3 build_stations.py         # Wikidata → stations.json พร้อม mode
 python3 build_outcomes.py         # ผลลัพธ์อาชีวะ + small-sample guard
 python3 build_access.py           # OSRM → province_access/*.json
-python3 build_web_dataset.py      # province_access → 03_WebApp/Pre_Present/data/nearby.json
+python3 build_web_dataset.py      # province_access → 03_WebApp/data/nearby.json
 
-cd ../../../03_WebApp/Pre_Present
+cd ../../../03_WebApp
 npm run check:data                # ตรวจ checksum, key, จำนวนแถว และความสอดคล้องข้ามไฟล์
 ```
 

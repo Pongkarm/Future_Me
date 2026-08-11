@@ -1,14 +1,14 @@
 # แผนนำมาสคอตเข้า FutureMe Web App
 
 เป้าหมาย: นำตัวละครจาก `04_Design/FutureMe_Mascot_Lab/` เข้าใช้งานจริงใน
-`03_WebApp/Pre_Present` (Next.js App Router)
+`03_WebApp` (Next.js App Router)
 
 เอกสารนี้ตรวจกับโค้ดจริงแล้ว ไม่ใช่ข้อสันนิษฐาน — ข้อเท็จจริงที่ตรวจแล้วอยู่ใน §1
 ถ้าโค้ดเปลี่ยนหลังจากวันที่เขียน ให้ตรวจ §1 ซ้ำก่อนใช้แผนนี้
 
 ตรวจซ้ำเมื่อ 11 ส.ค. 2569
 
-## สถานะ: ทำแล้วใน `03_WebApp/Pre_Present`
+## สถานะ: ทำแล้วใน `03_WebApp`
 
 Phase 0–4 เสร็จ · `npm run verify` ผ่าน (522 tests) · `npm run test:e2e` ผ่าน (94 journeys)
 

@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const repoRoot = resolve(appRoot, "../..");
+const repoRoot = resolve(appRoot, "..");
 const geoRoot = join(repoRoot, "01_Research", "Geography_and_Access");
 const dataRoot = join(geoRoot, "data");
 const errors = [];

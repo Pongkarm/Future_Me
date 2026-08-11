@@ -197,7 +197,7 @@ D/I  =  √3 (E + C − I − A)             (บวก = Data,   ลบ = Ideas
 - `01_Research/theory_draft/Academic References & Standards.md` — ขั้นตอน IOC, Cronbach's α, CFA, Rasch MNSQ
 - `01_Research/theory_draft/Multi-Layer Scoring Framework.md` — กรอบที่เสนอไว้ **มีข้อผิดพลาดเรื่องสูตร Prediger และน้ำหนัก barrier ที่ไม่ตรงกัน**
 - `01_Research/theory_draft/Toolkit Extension.md` — Prediger, Big Five, Gardner MI
-- `03_WebApp/Pre_Present/data/questions.json` — คลัง 30 ข้อปัจจุบัน พร้อม attribution 18REST
+- `03_WebApp/data/questions.json` — คลัง 30 ข้อปัจจุบัน พร้อม attribution 18REST
 
 **ภายนอกที่อ้างโดยตรง**
 

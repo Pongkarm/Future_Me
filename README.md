@@ -3,7 +3,7 @@
 **README:** **[EN](README.md)** · [TH](READMETH.md)
 
 <p align="center">
-  <img src="03_WebApp/Pre_Present/assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
+  <img src="03_WebApp/assets/banner/banner.png" alt="FutureMe AI — explore the next step, not one final answer" width="100%">
 </p>
 
 # FutureMe AI
@@ -59,16 +59,16 @@ integrated learner flow; source code and automated tests remain the authoritativ
     <th>Interview</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/landing-2026-08-09.png" alt="Latest FutureMe landing page" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/interview-2026-08-09.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/landing-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/landing-2026-08-09.png" alt="Latest FutureMe landing page" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/interview-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/interview-2026-08-09.png" alt="Latest FutureMe mascot-led interview" width="100%"></a></td>
   </tr>
   <tr>
     <th>Routes</th>
     <th>30-day plan</th>
   </tr>
   <tr>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/routes-2026-08-09.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
-    <td><a href="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/Pre_Present/assets/screenshots/app/plan-2026-08-09.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/routes-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/routes-2026-08-09.png" alt="Latest FutureMe route exploration results" width="100%"></a></td>
+    <td><a href="03_WebApp/assets/screenshots/app/plan-2026-08-09.png"><img src="03_WebApp/assets/screenshots/app/plan-2026-08-09.png" alt="Latest FutureMe 30-day exploration plan" width="100%"></a></td>
   </tr>
 </table>
 
@@ -200,7 +200,7 @@ Only the active product, evidence, and reproducible deliverables remain:
 |---|---|
 | [`01_Research/`](01_Research/) | Audited evidence, questionnaire research, and geography/data pipelines |
 | [`02_Backend/`](02_Backend/) | Separate FastAPI prototype and tests |
-| [`03_WebApp/Pre_Present/`](03_WebApp/Pre_Present/) | Current runnable FutureMe product and its automated tests |
+| [`03_WebApp/`](03_WebApp/) | Current runnable FutureMe product and its automated tests |
 | [`04_Design/FutureMe_Mascot_Lab/`](04_Design/FutureMe_Mascot_Lab/) | Canonical mascot assets synchronized into the web app |
 | [`Presentation/`](Presentation/) | Current editable deck, matching PDF, evidence notes, and QA record |
 
@@ -217,7 +217,7 @@ recoverable from Git history.
 Requirements: Node.js 20 or newer.
 
 ```bash
-cd 03_WebApp/Pre_Present
+cd 03_WebApp
 npm ci
 npm run dev
 ```
@@ -271,7 +271,7 @@ Send and may reach the configured provider. Deployment infrastructure may still 
 The implemented product is a Next.js/TypeScript guest app with a client-side decision engine and
 browser storage. FastAPI, PostgreSQL, Qdrant, BGE-M3, Kubernetes, AIS Cloud, identity, and school
 integrations are documented production designs, not running components. See the
-[architecture boundary](03_WebApp/Pre_Present/docs/05-system-architecture.md).
+[architecture boundary](03_WebApp/docs/05-system-architecture.md).
 </details>
 
 <details>
@@ -291,7 +291,7 @@ catalogue-wide `dataAsOf` date and 180-day freshness threshold. The UI warns whe
 identifies unsourced fields. Cost, relocation, time-to-earning, and flexibility are held out of
 decisions; strengths and limitations remain illustrative copy. The geography registry records full
 checksums and `npm run check:data` verifies its cross-file integrity. See the
-[source review](03_WebApp/Pre_Present/docs/09-source-review.md).
+[source review](03_WebApp/docs/09-source-review.md).
 </details>
 
 <details>
@@ -301,7 +301,7 @@ The project needs ethics approval, parental consent and student assent, formal T
 cognitive interviews, a representative pilot, reliability and structural analysis, subgroup
 invariance checks, and licensed current route data. Recommendation weights then need calibration
 against observed exploration outcomes. See the
-[validation plan](03_WebApp/Pre_Present/docs/validation-plan.md).
+[validation plan](03_WebApp/docs/validation-plan.md).
 </details>
 
 <details>
@@ -316,9 +316,9 @@ track enrolment or persistence without treating one route as the universal corre
 <details>
 <summary><strong>Where are the main documents?</strong></summary>
 
-[Web README](03_WebApp/Pre_Present/READMEEN.md) ·
-[Architecture](03_WebApp/Pre_Present/docs/05-system-architecture.md) ·
-[Source review](03_WebApp/Pre_Present/docs/09-source-review.md) ·
+[Web README](03_WebApp/READMEEN.md) ·
+[Architecture](03_WebApp/docs/05-system-architecture.md) ·
+[Source review](03_WebApp/docs/09-source-review.md) ·
 [Research guide](01_Research/Data/README.md) ·
 [Presentation PDF](Presentation/FutureMe_Project_Presentation.pdf)
 </details>

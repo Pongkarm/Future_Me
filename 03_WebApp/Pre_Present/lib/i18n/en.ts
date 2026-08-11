@@ -524,6 +524,7 @@ export const en = {
   },
 
   routes: {
+    programmesLiving: "Requires moving — living costs in {region} run about {min}–{max} baht a month · roughly {totalMin},000–{totalMax},000 over {years} years (team estimate citing TDRI/NSO ranges, not a per-province survey · tuition not included)",
     programmesProvenance: "Sources — programme and intake: MHESI/VEC registers · distance: OSRM road routing · interest profile: O*NET 29.1 (CC BY 4.0) · employment: VEC 2566 survey",
     programmesOccupations: "This field's interest profile comes from",
     programmesModes: "Get there by",

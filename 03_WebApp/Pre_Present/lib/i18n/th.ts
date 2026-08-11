@@ -522,6 +522,7 @@ export const th: Dictionary = {
   },
 
   routes: {
+    programmesLiving: "ต้องย้ายไปอยู่ — ค่าครองชีพ{region} ประมาณ {min}–{max} บาท/เดือน · {years} ปีราว {totalMin},000–{totalMax},000 บาท (ประมาณการของทีม อ้างช่วงจาก TDRI/NSO ยังไม่ใช่ค่าที่สำรวจรายจังหวัด · ยังไม่รวมค่าเทอม)",
     programmesProvenance: "ที่มา — หลักสูตรและจำนวนรับ: ทะเบียน อว./สอศ. · ระยะทาง: OSRM ตามถนนจริง · โปรไฟล์ความสนใจ: O*NET 29.1 (CC BY 4.0) · การมีงานทำ: สำรวจ สอศ. 2566",
     programmesOccupations: "สายนี้ใช้โปรไฟล์ความสนใจของอาชีพ",
     programmesModes: "ไปได้ด้วย",

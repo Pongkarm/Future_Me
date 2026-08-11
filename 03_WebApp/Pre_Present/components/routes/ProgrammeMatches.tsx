@@ -12,6 +12,7 @@ import {
 } from "@/lib/recommend";
 import type { InterviewInput } from "@/lib/decision-engine/types";
 import { BAND_KEY } from "@/lib/geo/types";
+import { courseLivingCost, livingCostFor, yearsForLevel } from "@/lib/recommend/living-cost";
 import { format, type Dictionary } from "@/lib/i18n";
 
 /**
@@ -71,12 +72,23 @@ function ProgrammeCard({
   row,
   rank,
   t,
+  homeProvince,
 }: {
   row: ScoredProgramme;
   rank: number;
   t: Dictionary;
+  homeProvince: string | null;
 }) {
   const { programme: p } = row;
+  /*
+   * Living cost is shown only when the learner would have to move. Someone
+   * studying in their own province is already paying to live there, so adding
+   * a rent-and-food total to their card would invent a cost they do not incur.
+   */
+  const mustMove = homeProvince !== null && p.provinceIso !== homeProvince;
+  const living = mustMove ? livingCostFor(p.provinceIso) : null;
+  const years = yearsForLevel(p.level);
+  const total = living ? courseLivingCost(living, years) : null;
   return (
     <li className="rounded-lg border border-subtle p-4">
       <div className="flex items-baseline gap-3">
@@ -183,6 +195,19 @@ function ProgrammeCard({
             {p.outcome.smallSample ? ` · ${t.routes.programmesOutcomeSmall}` : ""}
           </p>
         </div>
+      )}
+
+      {living && total && (
+        <p className="mt-2 text-xs text-muted">
+          {format(t.routes.programmesLiving, {
+            region: living.regionTh,
+            min: living.minPerMonth.toLocaleString("th-TH"),
+            max: living.maxPerMonth.toLocaleString("th-TH"),
+            years,
+            totalMin: Math.round(total.min / 1000).toLocaleString("th-TH"),
+            totalMax: Math.round(total.max / 1000).toLocaleString("th-TH"),
+          })}
+        </p>
       )}
 
       {p.productionCost !== null && (
@@ -392,7 +417,13 @@ export function ProgrammeMatches({
 
       <ol className="mt-3 space-y-3">
         {shown.map((row, i) => (
-          <ProgrammeCard key={`${row.programme.institutionId}-${row.programme.title}`} row={row} rank={i + 1} t={t} />
+          <ProgrammeCard
+            key={`${row.programme.institutionId}-${row.programme.title}`}
+            row={row}
+            rank={i + 1}
+            t={t}
+            homeProvince={provinceIso}
+          />
         ))}
       </ol>
 

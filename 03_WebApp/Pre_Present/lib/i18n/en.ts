@@ -524,6 +524,18 @@ export const en = {
   },
 
   routes: {
+    programmesNoneAfterFilter: "No programme clears the bar with these filters. Try removing one.",
+    programmesCost: "The state spends {baht} baht per student per year on this programme — production cost, not the tuition you pay",
+    programmesOutcome: "Graduates of this field in {province}, {level}: working {working}% · studying on {studying}%",
+    programmesOutcomeBase: "Of {tracked} the survey reached (out of {graduates} graduates), {year}",
+    programmesOutcomeSmall: "⚠ Small sample — the figure moves a lot",
+    programmesFilterAll: "All",
+    programmesFilterLevel: "Level",
+    programmesFilterProvince: "In my province only",
+    programmesFilterSector: "Institution type",
+    programmesFilterPublic: "Public",
+    programmesFilterPrivate: "Private",
+    programmesShowing: "Showing {shown} of {total} eligible programmes",
     programmesDistanceCaveat: "Distances are measured from your provincial centre, not your home — a border district could be far further. Good for comparing options, not for planning a journey.",
     programmesSite: "Institution website — check fees and entry requirements at the source",
     programmesSearch: "Search for the fee announcement of this institution (no official URL in the register)",

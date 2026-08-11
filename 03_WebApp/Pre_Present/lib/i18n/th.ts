@@ -522,6 +522,18 @@ export const th: Dictionary = {
   },
 
   routes: {
+    programmesNoneAfterFilter: "ไม่มีหลักสูตรที่ผ่านเกณฑ์ตามตัวกรองนี้ ลองเอาตัวกรองออกสักอัน",
+    programmesCost: "รัฐลงทุนกับหลักสูตรนี้ {baht} บาท/คน/ปี — เป็นต้นทุนการผลิต ไม่ใช่ค่าเทอมที่คุณจ่าย",
+    programmesOutcome: "ผู้จบสาขานี้ใน{province} ระดับ{level}: ทำงาน {working}% · เรียนต่อ {studying}%",
+    programmesOutcomeBase: "จากผู้ที่ติดตามได้ {tracked} คน (ผู้จบทั้งหมด {graduates} คน) ปี {year}",
+    programmesOutcomeSmall: "⚠ กลุ่มตัวอย่างเล็ก ตัวเลขแกว่งได้มาก",
+    programmesFilterAll: "ทั้งหมด",
+    programmesFilterLevel: "ระดับ",
+    programmesFilterProvince: "เฉพาะในจังหวัดฉัน",
+    programmesFilterSector: "ประเภทสถาบัน",
+    programmesFilterPublic: "รัฐ",
+    programmesFilterPrivate: "เอกชน",
+    programmesShowing: "แสดง {shown} จาก {total} หลักสูตรที่ผ่านเกณฑ์",
     programmesDistanceCaveat: "ระยะทางวัดจากอำเภอเมืองของจังหวัดคุณ ไม่ใช่จากบ้าน — ถ้าบ้านอยู่อำเภอชายแดนอาจไกลกว่านี้มาก ใช้เทียบทางเลือกได้ แต่ยังใช้วางแผนเดินทางจริงไม่ได้",
     programmesSite: "เว็บไซต์สถาบัน — ดูค่าเทอมและเกณฑ์รับเข้าจากประกาศจริง",
     programmesSearch: "ค้นหาประกาศค่าธรรมเนียมของสถาบันนี้ (เราไม่มี URL ทางการในทะเบียน)",

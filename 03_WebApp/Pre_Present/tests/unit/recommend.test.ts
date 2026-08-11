@@ -13,6 +13,7 @@ import {
   buildProfile,
   cosine,
   quadrantOf,
+  sectorOf,
   recommendProgrammes,
 } from "@/lib/recommend";
 
@@ -289,5 +290,53 @@ describe("travel distance on the result", () => {
   it("leaves distance null rather than guessing when the province is unknown", () => {
     const result = recommendProgrammes(practical, {});
     for (const row of result.top) expect(row.travel.km).toBeNull();
+  });
+});
+
+describe("filters narrow the ranking, not the finished list", () => {
+  const practical = (() => {
+    const a: Record<string, number> = {};
+    for (const q of questions.interest) a[q.id] = ["R", "I"].includes(q.dimension) ? 5 : 1;
+    return a;
+  })();
+
+  it("still fills the Top 5 when a level is chosen", () => {
+    // The bug this guards: filtering the finished Top 5 leaves a learner who
+    // asks for ปวช. staring at an empty list, while thousands of ปวช.
+    // programmes sit one rank below the cut.
+    const all = recommendProgrammes(practical, { provinceIso: "TH-50" });
+    const voc = recommendProgrammes(practical, { provinceIso: "TH-50", onlyLevel: "ปวช." });
+    expect(all.top.length).toBe(5);
+    expect(voc.top.length).toBe(5);
+    for (const row of voc.top) expect(row.programme.level).toBe("ปวช.");
+  });
+
+  it("honours the sector filter", () => {
+    const priv = recommendProgrammes(practical, {
+      provinceIso: "TH-50",
+      onlySector: "private",
+    });
+    for (const row of priv.top) expect(sectorOf(row.programme.tuitionBand)).toBe("private");
+  });
+
+  it("keeps every filtered result above the same core gate", () => {
+    const voc = recommendProgrammes(practical, { provinceIso: "TH-50", onlyLevel: "ปวส." });
+    for (const row of voc.top) expect(row.core).toBeGreaterThanOrEqual(CORE_GATE);
+  });
+});
+
+describe("employment outcomes", () => {
+  it("never reports a percentage without the base it was taken from", () => {
+    const a: Record<string, number> = {};
+    for (const q of questions.interest) a[q.id] = q.dimension === "R" ? 5 : 1;
+    const result = recommendProgrammes(a, { provinceIso: "TH-50", tier: "LOWER_SECONDARY" });
+    const withOutcome = result.top.filter((r) => r.programme.outcome);
+    for (const row of withOutcome) {
+      const o = row.programme.outcome!;
+      expect(o.tracked).toBeGreaterThan(0);
+      expect(o.graduates).toBeGreaterThanOrEqual(o.tracked);
+      expect(o.workingPct).toBeGreaterThanOrEqual(0);
+      expect(o.academicYear).toBeTruthy();
+    }
   });
 });

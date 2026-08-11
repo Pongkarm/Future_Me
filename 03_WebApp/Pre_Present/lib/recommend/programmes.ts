@@ -30,8 +30,10 @@ interface Packed {
   institutions: [string, string, string, string, string, string][];
   titles: string[];
   levels: string[];
-  /** [titleIndex, institutionIndex, fieldIndex, seats, productionCost, levelIndex] */
-  programmes: [number, number, number, number | null, number | null, number][];
+  /** [workingPct, studyingPct, tracked, graduates, smallSample, year] */
+  outcomes: [number, number, number, number, number, string][];
+  /** [titleIndex, institutionIndex, fieldIndex, seats, productionCost, levelIndex, outcomeIndex] */
+  programmes: [number, number, number, number | null, number | null, number, number][];
 }
 
 const data = packed as unknown as Packed;
@@ -64,9 +66,34 @@ export interface Programme {
   productionCost: number | null;
   /** ปริญญาตรี · ปวช. · ปวส. — the learner's stated tier gates on this */
   level: string;
+  /**
+   * What happened to people who finished this field, in this province, at this
+   * level. Null where the survey has nothing or suppressed it.
+   *
+   * `workingPct` and `studyingPct` are shares of `tracked`, never of
+   * `graduates` — the survey does not reach everyone, and a percentage of the
+   * reached read as a percentage of the whole is the misreading this field
+   * exists to prevent. Both numbers are carried so the UI can say which is
+   * which.
+   */
+  outcome: ProgrammeOutcome | null;
+}
+
+export interface ProgrammeOutcome {
+  workingPct: number;
+  studyingPct: number;
+  tracked: number;
+  graduates: number;
+  smallSample: boolean;
+  academicYear: string;
 }
 
 export const PROGRAMME_META = data.meta;
+
+function unpackOutcome(row: Packed["outcomes"][number]): ProgrammeOutcome {
+  const [workingPct, studyingPct, tracked, graduates, smallSample, academicYear] = row;
+  return { workingPct, studyingPct, tracked, graduates, smallSample: smallSample === 1, academicYear };
+}
 
 let cache: Programme[] | null = null;
 
@@ -81,7 +108,7 @@ export function allProgrammes(): Programme[] {
     return vec;
   });
 
-  cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost, levelIndex]) => {
+  cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost, levelIndex, outcomeIndex]) => {
     const [id, nameTh, provinceIso, provinceTh, tuitionBand, website] = data.institutions[instIndex];
     const [isced, iscedTitle, , iscedOccupations] = data.fields[fieldIndex];
     return {
@@ -99,6 +126,7 @@ export function allProgrammes(): Programme[] {
       seatsPlanned: seats,
       productionCost: cost,
       level: data.levels[levelIndex],
+      outcome: outcomeIndex >= 0 ? unpackOutcome(data.outcomes[outcomeIndex]) : null,
     };
   });
 

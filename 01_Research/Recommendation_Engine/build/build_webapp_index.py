@@ -20,7 +20,7 @@ Output, all positional:
   institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand, website|""]
   titles[j]       = programme title
   programmes[k]   = [titleIndex, institutionIndex, fieldIndex, seats|null,
-                     productionCost|null, levelIndex]
+                     productionCost|null, levelIndex, outcomeIndex|-1]
 """
 import json
 import os
@@ -45,10 +45,59 @@ def load_websites():
 
 WEBSITES = {}
 
+# The 2568 enrolment register renamed some ประเภทวิชา that the 2566 outcome
+# survey still lists under their old names. Only genuine renames are aliased;
+# categories that are actually new (อุตสาหกรรมอาหาร, โลจิสติกส์,
+# สุขภาพและความงาม) are left unmapped and simply have no outcome data, because
+# borrowing another category's employment rate would be inventing it.
+OUTCOME_ALIAS = {
+    "อุตสาหกรรมดิจิทัลและเทคโนโลยีสารสนเทศ": "เทคโนโลยีสารสนเทศและการสื่อสาร",
+    "เกษตรกรรมและประมง": "เกษตรกรรม",
+    "ศิลปกรรมและเศรษฐกิจสร้างสรรค์": "ศิลปกรรม",
+    "อุตสาหกรรมบันเทิง": "อุตสาหกรรมบันเทิงและดนตรี",
+    "อุตสาหกรรมแฟชั่นและสิ่งทอ": "อุตสาหกรรมสิ่งทอ",
+}
+
+WORKING = ("ทำงานเอกชน", "ทำงานราชการ", "ทำงานรัฐวิสาหกิจ", "อาชีพอิสระ")
+
+
+def load_outcomes():
+    """Employment after graduating, by province x level x field.
+
+    Percentages are of *those the survey reached*, never of all graduates, and
+    the source suppresses them below ten. Both facts travel with the number:
+    the UI states the tracked count beside the percentage so nobody reads 100%
+    off fifteen people as a fact about the field.
+    """
+    path = os.path.join(HERE, "..", "..", "Geography_and_Access", "data",
+                        "vocational_outcomes.json")
+    table, index = [], {}
+    with open(path, encoding="utf-8") as fh:
+        for r in json.load(fh):
+            if r.get("percentages_suppressed") or not r.get("of_tracked_percent"):
+                continue
+            pct = r["of_tracked_percent"]
+            working = round(sum(pct.get(k, 0) for k in WORKING), 1)
+            index[(r["province_iso"], r["level"], r["field_th"])] = len(table)
+            table.append([
+                working,
+                round(pct.get("ศึกษาต่อ", 0), 1),
+                r.get("tracked") or 0,
+                r.get("graduates") or 0,
+                1 if r.get("small_sample") else 0,
+                r.get("academic_year", ""),
+            ])
+    return table, index
+
+
+OUTCOMES, OUTCOME_INDEX = [], {}
+
 
 def main():
     global WEBSITES
     WEBSITES = load_websites()
+    global OUTCOMES, OUTCOME_INDEX
+    OUTCOMES, OUTCOME_INDEX = load_outcomes()
     with open(SRC, encoding="utf-8") as fh:
         payload = json.load(fh)
     rows = payload["programmes"]
@@ -78,6 +127,9 @@ def main():
                 "seats_planned": v["students_enrolled"],
                 "cost_per_year_production": None,
                 "level": v["level"],
+                "outcome": OUTCOME_INDEX.get(
+                    (v["province_iso"], v["level"],
+                     OUTCOME_ALIAS.get(v["field_broad"], v["field_broad"]))),
             })
 
     # Degrees first, then ปวช./ปวส. — the engine sorts on score, so order here
@@ -110,7 +162,8 @@ def main():
         programmes.append([title_index[title], inst_index[key], field_index[code],
                            p["seats_planned"],
                            round(cost) if cost is not None else None,
-                           LEVELS.index(p.get("level", "ปริญญาตรี"))])
+                           LEVELS.index(p.get("level", "ปริญญาตรี")),
+                           p.get("outcome") if p.get("outcome") is not None else -1])
 
     out = {
         "meta": {
@@ -120,6 +173,8 @@ def main():
             "institutions": len(institutions),
             "fields": len(fields),
             "levels": LEVELS,
+        # [workingPct, studyingPct, tracked, graduates, smallSample, year]
+        "outcomes": OUTCOMES,
             "riasecSource": "O*NET 29.1 Interests, Occupational Interest scale, "
                             "US DOL/ETA, CC BY 4.0 — mapped to ISCED-F 2013 fields",
             "riasecStatus": "ค่า RIASEC วัดมาจริง · การจับคู่สาย ISCED กับกลุ่มอาชีพ "
@@ -141,6 +196,8 @@ def main():
         },
         # top level, not inside meta: the engine reads it on every row
         "levels": LEVELS,
+        # [workingPct, studyingPct, tracked, graduates, smallSample, year]
+        "outcomes": OUTCOMES,
         "fields": fields,
         "institutions": institutions,
         "titles": titles,
@@ -158,6 +215,7 @@ def main():
     print(f"fields        {len(fields)}  (ISCED-F detailed, each with its own vector)")
     print(f"titles        {len(titles)} unique of {len(programmes)}")
     print(f"with cost     {sum(1 for r in programmes if r[4] is not None)}")
+    print(f"with outcome  {sum(1 for r in programmes if r[6] >= 0)} (ตาราง {len(OUTCOMES)} แถว)")
     print(f"size          {before/1e6:.1f} MB -> {after/1e6:.2f} MB "
           f"({after/before*100:.0f}%)")
 

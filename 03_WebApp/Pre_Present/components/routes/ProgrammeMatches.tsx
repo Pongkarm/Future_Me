@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   CONTEXT_MAX,
   DIFFERENTIATION_GATE,
@@ -32,6 +32,14 @@ import { format, type Dictionary } from "@/lib/i18n";
  * lookup is written out rather than indexed by a computed key — the compiler
  * can then prove each of these five is a string.
  */
+/** Mirrors levelOpenTo() in the engine — the chips must not offer more. */
+const LEVELS_FOR_TIER: Record<string, string[]> = {
+  LOWER_SECONDARY: ["ปวช."],
+  UPPER_SECONDARY: ["ปริญญาตรี", "ปวส."],
+  VOCATIONAL: ["ปวส.", "ปริญญาตรี"],
+  none: ["ปวช.", "ปวส.", "ปริญญาตรี"],
+};
+
 function quadrantLabel(quadrant: Quadrant, t: Dictionary): string {
   switch (quadrant) {
     case "golden-fit":
@@ -129,6 +137,38 @@ function ProgrammeCard({
         )}
       </p>
 
+      {p.outcome && (
+        <div className="mt-2 rounded border border-subtle bg-subtle/40 px-2.5 py-1.5 text-xs">
+          <p>
+            {format(t.routes.programmesOutcome, {
+              province: p.provinceTh,
+              level: p.level,
+              working: p.outcome.workingPct.toFixed(0),
+              studying: p.outcome.studyingPct.toFixed(0),
+            })}
+          </p>
+          {/* The base always travels with the percentage. 100% of fifteen
+              tracked people is not a fact about a field, and a reader who
+              cannot see the fifteen has no way to know that. */}
+          <p className="text-muted">
+            {format(t.routes.programmesOutcomeBase, {
+              tracked: p.outcome.tracked,
+              graduates: p.outcome.graduates,
+              year: p.outcome.academicYear,
+            })}
+            {p.outcome.smallSample ? ` · ${t.routes.programmesOutcomeSmall}` : ""}
+          </p>
+        </div>
+      )}
+
+      {p.productionCost !== null && (
+        <p className="mt-2 text-xs text-muted">
+          {format(t.routes.programmesCost, {
+            baht: p.productionCost.toLocaleString("th-TH"),
+          })}
+        </p>
+      )}
+
       <div className="mt-3">
         <Meter core={row.core} context={row.contextComponent} />
         <dl className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs">
@@ -166,9 +206,7 @@ function ProgrammeCard({
               ? ` · RIASEC วัดจาก ${p.iscedOccupations} อาชีพ${p.iscedOccupations < 3 ? " ⚠ หลักฐานบาง" : ""}`
               : " · ดูการจับคู่อาชีพใน vocational_audit.md"}
           </p>
-          {p.productionCost !== null && (
-            <p>ต้นทุนผลิต/คน/ปี {p.productionCost.toLocaleString("th-TH")} บาท (ไม่ใช่ค่าเทอม)</p>
-          )}
+
           {row.efficacy !== null && (
             <p>
               efficacy({row.efficacyDimensions.join("")}) = {row.efficacy.toFixed(2)}
@@ -197,6 +235,10 @@ export function ProgrammeMatches({
   provinceIso: string | null;
   t: Dictionary;
 }) {
+  const [level, setLevel] = useState<string>("all");
+  const [sector, setSector] = useState<"all" | "public" | "private">("all");
+  const [homeOnly, setHomeOnly] = useState(false);
+
   const result = useMemo<ProgrammeRecommendation>(
     () =>
       recommendProgrammes(interview.interest, {
@@ -205,8 +247,11 @@ export function ProgrammeMatches({
         mobility: interview.context.mobility,
         budgetBand:
           interview.context.cost === "unknown" ? undefined : interview.context.cost,
+        onlyLevel: level === "all" ? undefined : level,
+        onlySector: sector === "all" ? undefined : sector,
+        onlyHomeProvince: homeOnly || undefined,
       }),
-    [interview, provinceIso],
+    [interview, provinceIso, level, sector, homeOnly],
   );
 
   if (!result.confidentEnough) {
@@ -230,6 +275,14 @@ export function ProgrammeMatches({
       </section>
     );
   }
+
+  const shown = result.top;
+
+  const chip = (active: boolean) =>
+    [
+      "rounded-full border px-2.5 py-1 text-xs",
+      active ? "border-accent bg-accent/10 font-bold" : "border-subtle text-muted",
+    ].join(" ");
 
   return (
     <section className="mt-8" data-testid="programmes">
@@ -256,8 +309,55 @@ export function ProgrammeMatches({
         </ul>
       </div>
 
-      <ol className="mt-4 space-y-3">
-        {result.top.map((row, i) => (
+      {/*
+        Only levels this learner can actually enter next are offered. A ม.3
+        leaver cannot enrol on ปวส., so a ปวส. chip is a button that can only
+        ever produce an empty list — the filter row would be teaching them
+        their own options wrongly.
+      */}
+      <div className="mt-4 flex flex-wrap items-center gap-1.5" data-testid="programmes-filters">
+        {["all", ...LEVELS_FOR_TIER[interview.context.tier ?? "none"]].map((value) => (
+          <button key={value} type="button" onClick={() => setLevel(value)}
+                  className={chip(level === value)}>
+            {value === "all" ? t.routes.programmesFilterAll : value}
+          </button>
+        ))}
+        <span className="mx-1 h-4 w-px bg-subtle" aria-hidden="true" />
+        {(["all", "public", "private"] as const).map((value) => (
+          <button key={value} type="button" onClick={() => setSector(value)}
+                  className={chip(sector === value)}>
+            {value === "all"
+              ? t.routes.programmesFilterAll
+              : value === "public"
+                ? t.routes.programmesFilterPublic
+                : t.routes.programmesFilterPrivate}
+          </button>
+        ))}
+        {provinceIso && (
+          <>
+            <span className="mx-1 h-4 w-px bg-subtle" aria-hidden="true" />
+            <button type="button" onClick={() => setHomeOnly((v) => !v)}
+                    className={chip(homeOnly)}>
+              {t.routes.programmesFilterProvince}
+            </button>
+          </>
+        )}
+        <span className="ml-auto text-xs text-muted">
+          {format(t.routes.programmesShowing, {
+            shown: shown.length,
+            total: result.candidates,
+          })}
+        </span>
+      </div>
+
+      {shown.length === 0 && (
+        <p className="mt-4 rounded border border-subtle bg-subtle/40 p-4 text-sm text-muted">
+          {t.routes.programmesNoneAfterFilter}
+        </p>
+      )}
+
+      <ol className="mt-3 space-y-3">
+        {shown.map((row, i) => (
           <ProgrammeCard key={`${row.programme.institutionId}-${row.programme.title}`} row={row} rank={i + 1} t={t} />
         ))}
       </ol>

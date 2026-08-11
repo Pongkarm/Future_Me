@@ -95,6 +95,17 @@ export interface ProgrammeRecommendation {
 export interface LearnerContext {
   provinceIso?: string;
   /**
+   * Narrowing the learner asked for. These belong here rather than in the
+   * component because filtering the finished Top 5 is not the same operation:
+   * asking for ปวช. would leave a learner staring at an empty list while
+   * thousands of ปวช. programmes sat one rank below the cut. The filter has to
+   * apply before the ranking is taken, so the five they see are the best five
+   * of what they asked for.
+   */
+  onlyLevel?: string;
+  onlySector?: "public" | "private";
+  onlyHomeProvince?: boolean;
+  /**
    * What the learner is leaving. ม.3 can go to ปวช.; ม.6 to ปวส. or a degree.
    * Absent means no filter — showing everything is better than guessing wrong.
    */
@@ -257,6 +268,13 @@ function levelOpenTo(level: string, tier: LearnerContext["tier"]): boolean {
   return level === "ปริญญาตรี" || level === "ปวส.";
 }
 
+const STATE_FUNDED = new Set(["public", "rajabhat", "rajamangala", "autonomous"]);
+
+/** Coarse public/private split, from the institution's sector. */
+export function sectorOf(tuitionBand: string): "public" | "private" {
+  return STATE_FUNDED.has(tuitionBand) ? "public" : "private";
+}
+
 export function recommendProgrammes(
   answers: Record<string, number>,
   learner: LearnerContext = {},
@@ -306,6 +324,9 @@ export function recommendProgrammes(
       rejected += 1;
       continue;
     }
+    if (learner.onlyLevel && programme.level !== learner.onlyLevel) continue;
+    if (learner.onlySector && sectorOf(programme.tuitionBand) !== learner.onlySector) continue;
+    if (learner.onlyHomeProvince && programme.provinceIso !== learner.provinceIso) continue;
     if (core < CORE_GATE) {
       rejected += 1;
       continue;

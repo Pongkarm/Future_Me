@@ -156,6 +156,7 @@ export default function RoutesPage() {
           state="error"
           status={t.assessment.interviewerChecking}
           toggleMotionLabel={t.chat.motionEnable}
+          systemMotionLabel={t.chat.motionSystem}
           label={t.assessment.interviewerName}
           testIdPrefix="routes"
         >
@@ -200,6 +201,7 @@ export default function RoutesPage() {
           state="thinking"
           status={t.assessment.interviewerListening}
           toggleMotionLabel={t.chat.motionEnable}
+          systemMotionLabel={t.chat.motionSystem}
           label={t.assessment.interviewerName}
           testIdPrefix="routes"
         >
@@ -245,6 +247,7 @@ export default function RoutesPage() {
         state="speaking"
         status={t.assessment.interviewerListening}
         toggleMotionLabel={t.chat.motionEnable}
+        systemMotionLabel={t.chat.motionSystem}
         label={t.assessment.interviewerName}
         testIdPrefix="routes"
       >

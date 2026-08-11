@@ -60,6 +60,7 @@ export const th: Dictionary = {
     resetCancel: "เก็บคำตอบไว้",
     resetDone: "ลบคำตอบเรียบร้อยแล้ว ตอนนี้คุณอยู่ที่คำถามข้อแรก",
     eyebrowInterests: "ความสนใจ",
+    eyebrowFollowUp: "คำถามต่อยอดจากคำตอบแรก",
     eyebrowSituation: "สถานการณ์ของคุณ",
     eyebrowOptional: "ตอบหรือไม่ก็ได้",
     interestHelper: "คุณจะชอบทำกิจกรรมนี้มากแค่ไหน",

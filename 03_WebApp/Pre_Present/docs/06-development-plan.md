@@ -34,7 +34,7 @@ Used consistently across this repository, including in the README and the roadma
 | Route data provenance and freshness | 🟢 | Per-route source, status and last-checked date; catalogue age on screen | The catalogue itself is still illustrative |
 | Optional LLM explanation layer | 🟢 | Connected, labelled, cannot affect ranking, degrades to deterministic text | Not evaluated for quality |
 | Safeguarding pause | 🟡 | Keyword rule, Thai and English, stops recommendations and offers support | Not a risk assessment. Nobody is alerted |
-| Interest instrument | 🟡 | 30 interleaved items, bilingual Thai/English, plus context | Fixed rather than adaptive; Thai is a first draft; instrument is not validated |
+| Interest instrument | 🟡 | 30 bilingual Thai/English items plus context; the first answer reorders two reviewed follow-ups | Rule-based ordering only, not CAT/IRT; Thai is a first draft; instrument is not validated |
 | Route catalogue | 🟡 | Twelve routes with declared provenance | Cost, location, timing and flexibility carry no source and do not affect decisions |
 | 30-day plan | 🟡 | 30-day/four-week template plus gap-specific tasks, progress persists | Linear, not the planned DAG |
 | Continuous integration | 🟢 | Typecheck, lint, unit, integration, build and end-to-end on every PR | — |

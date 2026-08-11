@@ -71,7 +71,7 @@ FutureMe ไม่ได้ฟันธง **“อาชีพที่ใช�
 
 | Step | What happens |
 |---|---|
-| **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English, one at a time, then review every answer. |
+| **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English. The first answer selects two immediate follow-ups, then the learner reviews every answer. |
 | **2 · Try · ลอง** | Complete one of 3 short scenario missions; the suggested mission can be changed. |
 | **3 · Explore · สำรวจ** | Receive 0–3 route hypotheses with reasons, unknowns, provenance, and data-age warnings. |
 | **4 · Compare · เทียบ** | Compare routes using the same three evidence-based criteria; practical estimates stay visible as prompts to verify. |
@@ -140,7 +140,7 @@ routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geograph
 | Area | Implemented today |
 |---|---|
 | **Experience** | Complete guest journey, responsive layouts, Thai/English, and persistent light/dark/system preferences |
-| **Assessment** | 30 interleaved RIASEC-shaped interest items + 4 required context questions + 1 optional free-text prompt |
+| **Assessment** | 30 RIASEC-shaped interest items; the first answer deterministically moves two reviewed items forward + 4 required context questions + 1 optional free-text prompt |
 | **Missions** | 3 scenario missions chosen by a transparent rule; the learner may override the choice |
 | **Routes** | 12 illustrative routes; the engine may show 0–3 and can refuse to guess |
 | **Decision system** | Deterministic client-side TypeScript with hard filters, fixed weights, ties, contradictions, and evidence-strength labels |
@@ -157,6 +157,8 @@ routing — see [`01_Research/Geography_and_Access/`](../../01_Research/Geograph
   validity results exist.
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics and fixed decision weights are team design judgement, not fitted parameters.
+- The first-answer follow-up rule changes order only. It is not CAT or IRT and does not establish higher accuracy.
+- `data/question_bank_1000.json` is restored and structurally checked for later research, but it is not imported by the live interview.
 - The route catalogue is illustrative; cost, relocation, time-to-earning, and flexibility contain
   unsourced estimates and are held out of filtering, scoring, and ranking.
 - No real-student pilot, ethics approval, bias audit, or effectiveness study has run.
@@ -262,8 +264,8 @@ limiting, provider spend caps, and verified host/provider retention terms.
 The live chatbot mascot is synchronized from
 [`04_Design/FutureMe_Mascot_Lab`](../../04_Design/FutureMe_Mascot_Lab/). Run
 `npm run sync:mascot` after changing the design source; `npm run verify` checks for drift. On
-`/chat`, the mascot animates its listening, thinking, presenting, and error actions. It follows the
-system reduced-motion preference by default and includes an explicit **Always animate** opt-in.
+`/chat`, the mascot animates its listening, thinking, presenting, and error actions. Animation is on
+by default across the journey; the visible control can return it to the system motion preference.
 
 ---
 

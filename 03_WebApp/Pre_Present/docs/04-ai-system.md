@@ -53,16 +53,20 @@ flowchart TD
 
 ## A2 · Phase 1 — the interview
 
-**What it is:** 30 Likert items, five per RIASEC dimension and interleaved rather than blocked, plus four context questions and one
-optional free-text prompt. FutureMe presents the fixed bilingual Thai/English questions one at a
+**What it is:** 30 Likert items, five per RIASEC dimension, plus four context questions and one
+optional free-text prompt. FutureMe presents the bilingual Thai/English questions one at a
 time through a vertical chat transcript: the full animated mascot is embedded in the active
 FutureMe turn, questions appear on the left, saved learner answers appear on the right, and the red
 composer stays below the scrollable conversation. A deterministic,
 bilingual whole-reply parser accepts only a numbered option, an exact label, or an explicitly
 approved phrase; anything else stays unsaved and produces a clarification.
 
-**What it is not:** the mascot-led presentation does not make the instrument adaptive or
-model-generated. No chat model writes, rewords, guesses, or scores these questions, and raw scored
+After the first answer, a pure rule moves two existing items forward: a high response deepens the
+same dimension, a neutral response clarifies then broadens, and a low response explores two other
+dimensions. Every learner still sees all 30 items and scoring is unchanged.
+
+**What it is not:** this small rule is not CAT, IRT, model-generated interviewing, or early
+termination. No chat model writes, rewords, guesses, or scores these questions, and raw scored
 reply text is not stored. Historical choice bubbles therefore show the localized canonical answer
 that was saved, not a reconstructed raw message. The Thai
 translation has not completed formal cross-cultural adaptation. It is labelled *"Research-informed
@@ -217,9 +221,9 @@ live SVG implementation comes from
 [`04_Design/FutureMe_Mascot_Lab`](../../../04_Design/FutureMe_Mascot_Lab/) and is synchronized into
 the app by `scripts/sync-mascot.mjs`; `npm run verify` fails if those source-owned files drift.
 Stable React ids prevent duplicated SVG gradient ids during hydration. Visible, live status text
-carries the meaning for assistive technology. Motion follows the operating-system reduced-motion
-preference by default; `/chat` and `/interview` provide a localized, persisted **Always animate** opt-in for
-users who explicitly want the action animations despite that system setting.
+carries the meaning for assistive technology. Mascot motion is enabled by default throughout the
+journey. The localized control persists an explicit return to the operating-system motion preference
+for users who need less movement.
 
 → `app/chat/page.tsx`, `app/api/chat/route.ts`, `components/chat/`
 
@@ -253,7 +257,7 @@ submission, not because any of it runs.
 
 | Capability | Status | What the prototype does instead |
 |---|---|---|
-| Adaptive Thai-language Socratic interview | 📐 Planned | Mascot-led chat UI over a fixed bilingual Likert questionnaire; `/chat` is a separate unscored companion |
+| Adaptive Thai-language Socratic interview | 🧪 Partial rule-based prototype | The first answer reorders two existing bilingual items; no generated questions, early stopping, CAT, or IRT. `/chat` remains a separate unscored companion |
 | STAR extraction from free text | 📐 Planned | Keyword spotting against a fixed dimension map |
 | Qdrant hybrid retrieval (dense + sparse, RRF-fused) | 📐 Planned | Deterministic lexical matching over a small curated chat index; routes remain seeded JSON |
 | BGE-M3 embeddings, 1024-dim | 📐 Planned | No embeddings at all |

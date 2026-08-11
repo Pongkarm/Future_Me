@@ -37,7 +37,7 @@ export default function FutureMeMascot({
   crop = "full",
   size = "md",
   animated = true,
-  motion = "system",
+  motion = "on",
   ariaLabel,
   className,
 }: FutureMeMascotProps) {

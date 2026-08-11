@@ -28,6 +28,33 @@ export async function sendInterviewReply(page: Page, reply: string) {
   await expect(current).not.toHaveAttribute("data-question-id", questionId!);
 }
 
+/**
+ * Answer every live interest question according to the question actually on
+ * screen. The first answer can reorder two follow-ups, so iterating the source
+ * JSON and assuming its display order would attach the right values to the
+ * wrong dimensions.
+ */
+export async function answerInterestItems(
+  page: Page,
+  replyForDimension: (dimension: string) => string,
+) {
+  const byId = new Map(ITEMS.map((item) => [item.id, item]));
+  const seen = new Set<string>();
+
+  for (let index = 0; index < ITEMS.length; index += 1) {
+    const questionId = await page
+      .getByTestId("interview-current-question")
+      .getAttribute("data-question-id");
+    const item = questionId ? byId.get(questionId) : undefined;
+    if (!item) throw new Error(`Unexpected interest question ${String(questionId)}`);
+    if (seen.has(item.id)) throw new Error(`Interest question repeated: ${item.id}`);
+    seen.add(item.id);
+    await sendInterviewReply(page, replyForDimension(item.dimension));
+  }
+
+  expect(seen.size).toBe(ITEMS.length);
+}
+
 export function contextReplyNumber(questionId: string, value: string): string {
   const question = questions.context.find((item) => item.id === questionId);
   const index = question?.options?.findIndex((option) => option.value === value) ?? -1;
@@ -42,9 +69,9 @@ export async function completeInterview(page: Page, high: "practical" | "people"
 
   // Answer every interest item: the chosen dimensions high, the rest low.
   const highDims = high === "practical" ? ["R", "I"] : ["S", "E"];
-  for (const item of ITEMS) {
-    await sendInterviewReply(page, String(highDims.includes(item.dimension) ? 5 : 2));
-  }
+  await answerInterestItems(page, (dimension) =>
+    String(highDims.includes(dimension) ? 5 : 2),
+  );
 
   await sendInterviewReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
   await sendInterviewReply(page, contextReplyNumber("cost", "moderate"));

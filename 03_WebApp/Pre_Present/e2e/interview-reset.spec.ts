@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 import questions from "../data/questions.json";
 
 const first = questions.interest[0];
-const second = questions.interest[1];
-const third = questions.interest[2];
+const second = questions.interest.find((item) => item.id === "INT-R-02")!;
+const third = questions.interest.find((item) => item.id === "INT-R-03")!;
 
 /** Answer the question on screen and wait for the next one to arrive. */
 async function answer(page: import("@playwright/test").Page, reply: string, nextId: string) {

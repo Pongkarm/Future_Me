@@ -182,7 +182,8 @@ preference:
   observed distribution and report the percentile used — the widely cited "2 seconds per item"
   threshold is described in its own source as an educated guess, not a validated constant, and is
   likely too aggressive for a 13-year-old reading a translation on a phone.
-- **Longstring** — interpretable here precisely because the dimensions are interleaved.
+- **Longstring** — potentially useful because the base sequence is interleaved, but only as a soft
+  flag because the first-answer rule can cluster two same-dimension follow-ups near the start.
 - **Even–odd consistency** across the six scales, which are unidimensional by design.
 - **Intra-individual response variability**, which catches the opposite failure.
 - **One instructed-attention item** at roughly the two-thirds point — and no more than one. Treat
@@ -197,9 +198,12 @@ preference:
 
 ## 5. Order effects
 
-Item order is currently **fixed and interleaved**. Randomising order between participants during the
-pilot would allow order effects to be estimated. If they prove negligible, fixed order should be
-kept — it is better for a learner who returns to a partly finished assessment.
+The base item order is interleaved, but the live prototype now has **three deterministic sequences**.
+The learner's first answer selects two existing items to move forward; all 30 items are still asked.
+During the pilot, compare the three branches and controlled order variants to estimate whether the
+branch itself, item position or local context changes responses. If those effects are negligible,
+the deterministic rule can be kept because it gives a returning learner a stable sequence. This is
+not CAT or IRT, and it should not be described as improving accuracy until that claim is validated.
 
 ---
 

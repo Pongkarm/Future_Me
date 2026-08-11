@@ -166,6 +166,7 @@ export default function MissionPage() {
           state="speaking"
           status={t.assessment.interviewerListening}
           toggleMotionLabel={t.chat.motionEnable}
+          systemMotionLabel={t.chat.motionSystem}
           label={t.assessment.interviewerName}
           testIdPrefix="mission"
         >

@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import AssessmentMascot from "@/components/assessment/AssessmentMascot";
 import ChatAvatar from "@/components/chat/ChatAvatar";
 import type { MascotState } from "@/components/FutureMeMascot";
+import {
+  MASCOT_MOTION_KEY,
+  shouldForceMascotMotion,
+} from "@/lib/mascot/motion-preference";
 
 export function JourneyChatPanel({
   title,
@@ -113,6 +117,7 @@ export function JourneyMessage({
 export function JourneyMascotTurn({
   status,
   toggleMotionLabel,
+  systemMotionLabel,
   label,
   testIdPrefix,
   state = "idle",
@@ -120,13 +125,34 @@ export function JourneyMascotTurn({
 }: {
   status: string;
   toggleMotionLabel?: string;
+  systemMotionLabel?: string;
   label?: string;
   testIdPrefix?: string;
   state?: MascotState;
   children: ReactNode;
 }) {
-  const [forceMotion, setForceMotion] = useState(false);
+  const [forceMotion, setForceMotion] = useState(true);
   const prefix = testIdPrefix ?? "journey";
+
+  useEffect(() => {
+    try {
+      setForceMotion(shouldForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY)));
+    } catch {
+      setForceMotion(true);
+    }
+  }, []);
+
+  const toggleMotion = () => {
+    setForceMotion((current) => {
+      const next = !current;
+      try {
+        window.localStorage.setItem(MASCOT_MOTION_KEY, next ? "on" : "system");
+      } catch {
+        // The page-level choice still works if persistent storage is blocked.
+      }
+      return next;
+    });
+  };
 
   return (
     <div
@@ -138,8 +164,10 @@ export function JourneyMascotTurn({
           state={state}
           status={status}
           forceMotion={forceMotion}
-          onToggleMotion={toggleMotionLabel ? () => setForceMotion((value) => !value) : undefined}
-          toggleMotionLabel={toggleMotionLabel}
+          onToggleMotion={toggleMotionLabel ? toggleMotion : undefined}
+          toggleMotionLabel={
+            forceMotion ? (systemMotionLabel ?? toggleMotionLabel) : toggleMotionLabel
+          }
           testIdPrefix={prefix}
         />
       </div>

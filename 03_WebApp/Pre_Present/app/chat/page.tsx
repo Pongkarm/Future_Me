@@ -15,7 +15,10 @@ import {
   CHAT_MASCOT_TIMING,
   getChatResponseMotionDuration,
 } from "@/lib/mascot/chat-states";
-import { MASCOT_MOTION_KEY } from "@/lib/mascot/motion-preference";
+import {
+  MASCOT_MOTION_KEY,
+  shouldForceMascotMotion,
+} from "@/lib/mascot/motion-preference";
 import { checkText } from "@/lib/safety";
 
 interface ChatResponse {
@@ -89,7 +92,7 @@ export default function ChatPage() {
   const [busy, setBusy] = useState(false);
   const [safetySource, setSafetySource] = useState<SafetyTriggerSource | null>(null);
   const [mascotState, setMascotState] = useState<MascotState>("idle");
-  const [forceMascotMotion, setForceMascotMotion] = useState(false);
+  const [forceMascotMotion, setForceMascotMotion] = useState(true);
   const idSequence = useRef(0);
   const requestSequence = useRef(0);
   const controllerRef = useRef<AbortController | null>(null);
@@ -134,9 +137,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     try {
-      setForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY) === "on");
+      setForceMascotMotion(
+        shouldForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY)),
+      );
     } catch {
       // A blocked preference store should not stop the chat or the mascot.
+      setForceMascotMotion(true);
     }
   }, []);
 

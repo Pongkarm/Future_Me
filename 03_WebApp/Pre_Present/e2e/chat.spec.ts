@@ -266,7 +266,7 @@ test("the full mascot visibly animates each chat action", async ({ page }) => {
   await expect(mascot).toHaveAttribute("data-mascot-state", "idle", { timeout: 5_000 });
 });
 
-test("reduced motion keeps action states but removes mascot animation", async ({ page }) => {
+test("the system-motion opt-out keeps action states but removes mascot animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.route("**/api/chat", async (route) => {
     await route.fulfill({
@@ -284,6 +284,7 @@ test("reduced motion keeps action states but removes mascot animation", async ({
   await page.goto("/chat");
   const mascot = page.getByTestId("chat-mascot-action");
   const svg = mascot.locator("svg.fm-mascot");
+  await page.getByTestId("chat-motion-toggle").click();
   await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS("animation-name", "none");
 
   await page.getByTestId("chat-input").fill("Show the reduced-motion state");
@@ -295,7 +296,7 @@ test("reduced motion keeps action states but removes mascot animation", async ({
   await expect(svg.locator(".fm-mouth-shape--smile")).toHaveCSS("animation-name", "none");
 });
 
-test("an explicit mascot motion choice overrides reduced motion and persists", async ({ page }) => {
+test("mascot motion defaults on and the explicit system choice persists", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.route("**/api/chat", async (route) => {
     await route.fulfill({
@@ -315,10 +316,6 @@ test("an explicit mascot motion choice overrides reduced motion and persists", a
   const svg = mascot.locator("svg.fm-mascot");
   const toggle = page.getByTestId("chat-motion-toggle");
 
-  await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS("animation-name", "none");
-
-  await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect(svg).toHaveAttribute("data-fm-motion", "on");
   await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS(
@@ -334,8 +331,18 @@ test("an explicit mascot motion choice overrides reduced motion and persists", a
     "0.45s",
   );
 
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(svg).toHaveAttribute("data-fm-motion", "system");
+  await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS("animation-name", "none");
+
   await page.reload();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS("animation-name", "none");
+
+  await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect(svg).toHaveAttribute("data-fm-motion", "on");
   await expect(svg.locator(".fm-listen-ring").first()).toHaveCSS(
     "animation-name",
     "fm-listen-ping",

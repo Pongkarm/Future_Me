@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import questions from "../data/questions.json";
 
 const first = questions.interest[0];
-const second = questions.interest[1];
+const second = questions.interest.find((item) => item.id === "INT-R-02")!;
 
 test("the interview is a chronological bot-left and user-right chat", async ({ page }) => {
   const chatRequests: string[] = [];
@@ -38,7 +38,7 @@ test("the interview is a chronological bot-left and user-right chat", async ({ p
   await expect(activeTurn.getByTestId("chat-avatar-assistant")).toHaveCount(0);
   await expect(mascot.locator('.fm-mascot[data-crop="full"]')).toHaveCount(1);
   await expect(page.locator('svg.fm-mascot[data-crop="full"]')).toHaveCount(1);
-  await expect(mascot).toHaveAttribute("data-mascot-force-motion", "system");
+  await expect(mascot).toHaveAttribute("data-mascot-force-motion", "on");
   await expect(mascot.locator('[data-fm-anim="on"]')).toHaveCount(1);
   await expect(activeTail).toHaveAttribute("data-tail-target", "mascot");
   await expect(page.getByTestId("interview-mascot-aura")).toBeVisible();
@@ -214,7 +214,7 @@ test("the interview mascot keeps a calm scene with readable character motion", a
   expect(await acknowledgement).toEqual({ name: "fm-interview-ack-pop", duration: "0.42s" });
 });
 
-test("the static interview scene preserves reduced motion and character-only opt-in", async ({ page }) => {
+test("the interview mascot animates by default and preserves a system-motion opt-out", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/interview");
 
@@ -227,33 +227,34 @@ test("the static interview scene preserves reduced motion and character-only opt
   const characterRoot = scene.locator(".fm-root");
   const toggle = page.getByTestId("interview-motion-toggle");
 
-  await expect(stage).toHaveAttribute("data-mascot-force-motion", "system");
-  await expect(aura).toHaveCSS("animation-name", "none");
-  await expect(orbit).toHaveCSS("animation-name", "none");
-  await expect(spark).toHaveCSS("animation-name", "none");
-  await expect(statusDot).toHaveCSS("animation-name", "none");
-  await expect(characterRoot).toHaveCSS("animation-name", "none");
-  await expect(scene).not.toHaveCSS("background-image", "none");
-  await expect(scene).not.toHaveCSS("box-shadow", "none");
-
-  await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect(stage).toHaveAttribute("data-mascot-force-motion", "on");
-  await expect(scene.locator("svg.fm-mascot")).toHaveAttribute("data-fm-motion", "on");
   await expect(aura).toHaveCSS("animation-name", "none");
   await expect(orbit).toHaveCSS("animation-name", "none");
   await expect(spark).toHaveCSS("animation-name", "none");
   await expect(statusDot).toHaveCSS("animation-name", "none");
   await expect(characterRoot).toHaveCSS("animation-name", "fm-float");
+  await expect(scene).not.toHaveCSS("background-image", "none");
+  await expect(scene).not.toHaveCSS("box-shadow", "none");
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(stage).toHaveAttribute("data-mascot-force-motion", "system");
+  await expect(scene.locator("svg.fm-mascot")).toHaveAttribute("data-fm-motion", "system");
+  await expect(aura).toHaveCSS("animation-name", "none");
+  await expect(orbit).toHaveCSS("animation-name", "none");
+  await expect(spark).toHaveCSS("animation-name", "none");
+  await expect(statusDot).toHaveCSS("animation-name", "none");
+  await expect(characterRoot).toHaveCSS("animation-name", "none");
 
   await page.reload();
   await expect(page.getByTestId("interview-motion-toggle")).toHaveAttribute(
     "aria-pressed",
-    "true",
+    "false",
   );
   await expect(page.getByTestId("interview-mascot-stage")).toHaveAttribute(
     "data-mascot-force-motion",
-    "on",
+    "system",
   );
 });
 

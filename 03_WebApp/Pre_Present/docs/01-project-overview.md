@@ -66,8 +66,8 @@ flowchart LR
 ```
 
 **Phase 1 — what the student says.** *In the running prototype:* a bilingual 30-item interest
-questionnaire plus four required context questions and one optional free-text prompt, producing a RIASEC-shaped profile. Its design and
-limitations are documented in [questionnaire-methodology.md](questionnaire-methodology.md). *Planned:* an
+questionnaire plus four required context questions and one optional free-text prompt, producing a RIASEC-shaped profile. The first answer deterministically moves two reviewed items forward, while every learner still receives all 30. Its design and
+limitations are documented in [questionnaire-methodology.md](questionnaire-methodology.md). *Planned:* a fuller
 adaptive Thai-language conversation. Socratic questioning, Motivational Interviewing, Laddering,
 and STAR are candidate design influences that require expert review; none validates the current
 instrument.
@@ -123,7 +123,7 @@ This is hackathon-stage work with a real research base and a runnable prototype,
 product. Specifically:
 
 - The interest instrument and mission rubrics **have not been validated** by qualified assessment experts.
-- The assessment is a **fixed bilingual Thai/English questionnaire**, not the adaptive conversation described above. The Thai translation is a first draft, not a completed cross-cultural adaptation.
+- The assessment is a **bilingual Thai/English questionnaire with one small first-answer ordering rule**, not CAT, IRT, or the fuller adaptive conversation described above. The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - The route catalogue is **illustrative**. Cost, location and timing carry no source, so they are held out of eligibility, scoring and ranking.
 - **No student pilot has run.** Every effectiveness claim in this repository is a design goal, not a measured result.
 - NDLP/DEEP integration is a **future possibility**, dependent on documentation and partnership approval that do not exist. The July 2026 source audit could not verify the technical claims previously made about either platform.

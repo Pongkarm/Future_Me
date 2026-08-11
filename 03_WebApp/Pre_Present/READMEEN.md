@@ -105,7 +105,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 
 | Step | Learner experience | Evidence produced |
 |---|---|---|
-| **1 · Reflect** | Answer 30 interest items and 5 context prompts, one at a time, then review the responses. | A provisional RIASEC-shaped interest profile and practical constraints |
+| **1 · Reflect** | Answer 30 interest items and 5 context prompts. The first answer selects two immediate follow-ups, then the learner reviews every response. | A provisional RIASEC-shaped interest profile and practical constraints |
 | **2 · Try** | Complete one of 3 scenario missions; keep or replace the suggested mission. | A separate mission vector that can support or contradict self-report |
 | **3 · Explore** | Inspect 0–3 route hypotheses with reasons, unknowns, provenance, and freshness. | Comparable, inspectable route evidence |
 | **4 · Compare** | Review routes against the same three evidence-derived criteria; practical estimates stay visible as prompts to verify. | Trade-offs and missing information |
@@ -162,7 +162,8 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 |---|---|
 | **Interface** | Thai and English across the complete flow; light, dark, and system themes; responsive desktop/mobile layouts |
 | **Session** | Guest-only journey, refresh recovery, input validation, and immediate local deletion |
-| **Assessment** | 30 interleaved activity-interest items, 5 per RIASEC dimension, using a 5-point like/dislike scale |
+| **Assessment** | 30 activity-interest items, 5 per RIASEC dimension, using a 5-point scale; the first answer deterministically moves two reviewed items forward |
+| **Mascot motion** | Animated by default across the journey, with a persisted control to return to the operating-system motion preference |
 | **Context** | 4 required prompts for education tier, cost, mobility, and time horizon, plus 1 optional free-text prompt |
 | **Missions** | 3 four-step scenario missions; deterministic scoring and transparent selection; learner override |
 | **Catalogue** | 12 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
@@ -309,6 +310,8 @@ What is not supported:
 - Published reliability from 18REST does not transfer to adapted English items or the Thai translation.
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics, fixed weights, and recommendation thresholds have not been validated.
+- The first-answer follow-up rule changes order only. It is not CAT or IRT and does not establish higher accuracy.
+- The restored bilingual 1,000-item bank passes structural checks but remains a research-only input; it is not imported by the live interview.
 - The 12-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
   and limitations contain unsourced team estimates; practical estimates do not filter, score, or rank routes.
 - No ethics approval, real-student pilot, bias audit, or outcome evaluation has run.

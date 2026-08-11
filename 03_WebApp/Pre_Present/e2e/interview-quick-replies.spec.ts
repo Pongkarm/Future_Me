@@ -10,7 +10,8 @@ import questions from "../data/questions.json";
  */
 
 const first = questions.interest[0];
-const second = questions.interest[1];
+const highFollowUp = questions.interest.find((item) => item.id === "INT-R-02")!;
+const lowFollowUp = questions.interest.find((item) => item.id === "INT-I-01")!;
 const scale = questions.scale as { value: number; label: { en: string; th: string } }[];
 
 const currentQuestion = (page: Page) => page.getByTestId("interview-current-question");
@@ -32,7 +33,10 @@ test("a tap answers the question and moves on", async ({ page }) => {
 
   await page.getByTestId("quick-reply-4").click();
 
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", highFollowUp.id);
+  await expect(page.getByTestId("interview-question-bubble")).toContainText(
+    "Follow-up from your first answer",
+  );
   await expect(page.getByTestId("interview-message-user")).toContainText(scale[3].label.en);
 });
 
@@ -44,7 +48,7 @@ test("a tap and the typed word record the same answer", async ({ page }) => {
 
   await page.goto("/interview");
   await page.getByTestId("quick-reply-4").click();
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", highFollowUp.id);
   const tapped = await read(page);
 
   // Same question again, answered with the keyboard instead.
@@ -52,7 +56,7 @@ test("a tap and the typed word record the same answer", async ({ page }) => {
   await page.goto("/interview");
   await page.getByTestId("assessment-reply").fill(scale[3].label.en);
   await page.getByTestId("assessment-send").click();
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", highFollowUp.id);
   const typed = await read(page);
 
   expect(tapped).toEqual(typed);
@@ -64,7 +68,7 @@ test("the chips follow the language the learner reads", async ({ page }) => {
 
   await expect(page.getByTestId("quick-reply-4")).toContainText(scale[3].label.th);
   await page.getByTestId("quick-reply-4").click();
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", highFollowUp.id);
 });
 
 test("the situation questions get their own options, not the interest scale", async ({ page }) => {
@@ -101,7 +105,7 @@ test("typing still works, and the chips do not steal the composer", async ({ pag
   await page.goto("/interview");
   await page.getByTestId("assessment-reply").fill("I love it");
   await page.getByTestId("assessment-send").click();
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", highFollowUp.id);
   await expect(page.getByTestId("assessment-reply")).toHaveValue("");
 });
 
@@ -113,7 +117,7 @@ test("the chips are reachable and operable from the keyboard", async ({ page }) 
   await expect(chip).toBeFocused();
   await page.keyboard.press("Enter");
 
-  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", second.id);
+  await expect(currentQuestion(page)).toHaveAttribute("data-question-id", lowFollowUp.id);
 });
 
 test("the set is announced as a group rather than as loose words", async ({ page }) => {

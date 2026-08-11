@@ -374,8 +374,20 @@ in §12 rather than papered over.
 
 ### 8.1 Item order
 
-**The six dimensions are interleaved, not presented in blocks.** Items rotate R → I → A → S → E → C
-five times.
+**The base sequence is interleaved rather than presented in blocks.** The 30-item bank rotates
+R → I → A → S → E → C five times. The live interview now applies one small, deterministic
+first-answer rule: after `INT-R-01`, it moves two existing items forward as follow-ups.
+
+- Answer 4–5: two more Realistic items (`INT-R-02`, `INT-R-03`).
+- Answer 3: one Realistic clarification and one adjacent Investigative item (`INT-R-02`,
+  `INT-I-01`).
+- Answer 1–2: one Investigative and one Artistic item (`INT-I-01`, `INT-A-01`) to broaden the
+  exploration.
+
+No item is added, removed or scored differently. After those two follow-ups, the interview resumes
+the base sequence without repeating the moved items. The learner still answers all 30 interest
+items. This rule is a prototype interaction pattern, not computerised adaptive testing (CAT), item
+response theory (IRT), or evidence that measurement accuracy has improved.
 
 **A correction, recorded rather than quietly removed.** An earlier draft of this section attributed
 two direct quotations to O\*NET claiming that mixing items "reduced the presence of a general
@@ -385,25 +397,25 @@ Reliability, Validity, and Self-Scoring* (1999). The quotations have been withdr
 paper Short Form in fact groups items by construct, using "horizontal color bands" so clients can
 review a RIASEC category together — the opposite of what was claimed.
 
-Interleaving is therefore kept on the general grounds below, not on a citation:
+Interleaving is therefore kept as the base-order design on the general grounds below, not on a
+citation:
 
 - A block of six consecutive items from the same dimension invites the learner to answer the block
   rather than each item — an initial impression carried forward is exactly the acquiescence-adjacent
   pattern that item-specific response formats are meant to reduce (§6).
-- It makes a longstring careless-responding index interpretable. Identical consecutive answers across
-  a blocked instrument may be perfectly genuine; across an interleaved one they are more likely to
-  indicate insufficient effort.
+- It can make a longstring careless-responding index more interpretable. Identical consecutive
+  answers across a blocked instrument may be perfectly genuine; across a mostly interleaved one they
+  are more likely to indicate insufficient effort. The two-item adaptive prefix can temporarily
+  cluster dimensions, so longstring must remain a soft screening flag rather than proof of careless
+  responding.
 
 This is a design judgement supported by reasoning, not an empirical finding. It is labelled as
 such.
 
-Interleaving has a second benefit: it makes a longstring index interpretable. Identical consecutive
-answers across a blocked instrument may be perfectly genuine; across an interleaved one they are
-more likely to indicate careless responding.
-
-**Order is fixed rather than randomised**, so that a learner returning to the assessment sees a
-stable sequence and the review screen matches what they answered. Randomisation is proposed in the
-[validation plan](validation-plan.md) as a way to estimate order effects.
+**Order is deterministic rather than randomised.** Learners can see one of three sequences based on
+their first response, and that sequence then remains stable so a returning learner and the review
+screen match what was answered. The branch rule and order/context effects have not been validated.
+Controlled order variants are proposed in the [validation plan](validation-plan.md).
 
 ---
 
@@ -536,9 +548,10 @@ instrument.** Not weak — unexamined.
     catalogue is 0.20, so a strongly Conventional learner has nothing well-matched to be offered.
     This is asserted by a test so it stays visible. Adding an administration, accounting or
     logistics route is the fix, and it is a route-data task rather than an assessment one.
-11. **Order is fixed.** Items are interleaved across dimensions (§8.1) rather than blocked, but the
-    sequence is the same for every learner, so order and context effects are uncontrolled.
-    Randomisation is proposed in the [validation plan](validation-plan.md).
+11. **Order is partly answer-driven but not randomised.** The base sequence is interleaved across
+    dimensions (§8.1), while the first response selects two items to move forward. The three branch
+    sequences are deterministic, so branch, order and context effects remain uncontrolled.
+    Controlled order variants are proposed in the [validation plan](validation-plan.md).
 
 ---
 

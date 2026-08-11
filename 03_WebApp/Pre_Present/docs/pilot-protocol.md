@@ -63,11 +63,13 @@ well enough for the product's stated exploratory purpose in this sample.
 Single-administration cross-sectional pilot. No experimental manipulation, no
 control group — neither is meaningful for an item analysis.
 
-**Item order is fixed and interleaved** for every participant (§8.1 of the
-[methodology](questionnaire-methodology.md)). Randomising order between
-participants would let order effects be estimated, but it would also break the
-resume-where-you-stopped behaviour the product relies on. Order effects are
-therefore a known uncontrolled factor, listed in §9.
+The base order is interleaved, while the live prototype uses **three
+deterministic sequences** (§8.1 of the
+[methodology](questionnaire-methodology.md)). The first answer selects two
+existing items to move forward, after which the sequence remains stable and all
+30 items are still asked. The pilot should compare those branches and controlled
+order variants. Branch, order and context effects are therefore known
+uncontrolled factors, listed in §9.
 
 ---
 
@@ -238,7 +240,8 @@ intention on one device; it is not a substitute for the process above.
 
 ## 9. Known uncontrolled factors
 
-- **Item order is fixed**, so order and context effects are not estimable.
+- **Item order is partly answer-driven but not randomised**, so the effects of
+  the first-answer branch, item position and local context are not yet estimable.
 - **Acquiescence is not measured.** There are no reverse-keyed items — a decision
   argued from evidence in §8 of the methodology — and no separate acquiescence
   index, so response style is uncontrolled.

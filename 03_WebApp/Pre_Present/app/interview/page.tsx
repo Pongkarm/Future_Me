@@ -33,7 +33,14 @@ import {
   type LikertValue,
   type ReplyParseFailureReason,
 } from "@/lib/interview/reply-parser";
-import { MASCOT_MOTION_KEY } from "@/lib/mascot/motion-preference";
+import {
+  planInterestQuestions,
+  type InterestQuestion,
+} from "@/lib/interview/adaptive-engine";
+import {
+  MASCOT_MOTION_KEY,
+  shouldForceMascotMotion,
+} from "@/lib/mascot/motion-preference";
 import { clearTelemetry, markSeen, recordAnswer } from "@/lib/research/telemetry";
 
 type ContextKey = "tier" | "cost" | "mobility" | "horizon" | "proud";
@@ -59,37 +66,39 @@ interface ContextQuestion {
   options?: { value: string; label: Localised }[];
 }
 
-interface InterestQuestion {
-  id: string;
-  dimension: string;
-  text: Localised;
-}
-
 const CONTEXT_QUESTIONS = questions.context as ContextQuestion[];
-const INTEREST_QUESTIONS = questions.interest as InterestQuestion[];
+const BASE_INTEREST_QUESTIONS = questions.interest as InterestQuestion[];
 const SCALE = questions.scale as { value: LikertValue; label: Localised }[];
 
 type Step =
-  | { kind: "interest"; q: InterestQuestion }
+  | { kind: "interest"; q: InterestQuestion; followUp: boolean }
   | { kind: "context"; q: ContextQuestion }
   | { kind: "review" };
 
 /**
- * One flat list of screens. Order is the JSON's order, which keeps the
- * assessment's sequence a data decision rather than a layout decision.
+ * One flat list of screens. The first saved answer can move two reviewed
+ * interest items directly behind it; everything else keeps the JSON order.
  */
-const STEPS: Step[] = [
-  ...INTEREST_QUESTIONS.map((q) => ({ kind: "interest" as const, q })),
-  ...CONTEXT_QUESTIONS.map((q) => ({ kind: "context" as const, q })),
-  { kind: "review" as const },
-];
+function buildSteps(answers: Record<string, number>): Step[] {
+  const plan = planInterestQuestions(answers);
+  const followUps = new Set(plan.followUpIds);
+  return [
+    ...plan.questions.map((q) => ({
+      kind: "interest" as const,
+      q,
+      followUp: followUps.has(q.id),
+    })),
+    ...CONTEXT_QUESTIONS.map((q) => ({ kind: "context" as const, q })),
+    { kind: "review" as const },
+  ];
+}
 
-const REVIEW_INDEX = STEPS.length - 1;
-const TOTAL_QUESTIONS = REVIEW_INDEX;
+const TOTAL_QUESTIONS = BASE_INTEREST_QUESTIONS.length + CONTEXT_QUESTIONS.length;
+const REVIEW_INDEX = TOTAL_QUESTIONS;
 /** Questions that count towards the bar. The optional free text is excluded. */
-const SCORED_QUESTIONS = STEPS.filter(
-  (s) => s.kind === "interest" || (s.kind === "context" && s.q.type !== "text"),
-).length;
+const SCORED_QUESTIONS =
+  BASE_INTEREST_QUESTIONS.length +
+  CONTEXT_QUESTIONS.filter((question) => question.type !== "text").length;
 
 /** A short visible acknowledgement, not a fake model-generation delay. */
 const ADVANCE_MS = 480;
@@ -126,7 +135,7 @@ export default function InterviewPage() {
   const [replyError, setReplyError] = useState<ReplyParseFailureReason | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [mascotState, setMascotState] = useState<MascotState>("speaking");
-  const [forceMascotMotion, setForceMascotMotion] = useState(false);
+  const [forceMascotMotion, setForceMascotMotion] = useState(true);
 
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "back">("forward");
@@ -140,9 +149,13 @@ export default function InterviewPage() {
   const firstRender = useRef(true);
   const safetyReturnRef = useRef<HTMLElement | null>(null);
   const sessionRef = useRef<GuestSession | null>(null);
-  const forceMotionRef = useRef(false);
+  const forceMotionRef = useRef(true);
   sessionRef.current = session;
   forceMotionRef.current = forceMascotMotion;
+  const steps = useMemo(
+    () => buildSteps(session?.interview.interest ?? {}),
+    [session?.interview.interest],
+  );
 
   useEffect(() => {
     const result = loadSessionResult();
@@ -150,16 +163,20 @@ export default function InterviewPage() {
     setSession(restored);
     // Resume where the learner stopped rather than at question one. Anything
     // else makes a refresh feel like losing the work that was in fact kept.
-    setStepIndex(firstUnansweredStep(restored));
+    setStepIndex(firstUnansweredStep(restored, buildSteps(restored.interview.interest)));
     if (result.status === "reset" && result.discarded.length > 0) setRecovered("reset");
     else if (result.status === "repaired" && result.discarded.length > 0) setRecovered("repaired");
   }, []);
 
   useEffect(() => {
     try {
-      setForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY) === "on");
+      // Motion is on by default for the demo. A learner can still explicitly
+      // return to the operating-system preference from the visible control.
+      setForceMascotMotion(
+        shouldForceMascotMotion(window.localStorage.getItem(MASCOT_MOTION_KEY)),
+      );
     } catch {
-      setForceMascotMotion(false);
+      setForceMascotMotion(true);
     }
   }, []);
 
@@ -174,22 +191,25 @@ export default function InterviewPage() {
   // Response-process capture for a pilot. Local-only; nothing is transmitted,
   // and it is exported only by a deliberate action on /research.
   useEffect(() => {
-    const step = STEPS[stepIndex];
+    const step = steps[stepIndex];
     if (step?.kind === "interest") markSeen(step.q.id, stepIndex);
-  }, [stepIndex]);
+  }, [stepIndex, steps]);
 
   const sessionReady = session !== null;
 
   useEffect(() => {
-    if (!sessionReady) return;
+    // Persisting an answer can also create the adaptive order after question
+    // one. Do not replay the current question's speaking state while its saved
+    // acknowledgement is on screen; the scheduled step change will run this
+    // effect for the actual follow-up.
+    if (!sessionReady || submitting) return;
     const activeSession = sessionRef.current;
-    const activeStep = STEPS[stepIndex];
+    const activeStep = steps[stepIndex];
     if (!activeSession || !activeStep || activeStep.kind === "review") return;
 
     clearTimer(mascotTimer);
     setReply(replyForStep(activeSession, activeStep, lang));
     setReplyError(null);
-    setSubmitting(false);
     setMascotState("speaking");
 
     const reduced =
@@ -200,7 +220,7 @@ export default function InterviewPage() {
       return;
     }
     mascotTimer.current = setTimeout(() => setMascotState("idle"), ASKING_MS);
-  }, [lang, sessionReady, stepIndex]);
+  }, [lang, sessionReady, stepIndex, steps, submitting]);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -317,7 +337,7 @@ export default function InterviewPage() {
     if (replyError) setReplyError(null);
     if (mascotState === "error") setMascotState("idle");
 
-    const activeStep = STEPS[stepIndex];
+    const activeStep = steps[stepIndex];
     if (session && activeStep?.kind === "context" && activeStep.q.type === "text") {
       persist({
         ...session,
@@ -336,7 +356,7 @@ export default function InterviewPage() {
    *   answer and must not be recorded two different ways.
    */
   const handleReplySubmit = (quickReply?: string) => {
-    const activeStep = STEPS[stepIndex];
+    const activeStep = steps[stepIndex];
     if (!session || submitting || !activeStep || activeStep.kind === "review") return;
 
     const raw = (quickReply ?? reply).trim();
@@ -460,7 +480,7 @@ export default function InterviewPage() {
     );
   }
 
-  const step = STEPS[stepIndex];
+  const step = steps[stepIndex];
   const onReview = stepIndex === REVIEW_INDEX;
   const conversationLabels = {
     interviewerName: t.assessment.interviewerName,
@@ -486,7 +506,7 @@ export default function InterviewPage() {
       : t.assessment.replyNotRecognised
     : null;
   const transcriptHistory =
-    step.kind === "review" ? [] : conversationHistory(session, stepIndex, lang);
+    step.kind === "review" ? [] : conversationHistory(session, stepIndex, lang, steps);
   const acceptedReply =
     step.kind === "review"
       ? null
@@ -574,7 +594,9 @@ export default function InterviewPage() {
               questionId={step.q.id}
               eyebrow={
                 step.kind === "interest"
-                  ? t.assessment.eyebrowInterests
+                  ? step.followUp
+                    ? t.assessment.eyebrowFollowUp
+                    : t.assessment.eyebrowInterests
                   : step.q.type === "text"
                     ? t.assessment.eyebrowOptional
                     : t.assessment.eyebrowSituation
@@ -631,7 +653,7 @@ export default function InterviewPage() {
 
           {onReview ? (
             <ReviewStep
-              sections={reviewSections(session, lang, t)}
+              sections={reviewSections(session, lang, t, steps)}
               onJump={jumpTo}
               labels={t.assessment}
               transcriptLabel={t.chat.conversationLabel}
@@ -657,7 +679,7 @@ export default function InterviewPage() {
                   <li>
                     {format(t.assessment.errorNotEnough, {
                       min: MIN_INTEREST_ANSWERS,
-                      total: INTEREST_QUESTIONS.length,
+                      total: BASE_INTEREST_QUESTIONS.length,
                       answered: answeredInterest,
                     })}
                   </li>
@@ -772,11 +794,12 @@ function conversationHistory(
   session: GuestSession,
   activeIndex: number,
   lang: Language,
+  steps: Step[],
 ): AssessmentTranscriptExchange[] {
   const history: AssessmentTranscriptExchange[] = [];
 
   for (let index = 0; index < Math.min(activeIndex, REVIEW_INDEX); index += 1) {
-    const step = STEPS[index];
+    const step = steps[index];
     if (step.kind === "review") continue;
     const answer = replyForStep(session, step, lang).trim();
     history.push({
@@ -797,9 +820,9 @@ function stepHasAnswer(session: GuestSession, step: Exclude<Step, { kind: "revie
 }
 
 /** The first screen the learner has not completed, or the review if none. */
-function firstUnansweredStep(session: GuestSession): number {
-  for (let i = 0; i < STEPS.length - 1; i++) {
-    const step = STEPS[i];
+function firstUnansweredStep(session: GuestSession, steps: Step[]): number {
+  for (let i = 0; i < steps.length - 1; i++) {
+    const step = steps[i];
     if (step.kind === "interest") {
       if (session.interview.interest[step.q.id] === undefined) return i;
     } else if (step.kind === "context") {
@@ -813,15 +836,19 @@ function firstUnansweredStep(session: GuestSession): number {
       }
     }
   }
-  return STEPS.length - 1;
+  return steps.length - 1;
 }
 
 function reviewSections(
   session: GuestSession,
   lang: Language,
   t: { assessment: { sectionInterests: string; sectionSituation: string } },
+  steps: Step[],
 ): ReviewSection[] {
-  const interest = INTEREST_QUESTIONS.map((q, i) => {
+  const interestQuestions = steps
+    .filter((step): step is Extract<Step, { kind: "interest" }> => step.kind === "interest")
+    .map((step) => step.q);
+  const interest = interestQuestions.map((q, i) => {
     const value = session.interview.interest[q.id];
     const point = SCALE.find((s) => s.value === value);
     return {
@@ -833,7 +860,7 @@ function reviewSections(
   });
 
   const situation = CONTEXT_QUESTIONS.map((q, i) => {
-    const stepIndex = INTEREST_QUESTIONS.length + i;
+    const stepIndex = interestQuestions.length + i;
     if (q.type === "text") {
       const text = session.interview.context.proud?.trim();
       return {

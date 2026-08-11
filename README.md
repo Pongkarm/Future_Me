@@ -30,7 +30,8 @@
 ## Overview
 
 FutureMe is a decision-support prototype for Thai lower-secondary, upper-secondary, and vocational
-students. It combines a 30-question interest reflection, a short scenario mission, explainable
+students. It combines a 30-question interest reflection whose first answer selects two follow-up
+items, a short scenario mission, explainable
 comparison of up to three study or career-route hypotheses, a province-aware nearby-institution
 lookup, and a reversible 30-day action plan. It does not choose one “perfect career,” guarantee
 admission, or claim that a listed institution offers a particular programme.
@@ -39,7 +40,7 @@ admission, or claim that a listed institution offers a particular programme.
 |---|---|
 | **Who is it for?** | Thai students exploring their next study or career direction |
 | **What does it produce?** | Zero to three route hypotheses with reasons, limitations, comparisons, nearby-institution information, and a 30-day plan |
-| **What runs in this demo?** | 30 live interest questions, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
+| **What runs in this demo?** | 30 live interest questions with rule-based follow-up ordering, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
 | **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them or answer bounded repository questions |
 | **Is it production-ready?** | No. It is a runnable, tested hackathon prototype that still needs validated data and a real-student pilot |
 
@@ -76,7 +77,7 @@ integrated learner flow; source code and automated tests remain the authoritativ
 ```mermaid
 flowchart LR
     A["Official sources"] --> B["Source audit + demo data"]
-    B --> C["Interview + mission"]
+    B --> C["Answer-driven interview + mission"]
     C --> D["Deterministic rule engine"]
     D --> E["0–3 routes + comparison"]
     E --> F["Reversible 30-day plan"]
@@ -102,7 +103,7 @@ accounts, permanent storage, and deployment remain planned (red).
 
 | Step | What happens |
 |---|---|
-| **1. Reflect** | Answer 30 RIASEC-shaped interest items, four required context questions, and one optional prompt |
+| **1. Reflect** | Answer 30 RIASEC-shaped interest items. The first answer selects two immediate follow-ups; four required context questions and one optional prompt follow |
 | **2. Try** | Complete one of three short scenario missions |
 | **3. Explore** | The rule engine checks the evidence and returns zero to three routes |
 | **4. Compare** | Compare every route using the same three scored criteria, with practical estimates labelled separately |
@@ -156,16 +157,19 @@ current product name is **FutureMe AI**.
 ### ✅ Working now
 
 - Complete guest journey from assessment to a 30-day plan
+- Deterministic first-answer follow-ups that reorder two reviewed items without changing the 30-item bank or scoring
 - English and Thai interfaces, responsive layouts, and light/dark/system themes
 - Deterministic scoring, refusal gates, ties, provenance, and freshness warnings
 - Local persistence, deletion controls, optional research export, and analysis scripts
-- Mascot UI with offline fallbacks for optional chat and explanations
+- Mascot animation enabled by default across the journey, with a persisted system-motion opt-out
 - Twelve illustrative routes and province-aware nearby-institution views that do not claim a specific programme is offered
 - Mascot sync, typecheck, lint, unit/integration tests, production build, and browser journeys are included in the repository checks
 
 ### 🟡 Needs validation
 
 - The question set and Thai adaptation have not been validated with real students.
+- The restored 1,000-item future bank passes structural checks but is not used live; its wording, fairness, scoring, and branching still require expert and student validation.
+- The three first-answer branches are transparent product heuristics, not CAT, IRT, or evidence that the assessment is more accurate.
 - Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates; the first four are held out of route decisions.
 - The institution register keeps 207 missing or quarantined coordinates and 987 missing websites as unknown instead of inventing values.
 - Route and programme metadata need recurring source review; source dates, full checksums, and automated integrity checks are recorded with the geography data.
@@ -237,6 +241,14 @@ No. Routes are hypotheses to explore, not predictions or guarantees.
 <summary><strong>Is this a validated RIASEC test?</strong></summary>
 
 No. It uses the RIASEC structure for reflection, but this item set and its Thai adaptation still require validation.
+</details>
+
+<details>
+<summary><strong>Does the live interview use the restored 1,000-item bank?</strong></summary>
+
+No. That bilingual bank is preserved and structurally checked for later research. The live interview
+still uses all 30 reviewed items in `questions.json`; the first answer only chooses which two of
+those items appear next. This is deterministic rule-based ordering, not CAT or IRT.
 </details>
 
 <details>

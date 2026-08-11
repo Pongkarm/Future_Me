@@ -72,6 +72,7 @@ export default function ComparePage() {
           <JourneyMascotTurn
             status={t.assessment.interviewerListening}
             toggleMotionLabel={t.chat.motionEnable}
+            systemMotionLabel={t.chat.motionSystem}
             label={t.assessment.interviewerName}
             testIdPrefix="compare"
           >
@@ -200,6 +201,7 @@ export default function ComparePage() {
         <JourneyMascotTurn
           status={t.assessment.interviewerListening}
           toggleMotionLabel={t.chat.motionEnable}
+          systemMotionLabel={t.chat.motionSystem}
           label={t.assessment.interviewerName}
           testIdPrefix="compare"
         >

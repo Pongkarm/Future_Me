@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import routesData from "../data/routes.json";
 import {
-  ITEMS,
+  answerInterestItems,
   completeInterview,
   completeMission,
   contextReplyNumber,
@@ -38,13 +38,13 @@ async function reachPlanWithGaps(page: Page) {
   await page.getByTestId("start-guest").click();
   await expect(page).toHaveURL(/\/interview/);
 
-  for (const item of ITEMS) {
+  await answerInterestItems(page, (dimension) => {
     // Investigative alone. R and I together now surface three vocational
     // routes — the expanded catalogue gave a hands-on learner much better
     // local, affordable options, which is the point of it, and leaves this
     // test with no expensive relocation route to hang a gap notice on.
-    await sendInterviewReply(page, String(item.dimension === "I" ? 5 : 2));
-  }
+    return String(dimension === "I" ? 5 : 2);
+  });
   await sendInterviewReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
   await sendInterviewReply(page, contextReplyNumber("cost", "unknown"));
   await sendInterviewReply(page, contextReplyNumber("mobility", "unknown"));

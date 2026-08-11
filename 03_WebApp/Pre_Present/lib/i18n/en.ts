@@ -56,6 +56,7 @@ export const en = {
     resetCancel: "Keep my answers",
     resetDone: "Your answers were cleared. You are back at the first question.",
     eyebrowInterests: "Interests",
+    eyebrowFollowUp: "Follow-up from your first answer",
     eyebrowSituation: "Your situation",
     eyebrowOptional: "Optional",
     interestHelper: "How much would you like doing this activity?",

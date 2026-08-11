@@ -481,7 +481,7 @@ def add_chrome(slide, number: int, section: str, title: str, *, subtitle: str | 
     )
     add_text(
         slide,
-        "FutureMe AI · Project case study · July 2026",
+        "FutureMe AI · Project case study · August 2026",
         2.18,
         7.08,
         5.2,
@@ -842,7 +842,7 @@ def slide_05(prs: Presentation):
         ("2", "THEORY", "RIASEC gives a\nsix-part interest language", COLORS["indigo"]),
         ("3", "CONTEXT", "Socratic + STAR\nsurface lived evidence", COLORS["magenta"]),
         ("4", "ACTION", "A mini mission\ntests self-report", COLORS["mint"]),
-        ("5", "PRODUCT", "0–3 routes +\na 30-day experiment", COLORS["warning"]),
+        ("5", "PRODUCT", "Top 5 programmes +\na 30-day experiment", COLORS["warning"]),
     ]
     x_positions = [0.7, 3.15, 5.6, 8.05, 10.5]
     for i, ((num, cap, body, color), x) in enumerate(zip(entries, x_positions)):
@@ -919,7 +919,7 @@ def slide_06(prs: Presentation):
     add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, 5.2, 6.28, 7.0, 0.48, fill=COLORS["surface2"], line=COLORS["warning"])
     add_text(
         slide,
-        "The current 30-item instrument is research-informed—but has never been validated.",
+        "The 41-item instrument is research-informed—but has never been validated.",
         5.45,
         6.42,
         6.5,
@@ -980,9 +980,9 @@ def slide_08(prs: Presentation):
         "The experience accumulates evidence instead of manufacturing certainty.",
     )
     steps = [
-        ("REFLECT", "30-item\ninterest profile", COLORS["indigo"]),
+        ("REFLECT", "41-item profile:\ninterest + confidence", COLORS["indigo"]),
         ("TRY", "One scenario\nmission", COLORS["magenta"]),
-        ("EXPLORE", "0–3 routes\nwith reasons", COLORS["mint"]),
+        ("EXPLORE", "Top 5 real\nprogrammes", COLORS["mint"]),
         ("COMPARE", "Evidence · trade-offs\nunknowns · sources", COLORS["warning"]),
         ("ACT", "A reversible\n30-day plan", COLORS["coral"]),
     ]
@@ -1062,7 +1062,7 @@ def slide_10(prs: Presentation):
     left_nodes = [
         ("Learner input", COLORS["surface2"]),
         ("Deterministic\nTypeScript rules", COLORS["indigo"]),
-        ("0–3 routes", COLORS["mint"]),
+        ("Top 5 programmes", COLORS["mint"]),
     ]
     ly = [2.24, 3.42, 4.6]
     for i, ((label, color), y) in enumerate(zip(left_nodes, ly)):
@@ -1117,69 +1117,107 @@ def slide_11(prs: Presentation):
         prs,
         11,
         "Recommendation logic",
-        "Recommendation logic is explicit and auditable",
-        "Same answers, same routes. The model cannot change the decision.",
+        "Every number is measured, derived, or declared missing",
+        "Same answers, same programmes. No model touches the ranking.",
     )
     pipeline = [
-        ("30 items\n+ context", COLORS["surface2"]),
+        ("41 items\n+ context", COLORS["surface2"]),
         ("RIASEC\nvector", COLORS["indigo"]),
-        ("Mission\nvector", COLORS["magenta"]),
-        ("Hard\nfilters", COLORS["warning"]),
-        ("5-criterion\nmatrix", COLORS["mint"]),
-        ("0–3\nroutes", COLORS["coral"]),
+        ("Kelley\nshrinkage", COLORS["magenta"]),
+        ("Core fit\ncos + efficacy", COLORS["mint"]),
+        ("Context\ncapped +15", COLORS["warning"]),
+        ("Top 5\nprogrammes", COLORS["coral"]),
     ]
     xs = [0.66, 2.78, 4.9, 7.02, 9.14, 11.26]
     for i, ((label, color), x) in enumerate(zip(pipeline, xs)):
         add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, 1.82, 1.45, 0.92, fill=color, line=COLORS["stroke"])
-        add_text(slide, label, x + 0.08, 2.02, 1.29, 0.5, size=12.5, color=COLORS["black"] if color in (COLORS["mint"], COLORS["warning"]) else COLORS["text"], bold=True, align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
+        add_text(slide, label, x + 0.08, 2.02, 1.29, 0.5, size=11.5,
+                 color=COLORS["black"] if color in (COLORS["mint"], COLORS["warning"]) else COLORS["text"],
+                 bold=True, align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
         if i < 5:
             add_arrow_text(slide, x + 1.52, 2.1, COLORS["muted2"], 16)
 
-    add_section_label(slide, "DESIGN-JUDGEMENT WEIGHTS · NOT FITTED TO OUTCOMES", 0.75, 3.17, 5.9, COLORS["warning"])
-    segments = [
-        ("Interests 30%", 0.30, COLORS["indigo"]),
-        ("Feasibility 25%", 0.25, COLORS["warning"]),
-        ("Strengths 20%", 0.20, COLORS["magenta"]),
-        ("Work style 15%", 0.15, COLORS["mint"]),
-        ("Flexibility 10%", 0.10, COLORS["coral"]),
-    ]
-    x = 0.76
-    total_w = 11.82
-    for label, share, color in segments:
-        width = total_w * share
-        add_shape(slide, MSO_SHAPE.RECTANGLE, x, 3.6, width, 0.54, fill=color)
-        add_text(slide, label, x + 0.03, 3.77, width - 0.06, 0.2, size=8.7 if width < 1.7 else 10, color=COLORS["black"] if color in (COLORS["mint"], COLORS["warning"]) else COLORS["white"], bold=True, align=PP_ALIGN.CENTER)
-        x += width
+    add_section_label(slide, "INTEREST VECTORS ARE MEASURED, NOT ASSIGNED", 0.75, 3.17, 9.4, COLORS["mint"])
+    add_text(
+        slide,
+        "A programme’s six-dimension profile is the mean of the O*NET occupations in its official ISCED-F field — "
+        "923 occupations, measured. The twelve hand-written vectors it replaced had the wrong dominant dimension "
+        "in four of nine comparable fields.",
+        0.76, 3.56, 11.8, 0.66, size=12.5, color=COLORS["muted"],
+    )
+
+    add_section_label(slide, "ACADEMIC FIT AND CONTEXT STAY APART", 0.75, 4.34, 8.2, COLORS["warning"])
+    add_text(
+        slide,
+        "Final = CoreFit + 15 × ContextFit.  Distance, cost and intake reorder programmes of similar fit; "
+        "they cannot lift a poor fit above a strong one, because 15 points is smaller than any gap that matters.",
+        0.76, 4.72, 11.8, 0.5, size=12.5, color=COLORS["muted"],
+    )
 
     guardrails = [
-        ("23 / 30", "minimum items answered"),
-        ("FLAT", "profile → no route"),
-        ("WEAK", "all evidence insufficient → no route"),
-        ("TIES", "shown, not falsely ranked"),
+        ("“3” = 0", "an unsure answer is not evidence"),
+        ("FLAT", "profile → no ranking (Holland)"),
+        ("NULL", "tuition unknown → link, not a guess"),
+        ("TRACE", "every figure opens to its source"),
     ]
     gx = [0.75, 3.8, 6.85, 9.9]
     for (cap, body), x in zip(guardrails, gx):
-        add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, 4.78, 2.68, 1.12, fill=COLORS["surface"], line=COLORS["stroke"])
-        add_text(slide, cap, x + 0.16, 4.97, 2.36, 0.28, size=16, color=COLORS["mint"], bold=True, align=PP_ALIGN.CENTER)
-        add_text(slide, body, x + 0.16, 5.36, 2.36, 0.34, size=10.5, color=COLORS["muted"], align=PP_ALIGN.CENTER)
-    add_text(
-        slide,
-        "Interest fit compares the shape of all six dimensions; mission evidence remains independent so disagreement is visible.",
-        1.05,
-        6.36,
-        11.2,
-        0.38,
-        size=12.5,
-        color=COLORS["muted"],
-        align=PP_ALIGN.CENTER,
+        add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, 5.42, 2.68, 1.06, fill=COLORS["surface"], line=COLORS["stroke"])
+        add_text(slide, cap, x + 0.16, 5.60, 2.36, 0.28, size=15, color=COLORS["mint"], bold=True, align=PP_ALIGN.CENTER)
+        add_text(slide, body, x + 0.16, 5.96, 2.36, 0.34, size=10, color=COLORS["muted"], align=PP_ALIGN.CENTER)
+
+    add_source(slide, "Source: lib/recommend · the Python reference in 01_Research/Recommendation_Engine is pinned to it by test")
+
+
+def slide_11b(prs: Presentation):
+    slide = new_slide(
+        prs,
+        12,
+        "Data",
+        "23,257 real programmes, and the gaps named out loud",
+        "Every figure traces to a government register. Nothing on a card is an estimate.",
     )
-    add_source(slide, "Source: lib/decision-engine (current working prototype)")
+    tiles = [
+        ("23,257", "หลักสูตรจริง", "ปวช. 16,908 · ปวส. · ป.ตรี 6,349", COLORS["mint"]),
+        ("993", "สถาบัน", "840 วิทยาลัยอาชีวะ · 153 มหาวิทยาลัย", COLORS["indigo"]),
+        ("923", "อาชีพ O*NET", "RIASEC วัดจริง · 269 สาย", COLORS["magenta"]),
+        ("15,586", "มีผลการมีงานทำ", "สอศ. 2566 · แสดงฐานเสมอ", COLORS["coral"]),
+    ]
+    xs = [0.75, 3.94, 7.13, 10.32]
+    for (big, label, sub, color), x in zip(tiles, xs):
+        add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, 1.78, 2.86, 1.62, fill=COLORS["surface"], line=COLORS["stroke"])
+        add_text(slide, big, x + 0.18, 1.96, 2.5, 0.5, size=27, color=color, bold=True)
+        add_text(slide, label, x + 0.18, 2.52, 2.5, 0.28, size=12.5, color=COLORS["text"], bold=True, font=FONT_THAI)
+        add_text(slide, sub, x + 0.18, 2.86, 2.5, 0.42, size=10, color=COLORS["muted"], font=FONT_THAI)
+
+    add_section_label(slide, "SOURCES · ALL GOVERNMENT REGISTERS", 0.75, 3.68, 8.0, COLORS["mint"])
+    sources = [
+        "แผนการรับนักศึกษา (data.go.th) · หลักสูตรและรหัส ISCED-F (อว.) · ต้นทุนต่อหัวรายหลักสูตร (อว.)",
+        "นักเรียนอาชีวะรายวิทยาลัยรายสาขา (สอศ. 2568) · ภาวะการมีงานทำ (สอศ. 2566) · ระยะทางถนนจริง OSRM 77 จังหวัด",
+        "O*NET 29.1 Interests (US DOL, CC BY 4.0) · ทะเบียนที่ตั้งสถานศึกษา อว. และ สอศ.",
+    ]
+    for i, line in enumerate(sources):
+        add_text(slide, line, 0.76, 4.06 + i * 0.34, 11.8, 0.3, size=11.5, color=COLORS["muted"], font=FONT_THAI)
+
+    add_section_label(slide, "WHAT WE DO NOT HAVE — AND DO NOT ESTIMATE", 0.75, 5.22, 9.6, COLORS["warning"])
+    gaps = [
+        ("ค่าเทอมจริง", "ไม่มีชุดข้อมูลเปิด → ลิงก์ประกาศของสถาบัน"),
+        ("รอบ TCAS · คะแนน", "mytcas ไม่มี API → ยังตอบไม่ได้ บอกตรง ๆ"),
+        ("ทุนการศึกษา", "ไม่มีทะเบียนกลาง"),
+    ]
+    gx = [0.75, 4.75, 8.75]
+    for (cap, body), x in zip(gaps, gx):
+        add_shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x, 5.62, 3.7, 0.94, fill=COLORS["surface"], line=COLORS["warning"])
+        add_text(slide, cap, x + 0.18, 5.76, 3.3, 0.28, size=13, color=COLORS["warning"], bold=True, font=FONT_THAI)
+        add_text(slide, body, x + 0.18, 6.08, 3.34, 0.38, size=10, color=COLORS["muted"], font=FONT_THAI)
+
+    add_source(slide, "A blank field is a finding. Filling it with an average would be the failure this project keeps arguing against.")
 
 
 def slide_12(prs: Presentation):
     slide = new_slide(
         prs,
-        12,
+        13,
         "Prototype",
         "A complete prototype already runs end to end",
         "These are screenshots from the implemented app—not concept mockups.",
@@ -1222,7 +1260,7 @@ def slide_12(prs: Presentation):
 def slide_13(prs: Presentation):
     slide = new_slide(
         prs,
-        13,
+        14,
         "Value proposition",
         "The difference is what happens after the score",
         "FutureMe changes a result into a testable next step.",
@@ -1273,7 +1311,7 @@ def slide_13(prs: Presentation):
 def slide_14(prs: Presentation):
     slide = new_slide(
         prs,
-        14,
+        15,
         "Validation",
         "Validation is the next product—not a footnote",
         "The analysis pipeline is verified. The instrument is not.",
@@ -1330,7 +1368,7 @@ def slide_14(prs: Presentation):
 def slide_15(prs: Presentation):
     slide = new_slide(
         prs,
-        15,
+        16,
         "Roadmap",
         "From runnable demo to trusted decision support",
         "Every phase has a gate; partnerships stay exploratory until something is signed.",
@@ -1428,6 +1466,7 @@ def build_deck() -> Path:
     slide_09(prs)
     slide_10(prs)
     slide_11(prs)
+    slide_11b(prs)
     slide_12(prs)
     slide_13(prs)
     slide_14(prs)

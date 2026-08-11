@@ -43,3 +43,7 @@
 
 # Next.js generated
 **/next-env.d.ts
+
+# LibreOffice/PowerPoint lock files and the deck build venv
+Presentation/~$*
+Presentation/.venv/

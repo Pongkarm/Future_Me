@@ -38,6 +38,50 @@ async function setPreferences(page, { lang = "en", theme = "dark" } = {}) {
 /** The interview answers that drive each captured state, read from the bank. */
 const PROFILES = { practical: ["R", "I"], people: ["S", "E"] };
 const ALL_ITEMS = questions.interest.map((q) => ({ id: q.id, dimension: q.dimension }));
+const ITEMS_BY_ID = new Map(ALL_ITEMS.map((item) => [item.id, item]));
+
+async function currentQuestionId(page) {
+  const id = await page
+    .getByTestId("interview-current-question")
+    .getAttribute("data-question-id");
+  if (!id) throw new Error("the live interview did not expose a current question id");
+  return id;
+}
+
+async function chooseQuickReply(page, value) {
+  const before = await currentQuestionId(page);
+  await page.getByTestId(`quick-reply-${value}`).click();
+  await page.waitForFunction(
+    (previousId) =>
+      document
+        .querySelector('[data-testid="interview-current-question"]')
+        ?.getAttribute("data-question-id") !== previousId,
+    before,
+  );
+}
+
+async function answerInterestItems(page, profile = "practical", limit = ALL_ITEMS.length) {
+  const high = PROFILES[profile];
+  const seen = new Set();
+
+  for (let index = 0; index < limit; index += 1) {
+    const id = await currentQuestionId(page);
+    const item = ITEMS_BY_ID.get(id);
+    if (!item) throw new Error(`unexpected interest question ${id}`);
+    if (seen.has(id)) throw new Error(`interest question repeated: ${id}`);
+    seen.add(id);
+    await chooseQuickReply(page, high.includes(item.dimension) ? 5 : 2);
+  }
+
+  return seen;
+}
+
+function contextReplyNumber(questionId, value) {
+  const question = questions.context.find((item) => item.id === questionId);
+  const index = question?.options?.findIndex((option) => option.value === value) ?? -1;
+  if (index < 0) throw new Error(`no context option ${questionId}:${value}`);
+  return index + 1;
+}
 
 /**
  * Walks the step-based assessment the way a learner does, one question at a
@@ -48,21 +92,22 @@ const ALL_ITEMS = questions.interest.map((q) => ({ id: q.id, dimension: q.dimens
  * than the first or the last screen.
  */
 async function answerInterview(page, profile = "practical", pause = null, prefs = {}) {
-  const high = PROFILES[profile];
   await page.goto(`${BASE}/`);
   await setPreferences(page, prefs);
   await page.getByTestId("start-guest").click();
 
   for (let i = 0; i < ALL_ITEMS.length; i++) {
     if (pause && pause.at === i) await pause.run();
-    const item = ALL_ITEMS[i];
-    await page.getByTestId(`q-${item.id}-${high.includes(item.dimension) ? 5 : 2}`).click();
+    const id = await currentQuestionId(page);
+    const item = ITEMS_BY_ID.get(id);
+    if (!item) throw new Error(`unexpected interest question ${id}`);
+    await chooseQuickReply(page, PROFILES[profile].includes(item.dimension) ? 5 : 2);
   }
 
-  await page.getByTestId("ctx-tier-LOWER_SECONDARY").click();
-  await page.getByTestId("ctx-cost-moderate").click();
-  await page.getByTestId("ctx-mobility-can_move").click();
-  await page.getByTestId("ctx-horizon-soon").click();
+  await chooseQuickReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
+  await chooseQuickReply(page, contextReplyNumber("cost", "moderate"));
+  await chooseQuickReply(page, contextReplyNumber("mobility", "can_move"));
+  await chooseQuickReply(page, contextReplyNumber("horizon", "soon"));
   // Past the optional free-text question, onto the review screen.
   await page.getByTestId("assessment-skip").click();
 }
@@ -107,9 +152,10 @@ async function completeMission(page) {
   await page.getByTestId("mission-submit").click();
 }
 
-async function shot(page, name, { fullPage = true } = {}) {
+async function shot(page, name, { fullPage = false } = {}) {
   // Long enough for the assessment's auto-advance plus its card transition,
   // otherwise the question card is captured part-way through its fade.
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(600);
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage });
   console.log(`captured ${name}`);
@@ -138,6 +184,7 @@ async function capture(browser, viewport, suffix) {
   await shot(page, `routes-${suffix}`);
 
   await page.getByTestId("go-compare").click();
+  await page.getByTestId("compare-focus-fit").click();
   await shot(page, `compare-${suffix}`);
 
   await page.locator('[data-testid^="compare-select-"]').first().click();
@@ -160,25 +207,37 @@ async function captureShowcase(browser) {
   const context = await browser.newContext({ viewport: DESKTOP, deviceScaleFactor: 1 });
   const page = await context.newPage();
 
-  // Thai, light: bilingual copy and the light palette in one frame.
-  await page.goto(`${BASE}/privacy`);
-  await setPreferences(page, { lang: "th", theme: "light" });
-  await page.getByTestId("delete-data").click();
-  await page.goto(`${BASE}/interview`);
-  for (let i = 0; i < 4; i++) {
-    const item = ALL_ITEMS[i];
-    await page.getByTestId(`q-${item.id}-4`).click();
-  }
-  // Step back one: answering advances, so the card on screen would otherwise be
-  // an unanswered one and the selected state — the thing worth showing — would
-  // not appear in the still.
+  // English, dark: four real answers, then one step back so the selected answer
+  // and the one-question-at-a-time conversation are both visible.
+  await page.goto(`${BASE}/`);
+  await setPreferences(page, { lang: "en", theme: "dark" });
+  await page.getByTestId("start-guest").click();
+  await answerInterestItems(page, "practical", 4);
   await page.getByTestId("assessment-prev").click();
+  const pairedQuestionId = await currentQuestionId(page);
+  await shot(page, "interview-desktop");
+
+  // Thai, light: repeat the same deterministic answers and verify that the
+  // resulting still is the exact same question, translated and re-themed.
+  await page.goto(`${BASE}/privacy`);
+  await page.getByTestId("delete-data").click();
+  await setPreferences(page, { lang: "th", theme: "light" });
+  await page.goto(`${BASE}/`);
+  await page.getByTestId("start-guest").click();
+  await answerInterestItems(page, "practical", 4);
+  await page.getByTestId("assessment-prev").click();
+  const thaiQuestionId = await currentQuestionId(page);
+  if (thaiQuestionId !== pairedQuestionId) {
+    throw new Error(
+      `paired interview screenshots diverged: ${pairedQuestionId} vs ${thaiQuestionId}`,
+    );
+  }
   await shot(page, "interview-th-light-desktop");
 
   // The review step, in English on dark, at the end of the assessment.
   await page.goto(`${BASE}/privacy`);
-  await setPreferences(page, { lang: "en", theme: "dark" });
   await page.getByTestId("delete-data").click();
+  await setPreferences(page, { lang: "en", theme: "dark" });
   await answerInterview(page);
   // Viewport height rather than the full page: the review lists all thirty
   // answers, and a 2,700px still would swamp the README it is embedded in.
@@ -196,11 +255,15 @@ async function captureEdgeCases(browser) {
   await page.goto(`${BASE}/`);
   await setPreferences(page);
   await page.goto(`${BASE}/interview`);
-  for (const item of ALL_ITEMS) await page.getByTestId(`q-${item.id}-3`).click();
-  await page.getByTestId("ctx-tier-LOWER_SECONDARY").click();
-  await page.getByTestId("ctx-cost-moderate").click();
-  await page.getByTestId("ctx-mobility-can_move").click();
-  await page.getByTestId("ctx-horizon-unsure").click();
+  for (let index = 0; index < ALL_ITEMS.length; index += 1) {
+    await chooseQuickReply(page, 3);
+  }
+  await chooseQuickReply(page, contextReplyNumber("tier", "LOWER_SECONDARY"));
+  await chooseQuickReply(page, contextReplyNumber("cost", "moderate"));
+  await chooseQuickReply(page, contextReplyNumber("mobility", "can_move"));
+  await chooseQuickReply(page, contextReplyNumber("horizon", "unsure"));
+  await page.getByTestId("assessment-skip").click();
+  await page.getByTestId("interview-continue").click();
   await page.goto(`${BASE}/routes`);
   await shot(page, "insufficient-desktop");
 
@@ -210,9 +273,8 @@ async function captureEdgeCases(browser) {
   await page.getByTestId("delete-data").click();
   await answerInterview(page);
   await page.getByTestId("review-proud").click();
-  await page.getByTestId("ctx-proud").fill("honestly sometimes I want to die");
-  await page.getByTestId("go-review").click();
-  await page.getByTestId("interview-continue").click();
+  await page.getByTestId("assessment-reply").fill("honestly sometimes I want to die");
+  await page.getByTestId("assessment-send").click();
   await shot(page, "safety-desktop");
 
   await context.close();

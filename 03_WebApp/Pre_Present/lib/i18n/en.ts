@@ -524,6 +524,8 @@ export const en = {
   },
 
   routes: {
+    programmesSite: "Institution website — check fees and entry requirements at the source",
+    programmesSearch: "Search for the fee announcement of this institution (no official URL in the register)",
     programmesTitle: "The programmes that fit you best",
     programmesIntro: "Ranked on academic fit first; context (distance, cost, intake) then orders programmes of similar fit. Context can move a score by at most {cap} points, so it cannot lift a poor fit above a strong one.",
     programmesFieldsTitle: "Fields that fit you",

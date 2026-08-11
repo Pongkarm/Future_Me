@@ -26,8 +26,8 @@ interface Packed {
   };
   /** [iscedCode, title, [R,I,A,S,E,C], occupations behind the mean] */
   fields: [string, string, number[], number][];
-  /** [id, nameTh, provinceIso, provinceTh, tuitionBand] */
-  institutions: [string, string, string, string, string][];
+  /** [id, nameTh, provinceIso, provinceTh, tuitionBand, website] */
+  institutions: [string, string, string, string, string, string][];
   titles: string[];
   levels: string[];
   /** [titleIndex, institutionIndex, fieldIndex, seats, productionCost, levelIndex] */
@@ -43,6 +43,8 @@ export interface Programme {
   provinceIso: string;
   provinceTh: string;
   tuitionBand: string;
+  /** The institution's own site, from the register. Empty when it has none — never guessed. */
+  website: string;
   /** ISCED-F 2013 detailed field code, e.g. "0613" */
   isced: string;
   iscedTitle: string;
@@ -80,7 +82,7 @@ export function allProgrammes(): Programme[] {
   });
 
   cache = data.programmes.map(([titleIndex, instIndex, fieldIndex, seats, cost, levelIndex]) => {
-    const [id, nameTh, provinceIso, provinceTh, tuitionBand] = data.institutions[instIndex];
+    const [id, nameTh, provinceIso, provinceTh, tuitionBand, website] = data.institutions[instIndex];
     const [isced, iscedTitle, , iscedOccupations] = data.fields[fieldIndex];
     return {
       title: data.titles[titleIndex],
@@ -89,6 +91,7 @@ export function allProgrammes(): Programme[] {
       provinceIso,
       provinceTh,
       tuitionBand,
+      website,
       isced,
       iscedTitle,
       iscedOccupations,

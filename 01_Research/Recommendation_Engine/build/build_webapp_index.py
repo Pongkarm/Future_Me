@@ -17,7 +17,7 @@ repetition and fields the browser can derive:
 Output, all positional:
 
   fields[f]       = [iscedCode, title, [R,I,A,S,E,C], occupationsBehindIt]
-  institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand]
+  institutions[i] = [id, nameTh, provinceIso, provinceTh, tuitionBand, website|""]
   titles[j]       = programme title
   programmes[k]   = [titleIndex, institutionIndex, fieldIndex, seats|null,
                      productionCost|null, levelIndex]
@@ -36,7 +36,19 @@ DIMENSIONS = ["R", "I", "A", "S", "E", "C"]
 LEVELS = ["ปริญญาตรี", "ปวช.", "ปวส."]
 
 
+def load_websites():
+    path = os.path.join(HERE, "..", "..", "Geography_and_Access", "data",
+                        "institutions.json")
+    with open(path, encoding="utf-8") as fh:
+        return {i["id"]: (i.get("website") or "").strip() for i in json.load(fh)}
+
+
+WEBSITES = {}
+
+
 def main():
+    global WEBSITES
+    WEBSITES = load_websites()
     with open(SRC, encoding="utf-8") as fh:
         payload = json.load(fh)
     rows = payload["programmes"]
@@ -83,7 +95,11 @@ def main():
             inst_index[key] = len(institutions)
             institutions.append([p["institution_id"], p["institution_th"],
                                  p["province_iso"], p["province_th"],
-                                 p["tuition_band"]])
+                                 p["tuition_band"],
+                                 # Official site from the VEC/MHESI register, or
+                                 # empty. Never guessed: a wrong URL for a real
+                                 # institution is worse than no URL.
+                                 WEBSITES.get(p["institution_id"], "")])
 
         title = p["name_th"]
         if title not in title_index:
@@ -137,7 +153,8 @@ def main():
     before = os.path.getsize(SRC)
     after = os.path.getsize(OUT)
     print(f"programmes    {len(programmes)}  (ตรี {len(rows)} · อาชีวะ {len(vocational)})")
-    print(f"institutions  {len(institutions)}")
+    print(f"institutions  {len(institutions)}  "
+          f"(มีเว็บไซต์ทางการ {sum(1 for i in institutions if i[5])})")
     print(f"fields        {len(fields)}  (ISCED-F detailed, each with its own vector)")
     print(f"titles        {len(titles)} unique of {len(programmes)}")
     print(f"with cost     {sum(1 for r in programmes if r[4] is not None)}")

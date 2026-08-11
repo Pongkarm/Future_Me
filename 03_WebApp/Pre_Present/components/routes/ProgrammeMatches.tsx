@@ -92,6 +92,28 @@ function ProgrammeCard({
         )}
       </div>
 
+      {/*
+        The one honest answer to "how much does it cost". We hold no tuition
+        figure and will not estimate one, so the card points at the body that
+        publishes it. A register URL is a link; anything else is labelled a
+        search, because inventing a URL for a real institution is worse than
+        offering none.
+      */}
+      <p className="mt-2 text-xs">
+        {p.website ? (
+          <a href={p.website} target="_blank" rel="noreferrer noopener"
+             className="underline underline-offset-2">
+            {t.routes.programmesSite}
+          </a>
+        ) : (
+          <a href={`https://www.google.com/search?q=${encodeURIComponent(p.institutionTh + " ค่าธรรมเนียมการศึกษา " + p.title)}`}
+             target="_blank" rel="noreferrer noopener"
+             className="underline underline-offset-2 text-muted">
+            {t.routes.programmesSearch}
+          </a>
+        )}
+      </p>
+
       <div className="mt-3">
         <Meter core={row.core} context={row.contextComponent} />
         <dl className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs">

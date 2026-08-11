@@ -522,6 +522,7 @@ export const th: Dictionary = {
   },
 
   routes: {
+    programmesProvenance: "ที่มา — หลักสูตรและจำนวนรับ: ทะเบียน อว./สอศ. · ระยะทาง: OSRM ตามถนนจริง · โปรไฟล์ความสนใจ: O*NET 29.1 (CC BY 4.0) · การมีงานทำ: สำรวจ สอศ. 2566",
     programmesOccupations: "สายนี้ใช้โปรไฟล์ความสนใจของอาชีพ",
     programmesModes: "ไปได้ด้วย",
     programmesNoneAfterFilter: "ไม่มีหลักสูตรที่ผ่านเกณฑ์ตามตัวกรองนี้ ลองเอาตัวกรองออกสักอัน",

@@ -214,6 +214,16 @@ function ProgrammeCard({
         </dl>
       </div>
 
+      {/*
+        Directive 3 from the Kong19565 PR: show where each figure came from.
+        These are our own registers, named per field rather than as one badge
+        on the card — a single badge would imply the whole card shares one
+        source, and the distance, the intake and the employment survey do not.
+      */}
+      <p className="mt-2 text-[10px] leading-relaxed text-muted">
+        {t.routes.programmesProvenance}
+      </p>
+
       <details className="mt-3">
         <summary className="cursor-pointer text-xs text-muted">{t.routes.programmesWhy}</summary>
         <div className="mt-2 space-y-1 font-mono text-xs text-muted">

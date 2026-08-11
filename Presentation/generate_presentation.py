@@ -524,7 +524,7 @@ def slide_01(prs: Presentation):
         "JUMP THAILAND HACKATHON 2026 · PROJECT CASE STUDY",
         0.68,
         0.52,
-        6.4,
+        11.4,
         0.28,
         size=10,
         color=COLORS["mint"],
@@ -571,13 +571,25 @@ def slide_01(prs: Presentation):
         slide,
         "RESEARCH-INFORMED · NOT VALIDATED GUIDANCE",
         0.72,
-        4.08,
-        3.25,
+        4.06,
+        4.35,
         fill=COLORS["surface2"],
         text_color=COLORS["warning"],
         line=COLORS["warning"],
         size=9.4,
     )
+    stats = [
+        ("23,257", "หลักสูตรจริง", "ปวช. · ปวส. · ปริญญาตรี"),
+        ("993", "สถาบัน", "ทั่วประเทศ"),
+        ("923", "อาชีพ", "โปรไฟล์ความสนใจที่วัดมา"),
+    ]
+    for i, (big, label, sub_label) in enumerate(stats):
+        x = 0.72 + i * 2.02
+        add_text(slide, big, x, 4.78, 1.9, 0.52, size=26, color=COLORS["mint"], bold=True)
+        add_text(slide, label, x, 5.34, 1.9, 0.26, size=12, color=COLORS["text"], bold=True, font=FONT_THAI)
+        add_text(slide, sub_label, x, 5.62, 1.94, 0.24, size=9, color=COLORS["muted2"], font=FONT_THAI)
+    add_line(slide, 0.74, 4.62, 6.5, 4.62, color=COLORS["stroke"], width=1.0)
+
     add_text(
         slide,
         "Explore the next step—not one final answer.",
@@ -615,11 +627,11 @@ def slide_01(prs: Presentation):
     add_circle_label(slide, "NEXT\nEVIDENCE", 8.48, 5.62, 1.15, fill=COLORS["mint"], text_color=COLORS["black"], size=11)
     add_text(
         slide,
-        "Several hypotheses.\nOne reversible next step.",
+        "Several hypotheses. One reversible next step.",
         7.45,
-        6.82,
-        4.75,
-        0.46,
+        6.98,
+        4.9,
+        0.3,
         size=12,
         color=COLORS["muted"],
         align=PP_ALIGN.CENTER,
@@ -1233,10 +1245,10 @@ def slide_12(prs: Presentation):
     pills = [
         ("TH / EN + THEMES", 0.78, 1.85),
         ("3 MISSIONS", 2.78, 1.4),
-        ("6 ILLUSTRATIVE ROUTES", 4.38, 2.35),
+        ("23,257 PROGRAMMES", 4.38, 2.15),
         ("BROWSER-LOCAL", 6.93, 1.65),
-        ("234 TESTS", 8.78, 1.25),
-        ("20 E2E", 10.23, 1.05),
+        ("559 TESTS", 8.58, 1.15),
+        ("993 INSTITUTIONS", 9.93, 1.95),
     ]
     x = 0.78
     for text, _, width in pills:
@@ -1244,7 +1256,7 @@ def slide_12(prs: Presentation):
         x += width + 0.18
     add_text(
         slide,
-        "Route constraints and mission rubrics remain illustrative and unvalidated.",
+        "Programmes and distances come from government registers. The interest instrument itself is still unvalidated.",
         3.2,
         6.64,
         6.95,
@@ -1254,7 +1266,7 @@ def slide_12(prs: Presentation):
         bold=True,
         align=PP_ALIGN.CENTER,
     )
-    add_source(slide, "Verification rerun 30 Jul 2026: npm run verify + 20 Playwright journeys passed")
+    add_source(slide, "Screenshots captured 12 Aug 2026 from the production build · 559 unit tests, lint and build passing")
 
 
 def slide_13(prs: Presentation):

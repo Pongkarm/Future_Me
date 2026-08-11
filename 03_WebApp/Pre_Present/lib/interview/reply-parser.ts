@@ -33,8 +33,15 @@ export type ReplyParseResult<T> =
   | { ok: true; value: T }
   | { ok: false; reason: ReplyParseFailureReason };
 
+/*
+ * Aliases for both five-point scales the assessment uses: like/dislike for
+ * interest items and a confidence wording for the self-efficacy ones. They
+ * share a table because they share a value range, and a learner typing
+ * "ทำได้ดีมาก" at an interest question is answering 5 either way.
+ */
 const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
   1: [
+    "ทำไม่ได้เลย",
     "strongly dislike",
     "i strongly dislike it",
     "i would strongly dislike it",
@@ -45,6 +52,8 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "เกลียด",
   ],
   2: [
+    "a little",
+    "ทำได้นิดหน่อย",
     "dislike",
     "i dislike it",
     "i would dislike it",
@@ -54,6 +63,7 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "ไม่ค่อยชอบ",
   ],
   3: [
+    "ไม่แน่ใจ",
     "not sure",
     "i am not sure",
     "i'm not sure",
@@ -67,6 +77,8 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "ยังไม่รู้",
   ],
   4: [
+    "fairly well",
+    "ทำได้ค่อนข้างดี",
     "like",
     "i like it",
     "i would like it",
@@ -75,6 +87,8 @@ const LIKERT_ALIASES: Record<LikertValue, readonly string[]> = {
     "ค่อนข้างชอบ",
   ],
   5: [
+    "very well",
+    "ทำได้ดีมาก",
     "strongly like",
     "i strongly like it",
     "i would strongly like it",

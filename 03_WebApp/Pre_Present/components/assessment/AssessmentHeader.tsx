@@ -159,7 +159,9 @@ export default function AssessmentHeader({
       </p>
 
       <div className="mt-3 flex items-baseline justify-between text-xs font-semibold">
-        <span className="text-muted" aria-live="polite">
+        {/* Tagged so the screenshot capture can wait for the question to
+            actually change rather than guessing at the acknowledgement delay. */}
+        <span className="text-muted" aria-live="polite" data-testid="assessment-progress-label">
           {position > total
             ? reviewWord
             : format(counterTemplate, { current: position, total })}

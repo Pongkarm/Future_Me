@@ -37,7 +37,15 @@ async function setPreferences(page, { lang = "en", theme = "dark" } = {}) {
 
 /** The interview answers that drive each captured state, read from the bank. */
 const PROFILES = { practical: ["R", "I"], people: ["S", "E"] };
-const ALL_ITEMS = questions.interest.map((q) => ({ id: q.id, dimension: q.dimension }));
+/*
+ * Every screen the assessment asks before the context questions: the interest
+ * items and, since the second axis shipped, the self-efficacy ones. Both are
+ * answered the same way — a numbered chip — so one list drives both.
+ */
+const ALL_ITEMS = [...questions.interest, ...(questions.efficacy ?? [])].map((q) => ({
+  id: q.id,
+  dimension: q.dimension,
+}));
 
 /**
  * Walks the step-based assessment the way a learner does, one question at a
@@ -53,18 +61,54 @@ async function answerInterview(page, profile = "practical", pause = null, prefs 
   await setPreferences(page, prefs);
   await page.getByTestId("start-guest").click();
 
+  /*
+   * The assessment is a chat now: one question at a time, answered with a
+   * numbered chip rather than a per-item radio. The old selector
+   * (`q-<id>-<value>`) has not existed since that redesign, which is why this
+   * script had quietly stopped producing images.
+   *
+   * Each answer plays a short acknowledgement before the next question
+   * arrives, so the loop waits for the question counter to move rather than
+   * for a fixed delay. A fixed delay silently dropped six answers and left the
+   * capture stranded mid-assessment.
+   */
+  /*
+   * Answer, then confirm the question actually changed before moving on.
+   *
+   * A fixed delay is not enough on its own: an acknowledgement animation plays
+   * between questions, and a click that lands while the old card is unmounting
+   * is swallowed with no error. That silently lost six answers and stranded
+   * the capture mid-assessment, which looks exactly like a broken selector.
+   * Re-clicking when the counter has not moved is self-healing and costs
+   * nothing when it already has.
+   */
+  const counter = async () =>
+    (await page.getByTestId("assessment-progress-label").textContent())?.trim() ?? "";
+
+  const answerAndAdvance = async (choice) => {
+    const before = await counter();
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      await page.getByTestId(`quick-reply-${choice}`).click({ timeout: 5000 });
+      await page.waitForTimeout(560);
+      if ((await counter()) !== before) return;
+    }
+    throw new Error(`assessment did not advance past "${before}"`);
+  };
+
   for (let i = 0; i < ALL_ITEMS.length; i++) {
     if (pause && pause.at === i) await pause.run();
     const item = ALL_ITEMS[i];
-    await page.getByTestId(`q-${item.id}-${high.includes(item.dimension) ? 5 : 2}`).click();
+    await answerAndAdvance(high.includes(item.dimension) ? 5 : 2);
   }
 
-  await page.getByTestId("ctx-tier-LOWER_SECONDARY").click();
-  await page.getByTestId("ctx-cost-moderate").click();
-  await page.getByTestId("ctx-mobility-can_move").click();
-  await page.getByTestId("ctx-horizon-soon").click();
+  // Context questions use the same chips, in the order their options are
+  // listed: ม.3, moderate budget, willing to move, deciding soon.
+  for (const choice of [1, 2, 2, 1]) {
+    await answerAndAdvance(choice);
+  }
   // Past the optional free-text question, onto the review screen.
   await page.getByTestId("assessment-skip").click();
+  await page.waitForTimeout(500);
 }
 
 /** Fills whichever mission the rule selected, then submits. */

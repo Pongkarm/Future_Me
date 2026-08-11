@@ -376,7 +376,13 @@ export default function InterviewPage() {
 
     let next: GuestSession;
     if (activeStep.kind === "interest") {
-      const parsed = parseInterestReply(raw, SCALE);
+      /*
+       * Parse against the scale this item is actually shown with. Reading a
+       * confidence answer ("Very well") against the like/dislike labels
+       * rejects every self-efficacy answer — the question renders, the chip
+       * highlights, and the assessment refuses to move on.
+       */
+      const parsed = parseInterestReply(raw, scaleFor(activeStep.q));
       if (!parsed.ok) {
         showClarification(parsed.reason);
         return;

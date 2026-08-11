@@ -7,6 +7,7 @@
  */
 import { describe, expect, it } from "vitest";
 import questions from "@/data/questions.json";
+import { parseInterestReply } from "@/lib/interview/reply-parser";
 
 const efficacy = (questions as { efficacy?: { id: string; dimension: string; scaleId?: string }[] })
   .efficacy ?? [];
@@ -44,5 +45,22 @@ describe("self-efficacy items", () => {
   it("adds six screens to the assessment", () => {
     // 30 interest + 6 efficacy + 5 context = 41 questions before the review.
     expect(questions.interest.length + efficacy.length + questions.context.length).toBe(41);
+  });
+});
+
+describe("answering a self-efficacy item", () => {
+  it("accepts the confidence wording, in both languages", () => {
+    // The bug this guards: the page parsed every answer against the
+    // like/dislike scale, so "Very well" matched nothing, the assessment
+    // refused to advance, and the learner was stuck on question 31 with no
+    // error shown.
+    const scale = confidence.map((p) => ({ value: p.value as 1 | 2 | 3 | 4 | 5, label: p.label }));
+    for (const point of confidence) {
+      for (const lang of ["en", "th"] as const) {
+        const parsed = parseInterestReply(point.label[lang], scale);
+        expect(parsed.ok, `${point.label[lang]} was rejected`).toBe(true);
+        if (parsed.ok) expect(parsed.value).toBe(point.value);
+      }
+    }
   });
 });

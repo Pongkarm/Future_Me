@@ -183,6 +183,8 @@
     page-break-inside: avoid;
   }
   .callout.warn { border-left-color: var(--warn); }
+  /* A callout long enough to need its own page should split instead. */
+  .callout.can-break { page-break-inside: auto; }
   .callout.bad  { border-left-color: var(--bad); }
   .callout h4 {
     margin: 0 0 1.5mm;
@@ -348,6 +350,7 @@
     <tbody>
       <tr><td class="mono">build/build_programme_index.py</td>
           <td>ต่อทะเบียน 4 ชุด — แผนการรับนักศึกษา · รหัส ISCED-F · ต้นทุนต่อหัว · สถาบันที่มีพิกัด → <strong>หลักสูตรปริญญาตรี 6,349 หลักสูตร (88.8% ของที่ไม่ซ้ำ)</strong></td></tr>
+      <tr><td class="mono">components/routes/ProgrammeMatches.tsx</td><td>การ์ดแสดง <strong>ระยะทางถนนจริง · ผลการมีงานทำของผู้จบสาขานั้น · ต้นทุนที่รัฐลงทุน · ลิงก์ประกาศของสถาบัน</strong> และมี<strong>ตัวกรอง</strong>ระดับ/ประเภทสถาบัน/จังหวัด ที่กรองก่อนจัดอันดับ ไม่ใช่กรองห้าอันดับที่คัดเสร็จแล้ว</td></tr>
       <tr><td class="mono">build/build_vocational_index.py</td><td>ทะเบียนนักเรียนของ สอศ. ปี 2568 → <strong>ปวช./ปวส. 16,908 หลักสูตร ใน 840 วิทยาลัย</strong> · รวมทั้งระบบ <strong>23,257 หลักสูตร ใน 993 สถาบัน</strong></td></tr>
       <tr><td class="mono">build/build_isced_riasec.py</td><td>เวกเตอร์ RIASEC <strong>วัดจริงจาก 923 อาชีพใน O*NET</strong> ผ่านรหัส ISCED-F 2013 · พร้อม <span class="mono">crosswalk_audit.md</span> ที่ลิสต์ทุกการจับคู่ให้ตรวจ</td></tr>
       <tr><td class="mono">engine.py</td>
@@ -635,7 +638,7 @@
       <tr><td>จำนวนรับตามแผน</td><td class="num">ทุกแถว</td><td>เดียวกัน</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>ระยะทางถนนจริง</td><td class="num">77 จว.</td><td>OSRM (ไม่ใช่ระยะเส้นตรง)</td><td><span class="pill ok">คำนวณจากถนนจริง</span></td></tr>
       <tr><td>สถานีขนส่งผู้โดยสาร</td><td class="num">891</td><td>Wikidata</td><td><span class="pill ok">CC0</span></td></tr>
-      <tr><td>ผลผู้จบอาชีวะ</td><td class="num">1,014</td><td>สอศ.</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
+      <tr><td><strong>ผลการมีงานทำของผู้จบ</strong></td><td class="num">15,586</td><td>สอศ. survey 2566 · ต่อเข้า 92% ของหลักสูตรอาชีวะ</td><td><span class="pill ok">ทะเบียนราชการ</span></td></tr>
       <tr><td>ข้อคำถาม</td><td class="num">90</td><td>18REST + งานเขียนเอง</td><td><span class="pill mid">ยังไม่ validate</span></td></tr>
       <tr><td>เวกเตอร์ RIASEC ของสาย</td><td class="num">87</td><td>O*NET 29.1 · 923 อาชีพ (CC BY 4.0)</td><td><span class="pill ok">วัดมาจริง</span></td></tr>
       <tr><td>การจับคู่ ISCED → อาชีพ</td><td class="num">91</td><td>ทีมกำหนด · มี audit ให้ตรวจ</td><td><span class="pill mid">ยังไม่ผ่านผู้เชี่ยวชาญ</span></td></tr>
@@ -756,9 +759,12 @@
       ↓                  ← ถ้าหลักฐานไม่พอ หยุดตรงนี้และถามต่อ
 หลักสูตรที่ไปถึงได้      Top 5 พร้อมสถาบัน ระยะทางถนนจริง จำนวนรับ
       ↓
+จบแล้วเป็นยังไง          ผู้จบสาขานี้ในจังหวัดนี้ ทำงานกี่ % เรียนต่อกี่ % (สอศ. 2566)
+      ↓
 ความเป็นไปได้            รอบ TCAS · วิชา · คะแนน   ← ยังไม่มีข้อมูล บอกตรง ๆ
       ↓
-เงินและที่อยู่           ค่าเทอม ทุน ค่าหอ         ← ยังไม่มีข้อมูล บอกตรง ๆ
+เงินและที่อยู่           ต้นทุนที่รัฐลงทุน + ลิงก์ประกาศค่าธรรมเนียมของสถาบัน
+                        ค่าเทอมจริง ทุน ค่าหอ      ← ยังไม่มีข้อมูล บอกตรง ๆ
       ↓
 เปรียบเทียบ              วางเทียบกันทีละเกณฑ์
       ↓
@@ -891,7 +897,7 @@
       <tr><td>7</td><td>ระยะทางวัดจาก<strong>ศูนย์กลางจังหวัด ไม่ใช่บ้านเด็ก</strong></td><td><span class="pill mid">กลาง</span></td><td>รับตำแหน่งจากผู้เรียนแล้วคำนวณใหม่ · เขียนเตือนไว้ในข้อมูลแล้ว</td></tr>
       <tr><td>8</td><td><s>เอนจินยังไม่ได้ต่อเข้าเว็บแอป</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>อยู่บนหน้า <span class="mono">/routes</span> แล้ว · เทสต์ 546 ข้อผ่าน · parity test อ่าน <span class="mono">engine.py</span> เทียบค่าพารามิเตอร์กันเพี้ยน</td></tr>
       <tr><td>9</td><td><s>ระบบมีแต่ปริญญาตรี ไม่มีอาชีวะเลย</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>ปวช./ปวส. 16,908 หลักสูตร · 91.4% จับคู่ที่ระดับสาขาวิชา · ประตูระดับชั้นกันไม่ให้เสนอปริญญาตรีให้เด็ก ม.3</td></tr>
-      <tr><td>10</td><td>หน้าสัมภาษณ์ยังไม่ถามข้อ self-efficacy 6 ข้อ</td><td><span class="pill mid">กลาง</span></td><td>เอนจินอ่านได้แล้ว · ต้องเพิ่มสเกลความมั่นใจแยกในหน้า <span class="mono">/interview</span> ~1–2 ชม.</td></tr>
+      <tr><td>10</td><td><s>หน้าสัมภาษณ์ยังไม่ถาม self-efficacy</s></td><td><span class="pill ok">แก้แล้ว</span></td><td>ถาม 41 คำถาม (เดิม 35) ด้วยสเกลความมั่นใจแยก · ช่อง “ชอบ/ถนัด” แสดงบนการ์ดแล้ว</td></tr>
     </tbody>
   </table>
 
@@ -902,7 +908,7 @@
     <tbody>
       <tr><td>1</td><td>ซ้อมสไลด์ 5 (กลไก) และ 8 (ปฏิเสธ) ให้พูดได้โดยไม่ดูโน้ต</td><td>2 ชม.</td><td>เป็นสองสไลด์ที่อาจารย์บอกว่าคือคุณค่าแกนกลาง</td></tr>
       <tr><td>2</td><td>เตรียม demo <span class="mono">run.py</span> ให้รันสดได้บนเวที</td><td>1 ชม.</td><td>เห็นการอนุมานทีละขั้นดีกว่าอธิบายด้วยปาก</td></tr>
-      <tr><td>3</td><td>ถามข้อ self-efficacy 6 ข้อในหน้า <span class="mono">/interview</span></td><td>1–2 ชม.</td><td>เปิดใช้แกนที่สองและช่อง “ชอบ/ถนัด” ซึ่งตอนนี้ยังไม่แสดง</td></tr>
+      <tr><td>3</td><td>ให้ครูแนะแนว 3 คนตรวจ crosswalk (91 สาย ISCED + สาขาอาชีวะ)</td><td>รอ 3–5 วัน</td><td>เปลี่ยน “ทีมกำหนดเอง” เป็น “ผ่านผู้เชี่ยวชาญ” ซึ่งเป็นข้อที่กรรมการจะถามแน่</td></tr>
       <tr><td>4</td><td>ส่งข้อ 90 ข้อให้ครูแนะแนว 3 คนทำ IOC</td><td>รอ 3–5 วัน</td><td>เปลี่ยน “ยังไม่ validate” เป็น “IOC ผ่านแล้ว” ได้ในรอบเดียว</td></tr>
       <tr><td>5</td><td>ดึงค่าเทอมจริงของ 20 สถาบันแรก ด้วยมือ</td><td>3 ชม.</td><td>ปิดช่องว่างที่ใหญ่ที่สุดบางส่วน ด้วยข้อมูลจริงไม่ใช่ค่าประมาณ</td></tr>
       <tr><td>6</td><td>คัดของจาก branch เพื่อน (CAT engine ของ Kong)</td><td>2 ชม.</td><td>โค้ด CAT ใช้ได้ · <strong>แต่ต้อง revert การเปลี่ยน provenance เป็น “verified” ที่ไม่ได้ตรวจจริง</strong></td></tr>
@@ -919,19 +925,19 @@
       <tr class="score-row"><td><strong>ทฤษฎีการแนะนำ</strong></td><td class="num">60</td><td class="num"><strong>92</strong></td><td><span class="bar" style="width:46pt"></span></td><td>ความละเอียดยังอยู่ระดับสาย (87 สาย ไม่ใช่ 12 แล้ว)</td></tr>
       <tr class="score-row"><td><strong>เหตุผลทางวิชาการ</strong></td><td class="num">55</td><td class="num"><strong>94</strong></td><td><span class="bar" style="width:45pt"></span></td><td>พารามิเตอร์ 10 ตัวยังไม่ calibrate · แต่เวกเตอร์สายวัดมาแล้ว</td></tr>
       <tr class="score-row"><td><strong>อธิบายได้</strong></td><td class="num">45</td><td class="num"><strong>95</strong></td><td><span class="bar" style="width:47pt"></span></td><td>คำอธิบายยังเป็น output เทอร์มินัล ไม่ใช่ UI</td></tr>
-      <tr class="score-row"><td>ใช้ได้จริง</td><td class="num">40</td><td class="num">72</td><td><span class="bar" style="width:36pt"></span></td><td>ขาด TCAS/ค่าเทอม ซึ่งเป็นสิ่งที่เด็กต้องใช้จริง</td></tr>
+      <tr class="score-row"><td>ใช้ได้จริง</td><td class="num">40</td><td class="num">82</td><td><span class="bar" style="width:41pt"></span></td><td>ยังขาด TCAS/ค่าเทอม · แต่ตอบ “จบแล้วได้งานไหม” และ “ไปกลับไหวไหม” ได้แล้ว</td></tr>
       <tr class="score-row"><td>Business idea</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ยังไม่มี LOI จากโรงเรียน</td></tr>
       <tr class="score-row"><td>ความเหมาะสมของ AI</td><td class="num">50</td><td class="num">90</td><td><span class="bar" style="width:45pt"></span></td><td>ชั้น AI ยังไม่ได้เดโม</td></tr>
       <tr class="score-row"><td>คุณภาพข้อมูล</td><td class="num">70</td><td class="num">90</td><td><span class="bar" style="width:42pt"></span></td><td>ทะเบียนปี 2564 · ตรี 88.8% · อาชีวะครบ 840 วิทยาลัย</td></tr>
-      <tr class="score-row"><td>User journey</td><td class="num">60</td><td class="num">78</td><td><span class="bar" style="width:39pt"></span></td><td>สองขั้นท้ายยังว่างเพราะไม่มีข้อมูล</td></tr>
+      <tr class="score-row"><td>User journey</td><td class="num">60</td><td class="num">86</td><td><span class="bar" style="width:43pt"></span></td><td>ครบตั้งแต่รู้จักตัวเองถึงเลือกหลักสูตร · ขั้น “สมัครยังไง” ยังว่าง</td></tr>
       <tr class="score-row"><td>นวัตกรรม</td><td class="num">55</td><td class="num">82</td><td><span class="bar" style="width:41pt"></span></td><td>“ระบบที่ยอมปฏิเสธ” คือจุดต่างที่แท้จริง ต้องเล่าให้ดัง</td></tr>
       <tr class="score-row"><td>พลังการพิทช์</td><td class="num">45</td><td class="num">80</td><td><span class="bar" style="width:40pt"></span></td><td>ขึ้นกับการซ้อม</td></tr>
-      <tr style="border-top:1.5px solid var(--ink)"><td><strong>เฉลี่ย</strong></td><td class="num"><strong>52.5</strong></td><td class="num"><strong>85.5</strong></td><td></td><td></td></tr>
+      <tr style="border-top:1.5px solid var(--ink)"><td><strong>เฉลี่ย</strong></td><td class="num"><strong>52.5</strong></td><td class="num"><strong>87.0</strong></td><td></td><td></td></tr>
     </tbody>
   </table>
 
-  <div class="callout">
-    <h4>ความเสี่ยง 5 อันดับแรก</h4>
+  <div class="callout can-break">
+    <h4>ความเสี่ยงที่ต้องเตรียมคำตอบไว้</h4>
     <ol style="margin-bottom:0">
       <li><strong>กรรมการถามเรื่องค่าเทอม/TCAS แล้วเราไม่มี</strong> — ตอบตรง ๆ ว่าไม่มี พร้อมบอกว่าต้องดึงจากไหน ดีกว่าถูกจับได้ว่าเดา</li>
       <li><strong>เวลาหมดก่อนถึงสไลด์กลไก</strong> — สไลด์ 5 คือหัวใจ ถ้าจำเป็นต้องตัด ให้ตัดสไลด์อื่น</li>

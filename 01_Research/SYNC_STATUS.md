@@ -2,12 +2,12 @@
 
 Synced from `Kong19565` into `Panussu` on 2026-08-10.
 
-## Release 0.2.0 validation record
+## Validation record
 
 - Rechecked on 2026-08-11 and registered in [`03_WebApp/data/education-data-registry.json`](../03_WebApp/data/education-data-registry.json).
 - Institution and location coverage are partial; programme mapping covers 140 of 1,375 displayed institutions.
 - Admission, current TCAS, tuition, scholarship, accommodation and cost-of-living data remain unavailable and are excluded from route selection, scoring and ranking.
-- `npm run check:data` now checks the registry, release metadata, source counts and held-out decision fields together.
+- `npm run check:data` now checks the registry, source counts and held-out decision fields together.
 
 ## Verified and rebuilt
 
@@ -24,5 +24,5 @@ Synced from `Kong19565` into `Panussu` on 2026-08-10.
 ## Web-app integration record
 
 - On 2026-08-11, the `winxtxrgit` web-app implementation was integrated with this data set. The active prototype now has a 12-route catalogue and province-aware nearby-institution views.
-- `data/nearby.json` intentionally keeps the regenerated Panussu version: 77 provinces and 1,961 options from the documented MHESI/OVEC source pipeline. It replaces the older 1,904-option copy from the web-app branch.
+- `data/nearby.json` intentionally keeps the regenerated Panussu dataset: 77 provinces and 1,961 options from the documented MHESI/OVEC source pipeline. It replaces the older 1,904-option copy from the web-app branch.
 - The live interview still imports the existing 30-item `data/questions.json` instrument. A deterministic rule uses the first answer to move two existing items forward; it does not change the bank, scoring, or completion requirement.

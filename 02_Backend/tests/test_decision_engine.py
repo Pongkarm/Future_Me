@@ -173,7 +173,7 @@ def test_legacy_end_to_end_decision_engine_is_disabled_by_default(monkeypatch):
     ]
     
     monkeypatch.delenv("FUTUREME_ENABLE_LEGACY_BACKEND", raising=False)
-    with pytest.raises(RuntimeError, match="not validated for release 0.2.0"):
+    with pytest.raises(RuntimeError, match="not validated for the current prototype"):
         run_decision_engine(
             grade_level="ม.3",
             riasec_responses=riasec_responses,

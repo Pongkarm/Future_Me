@@ -1,6 +1,6 @@
 # FutureMe AI presentation
 
-> Release 0.2.0 - updated and reviewed 11 August 2026
+> Updated and reviewed 11 August 2026
 
 This folder contains the current presentation set:
 
@@ -13,7 +13,7 @@ questionnaire, first-answer follow-up ordering, deterministic 0-3 route boundary
 1,961 display rows across 1,375 institutions, 140 institutions with programme mappings, and the
 research-only 90-item and 1,000-item banks.
 
-Release 0.2.0 passed 533 Vitest tests and 95 Playwright browser journeys. These results validate the
+The current repository snapshot passed 533 Vitest tests and 95 Playwright browser journeys. These results validate the
 software and data contracts, not the questionnaire, recommendation weights, mission rubric, or
 student outcomes. TCAS admissions, fees, scholarships, and living costs remain unavailable. The
 FastAPI and RAG folders are separate research scaffolds and are not connected to the live app.

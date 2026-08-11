@@ -370,7 +370,6 @@ export default function RoutesPage() {
         <DataFreshness t={t} />
         <p className="mt-4 text-xs text-muted">
           {format(t.routes.generatedBy, {
-            version: result.engineVersion,
             date: routeDataAsOf(),
           })}
         </p>

@@ -11,7 +11,7 @@ import os
 
 DATASET_GENERATION_ENABLED = False
 RETIREMENT_REASON = (
-    "Synthetic QLoRA generation is disabled in release 0.2.0 because the previous "
+    "Synthetic QLoRA generation is disabled in the current prototype because the previous "
     "samples contained unvalidated education and admission claims. Build a new "
     "dataset only from reviewed source records with provenance and freshness fields."
 )

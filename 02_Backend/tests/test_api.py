@@ -1,7 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
-from app.version import APP_VERSION
 
 client = TestClient(app)
 
@@ -9,7 +8,6 @@ client = TestClient(app)
 def test_root_labels_the_service_as_a_scaffold():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json()["version"] == APP_VERSION
     assert response.json()["status"] == "architecture-scaffold"
     assert response.json()["connected_to_web_app"] is False
 

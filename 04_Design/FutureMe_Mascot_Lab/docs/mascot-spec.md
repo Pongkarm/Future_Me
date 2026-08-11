@@ -1,6 +1,6 @@
 # FutureMe Mascot — Character Specification
 
-Version 1.0 · prototype. The rendered sheets in `../assets/reference/` are the
+Prototype specification. The rendered sheets in `../assets/reference/` are the
 authority on form and material; the numbers here are the authority on
 proportion and part naming.
 

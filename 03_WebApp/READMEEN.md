@@ -44,7 +44,7 @@
 </p>
 
 <p align="center">
-  <sub>FutureMe 0.2.0 · runnable guest prototype · complete Thai/English interface · light, dark, and system themes · no API key required</sub>
+  <sub>Runnable guest prototype · complete Thai/English interface · light, dark, and system themes · no API key required</sub>
 </p>
 
 ---
@@ -169,7 +169,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 | **Context** | 4 required prompts for education tier, cost, mobility, and time horizon, plus 1 optional free-text prompt |
 | **Missions** | 3 four-step scenario missions; deterministic scoring and transparent selection; learner override |
 | **Catalogue** | 12 illustrative study/work routes with field-level source warnings and a catalogue freshness date |
-| **Education data contract** | Versioned Institution / Program / Admission / Financial / Location coverage, checked sources, known gaps, and decision-use limits |
+| **Education data contract** | Machine-readable Institution / Program / Admission / Financial / Location coverage, checked sources, known gaps, and decision-use limits |
 | **Recommendations** | 0–3 routes, refusal gates, a tier eligibility rule, ties, contradiction signals, provenance, and unknowns |
 | **Comparison and plan** | Consistent route comparison and a deterministic 30-day plan with gap-specific tasks |
 | **Optional AI** | Repo-grounded chat and explanation rewording, both with deterministic offline fallbacks and outside route selection |

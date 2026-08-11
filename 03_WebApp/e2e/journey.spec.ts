@@ -410,7 +410,7 @@ test("hand-edited local storage is repaired, not trusted", async ({ page }) => {
   const FIRST = ITEMS[0].id;
   await completeInterview(page);
 
-  // Rewrite the stored session the way an extension, an older release, or a
+  // Rewrite the stored session the way an extension, an older build, or a
   // curious student with devtools might: a Likert value off the scale, a
   // question that does not exist, and a route that was deleted.
   await page.evaluate((FIRST) => {

@@ -1,7 +1,7 @@
 """Legacy multi-tier routing experiment.
 
 This module is retained for research traceability. Its education mappings have not
-been validated for release 0.2.0 and are not connected to the runnable web app.
+been validated for the current prototype and are not connected to the runnable web app.
 Do not present its generated pathways as current admission guidance.
 """
 
@@ -22,7 +22,7 @@ class EducationTier(str, Enum):
 
 # --- Domain Reference Data ---
 
-# Historical vocational-area snapshot; not validated for release 0.2.0.
+# Historical vocational-area snapshot; not validated for the current prototype.
 VOCATIONAL_AREAS_2567: List[Dict[str, str]] = [
     {"area_id": "V01", "name_th": "อุตสาหกรรม", "name_en": "Industry", "description_th": "ช่างยนต์, ช่างไฟฟ้ากำลัง, ช่างอิเล็กทรอนิกส์, ช่างกลโรงงาน, เมคคาทรอนิกส์"},
     {"area_id": "V02", "name_th": "บริหารธุรกิจ", "name_en": "Business", "description_th": "การบัญชี, การตลาด, เลขานุการ, คอมพิวเตอร์ธุรกิจ"},

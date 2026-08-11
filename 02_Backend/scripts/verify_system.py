@@ -1,6 +1,6 @@
-"""Release 0.2.0 repository-contract verifier for the backend scaffold.
+"""Repository-contract verifier for the disconnected backend scaffold.
 
-This script checks version alignment and safety boundaries. It does not claim to
+This script checks the scaffold identity and safety boundaries. It does not claim to
 validate educational theory, admission rules, programme facts, or RAG quality.
 """
 
@@ -19,40 +19,17 @@ def read_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def repository_version() -> str:
-    return (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip()
-
-
-def check_version_alignment() -> None:
-    version = repository_version()
-    package = read_json(WEB_ROOT / "package.json")
-    package_lock = read_json(WEB_ROOT / "package-lock.json")
-    release = read_json(WEB_ROOT / "data" / "release.json")
-    registry = read_json(WEB_ROOT / "data" / "education-data-registry.json")
-    backend_version = (BACKEND_ROOT / "app" / "version.py").read_text(encoding="utf-8")
-
-    values = {
-        "web package": package["version"],
-        "web package lock": package_lock["version"],
-        "release record": release["version"],
-        "data registry": registry["releaseVersion"],
-    }
-    mismatches = {name: value for name, value in values.items() if value != version}
-    if mismatches:
-        raise AssertionError(f"Version mismatch: expected {version}, found {mismatches}")
-    if f'APP_VERSION = "{version}"' not in backend_version:
-        raise AssertionError("Backend APP_VERSION does not match repository VERSION")
-
-
-def check_component_statuses() -> None:
-    release = read_json(WEB_ROOT / "data" / "release.json")
-    components = release["components"]
-    if components["webApp"]["status"] != "implemented":
-        raise AssertionError("Web app must be labelled implemented")
-    if components["backend"]["status"] != "scaffold-not-connected":
-        raise AssertionError("Backend must be labelled scaffold-not-connected")
-    if components["decisionEngine"]["status"] != "implemented-unvalidated":
-        raise AssertionError("Decision engine must retain its unvalidated label")
+def check_scaffold_boundary() -> None:
+    main_source = (BACKEND_ROOT / "app" / "main.py").read_text(encoding="utf-8")
+    readme = (BACKEND_ROOT / "README.md").read_text(encoding="utf-8").lower()
+    if 'SERVICE_STATUS = "architecture-scaffold"' not in main_source:
+        raise AssertionError("Backend must retain its architecture-scaffold status")
+    if '"connected_to_web_app": False' not in main_source:
+        raise AssertionError("Backend root response must state that it is disconnected")
+    if "not connected to the runnable web app" not in main_source.lower():
+        raise AssertionError("Backend application description must state the runtime boundary")
+    if "disconnected scaffold" not in readme:
+        raise AssertionError("Backend README must retain the disconnected-scaffold warning")
 
 
 def check_missing_data_boundary() -> None:
@@ -95,8 +72,7 @@ def check_legacy_backend_quarantine() -> None:
 
 def main() -> int:
     checks: List[Tuple[str, Callable[[], None]]] = [
-        ("version alignment", check_version_alignment),
-        ("component status labels", check_component_statuses),
+        ("scaffold identity and runtime boundary", check_scaffold_boundary),
         ("missing-data decision boundary", check_missing_data_boundary),
         ("legacy backend quarantine", check_legacy_backend_quarantine),
     ]

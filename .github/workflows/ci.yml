@@ -24,7 +24,6 @@ on:
       - '01_Research/Geography_and_Access/PROVENANCE.json'
       - '01_Research/Geography_and_Access/data/**'
       - '04_Design/FutureMe_Mascot_Lab/**'
-      - 'VERSION'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
 
@@ -131,5 +130,5 @@ jobs:
       - name: Contract tests
         run: python -m pytest -q
 
-      - name: Release and safety-boundary verifier
+      - name: Safety-boundary verifier
         run: python scripts/verify_system.py

@@ -37,7 +37,7 @@
 </p>
 
 <p align="center">
-  <sub>FutureMe 0.2.0 · runnable guest prototype · Thai and English · light, dark, and system themes · no API key required</sub>
+  <sub>Runnable guest prototype · Thai and English · light, dark, and system themes · no API key required</sub>
 </p>
 
 ---

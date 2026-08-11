@@ -355,7 +355,7 @@ export const en = {
       "Programme-derived route mappings cover {mapped} of those {shown} institutions. Uncovered places use an institution-type fallback and must be checked directly.",
     coverageMissing:
       "Not stored here: programme-level TCAS criteria, tuition, scholarships, accommodation, or cost of living.",
-    coverageChecked: "Coverage registry checked {date} · FutureMe release {version}",
+    coverageChecked: "Coverage registry checked {date}",
     pickLabel: "Your province",
     pickPlaceholder: "Choose a province…",
     loading: "Looking up your province…",
@@ -563,7 +563,7 @@ export const en = {
     compareOne: "See this route's details side by side →",
     filteredSummary: "{n} more routes are not in the list above — see why",
     generatedBy:
-      "Generated in your browser by engine {version} from demo route data compiled {date}. No model chose these routes.",
+      "Generated in your browser from demo route data compiled {date}. No model chose these routes.",
     summaryTitle: "What your answers pointed to",
     summaryInterview: "Interview",
     summaryMission: "Mission",

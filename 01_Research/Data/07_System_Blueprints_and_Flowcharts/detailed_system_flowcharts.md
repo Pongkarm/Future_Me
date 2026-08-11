@@ -2,7 +2,7 @@
 
 > **เวทีการแข่งขัน:** JUMP THAILAND Hackathon 2026 (AIS Academy x NIA)
 >
-> **สถานะใน release 0.2.0:** พิมพ์เขียวสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่ deploy หรือเชื่อมกับเว็บปัจจุบัน AIS authentication, Qdrant/RAG, PostgreSQL, RBAC, SMS และ cloud ในแผนภาพยังไม่ได้ใช้งานจริง
+> **สถานะปัจจุบัน:** พิมพ์เขียวสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่ deploy หรือเชื่อมกับเว็บปัจจุบัน AIS authentication, Qdrant/RAG, PostgreSQL, RBAC, SMS และ cloud ในแผนภาพยังไม่ได้ใช้งานจริง
 >
 > **แหล่งใน repository:** [ภาพรวมข้อมูล](../README.md), [AIS Cloud & CAMARA research](../06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), [หลักสูตรทางเลือก](../02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) และ [Roadmap DAG research](../06_AIS_Cloud_and_Infrastructure/02_Interactive_Roadmap_DAG_Algorithm.md) ส่วนไฟล์เสียงคำแนะนำอาจารย์ไม่ได้เก็บใน branch นี้ จึงยังตรวจย้อนกลับไม่ได้
 

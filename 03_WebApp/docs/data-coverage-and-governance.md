@@ -2,7 +2,7 @@
 
 [← Source Review](09-source-review.md) · [Back to README](../READMEEN.md)
 
-> **Release 0.2.0 · checked 11 August 2026.** This document describes data that is actually stored
+> **Checked 11 August 2026.** This document describes data that is actually stored
 > and used. It does not turn an official portal into an ingested dataset or a directory into a
 > recommendation.
 
@@ -11,9 +11,9 @@
 [`data/education-data-registry.json`](../data/education-data-registry.json) is the machine-readable
 contract for Institution, Program, Admission, Financial and Location data. It records coverage,
 available fields, known gaps, sources, check dates, licences and the exact way each domain may be
-used. [`data/release.json`](../data/release.json) ties that contract to release 0.2.0.
+used.
 
-| Domain | Coverage in 0.2.0 | Status | May affect route selection? |
+| Domain | Current coverage | Status | May affect route selection? |
 |---|---:|---|:---:|
 | Institution | 1,417 source records; 1,375 unique institutions shown | Partially verified directory | No |
 | Program | 140 shown institutions have programme-derived route mappings | Partial degree-level mapping | No |

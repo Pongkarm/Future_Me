@@ -181,7 +181,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header>
   <h1>{title}</h1>
-  <div class="meta">FutureMe AI backend scaffold documentation — release 0.2.0</div>
+  <div class="meta">FutureMe AI backend scaffold documentation</div>
 </header>
 <main>
 {content}

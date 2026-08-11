@@ -39,7 +39,7 @@ flowchart LR
 | Chat companion | Stateless `POST /api/chat`; deterministic repository retrieval plus an optional Anthropic response, with an offline fallback. It cannot read or change the recommendation state. |
 | Chat transcript | React component state in the current tab only. Clear or refresh resets it; pressing Send transmits the bounded messages to the app server and, only when configured, Anthropic. |
 | Data provenance | Every route carries its source, status and last-checked date; the page reports the catalogue's age and names the unsourced fields. |
-| Release and data contract | `VERSION`, `data/release.json` and `data/education-data-registry.json` align component versions, dataset coverage, source checks, known gaps and decision-use limits. `npm run check:data` fails when they drift. |
+| Data contract | `data/education-data-registry.json` records dataset coverage, source checks, known gaps and decision-use limits. `npm run check:data` fails when the registry and stored data disagree. |
 | Storage | No application database or server-side transcript store. Assessment state remains in `localStorage`; chat bodies are processed in memory per request. Deployment hosts may still log request metadata or bodies depending on their configuration. |
 
 Source: `app/`, `components/`, `lib/`, `data/`. Tests: `tests/`, `e2e/`.
@@ -62,7 +62,7 @@ flowchart LR
 The directory is downstream of route selection. It may order institutions by a journey from a
 province centre and, where the official degree source has coverage, narrow obviously wrong subject
 matches. It cannot change the 0–3 routes. Admission and financial domains contain zero validated
-local records in 0.2.0.
+local records in the current prototype.
 
 See [Data coverage and governance](data-coverage-and-governance.md) and the machine-readable
 [`education-data-registry.json`](../data/education-data-registry.json).

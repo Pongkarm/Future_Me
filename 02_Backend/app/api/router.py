@@ -183,7 +183,7 @@ def get_future_path(id: str):
     if not LEGACY_FUTURE_PATHS_ENABLED:
         raise HTTPException(
             status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail="Legacy backend recommendations are disabled in release 0.2.0.",
+            detail="Legacy backend recommendations are disabled in the current prototype.",
         )
     if id not in future_paths_db:
         raise HTTPException(

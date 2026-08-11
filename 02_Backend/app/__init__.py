@@ -1,4 +1,4 @@
-"""FutureMe AI backend architecture scaffold (release 0.2.0).
+"""FutureMe AI backend architecture scaffold.
 
 This package is not connected to the runnable web application.
 """

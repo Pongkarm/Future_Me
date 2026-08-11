@@ -1,5 +1,4 @@
 import routesData from "@/data/routes.json";
-import releaseData from "@/data/release.json";
 import {
   decisionFieldIsVerified,
   evaluateEligibility,
@@ -37,7 +36,6 @@ import type {
   ScoreBreakdown,
 } from "./types";
 
-export const ENGINE_VERSION = releaseData.components.decisionEngine.version;
 export const MAX_ROUTES = 3;
 
 export * from "./types";
@@ -108,7 +106,6 @@ export function recommend(
       profile,
       notices,
       generatedAt: now.toISOString(),
-      engineVersion: ENGINE_VERSION,
     };
   }
 
@@ -124,7 +121,6 @@ export function recommend(
       profile,
       notices,
       generatedAt: now.toISOString(),
-      engineVersion: ENGINE_VERSION,
     };
   }
 
@@ -191,7 +187,6 @@ export function recommend(
       profile,
       notices,
       generatedAt: now.toISOString(),
-      engineVersion: ENGINE_VERSION,
     };
   }
 
@@ -205,7 +200,6 @@ export function recommend(
     profile,
     notices,
     generatedAt: now.toISOString(),
-    engineVersion: ENGINE_VERSION,
   };
 }
 

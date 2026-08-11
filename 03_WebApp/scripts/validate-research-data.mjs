@@ -9,7 +9,6 @@ const geoRoot = join(repoRoot, "01_Research", "Geography_and_Access");
 const dataRoot = join(geoRoot, "data");
 const errors = [];
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const SEMVER = /^\d+\.\d+\.\d+$/;
 
 function check(condition, message) {
   if (!condition) errors.push(message);
@@ -36,32 +35,8 @@ function sameMembers(left, right, label) {
 }
 
 const provenance = readJson(join(geoRoot, "PROVENANCE.json"));
-const release = readJson(join(appRoot, "data", "release.json"));
 const educationRegistry = readJson(join(appRoot, "data", "education-data-registry.json"));
-const packageManifest = readJson(join(appRoot, "package.json"));
-const packageLock = readJson(join(appRoot, "package-lock.json"));
-const rootVersion = readFileSync(join(repoRoot, "VERSION"), "utf8").trim();
-
-check(SEMVER.test(rootVersion), "VERSION must contain a semantic version");
-check(release.version === rootVersion, "release.json version must match VERSION");
-check(packageManifest.version === rootVersion, "package.json version must match VERSION");
-check(packageLock.version === rootVersion, "package-lock.json version must match VERSION");
-check(packageLock.packages?.[""]?.version === rootVersion, "package-lock root package version must match VERSION");
-check(release.components?.webApp?.version === rootVersion, "release web-app version must match VERSION");
-check(release.components?.backend?.version === rootVersion, "release backend version must match VERSION");
-check(
-  release.components?.decisionEngine?.version === `${rootVersion}-prototype`,
-  "release decision-engine version must be VERSION-prototype",
-);
-check(educationRegistry.releaseVersion === rootVersion, "education registry release must match VERSION");
-check(ISO_DATE.test(release.releasedAt ?? ""), "release date must be an ISO date");
 check(ISO_DATE.test(educationRegistry.checkedAt ?? ""), "education registry check date must be an ISO date");
-
-const backendVersionSource = readFileSync(join(repoRoot, "02_Backend", "app", "version.py"), "utf8");
-check(
-  backendVersionSource.includes(`APP_VERSION = "${rootVersion}"`),
-  "backend scaffold version must match VERSION",
-);
 
 const registryStatuses = new Set(Object.keys(educationRegistry.statusDefinitions ?? {}));
 check(registryStatuses.has("verified"), "education registry must define verified");
@@ -262,18 +237,11 @@ const mappedUniqueInstitutions = [...uniqueWebInstitutions.values()].filter(
 ).length;
 const sourceMappedInstitutions = Object.keys(programmeRoutes.institutions ?? {}).length;
 
-check(release.questionnaire?.liveInstrumentId === questions.meta?.id, "release questionnaire id is wrong");
-check(release.questionnaire?.interestItems === questions.interest?.length, "release interest-item count is wrong");
-check(release.questionnaire?.contextPrompts === questions.context?.length, "release context-prompt count is wrong");
-check(release.catalogues?.routes?.records === routeCatalogue.routes.length, "release route count is wrong");
-check(release.catalogues?.routes?.dataAsOf === routeCatalogue.meta?.dataAsOf, "release route data date is wrong");
-check(release.catalogues?.educationAccess?.provinces === provinces.length, "release province count is wrong");
-check(release.catalogues?.educationAccess?.sourceInstitutions === institutions.length, "release institution count is wrong");
-check(
-  release.catalogues?.educationAccess?.displayedUniqueInstitutions === uniqueWebInstitutions.size,
-  "release unique displayed-institution count is wrong",
-);
-check(release.catalogues?.educationAccess?.displayRows === webOptions, "release education display-row count is wrong");
+check(questions.meta?.id === "futureme-interest-v2", "live questionnaire id is wrong");
+check(questions.interest?.length === 30, "live interest-item count is wrong");
+check(questions.context?.length === 5, "live context-prompt count is wrong");
+check(routeCatalogue.routes.length === 12, "route count is wrong");
+check(ISO_DATE.test(routeCatalogue.meta?.dataAsOf ?? ""), "route catalogue has no ISO data date");
 
 const institutionCoverage = educationRegistry.domains?.institution?.coverage ?? {};
 check(institutionCoverage.sourceRecords === institutions.length, "registry source institution count is wrong");

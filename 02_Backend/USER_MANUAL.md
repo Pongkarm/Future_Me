@@ -1,6 +1,6 @@
 # คู่มือโครงสถาปัตยกรรม Backend ของ FutureMe
 
-> **รุ่น repository 0.2.0 · สถานะ: scaffold ที่ยังไม่เชื่อมกับเว็บหลัก**
+> **สถานะ: scaffold ที่ยังไม่เชื่อมกับเว็บหลัก**
 >
 > ระบบที่ใช้งานได้จริงอยู่ใน [`03_WebApp/`](../03_WebApp/) โฟลเดอร์นี้ไม่ใช่ backend
 > ของ flow ปัจจุบัน และไม่ควรใช้ผลลัพธ์แทนคำแนะนำจากเว็บ
@@ -35,7 +35,7 @@ endpoint `POST /v1/future-paths` ถูกปิดเป็นค่าเร�
 
 ## การตรวจ scaffold ในเครื่อง
 
-ควรใช้ virtual environment แยก โดยไฟล์ dependency ระบุรุ่นเดียวกับที่ใช้ตรวจ release 0.2.0
+ควรใช้ virtual environment แยก โดยไฟล์ dependency ระบุรุ่นเดียวกับที่ใช้ตรวจระบบล่าสุด
 
 ```powershell
 python -m venv .venv
@@ -61,4 +61,4 @@ python -m venv .venv
 
 อ่านรายละเอียดที่ [ขอบเขตสถาปัตยกรรม](../03_WebApp/docs/05-system-architecture.md),
 [ขอบเขตข้อมูล](../03_WebApp/docs/data-coverage-and-governance.md) และ
-[รายงานตรวจสอบรุ่น 0.2.0](../03_WebApp/docs/continuation-audit-2026-08-11.md)
+[รายงานตรวจสอบ repository](../03_WebApp/docs/continuation-audit-2026-08-11.md)

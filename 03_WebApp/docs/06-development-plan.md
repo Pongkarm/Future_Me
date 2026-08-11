@@ -4,7 +4,7 @@
 
 ---
 
-> **Status as of 11 August 2026 · release 0.2.0.** Statuses below describe *this repository*, not the team's private
+> **Status as of 11 August 2026.** Statuses below describe *this repository*, not the team's private
 > workspace. Where something exists only as a design, it says so.
 
 ## Status vocabulary

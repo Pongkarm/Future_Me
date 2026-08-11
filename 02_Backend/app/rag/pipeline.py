@@ -1,4 +1,4 @@
-"""Research-only RAG scaffold for FutureMe release 0.2.0.
+"""Research-only RAG scaffold for the current FutureMe repository snapshot.
 
 The runnable web app does not import this module.  The local knowledge base below
 contains repository-status records only; it deliberately excludes changing TCAS,
@@ -59,17 +59,17 @@ class RAGPipeline:
         self.initialize_knowledge_base()
 
     def initialize_knowledge_base(self) -> None:
-        """Index release, data-coverage, decision-boundary, and AI-boundary records."""
+        """Index repository, data-coverage, decision-boundary, and AI-boundary records."""
         if self._kb_initialized:
             return
 
         records = [
             SourceRecord(
-                source_id="doc_release_scope",
-                title="FutureMe release 0.2.0 scope",
+                source_id="doc_repository_scope",
+                title="FutureMe repository scope",
                 source_type="repository_metadata",
                 chunk_content=(
-                    "Release 0.2.0 contains a runnable Next.js web prototype. "
+                    "The repository contains a runnable Next.js web prototype. "
                     "The Python backend is an architecture scaffold and is not connected "
                     "to the web application."
                 ),
@@ -77,7 +77,7 @@ class RAGPipeline:
                     "validation_status": "verified_repository_state",
                     "last_validated": "2026-08-11",
                 },
-                file_path="../VERSION",
+                file_path="../README.md",
             ),
             SourceRecord(
                 source_id="doc_data_coverage",

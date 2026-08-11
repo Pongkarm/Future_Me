@@ -2,7 +2,7 @@
 
 [← Development Plan](06-development-plan.md) · [Back to README](../READMEEN.md) · [Next: Privacy →](08-privacy-and-data.md)
 
-> **Status as of 11 August 2026 · release 0.2.0.** Phase 2 closed when the guest journey became runnable end to
+> **Status as of 11 August 2026.** Phase 2 closed when the guest journey became runnable end to
 > end. What is still missing from it moved into Phase 3, rather than being left marked
 > "in progress" against a phase that is finished.
 
@@ -54,7 +54,7 @@ One complete path, working end to end, in preference to many partial ones.
 | Safeguarding pause | 🟢 | Keyword rule; stops recommendations and offers support |
 | Optional LLM explanation | 🟢 | Connected, labelled, cannot affect ranking |
 | Data provenance and freshness | 🟢 | Per-route source and status; catalogue age on screen |
-| Education-data coverage contract | 🟢 | Versioned registry for Institution, Program, Admission, Financial and Location domains; unavailable fields stay unavailable |
+| Education-data coverage contract | 🟢 | Machine-readable registry for Institution, Program, Admission, Financial and Location domains; unavailable fields stay unavailable |
 | Continuous integration | 🟢 | Typecheck, lint, tests, build and e2e on every PR |
 | Interactive roadmap renderer | 📐 | Moved to Phase 3 — the plan is linear today |
 | Consented counsellor summary | 📐 | Moved to Phase 3 — needs accounts first |

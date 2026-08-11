@@ -1,6 +1,6 @@
 # FutureMe backend plan
 
-> **Release 0.2.0 · architecture reference, not the running product.** Historical versions of this
+> **Architecture reference, not the running product.** Historical versions of this
 > file marked a FastAPI/Qdrant/PostgreSQL system and several unsupported content checks as complete.
 > Those claims are withdrawn. The current implementation boundary is recorded below.
 
@@ -12,16 +12,16 @@
 | Mission endpoints | Fixed mission examples and heuristic response evaluation | Experimental, unvalidated |
 | Future-path endpoint | Historical three-route generator | Disabled by default |
 | Storage | Process-local Python dictionary | Temporary only |
-| Decision engine | Separate Python prototypes with historical five-factor rules | Not aligned with the live 0.2.0 engine |
+| Decision engine | Separate Python prototypes with historical five-factor rules | Not aligned with the live engine |
 | RAG | Client and pipeline examples | No connected Qdrant service or evaluated retrieval set |
 | Schemas | Pydantic models for the proposed API | Reference only |
-| Dependencies and tests | Pinned runtime/dev requirements; 18 contract tests | Verified for release 0.2.0 |
+| Dependencies and tests | Pinned runtime/dev requirements; 18 contract tests | Verified in the current repository snapshot |
 
 ## Current interface
 
 | Method | Path | Current behavior |
 |---|---|---|
-| `GET` | `/` | Returns scaffold status and release version |
+| `GET` | `/` | Returns scaffold status and its disconnected runtime boundary |
 | `POST` | `/v1/missions/recommend` | Returns fixed experimental mission examples |
 | `POST` | `/v1/missions/{id}/submissions` | Runs an unvalidated heuristic evaluator |
 | `POST` | `/v1/future-paths` | Returns HTTP 501 unless `FUTUREME_ENABLE_LEGACY_BACKEND=1` |
@@ -48,4 +48,4 @@ Before this service can replace the browser engine, it needs:
 6. independent instrument, explanation, fairness, safety and outcome evaluation.
 
 See [`README.md`](README.md) for the folder boundary and the
-[0.2.0 continuation audit](../03_WebApp/docs/continuation-audit-2026-08-11.md) for the repository-wide decision.
+[continuation audit](../03_WebApp/docs/continuation-audit-2026-08-11.md) for the repository-wide decision.

@@ -1,9 +1,9 @@
-# Release 0.2.0 continuation audit — 11 August 2026
+# Repository continuation audit — 11 August 2026
 
 This audit answers the continuation brief before and after implementation. FutureMe already had a
 strong explainable exploration flow, but it did not have one machine-readable contract connecting
-release versions, education-data coverage, provenance, and decision-use limits. Release 0.2.0 adds
-that contract without pretending the prototype is a validated university recommender.
+education-data coverage, provenance, and decision-use limits. This update adds that contract
+without pretending the prototype is a validated university recommender.
 
 ## 1 · Current architecture
 
@@ -38,7 +38,7 @@ add, choose, rank, or remove a route or institution.
 
 Education tier is the only active route-level eligibility field. Cost, relocation, time to earning,
 flexibility, strengths, limitations, tuition, scholarships, admission criteria, deadlines and
-distance cannot score, rank, filter or remove a route in 0.2.0.
+distance cannot score, rank, filter or remove a route in the current prototype.
 
 ## 3 · Existing datasets and current coverage
 
@@ -75,7 +75,7 @@ Source availability does not make the route catalogue's practical estimates curr
 
 ## 5 · What is validated and what is not
 
-**Programmatically checked:** release-version consistency, JSON structure, unique identifiers,
+**Programmatically checked:** registry structure, JSON structure, unique identifiers,
 province coverage, source-to-web referential integrity, coordinate ranges, outcome arithmetic,
 small-sample suppression, full SHA-256 values, programme-route identifiers, source URLs/check
 dates, explicit missing-data states, deterministic scoring behavior, and documentation links.
@@ -87,21 +87,20 @@ suitability, affordability, or institution quality.
 Known incompleteness is preserved as missing: 207 institution coordinates, 987 institution
 websites, and 30 Thai station names.
 
-## 6 · Changes made in release 0.2.0
+## 6 · Changes made in this repository update
 
-1. Added a root `VERSION` and release manifest, and aligned web, engine and backend-scaffold labels.
-2. Added a machine-readable Institution / Program / Admission / Financial / Location registry.
-3. Extended `npm run check:data` to fail on version drift, unsupported status claims, unsafe source
+1. Added a machine-readable Institution / Program / Admission / Financial / Location registry.
+2. Extended `npm run check:data` to fail on unsupported status claims, unsafe source
    URLs, wrong counts, unavailable data used in decisions, or unsourced route fields omitted from
    the hold-out list.
-4. Added automated release-metadata tests.
-5. Added a learner-visible data-coverage panel to the nearby-institution screen.
-6. Corrected documentation that still described old test counts, route counts, or a fixed-only
+3. Added automated data-governance metadata tests.
+4. Added a learner-visible data-coverage panel to the nearby-institution screen.
+5. Corrected documentation that still described old test counts, route counts, or a fixed-only
    questionnaire.
-7. Relabelled the disconnected FastAPI service as an architecture scaffold instead of a finished
+6. Relabelled the disconnected FastAPI service as an architecture scaffold instead of a finished
    `1.0.0` backend.
-8. Added pinned backend runtime/development dependencies, 18 contract tests, a CI job, and a release
-   verifier for version alignment, missing-data boundaries, and legacy-code quarantine.
+7. Added pinned backend runtime/development dependencies, 18 contract tests, a CI job, and a
+   verifier for the scaffold boundary, missing-data boundaries, and legacy-code quarantine.
 
 ## 7 · Remaining work and risks
 
@@ -118,7 +117,7 @@ The largest regression risk is false confidence: a new source or UI field could 
 a score. The registry and tests now block the known fields, but human review is still required when
 new decision inputs are introduced.
 
-## 8 · Release verification
+## 8 · Verification
 
 Run from `03_WebApp/`:
 
@@ -135,5 +134,5 @@ python -m pytest -q
 python scripts/verify_system.py
 ```
 
-Verified release results: 27 Vitest files / 533 tests, 95 Playwright journeys, 18 backend contract
-tests, and all data, build, release-boundary, slide-overflow, and presentation-fidelity checks pass.
+Verified results: 27 Vitest files / 533 tests, 95 Playwright journeys, 18 backend contract tests,
+and all data, build, safety-boundary, slide-overflow, and presentation-fidelity checks pass.

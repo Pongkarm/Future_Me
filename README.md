@@ -27,7 +27,7 @@
   <a href="#quick-faq">FAQ</a>
 </p>
 
-<p align="center"><sub><strong>Release 0.2.0</strong> · repository documentation, data contract, and presentation reviewed 11 August 2026.</sub></p>
+<p align="center"><sub>Repository documentation, data contract, and presentation reviewed 11 August 2026.</sub></p>
 
 ---
 
@@ -43,7 +43,6 @@ admission, or claim that a listed institution offers a particular programme.
 | Question | Answer |
 |---|---|
 | **Who is it for?** | Thai students exploring their next study or career direction |
-| **What version is this?** | FutureMe 0.2.0; deterministic engine 0.2.0-prototype |
 | **What does it produce?** | Zero to three route hypotheses with reasons, limitations, comparisons, nearby-institution information, and a 30-day plan |
 | **What runs in this demo?** | 30 live interest questions with rule-based follow-up ordering, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
 | **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them or answer bounded repository questions |
@@ -145,7 +144,7 @@ visible for discussion but do not score, rank, or remove a route.
 | **Next.js web app** | Student journey, local session, decision engine, comparison, plan, and chat UI | ✅ Runnable |
 | **Demo inputs** | 30 live interest questions, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
 | **Research layer** | Source audit, curricula, labour data, claim status, and technical research | 🟡 First audit complete |
-| **Release + data registry** | Version, Institution / Program / Admission / Financial / Location coverage, sources, dates, gaps, and decision-use limits | ✅ Machine-checked |
+| **Education data registry** | Institution / Program / Admission / Financial / Location coverage, sources, dates, gaps, and decision-use limits | ✅ Machine-checked |
 | **FastAPI backend** | Mission and future-path API reference with in-memory storage | 🟡 Separate prototype |
 | **Optional AI** | Bounded chat and explanation rewording | 🟡 Optional |
 | **Production services** | Accounts, permanent database, RAG, school tools, and cloud deployment | 🔴 Planned |
@@ -169,11 +168,11 @@ into the main demo journey. A few backend schema and class identifiers retain th
 - Local persistence, deletion controls, optional research export, and analysis scripts
 - Mascot animation enabled by default across the journey, with a persisted system-motion opt-out
 - Twelve illustrative routes and province-aware nearby-institution views that do not claim a specific programme is offered
-- Versioned education-data coverage: 1,417 source institutions, 1,375 unique institutions shown, 140 with programme-derived route mappings, and zero locally validated admission or financial records
+- Machine-checked education-data coverage: 1,417 source institutions, 1,375 unique institutions shown, 140 with programme-derived route mappings, and zero locally validated admission or financial records
 - Mascot sync, typecheck, lint, unit/integration tests, production build, and browser journeys are included in the repository checks
 - Verification snapshot (11 August 2026): 27 Vitest files / 533 tests and all 95 Playwright browser
   journeys pass; data-integrity and production-build checks pass; the disconnected backend scaffold
-  also passes 18 contract tests and its release verifier
+  also passes 18 contract tests and its safety-boundary verifier
 
 ### 🟡 Needs validation
 
@@ -294,8 +293,8 @@ integrations are documented production designs, not running components. See the
 <summary><strong>Can a recommendation be reproduced and audited?</strong></summary>
 
 Yes. The same validated inputs and catalogue produce the same routes because scoring, filters,
-ties, and refusal gates are deterministic TypeScript. The UI exposes the engine version,
-catalogue date, reasons, unknowns, and provenance. The fixed weights are design judgement, not
+ties, and refusal gates are deterministic TypeScript. The UI exposes the catalogue date, reasons,
+unknowns, and provenance. The fixed weights are design judgement, not
 parameters fitted to outcome data; automated tests verify implementation behaviour, not real-world validity.
 </details>
 

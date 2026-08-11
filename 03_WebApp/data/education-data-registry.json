@@ -1,6 +1,5 @@
 {
   "schemaVersion": "1.0.0",
-  "releaseVersion": "0.2.0",
   "checkedAt": "2026-08-11",
   "purpose": "Machine-readable coverage, provenance and decision-use limits for education data exposed by the prototype.",
   "statusDefinitions": {
@@ -56,7 +55,7 @@
           "title": "Higher-education institution register, academic year 2566",
           "url": "https://data.mhesi.go.th/dataset/5d5c4958-9e36-41ae-a637-1b31148a1143/resource/a80acd99-86bf-4a58-81ea-58167b2679e3/download/univ_uni_11_01_2566.xlsx",
           "checkedAt": "2026-08-11",
-          "license": "not re-confirmed during this release"
+          "license": "not re-confirmed during this review"
         }
       ]
     },
@@ -208,6 +207,6 @@
       "TCAS deadlines",
       "distance"
     ],
-    "rule": "Education-directory data may help a learner investigate a route, but it cannot select, score, rank or remove a route in release 0.2.0."
+    "rule": "Education-directory data may help a learner investigate a route, but it cannot select, score, rank or remove a route in the current prototype."
   }
 }

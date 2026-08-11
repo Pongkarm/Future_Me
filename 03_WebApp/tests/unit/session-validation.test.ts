@@ -1,6 +1,6 @@
 /**
  * Everything here is an attack on `parseSession` with values localStorage can
- * actually contain: hand-edited JSON, state written by an older release, and
+ * actually contain: hand-edited JSON, state written by an older build, and
  * values that are the right type but not a value the UI could ever produce.
  *
  * The contract under test is narrow on purpose — never crash, never carry an

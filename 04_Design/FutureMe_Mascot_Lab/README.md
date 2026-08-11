@@ -4,7 +4,7 @@ Prototype workspace and canonical source for the FutureMe mascot. It exists so t
 can agree on how the character behaves inside the product **before** anyone
 commits to final 2D or 3D production.
 
-> FutureMe 0.2.0 live-app integration reviewed: 11 August 2026. `mascot.js` and `mascot.css` are synchronized into
+> Live-app integration reviewed: 11 August 2026. `mascot.js` and `mascot.css` are synchronized into
 > the current web app and checked by `npm run check:mascot`.
 
 Open `index.html` in a browser. No build step, no server.

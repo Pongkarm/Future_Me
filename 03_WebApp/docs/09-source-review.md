@@ -17,7 +17,7 @@ That audit contradicted several things this repository said. This document recor
 and why, so a reviewer can see the reasoning rather than a silently edited number.
 
 The full corrected registry is in [02 · Research and Evidence](02-research-and-evidence.md#source-registry).
-The release-specific Institution / Program / Admission / Financial / Location contract is in
+The machine-readable Institution / Program / Admission / Financial / Location contract is in
 [Data coverage and governance](data-coverage-and-governance.md).
 
 ### August education-data continuation check

@@ -1,6 +1,6 @@
 # FutureMe backend architecture scaffold
 
-> **Repository release 0.2.0 · status: disconnected scaffold.** The runnable product is
+> **Status: disconnected scaffold.** The runnable product is
 > [`03_WebApp/`](../03_WebApp/). This folder is not used by its interview, route selection,
 > comparison, plan, nearby directory, or optional AI endpoints.
 
@@ -21,7 +21,7 @@ unsourced feasibility and flexibility defaults. Set `FUTUREME_ENABLE_LEGACY_BACK
 isolated engineering tests. Do not present its output as the current product result or as validated
 guidance.
 
-The live 0.2.0 engine is the deterministic TypeScript implementation in
+The live engine is the deterministic TypeScript implementation in
 [`03_WebApp/lib/decision-engine/`](../03_WebApp/lib/decision-engine/). It holds cost, relocation,
 timing, flexibility, admission and financial data outside decisions until verified sources exist.
 
@@ -34,7 +34,7 @@ timing, flexibility, admission and financial data outside decisions until verifi
 ## Inspect the scaffold locally
 
 Use a separate virtual environment. The dependency files are pinned to the versions used for the
-0.2.0 verification run.
+latest verification run.
 
 ```powershell
 python -m venv .venv
@@ -46,6 +46,6 @@ python -m venv .venv
 The test run checks the scaffold contract and quarantine boundaries. It does not validate the
 questionnaire or make this backend part of the live web application.
 
-See the [release audit](../03_WebApp/docs/continuation-audit-2026-08-11.md),
+See the [repository audit](../03_WebApp/docs/continuation-audit-2026-08-11.md),
 [system architecture](../03_WebApp/docs/05-system-architecture.md), and
 [data coverage contract](../03_WebApp/docs/data-coverage-and-governance.md).

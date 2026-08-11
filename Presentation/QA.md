@@ -1,6 +1,5 @@
 # Presentation QA
 
-Release: 0.2.0
 Reviewed: 11 August 2026
 
 ## Content
@@ -16,7 +15,7 @@ Reviewed: 11 August 2026
   boundary are shown without describing either as validated assessment logic
 - The current software snapshot passes 27 Vitest files / 533 tests and all 95
   Playwright browser journeys
-- The data slide matches the release registry: 1,961 display rows, 1,375 unique
+- The data slide matches the education-data registry: 1,961 display rows, 1,375 unique
   institutions and 140 institutions with programme mappings
 - Admission cycles, tuition, scholarships and living costs are shown as
   unavailable instead of being inferred

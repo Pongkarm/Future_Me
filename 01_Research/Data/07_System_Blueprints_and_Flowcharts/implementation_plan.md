@@ -2,7 +2,7 @@
 
 > **เวทีการแข่งขัน:** JUMP THAILAND Hackathon 2026 (AIS Academy x NIA)
 > **หัวข้อ:** AI เพื่ออนาคตการศึกษาไทย (AI for the Future of Thai Education)
-> **สถานะใน release 0.2.0:** แผนสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่เชื่อมใช้งานแล้ว ส่วน AIS, RAG, Qdrant, PostgreSQL, multi-role dashboard และ cloud ยังเป็น research/planned
+> **สถานะปัจจุบัน:** แผนสถาปัตยกรรมอนาคต ไม่ใช่ระบบที่เชื่อมใช้งานแล้ว ส่วน AIS, RAG, Qdrant, PostgreSQL, multi-role dashboard และ cloud ยังเป็น research/planned
 >
 > **แหล่งใน repository:** [ภาพรวมข้อมูล](../README.md), [AIS Cloud & CAMARA research](../06_AIS_Cloud_and_Infrastructure/01_AIS_Cloud_Architecture_and_Deployment.md), [Detailed Flowcharts](detailed_system_flowcharts.md) และ [GED / สกร. / Homeschool](../02_Thai_National_Curricula/04_Non_Formal_and_Alternative_Education.md) ส่วนไฟล์เสียงคำแนะนำอาจารย์ไม่ได้เก็บใน branch นี้ จึงยังตรวจย้อนกลับไม่ได้
 
@@ -90,6 +90,6 @@
 - [detailed_system_flowcharts.md](detailed_system_flowcharts.md)
 - [implementation_plan.md](implementation_plan.md)
 
-ลิงก์ artifact ส่วนตัวจากเครื่องผู้เขียนเดิมถูกนำออกใน release 0.2.0 เพราะผู้ใช้อื่นเปิดไม่ได้
+ลิงก์ artifact ส่วนตัวจากเครื่องผู้เขียนเดิมถูกนำออกจาก repository เพราะผู้ใช้อื่นเปิดไม่ได้
 ให้ใช้ไฟล์ใน repository และ [สถาปัตยกรรมปัจจุบัน](../../../03_WebApp/docs/05-system-architecture.md)
 เป็นแหล่งอ้างอิงแทน

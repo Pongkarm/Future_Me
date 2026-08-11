@@ -14,7 +14,7 @@ from scripts.generate_qwen_dataset import (
 def test_rag_scaffold_retrieves_repository_metadata():
     rag = RAGPipeline()
     evaluation = [
-        {"query": "release 0.2.0 backend scaffold", "expected_doc_ids": ["doc_release_scope"]},
+        {"query": "repository backend scaffold", "expected_doc_ids": ["doc_repository_scope"]},
         {"query": "TCAS tuition scholarships unavailable", "expected_doc_ids": ["doc_data_coverage"]},
         {"query": "unverified fields excluded from scoring", "expected_doc_ids": ["doc_decision_boundary"]},
         {"query": "AI explain but not select routes", "expected_doc_ids": ["doc_ai_boundary"]},

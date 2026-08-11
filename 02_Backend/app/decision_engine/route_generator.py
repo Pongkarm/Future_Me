@@ -1,6 +1,6 @@
 """Legacy route-generation experiment, retained for traceability only.
 
-Release 0.2.0 disables this pipeline by default because it depends on unvalidated
+The current prototype disables this pipeline by default because it depends on unvalidated
 weights and practical-route assumptions. The runnable web app uses a separate,
 deterministic evidence pipeline.
 """
@@ -139,7 +139,7 @@ def run_decision_engine(
     if os.getenv("FUTUREME_ENABLE_LEGACY_BACKEND", "").strip() != "1":
         raise RuntimeError(
             "Legacy backend decision generation is disabled because its weights and "
-            "education assumptions are not validated for release 0.2.0."
+            "education assumptions are not validated for the current prototype."
         )
 
     # 1. RIASEC Scorer

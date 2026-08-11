@@ -1,7 +1,7 @@
 """Legacy five-weight recommendation-matrix experiment.
 
 The weights and default feasibility/flexibility values are unvalidated and excluded
-from the release 0.2.0 product decision path. The module remains for inspection only.
+from the current product decision path. The module remains for inspection only.
 """
 
 from typing import Any, Dict, List, Optional, Union

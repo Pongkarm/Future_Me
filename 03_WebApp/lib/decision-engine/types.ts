@@ -154,5 +154,4 @@ export interface Recommendation {
   /** Advisory notices that do not block a recommendation. */
   notices: ReasonCode[];
   generatedAt: string;
-  engineVersion: string;
 }

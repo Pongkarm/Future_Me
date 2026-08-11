@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import educationRegistry from "@/data/education-data-registry.json";
-import release from "@/data/release.json";
 import provinces from "@/data/provinces.json";
 import { Button, Card, Notice, Shell } from "@/components/ui";
 import { usePreferences, useT } from "@/components/PreferencesProvider";
@@ -225,7 +224,6 @@ export default function NearbyPage() {
           <p className="mt-3 text-xs text-muted">
             {format(t.nearby.coverageChecked, {
               date: educationRegistry.checkedAt,
-              version: release.version,
             })}
           </p>
         </Card>

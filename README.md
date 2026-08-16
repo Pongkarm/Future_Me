@@ -193,7 +193,6 @@ Pongkarm/Future_Me
 ├── FutureMe_Team_Portfolio.html # เอกสารผลงานต้นฉบับ HTML
 ├── README.md                    # เอกสารภาพรวมโครงการฉบับภาษาไทย (TH)
 ├── README_EN.md                 # เอกสารภาพรวมโครงการฉบับภาษาอังกฤษ (EN)
-├── HANDOFF.md                   # รายงานสรุปสถานะการส่งมอบโครงการ
 └── .gitignore                   # มาตรฐาน Git Ignore
 ```
 

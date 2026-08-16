@@ -193,7 +193,6 @@ Pongkarm/Future_Me
 ├── FutureMe_Team_Portfolio.html # Master Team Portfolio (HTML Source)
 ├── README.md                    # Project Overview in Thai (TH)
 ├── README_EN.md                 # Project Overview in English (EN)
-├── HANDOFF.md                   # Final Deliverables & Handoff Summary
 └── .gitignore                   # Standard Git Ignore
 ```
 

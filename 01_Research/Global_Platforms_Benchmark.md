@@ -2,8 +2,6 @@
 
 > **Project:** FutureMe AI — Career & Educational Guidance System (Hackathon 2026)  
 > **Governance Standard:** `00_Governance` Source & Research Metadata  
-> **Branch:** `Kong19565`
-
 ---
 
 ## 📌 Executive Summary

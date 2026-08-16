@@ -180,15 +180,6 @@ production build, and all 95 Playwright browser journeys.
 
 </details>
 
-> **Cross-branch scope · ขอบเขตข้อมูลข้าม branch:** Kong19565 adds a fixed 41-prompt flow
-> (30 interest + 6 self-efficacy + 5 context), a 23,257-programme index, and a separate top-five
-> matcher. None of those files is imported by this Panussu app yet. See the
-> [root README comparison](../README.md#data-reviewed-from-kong19565).
->
-> **ภาษาไทย:** Kong19565 เพิ่มแบบสอบถามลำดับคงที่ 41 ข้อ ดัชนีหลักสูตร 23,257 ระเบียน
-> และตัวจับคู่หลักสูตรแยกต่างหาก แต่ Panussu ยังไม่ได้ import ไฟล์เหล่านี้ ดู
-> [ตารางเปรียบเทียบภาษาไทย](../READMETH.md#ข้อมูลจาก-kong19565-ที่ตรวจแล้ว)
-
 ---
 
 ## How the decision system works · ระบบตัดสินใจทำงานอย่างไร

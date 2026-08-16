@@ -27,7 +27,7 @@
   <a href="#quick-faq">FAQ</a>
 </p>
 
-<p align="center"><sub>Documentation and cross-branch data reviewed 16 August 2026. The latest full app-verification snapshot remains 11 August 2026.</sub></p>
+<p align="center"><sub>Documentation reviewed 16 August 2026. The latest full app-verification snapshot remains 11 August 2026.</sub></p>
 
 ---
 
@@ -91,13 +91,11 @@ flowchart LR
 
     I["Optional bounded AI"] -. "explain only" .-> E
     J["FastAPI prototype"] -. "future integration" .-> D
-    K["Kong branch programme research"] -. "review before integration" .-> B
-
     classDef working fill:#d1fae5,stroke:#047857,color:#064e3b;
     classDef validating fill:#fef3c7,stroke:#d97706,color:#78350f;
     classDef planned fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
     class A,B,C,D,E,F,I,J working;
-    class G,K validating;
+    class G validating;
     class H planned;
 ```
 
@@ -135,9 +133,7 @@ flowchart TD
     class P planned;
 ```
 
-This diagram is the workflow implemented on **Panussu**. Optional AI can explain or reword results,
-but it does not select routes. Kong's fixed 41-prompt questionnaire and programme matcher are
-separate branch work and are not used by this runtime yet.
+Optional AI can explain or reword results, but it does not select routes.
 
 ### Recommendation logic
 
@@ -171,7 +167,6 @@ visible for discussion but do not score, rank, or remove a route.
 | **Demo inputs** | 30 interest items + 5 context prompts, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
 | **Research layer** | Source audit, curricula, labour data, claim status, and technical research | 🟡 First audit complete |
 | **Education data registry** | Institution / Program / Admission / Financial / Location coverage, sources, dates, gaps, and decision-use limits | ✅ Machine-checked |
-| **Kong branch research** | 23,257-programme index, six self-efficacy prompts, and a separate deterministic programme matcher | 🟡 Implemented on Kong19565; not integrated into Panussu |
 | **FastAPI backend** | Mission and future-path API reference with in-memory storage | 🟡 Separate prototype |
 | **Optional AI** | Bounded chat and explanation rewording | 🟡 Optional |
 | **Production services** | Accounts, permanent database, RAG, school tools, and cloud deployment | 🔴 Planned |
@@ -179,27 +174,6 @@ visible for discussion but do not score, rank, or remove a route.
 The current web app is the product source of truth. The FastAPI backend is not required by or wired
 into the main demo journey. A few backend schema and class identifiers retain the historical
 `FuturePath` name for import compatibility; the product name is **FutureMe AI**.
-
-### Data reviewed from Kong19565
-
-<details>
-<summary><strong>Open the verified cross-branch snapshot (not live on Panussu)</strong></summary>
-
-The following is verified from [Kong19565 at `df5632f`](https://github.com/Pongkarm/Future_Me/tree/df5632f156b60fec81ddf9712cbcb8d06b74ba05),
-reviewed 16 August 2026. It is useful integration work, but it is not part of the current Panussu runtime.
-
-| Kong branch asset | Verified scope | Boundary before Panussu can claim it |
-|---|---|---|
-| **Questionnaire extension** | Fixed sequence of 30 interest + 6 researcher-written self-efficacy + 5 context prompts = 41 prompts before review | Not CAT, IRT, Akinator-style, or answer-selected; the six added items are unvalidated |
-| **Programme index** | 23,257 records: 6,349 bachelor's, 9,191 ปวช., and 7,717 ปวส.; 993 institutions and 269 fields | 15,586 records include outcome data; 16,909 lack production-cost data, and production cost is not learner tuition |
-| **Programme matcher** | Core fit uses 70% interest cosine + 30% self-efficacy when available; context can move the score by at most 15 points; deterministic refusal gates return up to five matches | These are design weights, not outcome-fitted parameters. This layer is separate from the 50/30/20 route engine and does not drive route comparison or the 30-day plan |
-| **Known evidence gaps** | No verified learner-paid tuition, TCAS rounds/requirements/scores, scholarships, or programme-level financial aid | The field-to-occupation crosswalk is team-created and not expert-reviewed; five-region living costs are estimates |
-
-The supplied AIS Cloud workflow is therefore a **target architecture**, not a current-system diagram.
-AIS Cloud hosting, GPU compute, Qdrant, accounts, counsellor dashboards, native mobile, automatic
-feedback loops, and TCAS portfolios remain proposed unless a later branch implements and verifies them.
-
-</details>
 
 ---
 
@@ -312,14 +286,6 @@ distance from a province centre. Only 140 of 1,375 displayed institutions have p
 programme-derived route mappings; programme-level TCAS, tuition, scholarships, accommodation,
 and living costs have zero validated local records. See the
 [data coverage contract](03_WebApp/docs/data-coverage-and-governance.md).
-</details>
-
-<details>
-<summary><strong>Does Panussu already use Kong's 23,257-programme matcher?</strong></summary>
-
-No. Kong19565 contains that index and a separate top-five deterministic matcher, but those files are
-not imported by Panussu. The current Panussu result is still 0–3 illustrative route hypotheses;
-nearby institutions are a downstream directory and never change the route result.
 </details>
 
 <details>

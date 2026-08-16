@@ -1,6 +1,6 @@
 # Candidate 1,000-item question bank
 
-`question_bank_1000.json` is restored from the `Kong19565` branch as a research asset for later adaptive-assessment work.
+`question_bank_1000.json` is a research-only asset reserved for later adaptive-assessment work.
 
 ## Current status
 

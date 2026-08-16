@@ -178,12 +178,6 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 The application can be used end to end without an account, database, environment variable, or
 model provider.
 
-> **Cross-branch scope, reviewed 16 August 2026:** Kong19565 adds a fixed 41-prompt flow
-> (30 interest + 6 self-efficacy + 5 context), a 23,257-programme index covering 993 institutions
-> and 269 fields, and a separate top-five deterministic matcher. Those files are not imported by
-> Panussu. The dataset still lacks verified learner tuition, TCAS requirements, and scholarships.
-> See the [root comparison](../README.md#data-reviewed-from-kong19565).
-
 Verification snapshot (11 August 2026): mascot and data-integrity checks, typecheck, lint,
 27 Vitest files / 533 tests, production build, and all 95 Playwright browser journeys passed.
 

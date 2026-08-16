@@ -1,25 +1,16 @@
-# Future Me Web Design Concepts
+# 04_Design — คลังการออกแบบและ Design Systems (UI/UX Concepts & Mascot Lab)
 
-This folder contains eleven complete, comparable website directions based on the `Data/` knowledge base. Concept 11, **Aurora**, follows the dedicated `11_GenZ_Aurora_Direction` brief and integrates the strongest parts of the earlier library into a modern Gen-Z, non-social product direction.
+> **ภาพรวม:** บันทึกกระบวนการศึกษาและเปรียบเทียบแนวคิดการออกแบบ 11 ทิศทาง (Concepts 01–11) สู่การคัดเลือกทิศทางหลัก **"GenZ Aurora Direction"**
 
-## Start here
+---
 
-- [Concept gallery](index.html)
-- [Knowledge-base summary](00_Project_Analysis/knowledge_base_summary.md)
-- [Target users](00_Project_Analysis/target_users.md)
-- [Feature requirements and product plan](00_Project_Analysis/feature_requirements.md)
-- [Concept comparison](99_Final_Comparison/concept_comparison.md)
-- [Recommended direction](99_Final_Comparison/recommended_direction.md)
-- [Implementation roadmap](99_Final_Comparison/implementation_roadmap.md)
+## 🧭 สารบัญและโครงสร้างภายใน
 
-## View prototypes
-
-```bash
-python3 -m http.server 8080 --directory FutureMe_Web_Design_Concepts
-```
-
-Open `http://localhost:8080/`. Each concept is dependency-free and supports Landing, Interview, Results, Dashboard, Roadmap, responsive mobile, and wireframe mode.
-
-## Recommended direction
-
-**Aurora** is the recommended overall and Hackathon direction. It combines the Compass Coach flow, QuestMap evidence missions, PathLab explainability, Timefold future-self roadmap, and Clarity safeguards. If implementation time is constrained, retain the Aurora brand and visual tokens while simplifying to Compass Coach/Clarity components.
+| โฟลเดอร์ / ไฟล์ | คำอธิบาย |
+|---|---|
+| [`11_GenZ_Aurora_Direction/`](11_GenZ_Aurora_Direction/) | **ทิศทางการออกแบบหลัก:** ดีไซน์สไตล์ GenZ ทันสมัย, Gradient Glassmorphism, Modern Typography ที่ใช้ใน Web App ปัจจุบัน |
+| [`FutureMe_Mascot_Lab/`](FutureMe_Mascot_Lab/) | **ห้องทดลอง Mascot AI:** การออกแบบคาแรคเตอร์มาสคอต, ท่าทางอารมณ์, Interaction States และ Prompt Guide |
+| [`01_Concept_01/` ถึง `10_Concept_10/`](.) | แนวคิดการออกแบบทางเลือกทั้ง 10 รูปแบบ (Wireframes, Mockups, HTML Prototype) ที่ใช้ศึกษาเปรียบเทียบ |
+| [`99_Final_Comparison/`](99_Final_Comparison/) | ตารางและเกณฑ์การเปรียบเทียบจุดเด่น-จุดด้อยของแต่ละ Design Concept |
+| [`00_Project_Analysis/`](00_Project_Analysis/) | บทวิเคราะห์ Persona ผู้เรียน, Information Architecture และ UX Journey Mapping |
+| [`index.html`](index.html) | เว็บพอร์ทัลแบบ Interactive สำหรับเปิดดูและเทียบทุก Concept ผ่านบราวเซอร์ |

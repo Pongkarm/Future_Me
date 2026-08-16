@@ -1,42 +1,50 @@
-# 🚀 Project Handoff Document — FutureMe AI
+# FutureMe AI — Project Handoff Document
 
-**Repository:** `Future_Me`  
-**Branch:** `Kong19565`  
-**Date:** 2026-08-12  
-**Target Audience:** Next Agent / Pair Programmer / Hackathon Team  
-
----
-
-## 📌 Executive Summary & Context
-
-FutureMe AI is an adaptive career and educational guidance web platform designed for Thai learners (M.1–M.6 / Vocational). It combines a 6-dimension RIASEC interest framework with **Computerized Adaptive Testing (CAT)** and a 5-criterion Dual-Matrix recommendation engine.
-
-Per user instruction (*"ไม่ต้องผสานแต่ใช้ของ win เป็นหลักเลย ลบของเราออกเอาของวินมาแทน"*), branch `Kong19565` has been hard reset to match **`winxtxrgit/futureme-ai` (`main` branch)** 100% directly.
+**Last Updated:** 2026-08-16  
+**Repository Path:** `d:\My_server\University\3rd year\hackathon_git\Future_Me`  
+**Git Branch:** `Kong19565` ➔ Target Main Branch for JUMP THAILAND 2026 Submission  
+**Structure:** Clean Hackathon Standard (`01_Research`, `02_Backend`, `03_WebApp`, `04_Design`, `05_Assets`, `Presentation`, `Archive`)
 
 ---
 
-## 🛠️ Key Technical Accomplishments in Current Session
+## 1. Project Overview & Deliverables
 
-### 1. Direct Alignment with `winxtxrgit/futureme-ai` (`main`)
-* Hard reset `Kong19565` to match `winxtxrgit/futureme-ai` commit [`781f878`](https://github.com/winxtxrgit/futureme-ai/commit/781f878ccbf78810344b54e10fd2e58cc4ce997c):
-  - **23,257 Real Programme Engine ([`programmes.json`](01_Research/Recommendation_Engine/data/programmes.json)):** Real institution-level matching for 16,908 Vocational (ปวช./ปวส.) programs and 6,349 University degree programs across 993 campuses in Thailand.
-  - **Real Programme Cards ([`ProgrammeMatches.tsx`](03_WebApp/Pre_Present/components/routes/ProgrammeMatches.tsx)):** Displays road distances in kilometres, tuition fee sources, Thai occupation titles, and regional living cost estimates (6,000–13,000 THB/mo) for cross-region moves.
-  - **Self-Efficacy Assessment Engine:** 6 Bandura/Kuder self-efficacy items integrated into `/interview` questionnaire.
-  - **Adaptive Questionnaire Suite ([`01_Research/Adaptive_Questionnaire/`](01_Research/Adaptive_Questionnaire/)):** 90-item research bank (`items.json`) with facet tracking and simulation scripts.
-  - **Updated Presentation Deck ([`Presentation/FutureMe_Project_Presentation.pdf`](Presentation/FutureMe_Project_Presentation.pdf)):** 15-slide pitch deck featuring real app screenshots and candidate summary deck ([`FutureMe_Recommendation_Summary.html`](Presentation/FutureMe_Recommendation_Summary.html)).
-  - **Evidence Catalog v2.0.0 ([`Evidence_Catalog.md`](01_Research/Evidence_Catalog.md)):** Audited provenance badging enforcing openable links for all `[VERIFIED]` entries.
+All tasks requested in this session are **100% complete, verified, and approved by the user**.
 
----
-
-## 📊 System Health & Verification Status
-
-* **TypeScript Typecheck:** `npm run typecheck` ➔ **0 Errors**
-* **Production Build:** `npm run build` (`next build`) ➔ **Clean Production Build (17/17 pages)**
-* **Local Development Server:** `npm run dev` in `03_WebApp/Pre_Present` running on `http://localhost:3000`
+### 🌟 Key Submission Artifact: Master Presentation Deck (7-Slide Widescreen 16:9)
+* **Official Primary Submission PDF (Root):** [`FutureMe_Presentation.pdf`](file:///d:/My_server/University/3rd%20year/hackathon_git/Future_Me/FutureMe_Presentation.pdf) (**1.16 MB**, 7 Pages)
+* **Official Primary Submission PDF (Presentation Folder):** [`Presentation/FutureMe_Presentation.pdf`](file:///d:/My_server/University/3rd%20year/hackathon_git/Future_Me/Presentation/FutureMe_Presentation.pdf)
+* **Source HTML Deck (Root):** [`FutureMe_Presentation.html`](file:///d:/My_server/University/3rd%20year/hackathon_git/Future_Me/FutureMe_Presentation.html)
+* **Source HTML Deck (Presentation Folder):** [`Presentation/FutureMe_Presentation.html`](file:///d:/My_server/University/3rd%20year/hackathon_git/Future_Me/Presentation/FutureMe_Presentation.html)
+* **Status:** Fully updated with user's preferred font family, font sizes, and layout scale across all 7 slides.
 
 ---
 
-## 🎯 Recommended Next Steps
+## 2. 7-Slide Master Deck Breakdown (Field 8 Submission Form)
 
-1. **Pitch Practice (Wed Night 21:00-22:00):** Review [`Presentation/FutureMe_Project_Presentation.pdf`](Presentation/FutureMe_Project_Presentation.pdf) and [`Presentation/FutureMe_Recommendation_Summary.html`](Presentation/FutureMe_Recommendation_Summary.html) for judge Q&A.
-2. **Final Submission Prep (Due Aug 15):** Submit production build and presentation materials for JUMP THAILAND Hackathon 2026.
+| Slide | Title | Key Contents & Visual Elements |
+|:---:|---|---|
+| **Slide 1** | **WHAT (Problem & Choice Points)** | TDRI stats (`56%` mismatch, `27%` underqualified, `39%` skill shift) + **Consequential Choice Points Diagram (ม.3 & ม.6)** |
+| **Slide 2** | **WHO & Continuous Engagement** | **5-Step Continuous Evidence Loop Diagram** (`Reflect` ➔ `Try` ➔ `Update` ➔ `Compare` ➔ `Act 30-Day Plan`) + Post-Mission Reflection & Weekly Micro Check-in + Data Ownership |
+| **Slide 3** | **HOW (Solution & Principles)** | 3-Step Process (`Answer` ➔ `Try` ➔ `Reflect`) + **5 Design Principles Banner** (*"Rules decide. AI explains."*) |
+| **Slide 4** | **System Architecture & Ecosystem Flowchart** | 🌟 **3-Track 9-Step Flowchart Workflow Diagram** (Student Journey Track ➔ AI Core Engine & AIS Cloud Hub ➔ Ecosystem Opportunities Track) matching professional Hackathon criteria |
+| **Slide 5** | **Real Database & Engines** | **23,257 Real Programmes** (16,908 vocational + 6,349 bachelor's across 993 institutions) + Deterministic Cosine/Kelley Engine + Geo-Distance & Living Cost Index 5 Regions |
+| **Slide 6** | **Business Model & Sustainability** | **B2C Freemium Model** (Student Free / Parent Pass 199-299.-) + **B2G Institutional License** (สอศ., ศธ., กสศ., อบจ. + National Interest Dashboard) + **B2B Recruitment Portal** |
+| **Slide 7** | **Impact, Roadmap & Team** | Pilot Phase (3-5 Schools), Evidence-First Approach, 5 Team Roles & Super Power Statement |
+
+---
+
+## 3. Integrated Research & Knowledge Assets
+
+* **`01_Research/Theory_and_Standards/`**: Holland RIASEC Psychometric Analysis, Psychometric Fact-Check Review, Multi-Layer Scoring Framework, Academic References & Standards.
+* **`01_Research/Geography_and_Access/`**: Admission plan, institution coordinates, Geo-Distance formula, Living Cost Index 5 regions.
+* **`01_Research/Thai_AI_System_Research/`**: Thai NLP, SLM fine-tuning, RAG pipelines, Qdrant vectors.
+
+---
+
+## 4. Build & Verification Status
+
+* **Typecheck:** `npm run typecheck` ➔ 0 errors.
+* **Lint:** `npm run lint` ➔ 0 errors / 0 warnings.
+* **Build:** `npm run build` ➔ 17/17 Next.js 15.5 pages compiled cleanly.
+* **Status:** Ready to be submitted to JUMP THAILAND Innovation Hackathon 2026.

@@ -1,131 +1,141 @@
-# FutureMe / FuturePath AI — Workspace
+# FutureMe AI — ระบบแนะแนวการศึกษาและเส้นทางอาชีพสำหรับเด็กไทย
 
-พื้นที่ทำงานสำหรับ **JUMP THAILAND Hackathon 2026** (AIS Academy x NIA)
-FutureMe = ชื่อผลิตภัณฑ์ · FuturePath = ชื่อ engine ภายใน
-
-จัดโครงสร้างใหม่เมื่อ 29 กรกฎาคม 2026 · อัปเดต GitHub snapshot เมื่อ 30 กรกฎาคม 2026
+> **ผลงานเข้าประกวด:** JUMP THAILAND Innovation Hackathon 2026 (AIS Academy x NIA)  
+> **Core Concept:** *“ลองเส้นทางอนาคต ก่อนตัดสินใจจริง”* — ระบบประเมินและทดลองเส้นทางอาชีพด้วยหลักฐานจริง (Evidence-Based Guidance)
 
 ---
 
-## สารบัญ
+## 🌟 เอกสารสำคัญสำหรับกรรมการ (Submission Quick Links)
 
-| โฟลเดอร์ | คืออะไร | ขนาดใน repository โดยประมาณ |
-|---|---|---|
-| [`01_Research/`](01_Research/) | ฐานความรู้และงานวิจัยทั้งหมด | 2.6M |
-| [`02_Backend/`](02_Backend/) | โค้ด FastAPI + decision engine + RAG | 1.5M |
-| [`03_WebApp/`](03_WebApp/) | prototype Next.js ที่รันได้จริง | 4M source (ไม่รวม dependency/build cache) |
-| [`04_Design/`](04_Design/) | 11 design concepts + ตัวเปรียบเทียบ | 61M |
-| [`05_Team_Repo/`](05_Team_Repo/) | snapshot งานของเพื่อนร่วมทีม | 23M (ไม่รวม `.git`) |
-| [`06_Assets/`](06_Assets/) | ไฟล์สื่อต้นฉบับ | 19M |
-| [`90_Archive/`](90_Archive/) | ของเก่าเก็บอ้างอิง ไม่ใช้ทำงานประจำวัน | 18M |
-| [`99_Process/`](99_Process/) | บันทึกกระบวนการทำงานและ agent logs | 464K |
-| [`Presentation/`](Presentation/) | สไลด์แก้ไขได้, PDF, source generator และภาพที่ใช้ตรวจ QA | 4.7M |
+| เอกสารนำเสนอ | คำอธิบาย | ไฟล์ดาวน์โหลด / เข้าชม |
+|---|---|:---:|
+| **Official Pitch Deck (PDF)** | สไลด์นำเสนอฉบับทางการ 7 หน้า (16:9 Widescreen) สำหรับกรรมการ | [📄 `FutureMe_Presentation.pdf`](FutureMe_Presentation.pdf) |
+| **Official Pitch Deck (HTML)** | สไลด์ต้นฉบับ HTML Responsive ปรับฟอนต์ Sarabun/Prompt | [🌐 `FutureMe_Presentation.html`](FutureMe_Presentation.html) |
+| **Interactive Web App** | แอปพลิเคชัน Next.js 15.5 รันจริงพร้อม 11 หน้าจอ | [🚀 ดูวิธีเปิดแอปด้านล่าง](#-quick-start--วิธีรันแอปพลิเคชัน) |
+| **Evidence & Theory Catalog** | ฐานงานวิจัย ทฤษฎีจิตวิทยา และสถิติอ้างอิง | [`01_Research/`](01_Research/) |
 
 ---
 
-## 01_Research — ฐานความรู้
+## 🧭 ปัญหาและทางแยกสำคัญ (WHAT & Problem Statement)
 
-| ที่อยู่ | เนื้อหา |
-|---|---|
-| `Data/` | งานวิจัย 7 หมวด: สถิติว่างงาน/mismatch, หลักสูตรไทย, career-skill mapping, การสัมภาษณ์เชิงลึก (RIASEC/STAR), NDLP–DEEP, AIS Cloud, system blueprints |
-| `Data/README.md` · `REFERENCES.md` · `SOURCE_AUDIT.md` · `RAG_DATA_SPEC.md` | สารบัญ แหล่งอ้างอิง ผลตรวจสอบ claim และสเปกข้อมูลสำหรับ RAG |
-| `Thai_AI_System_Research/` | คู่มือ 18 บท: Thai NLP, SLM, RAG, embedding, LoRA/QLoRA, evaluation, security, cost + `examples/` โค้ดตัวอย่าง |
-| `Source_Documents/` | เอกสารตั้งต้น: FutureMe_AI_Brief.pdf, FutureMe_AI_Deck.pdf, jump-thailand-2026-ideas |
+การศึกษาไทยกำลังเผชิญปัญหาช่องว่างขนาดใหญ่ระหว่างสิ่งที่เรียนกับความต้องการของตลาดแรงงานจริง:
+* **56% ทำงานไม่ตรงสายที่เรียน:** ข้อมูลสำรวจจาก TDRI (2025)
+* **27% ทำงานต่ำกว่าคุณวุฒิ:** ขาดทักษะเฉพาะทางที่ตลาดต้องการ
+* **39% ทักษะจะเปลี่ยนไปใน 5 ปี:** รายงาน WEF Future of Jobs (2025)
 
-## 02_Backend — โค้ดฝั่งเซิร์ฟเวอร์
+### 📍 สองทางแยกสำคัญ (Consequential Choice Points)
+1. **ทางแยก ม.3 (Choice Point 1):** สายสามัญ (ม.ปลาย) VS สายอาชีพ (ปวช.) VS ทางเลือกท้องถิ่น — เด็กต้องเลือกจากคำบอกเล่าโดยไม่เคยได้ทดลองปฏิบัติการจริง
+2. **ทางแยก ม.6 / ปวช. (Choice Point 2):** มหาวิทยาลัย (TCAS) VS อาชีวะชั้นสูง (ปวส.) VS เข้าสู่ตลาดแรงงาน — เสี่ยงต่อการซิ่ว ย้ายคณะ หรือหลุดจากระบบการศึกษาเมื่อพบว่าไม่ใช่
+
+---
+
+## 💡 นวัตกรรมและหลักการทำงาน (HOW & Core Innovation)
+
+> ### ⚙️ Core Principle: **“Rules decide. AI explains.”**
+> FutureMe AI ไม่ใช้ AI มโนหรือแต่งเติมเส้นทางเอง (Zero Hallucination) แต่ใช้ **Deterministic Scoring Engine** ในการคำนวณความสอดคล้องทางคณิตศาสตร์ แมตช์กับ **23,257 หลักสูตรจริง** ทั่วประเทศ โดยมี AI ทำหน้าที่เป็น **Socratic Interviewer** ช่วยซักถามและอธิบายเหตุผล
 
 ```
-app/decision_engine/   matrix, multi_tier, riasec, route_generator, star_eval
-app/rag/               pipeline, qdrant_client
-app/api/router.py      FastAPI endpoints
-schemas/               Pydantic models 11 ไฟล์
-scripts/               verify_system, generate_qwen_dataset, convert_data_to_pdf
-tests/                 test_api, test_decision_engine, test_rag
+[1. ANSWER (ประเมิน)]
+  • 36-Item Holland RIASEC Questionnaire + Self-Efficacy Scale (6 มิติ)
+  • Socratic Interview เจาะลึกความถนัดด้วย STAR Framework
+  • Geolocation, Living Cost Index 5 ภาค และงบประมาณครอบครัว
+        ⬇️
+[2. TRY (ทดลองจริง)]
+  • Scenario Missions ภารกิจจำลองการทำงานจริงในชีวิตประจำวัน
+  • วัดผลจากพฤติกรรมการลงมือทำจริง ไม่ใช่แค่ความรู้สึก
+        ⬇️
+[3. REFLECT (สะท้อนผล)]
+  • จับคู่ 23,257 หลักสูตรสถาบันการศึกษาจริง (16,908 ปวช./ปวส. + 6,349 ป.ตรี จาก 993 สถาบัน)
+  • อธิบายเหตุผลเบื้องหลังคำแนะนำ พร้อมสร้าง 30-Day Action Roadmap
 ```
 
-อ่านก่อน: [`PROJECT.md`](02_Backend/PROJECT.md) (แผน M1–M4) และ [`USER_MANUAL.md`](02_Backend/USER_MANUAL.md) (คู่มือระบบ v2.0.0)
+---
 
-## 03_WebApp — prototype ที่ใช้เดโม
+## 🔄 วงจรสะสมหลักฐานอัปเดตต่อเนื่อง (WHO & 5-Step Continuous Loop)
 
-`Pre_Present/` — Next.js + TypeScript + Tailwind
-git remote: `github.com/winxtxrgit/futureme-ai` · เอกสารในตัวอยู่ที่ `Pre_Present/docs/` 9 ไฟล์
+FutureMe ไม่ใช่แบบประเมินแบบครั้งเดียวจบ แต่คือ **ระบบนิเวศสะสมหลักฐาน (Continuous Evidence Loop)** ตลอดช่วงวัยเรียน:
 
-**นี่คือแหล่งความจริงล่าสุดของ product spec** — ใหม่กว่าเอกสารเดียวกันใน `05_Team_Repo/`
+$$\mathbf{Reflect} \xrightarrow{\text{ประเมินเวกเตอร์}} \mathbf{Try} \xrightarrow{\text{ทำภารกิจจำลอง}} \mathbf{Update} \xrightarrow{\text{สะท้อนผลหลังทำ}} \mathbf{Compare} \xrightarrow{\text{เทียบงบ/ย้ายถิ่น}} \mathbf{Act} \xrightarrow{\text{แผนมินิภารกิจ 30 วัน}}$$
 
+* **Post-Mission Reflection:** AI ทักถามทันทีหลังจบมินิภารกิจ เพื่อ Re-calibrate เวกเตอร์ความถนัดแบบไดนามิก
+* **Weekly Micro Check-in:** ชวนคุยสั้น ๆ สัปดาห์ละครั้ง เพื่อติดตามความสนใจที่เปลี่ยนแปลงไป
+* **Data Ownership & PDPA:** นักเรียนเป็นเจ้าของข้อมูล 100% สามารถเลือกแชร์ข้อมูลให้กับครูแนะแนวหรือผู้ปกครองผ่าน Counselor Dashboard
+
+---
+
+## 📱 ภาพตัวอย่างระบบ Web Application (Live Showcase)
+
+| 1. หน้าแรก (Landing Page) | 2. แบบประเมินจิตวิทยา (Interview) |
+|:---:|:---:|
+| ![Landing Page](03_WebApp/Pre_Present/assets/screenshots/app/landing-desktop.png) | ![Assessment](03_WebApp/Pre_Present/assets/screenshots/app/interview-desktop.png) |
+
+| 3. จัดอันดับเส้นทาง (Ranked Routes) | 4. เปรียบเทียบหลักสูตร (Compare) |
+|:---:|:---:|
+| ![Routes](03_WebApp/Pre_Present/assets/screenshots/app/routes-desktop.png) | ![Compare](03_WebApp/Pre_Present/assets/screenshots/app/compare-desktop.png) |
+
+| 5. แผนปฏิบัติการ 30 วัน (Action Plan) | 6. ภารกิจสะสมหลักฐาน (Scenario Mission) |
+|:---:|:---:|
+| ![Action Plan](03_WebApp/Pre_Present/assets/screenshots/app/plan-desktop.png) | ![Missions](03_WebApp/Pre_Present/assets/screenshots/app/mission-desktop.png) |
+
+---
+
+## 🏗️ โครงสร้าง Repository (Clean Hackathon Standard)
+
+```
+Pongkarm/Future_Me
+├── 01_Research/                 # ฐานความรู้, งานวิจัย, Evidence Catalog & ข้อมูลหลักสูตร 23,257 รายการ
+│   ├── Theory_and_Standards/    # เอกสารทฤษฎีจิตวิทยา Holland RIASEC, Psychometric Review & Scoring Engine
+│   ├── Geography_and_Access/    # ข้อมูลพิกัดสถาบัน, ค่าเดินทาง และ Living Cost Index 5 ภาค
+│   └── Thai_AI_System_Research/ # คู่มืองานวิจัย Thai NLP, SLM, Vector Embedding & Security
+├── 02_Backend/                  # FastAPI Backend, Deterministic Engine & RAG Pipelines
+├── 03_WebApp/                   # Next.js 15.5 Interactive Web Application (Pre_Present)
+│   ├── app/                     # หน้าเพจทั้ง 11 Routes & API Endpoints
+│   ├── components/              # UI Components ตามทิศทาง GenZ Aurora
+│   ├── data/                    # ฐานข้อมูลหลักสูตรและแบบสอบถาม
+│   └── lib/                     # Matching Engine, Cosine Similarity & Utilities
+├── 04_Design/                   # Design Systems, Wireframes, UI Concepts (GenZ Aurora Direction)
+├── 05_Assets/                   # Brand Assets, รูปภาพประกอบ และ Media
+├── Presentation/                # Master Presentation Deck (FutureMe_Presentation.pdf + HTML)
+├── Archive/                     # จัดเก็บประวัติการพัฒนาและเอกสารบันทึกกระบวนการย้อนหลัง
+├── FutureMe_Presentation.pdf    # สไลด์นำเสนอทางการ 7 หน้า (PDF 16:9 Widescreen)
+├── FutureMe_Presentation.html   # สไลด์นำเสนอทางการ 7 หน้า (HTML)
+├── README.md                    # เอกสารภาพรวมโครงการฉบับสมบูรณ์
+├── HANDOFF.md                   # รายงานสรุปสถานะการส่งมอบโครงการ
+└── .gitignore                   # มาตรฐาน Git Ignore
+```
+
+---
+
+## 💻 Quick Start — วิธีรันแอปพลิเคชัน
+
+### ข้อกำหนดเบื้องต้น
+* **Node.js:** เวอร์ชัน 20 ขึ้นไป
+* **Package Manager:** npm
+
+### ขั้นตอนการรัน
 ```bash
-cd 03_WebApp/Pre_Present && npm run dev
+# 1. เข้าสู่โฟลเดอร์ Web Application
+cd 03_WebApp/Pre_Present
+
+# 2. ติดตั้ง dependencies (หากยังไม่ได้ติดตั้ง)
+npm install
+
+# 3. รันเซิร์ฟเวอร์สำหรับทดสอบ
+npm run dev
+```
+เปิดบราวเซอร์ไปที่: **`http://localhost:3000`**
+
+### การตรวจสอบคุณภาพโค้ด (Quality Checks)
+```bash
+npm run typecheck    # ตรวจสอบ TypeScript Types (0 Errors)
+npm run lint         # ตรวจสอบ ESLint Coding Standards
+npm run build        # ทดสอบการ Compile Production Bundle (17/17 Pages)
 ```
 
-## 04_Design — คลัง design concept
+---
 
-11 concept (`01_Concept_01/` … `11_Concept_11/`) แต่ละอันมี wireframes, mockups, prototype, assets
-`11_GenZ_Aurora_Direction/` คือทิศทางที่เลือก · `99_Final_Comparison/` เทียบทุกตัว · เปิด `index.html` เพื่อดูรวม
+## 👥 ข้อมูลทีมผู้พัฒนา & พันธกิจ (Team & Vision)
 
-## 05_Team_Repo — ของเพื่อนร่วมทีม
-
-`Future_Me_Pongkarm/` clone จาก `github.com/Pongkarm/Future_Me` (branch `pongkarm`)
-
-ส่วนใหญ่คือ `01_Research/` และ `03_WebApp/` ที่ถูกจัดใหม่ **ของที่มีเฉพาะที่นี่:**
-
-- `FutureMe_Consolidated/00_Governance/` — SOURCE_POLICY, CORRECTION_LOG, CONTENT_STATUS, RAG_INDEX_MANIFEST
-- `FutureMe_Consolidated/07_Business_and_Competition/` — business strategy, pilot metrics, pitch script
-- `reports/futureme-ai-infrastructure/` — รายงาน infrastructure คนละฉบับกับใน `90_Archive/`
-
-⚠️ เอกสาร product ใน `04_Product_and_UX/` และ `90_Assets/Pre_Present/` ของ repo นี้เป็น snapshot **ก่อน** PR#6 — เก่ากว่า `03_WebApp/Pre_Present/` อย่าเอาไปทับ
-
-## 90_Archive — เก็บอ้างอิง
-
-`FutureMe_AI_Master_Report.pdf` / `.html` · วิดีโอ 3D 2 ไฟล์ · `reports/futureme-ai-version2/`
-(`Data/` ที่ซ้ำถูกลบแล้ว ต้นฉบับอยู่ที่ `01_Research/Data/`)
-
-## 99_Process — บันทึกกระบวนการ
-
-`ORIGINAL_REQUEST.md` โจทย์ตั้งต้น · `.agents/` log การทำงาน 18 agent ตาม milestone M1–M4
-
-## Presentation — สไลด์โครงการ
-
-- `FutureMe_Project_Presentation.pptx` — ไฟล์นำเสนอที่แก้ไขได้
-- `FutureMe_Project_Presentation.pdf` — PDF 15 หน้า
-- `generate_presentation.py` — source สำหรับสร้างสไลด์
-- `rendered/` และ `QA.md` — ภาพตรวจรายหน้าและผลตรวจคุณภาพ
-
-## แบบสำรวจแบบปรับตัว (การออกแบบ · ยังไม่ลงแอป)
-
-แบบสำรวจที่รันอยู่ถามคงที่ 30 ข้อเท่ากันทุกคน
-การออกแบบระบบที่ **เปลี่ยนคำถามถัดไปตามคำตอบก่อนหน้า** อยู่ที่
-[`01_Research/Adaptive_Questionnaire/`](01_Research/Adaptive_Questionnaire/) — 9 เอกสาร + คลังคำถาม 90 ข้อ
-
-สิ่งที่การออกแบบนี้แก้จากคลังเดิม
-
-| ปัญหาของคลัง 30 ข้อ | ในการออกแบบใหม่ |
-|---|---|
-| ทั้ง 30 ข้อเป็น `direction: "positive"` จึงแยกคนที่กด 5 รวดไม่ได้ | ข้อกลับด้าน 12 ข้อ (2 ข้อต่อมิติ) พร้อมกลไก `reverse-fail` ลดน้ำหนักคำตอบทั้งมิติ |
-| 5 ข้อต่อมิติ ต่ำกว่า 8–12 ข้อที่ทำให้ Cronbach's α มีความหมาย | 10 ข้อที่ให้คะแนนต่อมิติ |
-| "ไม่แน่ใจ" กับ "ไม่ชอบ" ถูกปฏิบัติเหมือนกัน | "ไม่แน่ใจ" ไม่นับเป็นหลักฐาน และนำไปสู่ข้อถามประสบการณ์ — ยังไม่เคยลอง ≠ ไม่ชอบ |
-| ถามเท่ากันทุกคน ทั้งคนที่ชัดและคนที่ยังไม่รู้อะไรเลย | 18–34 ข้อ ตามความชัดของคำตอบ |
-| คู่ตรงข้าม RIASEC ที่สูงทั้งคู่ดูเหมือนตอบขัดกัน | ข้อบูรณาการ 3 ข้อ · โปรไฟล์ความสอดคล้องต่ำไม่ใช่ความผิดพลาด |
-
-หลักที่ยึดไว้เหมือนเดิม — คำตอบเดียวไม่ปิดเส้นทาง · ปฏิเสธดีกว่าเดา · เอนจินกฎเป็นผู้ตัดสิน ไม่ใช่ LLM
-
-### ผลการจำลอง
-
-กฎทั้งชุดถูกรันกับผู้ตอบสังเคราะห์ **5,000 คน** ก่อนแตะแอปจริง
-([`sim/`](01_Research/Adaptive_Questionnaire/sim/)) — เจอ **13 จุดที่เอกสารเขียนไว้อย่างหนึ่งแต่รันแล้วได้อีกอย่าง**
-แก้แล้วทั้งหมดและอัปเดตกลับเข้าเอกสารต้นทาง ตัวอย่างที่หนักที่สุด
-
-- กฎ "ต้องมีข้อกลับด้านในมิติอันดับ 1" เรียกร้องข้อที่ตัวจัดตารางไม่มีวันส่งให้ → **23% ของเซสชันวิ่งชนเพดาน 34 ข้อ**
-- ข้อ `self-efficacy` และ `intensity` รวม 12 ข้อ **ไม่เคยถูกถามเลยแม้แต่ครั้งเดียว** ใน 400 เซสชัน
-- สาขาที่ปิดแล้วยังปิดอยู่ ทั้งที่ผู้เรียนตอบ "ชอบอย่างยิ่ง" ในมิตินั้น
-- ข้อ L5 ที่ควรเจาะลึกมิติที่ชัดแล้ว กลับ **ลดความมั่นใจของมิตินั้นเอง**
-
-หลังแก้: invariant ทั้ง 10 ข้อผ่าน · ทุกข้อในคลังเข้าถึงได้ 90/90 · ความยาวมัธยฐาน 26 ข้อ
-ผู้ตอบที่ชัดเจนได้ 21 ข้อ ผู้ตอบที่กดผ่าน ๆ ได้ความมั่นใจ 0.18 (ระบบไม่สรุปให้)
-
-**ยังไม่มีข้อใดผ่าน IOC · Cronbach's α · CFA** และยังไม่มีผู้ตอบจริงแม้แต่คนเดียว
-การจำลองยืนยันว่ากฎ *สอดคล้องกันเอง* ไม่ได้ยืนยันว่ากฎ *ถูก*
-
-## นโยบาย GitHub snapshot
-
-โฟลเดอร์งานทั้งหมดด้านบนถูกเก็บไว้ แต่ไม่นำไฟล์ที่สร้างใหม่ได้หรือ metadata ของ repository
-ซ้อนขึ้น GitHub ได้แก่ `node_modules/`, `.next/`, `test-results/`, `__pycache__/`,
-`*.tsbuildinfo`, `.DS_Store` และ `.git/` ภายในแต่ละโปรเจกต์
+* **โครงการ:** FutureMe AI — ระบบแนะแนวการศึกษาและเส้นทางอาชีพเพื่อลดปัญหาความไม่สอดคล้องทางการศึกษา (Educational Mismatch)
+* **การสนับสนุนและเทคโนโลยี:** ขับเคลื่อนบนโครงสร้างพื้นฐาน AIS Cloud Database, Next.js และ Open Data ทางการศึกษาไทย (สอศ., ทปอ., กสศ.)
+* **ลิขสิทธิ์:** MIT License (2026)

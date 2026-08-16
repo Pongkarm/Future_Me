@@ -6,7 +6,7 @@
 
 ## 🧭 สารบัญและโครงสร้างภายใน
 
-`
+```
 02_Backend/
 ├── app/
 │   ├── api/               # FastAPI Endpoints (/recommend, /explain, /evaluate)
@@ -18,17 +18,17 @@
 ├── PROJECT.md             # แผนการพัฒนาระบบตาม Milestone M1–M4
 ├── USER_MANUAL.md         # คู่มือการใช้งานและเอกสารอ้างอิง API (v2.0.0)
 └── USER_MANUAL.pdf        # คู่มือฉบับเอกสาร PDF
-`
+```
 
 ---
 
 ## ⚙️ หลักการทำงานของเอนจินคำนวณ
 
-1. **Deterministic Matcher (pp/decision_engine/):**
+1. **Deterministic Matcher (`app/decision_engine/`):**
    - คำนวณความสอดคล้องระหว่างเวกเตอร์ความสนใจของผู้เรียน (RIASEC + Context) กับเวกเตอร์หลักสูตรอาชีพ
    - ใช้ **Cosine Similarity** ร่วมกับ **Kelley Shrinkage** เพื่อลด Error จากกลุ่มตัวอย่างน้อย
    - กรองด้วย Geolocation Distance และงบประมาณครอบครัว
-2. **RAG & Vector Vault (pp/rag/):**
+2. **RAG & Vector Vault (`app/rag/`):**
    - ดึงข้อมูลหลักสูตรและระเบียบการจากฐานข้อมูลเวกเตอร์ Qdrant
    - ป้องกันการหลอนของ AI (Zero Hallucination)
 3. **Explainability Engine:**
@@ -38,7 +38,7 @@
 
 ## 🚀 การทดสอบและรันระบบ Backend
 
-`ash
+```bash
 # ติดตั้ง dependencies
 pip install -r requirements.txt
 
@@ -47,4 +47,4 @@ uvicorn app.main:app --reload --port 8000
 
 # รันชุดการทดสอบ Unit Tests
 pytest tests/
-`
+```

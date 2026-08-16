@@ -115,11 +115,13 @@ flowchart TD
     E -->|"Evidence too thin or too flat"| F["Return 0 routes<br/>Explain what evidence is missing"]
     F --> G["Review answers or redo the mission"]
     G --> B
+    G --> D
     E -->|"Enough evidence"| H["3 · Explore<br/>0–3 hypotheses from 12 routes<br/>Tier gate · ties · contradictions · provenance"]
     H -. "Optional" .-> N["Choose a province manually<br/>77 provinces · 1,961 display rows<br/>Never changes the route result"]
-    H --> I["4 · Compare<br/>Interest 50% · mission evidence 30%<br/>learning-environment affinity 20%"]
+    H --> I["4 · Compare (optional)<br/>Interest 50% · mission evidence 30%<br/>learning-environment affinity 20%"]
     I --> J["Cost · relocation · timing · flexibility<br/>Shown as unverified prompts<br/>Not used to decide routes"]
     J --> K["5 · Act<br/>Choose one route<br/>Reversible 4-week / 30-day plan"]
+    H -->|"Choose a route directly"| K
     K --> L["Progress stays in this browser"]
     L -. "Planned, not live" .-> P["Accounts · cloud database/RAG<br/>counsellor dashboard · TCAS portfolio"]
 

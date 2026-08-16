@@ -83,7 +83,7 @@ journey
     section Explore
       Inspect zero to three routes: 5: Student
       Optional nearby directory: 4: Student
-    section Compare
+    section Compare (optional)
       Compare evidence and unknowns: 4: Student
     section Act
       Run a reversible 30-day plan: 4: Student
@@ -94,13 +94,16 @@ mission, route comparison and 30-day plan without an account. Identity is reques
 is something worth saving — and in the prototype, accounts do not exist at all, so nothing is asked
 for.
 
-This ordering is now consistent across the UX flow, the architecture diagram and the running app.
+The guest-first boundary is consistent across the UX flow, architecture, and running app. Compare is
+available from Routes but is not required: a learner may select a route and build the plan directly.
 [05 · System Architecture](05-system-architecture.md) previously placed login before the assessment;
-that was a documentation error and has been corrected.
+that documentation error has been corrected.
 
 ```text
-Landing → Start as guest → Reflect → Try → Explore 0–3 routes
-        → Compare → Act with a 30-day plan → (optional account, not implemented)
+Landing → Start as guest → Reflect → Try → Explore 0–3 routes ─→ Compare (optional) ─→ Act
+                                                  └─────────────────────────────────→ Act
+                                                        → 30-day plan
+                                                        → (optional account, not implemented)
 ```
 
 ---

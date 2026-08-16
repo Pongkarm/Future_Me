@@ -87,22 +87,22 @@ FutureMe is not a one-time test, but a **Continuous Evidence Ecosystem** across 
 ```mermaid
 flowchart LR
     A["Official Curricula Sources<br/>(OVEC / TCAS / EEF)"] --> B["23,257 Curricula Database<br/>+ 5-Region Living Cost Index"]
-    B --> C["RIASEC Assessment<br/>+ Socratic STAR Chat"]
+    B --> C["RIASEC Assessment<br/>+ Scenario Missions"]
     C --> D["Deterministic Scoring Engine<br/>(Cosine Matcher + Kelley)"]
-    D --> E["Ranked 0–3 Route Hypotheses<br/>+ AI Socratic Explainability"]
+    D --> E["Ranked 0–3 Route Hypotheses<br/>+ Baseline Explanations"]
     E --> F["30-Day Action Plan<br/>(Reversible Roadmap)"]
     F --> G["School Pilot & Real Students<br/>(Pilot Validation)"]
-    G -. "Re-calibrate Vectors" .-> B
+    G -. "Re-calibrate Vectors & AI Prompts" .-> B
     G --> H["National Rollout<br/>(B2G / B2C Services)"]
 
-    I["Socratic AI Counselor"] -. "STAR Explanations" .-> E
-    J["AIS Cloud Data Vault"] -. "Data Residency & Security" .-> D
+    I["Socratic AI Counselor<br/>(Research & Offline Prototype)"] -. "STAR Questioning Trials" .-> E
+    J["AIS Cloud Data Vault"] -. "Planned Security Architecture" .-> D
     classDef working fill:#d1fae5,stroke:#047857,color:#064e3b;
     classDef validating fill:#fef3c7,stroke:#d97706,color:#78350f;
     classDef planned fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
-    class A,B,C,D,E,F,I,J working;
-    class G validating;
-    class H planned;
+    class A,B,C,D,E,F working;
+    class G,I validating;
+    class H,J planned;
 ```
 
 ### 2. Student Journey Flowchart
@@ -110,7 +110,7 @@ flowchart LR
 ```mermaid
 flowchart TD
     A["Start as Guest<br/>No account required · No tracking"] --> B["1. REFLECT: Interest Assessment<br/>36 RIASEC Items + Self-Efficacy Scale"]
-    B --> C["4 Context Prompts + STAR Interview<br/>Review and edit responses anytime"]
+    B --> C["4 Context Prompts + STAR Structure<br/>Review and edit responses anytime"]
     C --> D["2. TRY: Scenario Missions<br/>4 Steps · 12 Minutes simulation"]
     D --> E{"Deterministic Evidence Check"}
     E -->|"Evidence too flat/insufficient"| F["Return 0 routes & explain missing gaps<br/>Prompt to explore further"]
@@ -156,15 +156,15 @@ flowchart TD
 
 ## 🚦 System Readiness Matrix
 
-| Status | Component | Implementation Detail |
+| Status | Component | Actual Technical Implementation |
 |:---:|---|---|
-| **✅ Working Now** | **Interactive Web App** | Next.js 15.5 application with 11 live routes and guest mode |
-| **✅ Working Now** | **Deterministic Matcher** | Cosine Similarity + Kelley Shrinkage across 23,257 real curricula (16,908 vocational + 6,349 bachelor's from 993 institutions) |
-| **✅ Working Now** | **Socratic STAR Chat** | Mascot AI Guide providing structured reflection using the STAR Framework |
-| **✅ Working Now** | **Client-Side Privacy** | Full browser storage (LocalStorage) compliant with PDPA standards |
-| **✅ Working Now** | **Code Quality & Build** | Typecheck (0 Errors), ESLint (0 Warnings), Production Build (17/17 Pages) |
-| **🟡 In Validation** | **School Pilot Phase** | Planned deployment across 3–5 schools (OBEC & OVEC) with 1,500+ students |
-| **🔴 Planned** | **AIS Infrastructure Integration** | AIS Cloud Data Vault & AIS Open API (Number Verification OTP) for Counselor Authentication |
+| **✅ Working in Demo** | **Interactive Web App** | Next.js 15.5 application with 11 live routes in Guest Mode |
+| **✅ Working in Demo** | **Deterministic Rule Engine** | Cosine Similarity + Kelley Shrinkage across 23,257 real curricula (16,908 vocational + 6,349 bachelor's from 993 institutions) & 5-Region Living Cost Index |
+| **✅ Working in Demo** | **Client-Side Privacy** | Full browser storage (LocalStorage) with zero central PII tracking |
+| **✅ Working in Demo** | **Mascot & Socratic UI Flow** | Simulated chat interface with STAR Framework response templates |
+| **🟡 In Validation & Research** | **Live AI Model Testing** | Real-time Thai LLM/SLM (Typhoon 2 / Qwen) evaluation and hallucination prevention testing with real students |
+| **🟡 In Validation & Research** | **School Pilot Phase** | Planned deployment across 3–5 schools (OBEC & OVEC) with 1,500+ students to re-calibrate weights |
+| **🔴 Planned for Production** | **AIS Infrastructure Integration** | Deployment on AIS Cloud Data Vault in Thailand and AIS Open API (Number Verification OTP) for Counselor Authentication |
 
 ---
 
@@ -241,7 +241,7 @@ No. Route recommendations are **exploration hypotheses**, not guarantees or admi
 <details>
 <summary><strong>4. Does AI make the decisions for students?</strong></summary>
 
-**No.** The platform follows **“Rules decide. AI explains.”** A transparent deterministic engine calculates mathematical fit across **23,257 real curricula**, while AI only assists in Socratic interviews and explanations.
+**No.** The platform follows **“Rules decide. AI explains.”** A transparent deterministic engine calculates mathematical fit across **23,257 real curricula**. In the demo, decisions are rule-based, while live AI integration for real-time Socratic dialogue is in research and awaiting validation with real students during the pilot phase.
 </details>
 
 <details>

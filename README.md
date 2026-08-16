@@ -87,22 +87,22 @@ FutureMe ไม่ใช่แบบประเมินแบบครั้�
 ```mermaid
 flowchart LR
     A["แหล่งข้อมูลหลักสูตรทางการ<br/>(สอศ. / ทปอ. / กสศ.)"] --> B["ฐานข้อมูล 23,257 หลักสูตร<br/>+ Living Cost 5 ภูมิภาค"]
-    B --> C["แบบประเมิน RIASEC<br/>+ Socratic STAR Chat"]
+    B --> C["แบบประเมิน RIASEC<br/>+ Scenario Missions"]
     C --> D["Deterministic Scoring Engine<br/>(Cosine Matcher + Kelley)"]
-    D --> E["จัดอันดับ 0–3 เส้นทางแนะนำ<br/>+ อธิบายเหตุผลด้วย AI"]
+    D --> E["จัดอันดับ 0–3 เส้นทางแนะนำ<br/>+ อธิบายเหตุผลเบื้องต้น"]
     E --> F["แผนปฏิบัติการ 30 วัน<br/>(30-Day Action Plan)"]
     F --> G["โรงเรียนนำร่อง + นักเรียนจริง<br/>(Pilot Validation)"]
-    G -. "Re-calibrate เวกเตอร์" .-> B
+    G -. "Re-calibrate เวกเตอร์ & AI Prompt" .-> B
     G --> H["ระบบบริการทางการระดับประเทศ<br/>(National Rollout)"]
 
-    I["Socratic AI Counselor"] -. "อธิบายเหตุผล/เจาะลึก STAR" .-> E
-    J["AIS Cloud Data Vault"] -. "Data Residency & Security" .-> D
+    I["Socratic AI Counselor<br/>(Research & Offline Prototype)"] -. "ทดสอบการซักถาม STAR" .-> E
+    J["AIS Cloud Data Vault"] -. "แผนพัฒนาความปลอดภัย" .-> D
     classDef working fill:#d1fae5,stroke:#047857,color:#064e3b;
     classDef validating fill:#fef3c7,stroke:#d97706,color:#78350f;
     classDef planned fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
-    class A,B,C,D,E,F,I,J working;
-    class G validating;
-    class H planned;
+    class A,B,C,D,E,F working;
+    class G,I validating;
+    class H,J planned;
 ```
 
 ### 2. เส้นทางประสบการณ์ของผู้เรียน (Student Journey Flowchart)
@@ -110,7 +110,7 @@ flowchart LR
 ```mermaid
 flowchart TD
     A["เริ่มต้นใช้งานทันที (Guest Mode)<br/>ไม่ต้องลงทะเบียน ไม่เก็บข้อมูลส่วนตัว"] --> B["1. REFLECT: ประเมินความสนใจ<br/>แบบสอบถาม RIASEC 36 ข้อ + Self-Efficacy"]
-    B --> C["คำถามบริบท 4 ข้อ + คุยเจาะลึกแบบ STAR<br/>สามารถตรวจทานและแก้ไขคำตอบได้ตลอด"]
+    B --> C["คำถามบริบท 4 ข้อ + โครงสร้าง STAR Framework<br/>สามารถตรวจทานและแก้ไขคำตอบได้ตลอด"]
     C --> D["2. TRY: ภารกิจจำลองชีวิตจริง<br/>Scenario Missions 4 ขั้นตอน (12 นาที)"]
     D --> E{"ระบบตรวจสอบหลักฐาน<br/>(Deterministic Evidence Check)"}
     E -->|"หลักฐานไม่ชัดเจน/แบนราบ"| F["แจ้งว่าหลักฐานยังไม่เพียงพอ<br/>พร้อมแนะนำให้ลองสำรวจจุดที่ยังขาด"]
@@ -156,15 +156,15 @@ flowchart TD
 
 ## 🚦 สถานะความพร้อมของระบบ (System Readiness Matrix)
 
-| สถานะ | องค์ประกอบ | รายละเอียดการทำงาน |
+| สถานะ | องค์ประกอบ | รายละเอียดการทำงานจริง (Technical Audit) |
 |:---:|---|---|
-| **✅ พร้อมใช้งาน (Working Now)** | **Interactive Web Application** | ระบบ Next.js 15.5 รันจริง 11 Routes ครบวงจรตั้งแต่เริ่มจนจบแผน 30 วัน |
-| **✅ พร้อมใช้งาน (Working Now)** | **Deterministic Matcher** | คำนวณ Cosine Similarity + Kelley Shrinkage แมตช์ 23,257 หลักสูตรจริง (16,908 ปวช./ปวส. + 6,349 ป.ตรี จาก 993 สถาบัน) |
-| **✅ พร้อมใช้งาน (Working Now)** | **Socratic STAR Chat** | แชทสนทนากับ Mascot AI ช่วยซักถามและสะท้อนจุดแข็งตาม STAR Framework |
-| **✅ พร้อมใช้งาน (Working Now)** | **Client-Side Privacy** | ข้อมูลทั้งหมดจัดเก็บใน Browser (LocalStorage) ปลอดภัย 100% ตามมาตรฐาน PDPA |
-| **✅ พร้อมใช้งาน (Working Now)** | **Code Quality & Build** | ผ่าน Typecheck (0 Errors), ESLint (0 Warnings), Production Build (17/17 Pages) |
-| **🟡 อยู่ระหว่างทดสอบ (In Validation)** | **School Pilot Phase** | เตรียมทดสอบนำร่องใน 3–5 โรงเรียน (สพฐ. และ สอศ.) ดูแลนักเรียน 1,500+ คน เพื่อ Re-calibrate เอนจิน |
-| **🔴 แผนพัฒนาต่อเนื่อง (Planned)** | **AIS Infrastructure Integration** | เชื่อมต่อ AIS Cloud Data Vault และ AIS Open API (Number Verification OTP) สำหรับยืนยันตัวตนครูแนะแนว |
+| **✅ พร้อมใช้งานใน Demo (Working Now)** | **Interactive Web Application** | ระบบ Next.js 15.5 รันจริง 11 Routes ครบวงจรตั้งแต่เริ่มจนจบแผน 30 วัน (โหมด Guest ใช้งานได้ทันที) |
+| **✅ พร้อมใช้งานใน Demo (Working Now)** | **Deterministic Rule Engine** | คำนวณ Cosine Similarity + Kelley Shrinkage แมตช์ 23,257 หลักสูตรจริง (16,908 ปวช./ปวส. + 6,349 ป.ตรี จาก 993 สถาบัน) และคำนวณ Living Cost Index 5 ภาคอย่างแม่นยำ |
+| **✅ พร้อมใช้งานใน Demo (Working Now)** | **Client-Side Privacy** | ข้อมูลทั้งหมดจัดเก็บใน Browser (LocalStorage) ปลอดภัย 100% ไม่เก็บข้อมูลระบุตัวตน (PII) หรือพิกัด GPS ละเอียด |
+| **✅ พร้อมใช้งานใน Demo (Working Now)** | **Mascot & Socratic UI Flow** | หน้าจอจำลองการแชท (Mock/Template Dialogue) ตามกรอบ STAR Framework สำหรับนำเสนอ Flow การใช้งาน |
+| **🟡 อยู่ระหว่างทดลองและวิจัย (In Validation & Research)** | **Live AI Model Testing** | การทดสอบเชื่อมต่อ Live LLM/SLM (Typhoon 2 / Qwen) กับนักเรียนจริง เพื่อวัดความแม่นยำของการถามตอบเชิงจิตวิทยาและป้องกันอาการหลอน (Hallucination) |
+| **🟡 อยู่ระหว่างทดลองและวิจัย (In Validation & Research)** | **School Pilot Phase** | เตรียมนำระบบต้นแบบไปทดสอบนำร่องในโรงเรียน 3–5 แห่ง (สพฐ. และ สอศ.) ดูแลนักเรียน 1,500+ คน เพื่อ Re-calibrate น้ำหนักคะแนนตามพฤติกรรมจริง |
+| **🔴 แผนพัฒนาต่อเนื่อง (Planned for Production)** | **AIS Infrastructure Integration** | การ Deploy บน AIS Cloud Data Vault ในประเทศ และการเชื่อมต่อ AIS Open API (Number Verification OTP) สำหรับยืนยันตัวตนครูแนะแนว |
 
 ---
 
@@ -241,7 +241,7 @@ npm run dev
 <details>
 <summary><strong>4. AI เป็นผู้ตัดสินใจเลือกเส้นทางให้เด็กใช่หรือไม่?</strong></summary>
 
-**ไม่ใช่** ระบบยึดหลักปรัชญา **“Rules decide. AI explains.”** เส้นทางทั้งหมดถูกคำนวณและจัดอันดับด้วย **Deterministic Scoring Engine** (Cosine Similarity + Kelley Shrinkage) ซึ่งเป็นคณิตศาสตร์ที่โปร่งใส ตรวจสอบย้อนกลับได้ 100% โดยมี AI ทำหน้าที่เพียงซักถามเจาะลึก (Socratic Interviewer) และอธิบายเหตุผลเบื้องหลังคำแนะนำเท่านั้น
+**ไม่ใช่** ระบบยึดหลักปรัชญา **“Rules decide. AI explains.”** เส้นทางทั้งหมดถูกคำนวณและจัดอันดับด้วย **Deterministic Scoring Engine** (Cosine Similarity + Kelley Shrinkage) ซึ่งเป็นคณิตศาสตร์ที่โปร่งใส ตรวจสอบย้อนกลับได้ 100% โดยในเวอร์ชัน Demo ระบบใช้กฎคณิตศาสตร์ในการตัดสินใจ ส่วนการเชื่อมต่อ Live AI เพื่อซักถาม Socratic Chat กำลังอยู่ในขั้นตอนวิจัยและเตรียมทดสอบกับนักเรียนจริงใน Pilot Phase
 </details>
 
 <details>

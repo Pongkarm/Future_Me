@@ -309,11 +309,11 @@ Measured by decision quality (e.g. 30-day mission completion rate, post-reflecti
 ## 👥 Team & Vision
 
 * **Development Team:** 3rd Year Computer Engineering Students, Chitralada Technology Institute (CDTI)
-  - Panas Toopanich — *Team Coordination & Presentation*
-  - Daranphop Phithakkijphaisan — *Backend Development*
-  - Thanat Jongtheerathanachot — *Frontend Web Application*
-  - Apisak Khongphakdee — *Research & Information Analysis*
-  - Wiratsanh Jennanachok — *Quality Assurance*
+  - Panus Toopanich — *Team Coordination & Presentation*
+  - Darunpop Pitakkitpaisarn — *Backend Development*
+  - Thanut Jongteerathanachote — *Frontend Web Application*
+  - Apisak Kongphakdee — *Research & Information Analysis*
+  - Viruchsun Jennanachok — *Quality Assurance*
 * **Faculty Advisor:** Asst. Prof. Damrongrit Sethasirishoke
 * **Vision:** Bridging the educational mismatch and empowering Thai students to *“Explore the next step before making irreversible decisions.”*
 * **License:** MIT License (2026)

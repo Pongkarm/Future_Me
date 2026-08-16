@@ -313,7 +313,7 @@ npm run dev
   - นาย ปาณัสม์ ตูพานิช — *Team Coordination & Presentation*
   - นาย ดรัณภพ พิทักษ์กิจไพศาล — *Backend Development*
   - นาย ธนัท จงธีรธนโชติ — *Frontend Web Application*
-  - นาย อภิศักดิ์ คงภักดี — *Research & Information Analysis*
+  - นาย อภิสักก์ คงภักดี — *Research & Information Analysis*
   - นาย วิรัชสัณห์ เจนนานาโชค — *Quality Assurance*
 * **อาจารย์ที่ปรึกษา:** ผู้ช่วยศาสตราจารย์ ดำรงค์ฤทธิ์ เศรษฐศิริโชค
 * **พันธกิจ:** มุ่งพัฒนานวัตกรรมเพื่อลดปัญหาความไม่สอดคล้องทางการศึกษา (Educational Mismatch) และเปิดโอกาสให้เด็กไทยทุกคนได้ *"ลองเส้นทางอนาคต ก่อนตัดสินใจจริง"* อย่างเท่าเทียม

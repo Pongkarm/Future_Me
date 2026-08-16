@@ -55,7 +55,13 @@
 
 FutureMe ไม่ใช่แบบประเมินแบบครั้งเดียวจบ แต่คือ **ระบบนิเวศสะสมหลักฐาน (Continuous Evidence Loop)** ตลอดช่วงวัยเรียน:
 
-$$\mathbf{Reflect} \xrightarrow{\text{ประเมินเวกเตอร์}} \mathbf{Try} \xrightarrow{\text{ทำภารกิจจำลอง}} \mathbf{Update} \xrightarrow{\text{สะท้อนผลหลังทำ}} \mathbf{Compare} \xrightarrow{\text{เทียบงบ/ย้ายถิ่น}} \mathbf{Act} \xrightarrow{\text{แผนมินิภารกิจ 30 วัน}}$$
+| 1. REFLECT | ➔ | 2. TRY | ➔ | 3. UPDATE | ➔ | 4. COMPARE | ➔ | 5. ACT |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **ประเมินความถนัด**<br><sub>(Provisional Vector)</sub> | | **ทดลองทำจริง**<br><sub>(Scenario Mission)</sub> | | **สะท้อนผลหลังทำ**<br><sub>(Post-Mission)</sub> | | **ชั่งน้ำหนักงบประมาณ**<br><sub>(Living Cost Index)</sub> | | **ลงมือทำต่อเนื่อง**<br><sub>(30-Day Action Plan)</sub> |
+
+```
+🔄 Continuous Loop: [1. Reflect ประเมิน] ➔ [2. Try ทดลองจริง] ➔ [3. Update สะท้อนผล] ➔ [4. Compare เทียบงบ/ที่พัก] ➔ [5. Act แผน 30 วัน]
+```
 
 * **Post-Mission Reflection:** AI ทักถามทันทีหลังจบมินิภารกิจ เพื่อ Re-calibrate เวกเตอร์ความถนัดแบบไดนามิก
 * **Weekly Micro Check-in:** ชวนคุยสั้น ๆ สัปดาห์ละครั้ง เพื่อติดตามความสนใจที่เปลี่ยนแปลงไป

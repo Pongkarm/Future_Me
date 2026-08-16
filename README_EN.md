@@ -269,6 +269,7 @@ FutureMe uses Holland's RIASEC 6 dimensions coupled with a Self-Efficacy scale f
 * **B2C Freemium:** Free for all students / Optional Parent Career Pass (99 THB/mo or 999 THB/yr) for 5-year living cost budgets & TCAS export.
 * **B2G District License (Starting 300,000 THB/yr):** Multi-school licensing with National Interest Dashboard for educational authorities (OVEC, MOE, EEF).
 * **B2B Institutional (Starting 30,000 THB/yr):** University / Private Vocational Matching Portal.
+* **🌱 Sustainability Vision:** Generate revenue from users and institutions based on ability to pay, subsidizing operational costs for budget-constrained schools and ensuring 100% free platform access for underprivileged students nationwide.
 </details>
 
 <details>

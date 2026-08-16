@@ -14,8 +14,8 @@
 </p>
 
 <p align="center">
-  Reflect on interests. Try a small mission. Compare several routes. Plan one reversible next step.<br>
-  ทบทวนความสนใจ ลองทำภารกิจ เปรียบเทียบหลายเส้นทาง แล้ววางก้าวถัดไปที่เปลี่ยนใจได้
+  Reflect on interests. Try a small mission. Explore and compare several routes. Plan one reversible next step.<br>
+  ทบทวนความสนใจ ลองทำภารกิจ สำรวจและเปรียบเทียบหลายเส้นทาง แล้ววางก้าวถัดไปที่เปลี่ยนใจได้
 </p>
 
 <p align="center">
@@ -73,7 +73,7 @@ FutureMe ไม่ได้ฟันธง **“อาชีพที่ใช�
 
 | Step | What happens |
 |---|---|
-| **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English. The first answer selects two immediate follow-ups, then the learner reviews every answer. |
+| **1 · Reflect · ทบทวน** | Answer 30 interest items and 5 context prompts in Thai or English. The first answer only reorders two existing interest items, then the learner reviews every answer. |
 | **2 · Try · ลอง** | Complete one of 3 short scenario missions; the suggested mission can be changed. |
 | **3 · Explore · สำรวจ** | Receive 0–3 route hypotheses with reasons, unknowns, provenance, and data-age warnings. |
 | **4 · Compare · เทียบ** | Compare routes using the same three evidence-based criteria; practical estimates stay visible as prompts to verify. |
@@ -86,13 +86,14 @@ Reflect → Try → Explore → Compare → Act
 
 ### Where the route could actually be studied · เรียนได้ที่ไหนจริง
 
-A route is a phrase until a learner knows where a person does it. Pick a
-province — from a list, never from the device — and every suggestion names real
-institutions with **road** distance, driving time, and the vehicles the journey
-would actually take.
+A route is a phrase until a learner knows where it could be explored. Pick a
+province from a list, never from the device, and the app shows up to four directory
+options per route ordered by **road** distance from the province centre. This lookup
+does not confirm programme availability and cannot change the route result.
 
-หนึ่งเส้นทางยังเป็นแค่คำ จนกว่าผู้เรียนจะรู้ว่าคนเรียนกันที่ไหน เลือกจังหวัดจากรายการ
-แล้วทุกข้อเสนอจะบอกสถานศึกษาจริง พร้อมระยะทางตามถนน เวลาเดินทาง และพาหนะที่ใช้ได้จริง
+หนึ่งเส้นทางยังเป็นเพียงแนวคิด จนกว่าผู้เรียนจะเห็นว่าจะสำรวจได้ที่ไหน ผู้เรียนเลือกจังหวัด
+จากรายการ ระบบไม่อ่านตำแหน่งอุปกรณ์ แล้วแสดง directory สูงสุด 4 แห่งต่อเส้นทางโดยเรียงตาม
+ระยะทางถนนจากศูนย์กลางจังหวัด ข้อมูลนี้ไม่ยืนยันว่ามีหลักสูตรนั้นจริงและไม่เปลี่ยนผลเส้นทาง
 
 | Band · ระดับ | Distance | What the journey is |
 |---|---|---|
@@ -106,8 +107,10 @@ A route with nothing in reach **says so** rather than being hidden — that a
 direction would mean living away from home is a fact about the learner's life,
 not a reason to steer them elsewhere.
 
-Built from 1,358 institutions in the OVEC and MHESI registers with OSRM road
-routing — see [`01_Research/Geography_and_Access/`](../01_Research/Geography_and_Access/).
+The Panussu directory starts from 1,417 OVEC/MHESI source records and contains 1,375 unique
+displayed institutions across 1,961 province-display rows; only 140 institutions have partial
+programme-derived route mappings. Road distance uses OSRM. See
+[`01_Research/Geography_and_Access/`](../01_Research/Geography_and_Access/).
 
 <table width="100%">
 <tr>
@@ -162,8 +165,8 @@ production build, and all 95 Playwright browser journeys.
   validity results exist.
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics and fixed decision weights are team design judgement, not fitted parameters.
-- The first-answer follow-up rule changes order only. It is not CAT or IRT and does not establish higher accuracy.
-- `data/question_bank_1000.json` is restored and structurally checked for later research, but it is not imported by the live interview.
+- The first-answer ordering rule only moves existing items. It is not CAT or IRT and does not establish higher accuracy.
+- `data/question_bank_1000.json` contains 1,000 generated rows derived from 148 base prompts, with some bases repeated up to 19 times. It is structurally checked for later research but is not imported by the live interview.
 - The route catalogue is illustrative; cost, relocation, time-to-earning, and flexibility contain
   unsourced estimates and are held out of filtering, scoring, and ranking.
 - No real-student pilot, ethics approval, bias audit, or effectiveness study has run.
@@ -176,6 +179,15 @@ production build, and all 95 Playwright browser journeys.
 การรับรองจริยธรรม หรือผลลัพธ์ที่ใช้กล่าวอ้างประสิทธิผลได้
 
 </details>
+
+> **Cross-branch scope · ขอบเขตข้อมูลข้าม branch:** Kong19565 adds a fixed 41-prompt flow
+> (30 interest + 6 self-efficacy + 5 context), a 23,257-programme index, and a separate top-five
+> matcher. None of those files is imported by this Panussu app yet. See the
+> [root README comparison](../README.md#data-reviewed-from-kong19565).
+>
+> **ภาษาไทย:** Kong19565 เพิ่มแบบสอบถามลำดับคงที่ 41 ข้อ ดัชนีหลักสูตร 23,257 ระเบียน
+> และตัวจับคู่หลักสูตรแยกต่างหาก แต่ Panussu ยังไม่ได้ import ไฟล์เหล่านี้ ดู
+> [ตารางเปรียบเทียบภาษาไทย](../READMETH.md#ข้อมูลจาก-kong19565-ที่ตรวจแล้ว)
 
 ---
 

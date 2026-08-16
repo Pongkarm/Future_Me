@@ -10,7 +10,7 @@
 
 <p align="center">
   <strong>Career and study exploration for Thai students.</strong><br>
-  Reflect on interests, test one small mission, compare several routes, and plan a reversible next step.
+  Reflect on interests, test one small mission, explore and compare several routes, and plan a reversible next step.
 </p>
 
 <p align="center">
@@ -107,7 +107,7 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 
 | Step | Learner experience | Evidence produced |
 |---|---|---|
-| **1 · Reflect** | Answer 30 interest items and 5 context prompts. The first answer selects two immediate follow-ups, then the learner reviews every response. | A provisional RIASEC-shaped interest profile and practical constraints |
+| **1 · Reflect** | Answer 30 interest items and 5 context prompts. The first answer only reorders two existing interest items, then the learner reviews every response. | A provisional RIASEC-shaped interest profile and practical constraints |
 | **2 · Try** | Complete one of 3 scenario missions; keep or replace the suggested mission. | A separate mission vector that can support or contradict self-report |
 | **3 · Explore** | Inspect 0–3 route hypotheses with reasons, unknowns, provenance, and freshness. | Comparable, inspectable route evidence |
 | **4 · Compare** | Review routes against the same three evidence-derived criteria; practical estimates stay visible as prompts to verify. | Trade-offs and missing information |
@@ -177,6 +177,12 @@ statistical evidence above motivates the problem; it does not prove that FutureM
 
 The application can be used end to end without an account, database, environment variable, or
 model provider.
+
+> **Cross-branch scope, reviewed 16 August 2026:** Kong19565 adds a fixed 41-prompt flow
+> (30 interest + 6 self-efficacy + 5 context), a 23,257-programme index covering 993 institutions
+> and 269 fields, and a separate top-five deterministic matcher. Those files are not imported by
+> Panussu. The dataset still lacks verified learner tuition, TCAS requirements, and scholarships.
+> See the [root comparison](../README.md#data-reviewed-from-kong19565).
 
 Verification snapshot (11 August 2026): mascot and data-integrity checks, typecheck, lint,
 27 Vitest files / 533 tests, production build, and all 95 Playwright browser journeys passed.
@@ -316,8 +322,8 @@ What is not supported:
 - Published reliability from 18REST does not transfer to adapted English items or the Thai translation.
 - The Thai translation is a first draft, not a completed cross-cultural adaptation.
 - Mission rubrics, fixed weights, and recommendation thresholds have not been validated.
-- The first-answer follow-up rule changes order only. It is not CAT or IRT and does not establish higher accuracy.
-- The restored bilingual 1,000-item bank passes structural checks but remains a research-only input; it is not imported by the live interview.
+- The first-answer ordering rule only moves existing items. It is not CAT or IRT and does not establish higher accuracy.
+- The experimental bilingual asset contains 1,000 generated rows derived from 148 base prompts, with some bases repeated up to 19 times. It passes structural checks but remains research-only and is not imported by the live interview.
 - The 12-route catalogue is illustrative. Cost, relocation, time-to-earning, flexibility, strengths,
   and limitations contain unsourced team estimates; practical estimates do not filter, score, or rank routes.
 - The education directory contains 1,375 unique displayed institutions; only 140 have partial

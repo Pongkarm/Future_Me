@@ -77,14 +77,16 @@ journey
     section Arrive
       Start as guest: 5: Student
     section Reflect
-      Interview: 4: Student
+      Answer and review: 4: Student
     section Try
       Scenario mission: 5: Student
+    section Explore
+      Inspect zero to three routes: 5: Student
+      Optional nearby directory: 4: Student
     section Compare
-      Read up to three routes: 5: Student
-      Check unknowns: 4: Student
-    section Plan
-      Accept 30-day plan: 4: Student
+      Compare evidence and unknowns: 4: Student
+    section Act
+      Run a reversible 30-day plan: 4: Student
 ```
 
 **Guest-first is deliberate, and it is implemented.** A student completes the entire interview,
@@ -97,8 +99,8 @@ This ordering is now consistent across the UX flow, the architecture diagram and
 that was a documentation error and has been corrected.
 
 ```text
-Landing → Start as guest → Interview → Mission → Up to three routes
-        → Compare → 30-day plan → (optional account, not implemented)
+Landing → Start as guest → Reflect → Try → Explore 0–3 routes
+        → Compare → Act with a 30-day plan → (optional account, not implemented)
 ```
 
 ---
@@ -108,7 +110,7 @@ Landing → Start as guest → Interview → Mission → Up to three routes
 | Screen | Purpose | The one dominant action | Status |
 |---|---|---|:--:|
 | Landing | Set the promise: routes to compare, not one answer | *Start as guest* | 🟢 |
-| Interview | Visible progress, editable answers, validation | Answer the current item | 🟡 static, English |
+| Interview | Visible progress, editable answers, validation | Answer the current item | 🟢 bilingual and responsive |
 | Scenario mission | A short realistic task, chosen from the interview profile | Submit the attempt | 🟢 |
 | Routes | Evidence, limitations, unknowns and provenance for up to three routes | *Build a plan* on one route | 🟢 |
 | Comparison | The same criteria across every route | Select a route | 🟢 |

@@ -9,9 +9,9 @@ This folder contains the current presentation set:
 - [`QA.md`](QA.md) - content, visual, source-note, and file checks
 
 The deck uses current app screenshots and verified repository evidence. It covers the live 30-item
-questionnaire, first-answer follow-up ordering, deterministic 0-3 route boundary, data lineage,
+questionnaire, first-answer ordering rule, deterministic 0-3 route boundary, data lineage,
 1,961 display rows across 1,375 institutions, 140 institutions with programme mappings, and the
-research-only 90-item and 1,000-item banks.
+research-only 90-item bank plus an experimental 1,000-row asset derived from 148 base prompts.
 
 The current repository snapshot passed 533 Vitest tests and 95 Playwright browser journeys. These results validate the
 software and data contracts, not the questionnaire, recommendation weights, mission rubric, or

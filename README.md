@@ -10,7 +10,7 @@
 
 <p align="center">
   <strong>Career and study exploration for Thai students</strong><br>
-  Reflect → Try → Compare → Act
+  Reflect → Try → Explore → Compare → Act
 </p>
 
 <p align="center">
@@ -27,24 +27,24 @@
   <a href="#quick-faq">FAQ</a>
 </p>
 
-<p align="center"><sub>Repository documentation, data contract, and presentation reviewed 11 August 2026.</sub></p>
+<p align="center"><sub>Documentation and cross-branch data reviewed 16 August 2026. The latest full app-verification snapshot remains 11 August 2026.</sub></p>
 
 ---
 
 ## Overview
 
 FutureMe is a decision-support prototype for Thai lower-secondary, upper-secondary, and vocational
-students. It combines a 30-question interest reflection whose first answer selects two follow-up
-items, a short scenario mission, explainable
-comparison of up to three study or career-route hypotheses, a province-aware nearby-institution
-lookup, and a reversible 30-day action plan. It does not choose one “perfect career,” guarantee
-admission, or claim that a listed institution offers a particular programme.
+students. It combines 30 interest-reflection items whose first answer only reorders two existing
+items, five context prompts, a short scenario mission, explainable comparison of up to three study
+or career-route hypotheses, a province-aware nearby-institution lookup, and a reversible 30-day
+action plan. It does not choose one “perfect career,” guarantee admission, or claim that a listed
+institution offers a particular programme.
 
 | Question | Answer |
 |---|---|
 | **Who is it for?** | Thai students exploring their next study or career direction |
 | **What does it produce?** | Zero to three route hypotheses with reasons, limitations, comparisons, nearby-institution information, and a 30-day plan |
-| **What runs in this demo?** | 30 live interest questions with rule-based follow-up ordering, 3 missions, 12 illustrative routes, and 1,961 nearby-institution records across all 77 provinces |
+| **What runs in this demo?** | 30 interest items + 5 context prompts, 3 missions, 12 illustrative routes, and 1,961 nearby-institution display rows across all 77 provinces |
 | **Does AI decide the result?** | No. A deterministic rule engine selects routes; optional AI may only explain them or answer bounded repository questions |
 | **Is it production-ready?** | No. It is a runnable, tested hackathon prototype that still needs validated data and a real-student pilot |
 
@@ -81,7 +81,7 @@ integrated learner flow; source code and automated tests remain the authoritativ
 ```mermaid
 flowchart LR
     A["Official sources"] --> B["Source audit + demo data"]
-    B --> C["Answer-driven interview + mission"]
+    B --> C["Interview + mission"]
     C --> D["Deterministic rule engine"]
     D --> E["0–3 routes + comparison"]
     E --> F["Reversible 30-day plan"]
@@ -91,12 +91,13 @@ flowchart LR
 
     I["Optional bounded AI"] -. "explain only" .-> E
     J["FastAPI prototype"] -. "future integration" .-> D
+    K["Kong branch programme research"] -. "review before integration" .-> B
 
     classDef working fill:#d1fae5,stroke:#047857,color:#064e3b;
     classDef validating fill:#fef3c7,stroke:#d97706,color:#78350f;
     classDef planned fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
     class A,B,C,D,E,F,I,J working;
-    class G validating;
+    class G,K validating;
     class H planned;
 ```
 
@@ -105,13 +106,36 @@ accounts, permanent storage, and deployment remain planned (red).
 
 ### Student journey
 
-| Step | What happens |
-|---|---|
-| **1. Reflect** | Answer 30 RIASEC-shaped interest items. The first answer selects two immediate follow-ups; four required context questions and one optional prompt follow |
-| **2. Try** | Complete one of three short scenario missions |
-| **3. Explore** | The rule engine checks the evidence and returns zero to three routes |
-| **4. Compare** | Compare every route using the same three scored criteria, with practical estimates labelled separately |
-| **5. Act** | Choose one route to explore through a reversible 30-day plan |
+```mermaid
+flowchart TD
+    A["Start as guest<br/>No account required"] --> B["1 · Reflect<br/>30 RIASEC-shaped interest items<br/>First answer reorders 2 existing items"]
+    B --> C["4 required context choices<br/>+ 1 optional free-text prompt<br/>Review and edit every response"]
+    C -->|"23+ interest answers<br/>and all required context answered"| D["2 · Try<br/>Rule suggests 1 of 3 missions<br/>12 minutes · 4 steps · learner may switch"]
+    D --> E{"Deterministic evidence check"}
+    E -->|"Evidence too thin or too flat"| F["Return 0 routes<br/>Explain what evidence is missing"]
+    F --> G["Review answers or redo the mission"]
+    G --> B
+    E -->|"Enough evidence"| H["3 · Explore<br/>0–3 hypotheses from 12 routes<br/>Tier gate · ties · contradictions · provenance"]
+    H -. "Optional" .-> N["Choose a province manually<br/>77 provinces · 1,961 display rows<br/>Never changes the route result"]
+    H --> I["4 · Compare<br/>Interest 50% · mission evidence 30%<br/>learning-environment affinity 20%"]
+    I --> J["Cost · relocation · timing · flexibility<br/>Shown as unverified prompts<br/>Not used to decide routes"]
+    J --> K["5 · Act<br/>Choose one route<br/>Reversible 4-week / 30-day plan"]
+    K --> L["Progress stays in this browser"]
+    L -. "Planned, not live" .-> P["Accounts · cloud database/RAG<br/>counsellor dashboard · TCAS portfolio"]
+
+    classDef live fill:#10231f,stroke:#43e6bd,color:#f7f7ff;
+    classDef gate fill:#211b38,stroke:#8b6cff,color:#f7f7ff;
+    classDef caution fill:#2c2414,stroke:#f5c451,color:#fff7dc;
+    classDef planned fill:#191c24,stroke:#808898,color:#d0d4de,stroke-dasharray:5 5;
+    class A,B,C,D,H,N,I,K,L live;
+    class E gate;
+    class F,G,J caution;
+    class P planned;
+```
+
+This diagram is the workflow implemented on **Panussu**. Optional AI can explain or reword results,
+but it does not select routes. Kong's fixed 41-prompt questionnaire and programme matcher are
+separate branch work and are not used by this runtime yet.
 
 ### Recommendation logic
 
@@ -142,9 +166,10 @@ visible for discussion but do not score, rank, or remove a route.
 | Component | Role | Current state |
 |---|---|---|
 | **Next.js web app** | Student journey, local session, decision engine, comparison, plan, and chat UI | ✅ Runnable |
-| **Demo inputs** | 30 live interest questions, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
+| **Demo inputs** | 30 interest items + 5 context prompts, 3 missions, 12 illustrative routes, and a 77-province nearby-institution lookup | 🟡 Research-informed prototype data |
 | **Research layer** | Source audit, curricula, labour data, claim status, and technical research | 🟡 First audit complete |
 | **Education data registry** | Institution / Program / Admission / Financial / Location coverage, sources, dates, gaps, and decision-use limits | ✅ Machine-checked |
+| **Kong branch research** | 23,257-programme index, six self-efficacy prompts, and a separate deterministic programme matcher | 🟡 Implemented on Kong19565; not integrated into Panussu |
 | **FastAPI backend** | Mission and future-path API reference with in-memory storage | 🟡 Separate prototype |
 | **Optional AI** | Bounded chat and explanation rewording | 🟡 Optional |
 | **Production services** | Accounts, permanent database, RAG, school tools, and cloud deployment | 🔴 Planned |
@@ -152,6 +177,27 @@ visible for discussion but do not score, rank, or remove a route.
 The current web app is the product source of truth. The FastAPI backend is not required by or wired
 into the main demo journey. A few backend schema and class identifiers retain the historical
 `FuturePath` name for import compatibility; the product name is **FutureMe AI**.
+
+### Data reviewed from Kong19565
+
+<details>
+<summary><strong>Open the verified cross-branch snapshot (not live on Panussu)</strong></summary>
+
+The following is verified from [Kong19565 at `df5632f`](https://github.com/Pongkarm/Future_Me/tree/df5632f156b60fec81ddf9712cbcb8d06b74ba05),
+reviewed 16 August 2026. It is useful integration work, but it is not part of the current Panussu runtime.
+
+| Kong branch asset | Verified scope | Boundary before Panussu can claim it |
+|---|---|---|
+| **Questionnaire extension** | Fixed sequence of 30 interest + 6 researcher-written self-efficacy + 5 context prompts = 41 prompts before review | Not CAT, IRT, Akinator-style, or answer-selected; the six added items are unvalidated |
+| **Programme index** | 23,257 records: 6,349 bachelor's, 9,191 ปวช., and 7,717 ปวส.; 993 institutions and 269 fields | 15,586 records include outcome data; 16,909 lack production-cost data, and production cost is not learner tuition |
+| **Programme matcher** | Core fit uses 70% interest cosine + 30% self-efficacy when available; context can move the score by at most 15 points; deterministic refusal gates return up to five matches | These are design weights, not outcome-fitted parameters. This layer is separate from the 50/30/20 route engine and does not drive route comparison or the 30-day plan |
+| **Known evidence gaps** | No verified learner-paid tuition, TCAS rounds/requirements/scores, scholarships, or programme-level financial aid | The field-to-occupation crosswalk is team-created and not expert-reviewed; five-region living costs are estimates |
+
+The supplied AIS Cloud workflow is therefore a **target architecture**, not a current-system diagram.
+AIS Cloud hosting, GPU compute, Qdrant, accounts, counsellor dashboards, native mobile, automatic
+feedback loops, and TCAS portfolios remain proposed unless a later branch implements and verifies them.
+
+</details>
 
 ---
 
@@ -162,7 +208,7 @@ into the main demo journey. A few backend schema and class identifiers retain th
 ### ✅ Working now
 
 - Complete guest journey from assessment to a 30-day plan
-- Deterministic first-answer follow-ups that reorder two reviewed items without changing the 30-item bank or scoring
+- A deterministic first-answer ordering rule that moves two reviewed items forward without changing the 30-item bank or scoring
 - English and Thai interfaces, responsive layouts, and light/dark/system themes
 - Deterministic scoring, refusal gates, ties, provenance, and freshness warnings
 - Local persistence, deletion controls, optional research export, and analysis scripts
@@ -177,7 +223,7 @@ into the main demo journey. A few backend schema and class identifiers retain th
 ### 🟡 Needs validation
 
 - The question set and Thai adaptation have not been validated with real students.
-- The restored 1,000-item future bank passes structural checks but is not used live; its wording, fairness, scoring, and branching still require expert and student validation.
+- The experimental 1,000-row future asset is generated from 148 base prompts (some repeated up to 19 times). It passes structural checks but is not used live; its wording, fairness, scoring, and branching still require expert and student validation.
 - The three first-answer branches are transparent product heuristics, not CAT, IRT, or evidence that the assessment is more accurate.
 - Route costs, relocation, time-to-earning, flexibility, strengths, and limitations include team estimates; the first four are held out of route decisions.
 - The institution register keeps 207 missing or quarantined coordinates and 987 missing websites as unknown instead of inventing values.
@@ -242,6 +288,15 @@ Yes. The complete student journey runs locally in the browser without either one
 </details>
 
 <details>
+<summary><strong>What evidence motivates the problem, and does it validate FutureMe?</strong></summary>
+
+TDRI reports that 56% of Thais educated beyond upper secondary work outside their field and 27%
+work below their skill or qualification level. WEF employers expect 39% of core skills to change
+by 2030. These figures motivate the problem; they do not prove that FutureMe is effective. See the
+[scoped research summary](01_Research/Data/01_Graduate_Unemployment_and_Mismatch_Stats/SUMMARY.md).
+</details>
+
+<details>
 <summary><strong>Does FutureMe guarantee admission or employment?</strong></summary>
 
 No. Routes are hypotheses to explore, not predictions or guarantees.
@@ -258,17 +313,26 @@ and living costs have zero validated local records. See the
 </details>
 
 <details>
+<summary><strong>Does Panussu already use Kong's 23,257-programme matcher?</strong></summary>
+
+No. Kong19565 contains that index and a separate top-five deterministic matcher, but those files are
+not imported by Panussu. The current Panussu result is still 0–3 illustrative route hypotheses;
+nearby institutions are a downstream directory and never change the route result.
+</details>
+
+<details>
 <summary><strong>Is this a validated RIASEC test?</strong></summary>
 
 No. It uses the RIASEC structure for reflection, but this item set and its Thai adaptation still require validation.
 </details>
 
 <details>
-<summary><strong>Does the live interview use the restored 1,000-item bank?</strong></summary>
+<summary><strong>Does the live interview use the experimental 1,000-row question asset?</strong></summary>
 
-No. That bilingual bank is preserved and structurally checked for later research. The live interview
-still uses all 30 reviewed items in `questions.json`; the first answer only chooses which two of
-those items appear next. This is deterministic rule-based ordering, not CAT or IRT.
+No. Its 1,000 rows were generated from 148 base prompts by adding context variants, with some bases
+repeated up to 19 times. It is preserved and structurally checked for later research. The live
+interview still uses all 30 reviewed items in `questions.json`; the first answer only changes which
+two existing items appear next. This is deterministic rule-based ordering, not CAT or IRT.
 </details>
 
 <details>
@@ -292,7 +356,7 @@ integrations are documented production designs, not running components. See the
 <details>
 <summary><strong>Can a recommendation be reproduced and audited?</strong></summary>
 
-Yes. The same validated inputs and catalogue produce the same routes because scoring, filters,
+Yes. The same accepted inputs and catalogue produce the same routes because scoring, filters,
 ties, and refusal gates are deterministic TypeScript. The UI exposes the catalogue date, reasons,
 unknowns, and provenance. The fixed weights are design judgement, not
 parameters fitted to outcome data; automated tests verify implementation behaviour, not real-world validity.

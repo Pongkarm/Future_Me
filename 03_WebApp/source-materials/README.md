@@ -8,7 +8,7 @@ This repository publishes **rewritten English summaries** and a curated subset o
 research base. It does not contain every raw team source. This document records what is retained,
 what was summarized, and what was excluded.
 
-Integration boundary reviewed 11 August 2026. The live app, current screenshots,
+Integration boundary reviewed 16 August 2026. The live app, current screenshots,
 restored future question bank, and research-only RAG materials remain labelled separately. Current
 education-data coverage and decision-use limits are recorded in
 [`education-data-registry.json`](../data/education-data-registry.json).
@@ -37,8 +37,9 @@ journey. Qdrant and PostgreSQL remain planned production components, not impleme
 - **Rewritten English summaries** of all seven categories, in [`docs/`](../docs/)
 - **Four curated Aurora mockups** in [`assets/screenshots/`](../assets/screenshots/) plus current
   production-build captures in [`assets/screenshots/app/`](../assets/screenshots/app/)
-- **A restored 1,000-item bilingual future question bank**, structurally checked but not imported
-  by the live interview and not content-validated
+- **An experimental 1,000-row bilingual question asset**, generated from 148 base prompts with
+  some bases repeated up to 19 times; structurally checked, not imported by the live interview,
+  and not content-validated
 - **Purpose-built SVG assets** — a bilingual banner pair and the current decision-matrix diagram
 
 ## What stayed private, and why

@@ -216,13 +216,6 @@ npm run dev
 ```
 Open browser at: **`http://localhost:3000`**
 
-### Code Quality & Build Checks
-```bash
-npm run typecheck    # Verify TypeScript Types (0 Errors)
-npm run lint         # Check ESLint Standards
-npm run build        # Test Production Bundle Compilation (17/17 Pages)
-```
-
 ---
 
 ## ❓ Quick FAQ
@@ -248,7 +241,7 @@ No. Route recommendations are **exploration hypotheses**, not guarantees or admi
 <details>
 <summary><strong>4. Does AI make the decisions for students?</strong></summary>
 
-**No.** The platform follows **“Rules decide. AI explains.”** A transparent deterministic engine calculates mathematical fit, while AI only assists in Socratic interviews and explanations.
+**No.** The platform follows **“Rules decide. AI explains.”** A transparent deterministic engine calculates mathematical fit across **23,257 real curricula**, while AI only assists in Socratic interviews and explanations.
 </details>
 
 <details>
@@ -264,16 +257,19 @@ FutureMe uses Holland's RIASEC 6 dimensions coupled with a Self-Efficacy scale f
 </details>
 
 <details>
-<summary><strong>7. Where is learner data stored?</strong></summary>
+<summary><strong>7. Where is learner data stored and how is PDPA handled?</strong></summary>
 
-Data is stored strictly in the client browser's **LocalStorage** with zero central PII tracking, adhering to Privacy-by-Design and PDPA principles.
+* **Client-Side:** Stored safely in the browser's `LocalStorage` with zero tracking.
+* **Production Infrastructure:** Designed for **AIS Cloud Data Vault** (Data Residency in Thailand) with **AIS Open API (Number Verification OTP)** for Counselor Authentication. We adhere strictly to Privacy-by-Design and **do not track granular GPS location**.
 </details>
 
 <details>
 <summary><strong>8. What is the business and sustainability model?</strong></summary>
 
-* **B2C Freemium:** Free for all students / Optional Parent Career Pass (99 THB/mo or 999 THB/yr)
-* **B2G & B2B Institutional License:** District-level licensing with National Interest Dashboard for educational authorities (OVEC, MOE, EEF) to guide resource allocation.
+* **B2C Freemium:** Free for all students / Optional Parent Career Pass (99 THB/mo or 999 THB/yr) for 5-year living cost budgets & TCAS export.
+* **B2G District License (Starting 300,000 THB/yr):** Multi-school licensing with National Interest Dashboard for educational authorities (OVEC, MOE, EEF).
+* **B2B Institutional (Starting 30,000 THB/yr):** University / Private Vocational Matching Portal.
+* **🌱 Sustainability Vision:** Revenue from solvent institutions and parents subsidizes 100% free access for underprivileged students nationwide.
 </details>
 
 <details>

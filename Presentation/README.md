@@ -1,17 +1,17 @@
-# Presentation — ชุดเอกสารและสไลด์นำเสนอทางการ (Master Pitch Deck)
+# Presentation — ชุดเอกสารและสไลด์นำเสนอทางการ (Master Pitch & Portfolio)
 
-> **วัตถุประสงค์:** เอกสารและสไลด์นำเสนอทางการ 7 หน้า (16:9 Widescreen) สำหรับส่งคณะกรรมการ **JUMP THAILAND Innovation Hackathon 2026**
+> **วัตถุประสงค์:** เอกสารและสไลด์นำเสนอทางการฉบับสมบูรณ์ สำหรับส่งคณะกรรมการ **JUMP THAILAND Innovation Hackathon 2026**
 
 ---
 
-## 🌟 เอกสารหลักสำหรับการนำเสนอ (Official Pitch Artifacts)
+## 🌟 เอกสารหลักสำหรับการนำเสนอและส่งผลงาน (Official Submission Artifacts)
 
-| ไฟล์นำเสนอ | รูปแบบ | คำอธิบายและการใช้งาน |
+| เอกสารนำเสนอ | รูปแบบ | คำอธิบายและการใช้งาน |
 |---|:---:|---|
-| [📄 **`FutureMe_Presentation.pdf`**](FutureMe_Presentation.pdf) | PDF (7 หน้า) | **ไฟล์นำเสนอทางการ (Official Master Deck):** อัตราส่วน 16:9 ไวด์สกรีน พร้อมส่งกรรมการ |
-| [🌐 **`FutureMe_Presentation.html`**](FutureMe_Presentation.html) | HTML | **สไลด์ต้นฉบับ:** Responsive HTML สไลด์ ปรับแต่งขนาดตัวอักษร Sarabun/Prompt สวยงาม |
-| [📄 `FutureMe_Project_Presentation.pdf`](FutureMe_Project_Presentation.pdf) | PDF (15 หน้า) | สไลด์โครงการฉบับดั้งเดิม (สำหรับอ้างอิงข้อมูลเบื้องหลัง) |
-| [📊 `FutureMe_Project_Presentation.pptx`](FutureMe_Project_Presentation.pptx) | PowerPoint | ไฟล์สไลด์ต้นฉบับ PowerPoint สามารถแก้ไขได้ |
+| [📄 **`FutureMe_Presentation.pdf`**](FutureMe_Presentation.pdf) | PDF (7 หน้า) | **ไฟล์นำเสนอทางการ (Master Pitch Deck):** อัตราส่วน 16:9 ไวด์สกรีน สำหรับกรอกส่งในข้อ 8 |
+| [🌐 **`FutureMe_Presentation.html`**](FutureMe_Presentation.html) | HTML | **สไลด์ต้นฉบับ:** Responsive HTML สไลด์ ปรับแต่งขนาดตัวอักษร Prompt & Sarabun คมชัด 100% |
+| [📄 **`FutureMe_Team_Portfolio.pdf`**](FutureMe_Team_Portfolio.pdf) | PDF (8 หน้า) | **เอกสารผลงานและพอร์ตโฟลิโอทีม:** รวมหลักฐานความพร้อม Prototype + ประวัติสมาชิก 5 คน สำหรับข้อ 7 |
+| [🌐 **`FutureMe_Team_Portfolio.html`**](FutureMe_Team_Portfolio.html) | HTML | **พอร์ตโฟลิโอต้นฉบับ:** Responsive HTML Template เอกสารผลงานของทีม |
 | [`generate_presentation.py`](generate_presentation.py) | Python Script | สคริปต์อัตโนมัติสำหรับคอมไพล์สไลด์ |
 | [`rendered/`](rendered/) | Image Folder | ภาพ Render ตรวจทานคุณภาพสไลด์แต่ละหน้า (QA Images) |
 

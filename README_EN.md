@@ -21,7 +21,6 @@
 | Document / Artifact | Description | Link |
 |---|---|:---:|
 | **Official Pitch Deck (PDF)** | Official 7-slide Master Deck (16:9 Widescreen) | [📄 `FutureMe_Presentation.pdf`](FutureMe_Presentation.pdf) |
-| **Official Pitch Deck (HTML)** | Responsive HTML Slides with Prompt & Sarabun typography | [🌐 `FutureMe_Presentation.html`](FutureMe_Presentation.html) |
 | **Team Portfolio & Evidence** | 8-Page Master Document (Prototype Proof + 5 CDTI Engineering Members) | [📄 `FutureMe_Team_Portfolio.pdf`](FutureMe_Team_Portfolio.pdf) |
 | **Interactive Web App** | Next.js 15.5 Application with 11 live UI screens | [🚀 See Quick Start Below](#-quick-start--run-locally) |
 | **Evidence & Theory Catalog** | Academic papers, psychometric frameworks, and verified statistics | [`01_Research/`](01_Research/) |

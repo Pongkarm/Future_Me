@@ -21,7 +21,6 @@
 | เอกสารนำเสนอ | คำอธิบาย | ไฟล์ดาวน์โหลด / เข้าชม |
 |---|---|:---:|
 | **Official Pitch Deck (PDF)** | สไลด์นำเสนอฉบับทางการ 7 หน้า (16:9 Widescreen) สำหรับกรรมการ | [📄 `FutureMe_Presentation.pdf`](FutureMe_Presentation.pdf) |
-| **Official Pitch Deck (HTML)** | สไลด์ต้นฉบับ HTML Responsive ปรับฟอนต์ Prompt & Sarabun สวยงาม | [🌐 `FutureMe_Presentation.html`](FutureMe_Presentation.html) |
 | **Team Portfolio & Evidence** | เอกสารหลักฐานผลงานและความพร้อมของทีม 8 หน้า (หลักฐาน Prototype + ประวัติทีม 5 คน) | [📄 `FutureMe_Team_Portfolio.pdf`](FutureMe_Team_Portfolio.pdf) |
 | **Interactive Web App** | แอปพลิเคชัน Next.js 15.5 รันจริงพร้อม 11 หน้าจอ | [🚀 ดูวิธีเปิดแอปด้านล่าง](#-quick-start--วิธีรันแอปพลิเคชัน) |
 | **Evidence & Theory Catalog** | ฐานงานวิจัย ทฤษฎีจิตวิทยา และสถิติอ้างอิง | [`01_Research/`](01_Research/) |
